@@ -33,6 +33,27 @@ class SelfCheckInModel {
     required this.signatureUrl,
   });
 
+  // Factory constructor for mapping Firestore data to SelfCheckInModel
+  factory SelfCheckInModel.fromMap(Map<String, dynamic> data) {
+    return SelfCheckInModel(
+      documentType: data['documentType'],
+      frontDocumentUrl: data['frontDocumentUrl'],
+      backDocumentUrl: data['backDocumentUrl'],
+      fullName: data['fullName'],
+      email: data['email'], // May be null
+      contact: data['contact'],
+      age: data['age'],
+      address: data['address'], // May be null
+      city: data['city'], // May be null
+      gender: data['gender'],
+      country: data['country'],
+      regionState: data['regionState'],
+      arrivingFrom: data['arrivingFrom'], // May be null
+      goingTo: data['goingTo'], // May be null
+      signatureUrl: data['signatureUrl'],
+    );
+  }
+
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
       'documentType': documentType,

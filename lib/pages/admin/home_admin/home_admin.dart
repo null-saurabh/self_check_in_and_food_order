@@ -73,6 +73,7 @@ class HomeAdmin extends StatelessWidget {
                   const SizedBox(height: 50.0),
                   GestureDetector(
                     onTap: () {
+                      Get.toNamed('/admin/check-in-list');
                       // Navigator.push(context, MaterialPageRoute(builder: (context)=> SelfCheckinList()));
                     },
                     child: Material(
@@ -111,8 +112,49 @@ class HomeAdmin extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 50.0),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed('/admin/order-list');
+                      // Navigator.push(context, MaterialPageRoute(builder: (context)=> SelfCheckinList()));
+                    },
+                    child: Material(
+                      elevation: 10.0,
+                      borderRadius: BorderRadius.circular(10),
+                      child: Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: Image.asset(
+                                  "assets/images/food.jpg",
+                                  height: 100,
+                                  width: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              const SizedBox(width: 30.0),
+                              const Text(
+                                "Order List",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 20.0),
-                  _buildOrderList(orderController),
                 ],
               ),
             ),
@@ -122,27 +164,4 @@ class HomeAdmin extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderList(AdminOrderListController orderController) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 2000,
-          child: Obx(() {
-            return Column(
-              children: orderController.getOrderList.map(
-                    (orderData) {
-                  return SingleOrder(
-                    orderName: orderData.orderName,
-                    orderAmount: orderData.amount,
-                    orderDate: orderData.date,
-                  );
-                },
-              ).toList(),
-            );
-          }),
-        ),
-      ],
-    );
-  }
 }

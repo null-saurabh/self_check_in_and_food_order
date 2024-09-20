@@ -2,9 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:get/get.dart';
+import 'package:wandercrew/pages/admin/check_in_list_admin/check_in_list_admin.dart';
 import 'package:wandercrew/pages/admin/home_admin/home_admin.dart';
 import 'package:wandercrew/pages/admin/home_admin/widgets/add_food.dart';
 import 'package:wandercrew/pages/admin/login_admin/admin_login.dart';
+import 'package:wandercrew/pages/admin/orders_admin/orders_list_screen.dart';
 import 'package:wandercrew/pages/cart_screen/cart_screen.dart';
 import 'package:wandercrew/service/auth_services.dart';
 import 'package:wandercrew/widgets/bottom_nav.dart';
@@ -57,6 +59,16 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/admin/add-menu',
           page: () => const AddFoodItem(),
+          middlewares: [AuthMiddleware()],
+        ),
+        GetPage(
+          name: '/admin/order-list',
+          page: () => const OrdersListScreen(),
+          middlewares: [AuthMiddleware()],
+        ),
+        GetPage(
+          name: '/admin/check-in-list',
+          page: () => const CheckInListAdmin(),
           middlewares: [AuthMiddleware()],
         ),
       ],
