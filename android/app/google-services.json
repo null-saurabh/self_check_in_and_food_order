@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "383803428115",
+    "project_id": "wander-crew",
+    "storage_bucket": "wander-crew.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:383803428115:android:8c01b4c895615c861a9ee6",
+        "android_client_info": {
+          "package_name": "com.example.wandercrew"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi_jM69XRZxgpA-6ZNgXCzeKFahVspAbc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
