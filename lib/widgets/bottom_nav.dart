@@ -1,6 +1,5 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:wandercrew/pages/home_screen.dart';
 import 'package:wandercrew/pages/menu_screen/menu_screen.dart';
 
 import '../pages/self_checking_screen/self_check_in_one_document_info.dart';
