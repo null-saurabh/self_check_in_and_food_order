@@ -107,12 +107,12 @@ class CartScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      if (cartScreenController.total > 0) {
-
-                        RazorpayService razorpay = RazorpayService();
-                        razorpay.openCheckout(
-                            amount: cartScreenController.total.value * 100, key: "rzp_test_G05wrC5hbOAv5R",onSuccess: cartScreenController.onSuccess, onDismiss: cartScreenController.onDismiss, onFail: cartScreenController.onFail);
-                      } else {}
+                      // if (cartScreenController.total > 0) {
+                      //
+                      //   RazorpayService razorpay = RazorpayService();
+                      //   razorpay.openCheckout(
+                      //       amount: cartScreenController.total.value * 100, key: "rzp_test_G05wrC5hbOAv5R",onSuccess: cartScreenController.onSuccess, onDismiss: cartScreenController.onDismiss, onFail: cartScreenController.onFail);
+                      // } else {}
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),

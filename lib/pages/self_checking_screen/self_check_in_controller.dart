@@ -217,10 +217,11 @@ class SelfCheckInController extends GetxController {
     try {
       Reference ref = storage.ref().child("documents").child(fileName);
 
+      SettableMetadata metadata = SettableMetadata(contentType: 'image/jpeg');
       UploadTask task;
       if (kIsWeb) {
         // For web, use putData() since selectedImage.value is Uint8List
-        task = ref.putData(document as Uint8List);
+        task = ref.putData(document as Uint8List, metadata);
       } else {
         // For mobile, use putFile() since selectedImage.value is File
         task = ref.putFile(document as File);
@@ -234,8 +235,8 @@ class SelfCheckInController extends GetxController {
 
       return downloadUrl;
     } catch (e) {
-      print("a");
-      print(e);
+      // print("a");
+      // print(e);
       Get.snackbar("Error", "Failed to upload document: $e", backgroundColor: Colors.redAccent, colorText: Colors.white);
       return null;
     }
@@ -275,14 +276,14 @@ class SelfCheckInController extends GetxController {
         if (frontDocument.value != null) {
           frontDocumentUrl = await uploadDocument(frontDocument.value!, "front_${fullName.value}");
         }
-        print("1");
+        // print("1");
       if (backDocument.value != null) {
           backDocumentUrl = await uploadDocument(backDocument.value!, "back_${fullName.value}");
         }
-        print("2");
+        // print("2");
 
         signatureUrl = await uploadSignature();
-        print("3");
+        // print("3");
 
         if (frontDocumentUrl != null && backDocumentUrl != null && signatureUrl != null) {
           // Handle optional fields: email, address, city, arrivingFrom, goingTo
@@ -304,11 +305,11 @@ class SelfCheckInController extends GetxController {
             signatureUrl: signatureUrl,
           );
 
-          print("4");
+          // print("4");
           await DatabaseMethods().addSelfCheckInData(selfCheckInData.toMap()).then((_) {
-            print("5");
+            // print("5");
             Get.back();
-            print("55");
+            // print("55");
 
             Get.snackbar(
               "Success",
@@ -316,7 +317,7 @@ class SelfCheckInController extends GetxController {
               backgroundColor: Colors.orangeAccent,
               colorText: Colors.white,
             );
-            print("6");
+            // print("6");
             clearFields();
           });
         } else {
@@ -330,7 +331,7 @@ class SelfCheckInController extends GetxController {
           colorText: Colors.white,
         );
       } finally {
-        print("AAAA");
+        // print("AAAA");
         // Get.back();
         Get.to(() => const BottomNav());
         //Close loading dialog

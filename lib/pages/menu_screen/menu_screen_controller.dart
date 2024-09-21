@@ -4,6 +4,14 @@ import 'package:get/get.dart';
 import '../../models/product_model.dart';
 
 class MenuScreenController extends GetxController {
+
+  @override
+  void onInit() {
+    fetchBreakfastMenuData();
+    super.onInit();
+  }
+
+
   RxBool isVeg = false.obs;
   RxBool isNonVeg = false.obs;
 
@@ -29,8 +37,10 @@ class MenuScreenController extends GetxController {
 
     for (var element in value.docs) {
       productModels(element);
-
       newList.add(productModel);
+      // print("aabbcc");
+      // print(newList.last.productImage);
+
     }
     breakfastMenuList = newList;
     update();

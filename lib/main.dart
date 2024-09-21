@@ -22,6 +22,7 @@ void main() async {
           projectId: "wander-crew"));
   Get.put(AuthService());
   setUrlStrategy(PathUrlStrategy());
+  // registerImageViewFactory('https://firebasestorage.googleapis.com/v0/b/wander-crew.appspot.com/o/foodImages%2FScreenshot%20(1).png?alt=media&token=ce3dcce1-0732-48b3-ba5b-bb9cbcece69c');
   runApp(const MyApp());
 }
 

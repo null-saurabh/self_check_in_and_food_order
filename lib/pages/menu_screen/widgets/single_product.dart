@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'count.dart';
 import '../../../widgets/widget_support.dart';
@@ -16,6 +17,8 @@ class SingleProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print("Image URL: $productImage");
+
     return Column(
       children: [
         Container(
@@ -29,10 +32,17 @@ class SingleProduct extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // HtmlElementView(viewType: 'image-view'),
+                  // CachedNetworkImage(imageUrl: productImage),
                   Image.network(
-                    productImage,
+                    productImage, // Ensure URL is properly encoded
+                    fit: BoxFit.cover,
                     width: 65,
                     height: 65,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(child: CircularProgressIndicator());
+                    },
                   ),
                   const SizedBox(
                     width: 20.0,

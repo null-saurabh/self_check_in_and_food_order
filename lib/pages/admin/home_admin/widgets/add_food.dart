@@ -40,9 +40,11 @@ class AddFoodItem extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                     image: controller.selectedImage.value != null
                         ? DecorationImage(
-                      image: kIsWeb
+                      image:
+                      kIsWeb
                           ? MemoryImage(controller.selectedImage.value as Uint8List) // For web
-                          : FileImage(controller.selectedImage.value as File), // For mobile
+                          :
+                        FileImage(controller.selectedImage.value as File), // For mobile
                       fit: BoxFit.cover,
                     )
                         : null,

@@ -21,7 +21,7 @@ class Count extends StatelessWidget {
   Widget build(BuildContext context) {
     // Use GetX to find the CartScreenController
     final CartScreenController cartController =
-        Get.find<CartScreenController>();
+        Get.put(CartScreenController());
 
     return Obx(() {
       // Retrieve the current item count reactively

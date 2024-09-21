@@ -13,6 +13,7 @@ class AddFoodItemController extends GetxController {
   var selectedCategory = Rxn<String>();
   // var selectedImage = Rxn<File>();
   Rxn<dynamic> selectedImage = Rxn<dynamic>();
+  // Rxn<dynamic> selectedImage2 = Rxn<dynamic>();
   var idController = TextEditingController();
   var nameController = TextEditingController();
   var priceController = TextEditingController();
@@ -20,26 +21,23 @@ class AddFoodItemController extends GetxController {
 
   final ImagePicker _picker = ImagePicker();
 
-  // Future<void> pickImage() async {
-  //   final image = await _picker.pickImage(source: ImageSource.gallery);
-  //   if (image != null) {
-  //     selectedImage.value = File(image.path);
-  //   }
-  // }
-
   Future<void> pickImage() async {
     if (kIsWeb) {
       // For web, use a different image picker approach or Image.network
       final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
       if (pickedImage != null) {
         final imageBytes = await pickedImage.readAsBytes();
-        selectedImage.value = imageBytes; // Store bytes for web use
+        selectedImage.value = imageBytes;// Store bytes for web use
+        // selectedImage2.value = File(pickedImage.path);  // Store file for mobile
+
       }
     } else {
       // For mobile platforms
       final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
       if (pickedImage != null) {
-        selectedImage.value = File(pickedImage.path);  // Store file for mobile
+        selectedImage.value = File(pickedImage.path);// Store file for mobile
+        // selectedImage2.value = File(pickedImage.path);  // Store file for mobile
+
       }
     }
   }
@@ -63,10 +61,18 @@ class AddFoodItemController extends GetxController {
         Reference firebaseStorageRef =
         FirebaseStorage.instance.ref().child("foodImages").child(addId);
         // print("abb");
+
+        SettableMetadata metadata = SettableMetadata(contentType: 'image/jpeg');
         UploadTask task;
         if (kIsWeb) {
+          // print("abc");
+
+          // task = firebaseStorageRef.putFile(selectedImage2.value);
+          // print("abcd");
+
+          task = firebaseStorageRef.putData(selectedImage.value as Uint8List, metadata);
           // For web, use putData() since selectedImage.value is Uint8List
-          task = firebaseStorageRef.putData(selectedImage.value as Uint8List);
+          // task = firebaseStorageRef.putData(selectedImage.value as Uint8List);
         } else {
           // For mobile, use putFile() since selectedImage.value is File
           task = firebaseStorageRef.putFile(selectedImage.value as File);
@@ -74,13 +80,9 @@ class AddFoodItemController extends GetxController {
 
         TaskSnapshot taskSnapshot = await task;
         String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+        // print("abcde");
+        // print(downloadUrl);
 
-
-        // final UploadTask task = firebaseStorageRef.putFile(selectedImage.value!);
-        // print("abc");
-
-        // var downloadUrl = await (await task).ref.getDownloadURL();
-        // print("abcd");
 
         Map<String, dynamic> addItem = {
           "productId": idController.text,
