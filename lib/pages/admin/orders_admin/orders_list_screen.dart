@@ -24,9 +24,9 @@ class OrdersListScreen extends StatelessWidget {
                       children: orderController.getOrderList.map(
                             (orderData) {
                           return SingleOrder(
-                            orderName: orderData.orderName,
-                            orderAmount: orderData.amount,
-                            orderDate: orderData.date,
+                            orderName: orderData.dinerName,
+                            orderAmount: orderData.totalAmount,
+                            orderDate: orderData.createdAt.toString(),
                           );
                         },
                       ).toList(),

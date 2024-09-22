@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../models/menu_item_model.dart';
+import '../../service/razorpay_web.dart';
 import '../../widgets/widget_support.dart';
 import '../menu_screen/menu_screen_controller.dart';
 import 'cart_screen_controller.dart';
@@ -110,12 +111,12 @@ class CartScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      // if (cartScreenController.total > 0) {
-                      //
-                      //   RazorpayService razorpay = RazorpayService();
-                      //   razorpay.openCheckout(
-                      //       amount: cartScreenController.total.value * 100, key: "rzp_test_G05wrC5hbOAv5R",onSuccess: cartScreenController.onSuccess, onDismiss: cartScreenController.onDismiss, onFail: cartScreenController.onFail);
-                      // } else {}
+                      if (cartScreenController.total > 0) {
+
+                        RazorpayService razorpay = RazorpayService();
+                        razorpay.openCheckout(
+                            amount: cartScreenController.total.value * 100, key: "rzp_test_G05wrC5hbOAv5R",onSuccess: cartScreenController.onSuccess, onDismiss: cartScreenController.onDismiss, onFail: cartScreenController.onFail);
+                      } else {}
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),

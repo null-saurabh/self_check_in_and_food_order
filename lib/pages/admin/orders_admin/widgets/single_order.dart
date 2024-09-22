@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class SingleOrder extends StatelessWidget {
   final String orderName;
-  final int orderAmount;
+  final double orderAmount;
   final String orderDate;
   const SingleOrder({super.key,required this.orderName, required this.orderAmount, required this.orderDate});
 
