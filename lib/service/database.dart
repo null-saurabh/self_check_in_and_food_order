@@ -8,10 +8,10 @@ class DatabaseMethods {
         .set(userInfoMap);
   }
 
-  Future addFoodItem(Map<String, dynamic> userInfoMap, String name) async {
+  Future addFoodItem(Map<String, dynamic> foodItemData, String name) async {
     return await FirebaseFirestore.instance
         .collection(name)
-        .add(userInfoMap);
+        .add(foodItemData);
   }
 
   Future addOrder(Map<String, dynamic> userInfoMap) async {

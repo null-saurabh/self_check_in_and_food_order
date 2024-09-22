@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:random_string/random_string.dart';
 import 'package:signature/signature.dart';
 import '../../models/self_checking_model.dart';
 import '../../service/database.dart';
@@ -47,7 +48,7 @@ class SelfCheckInController extends GetxController {
 
   Future<void> fetchCountries() async {
     try {
-      final response = await http.get(Uri.parse('http://api.geonames.org/countryInfoJSON?username=wandercrew'));
+      final response = await http.get(Uri.parse('https://secure.geonames.org/countryInfoJSON?username=wandercrew'));
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body)['geonames'];
         countries.value = data.map((country) {
@@ -65,13 +66,14 @@ class SelfCheckInController extends GetxController {
         documentIssueCountry.value = selectedCountry.value;
 
       } else {
-        // print("AAA");
-        print(response.body);
+        // print("self country:");
+        // print(response.body);
 
-        // Get.snackbar("Error", "Failed to fetch country list");
+        Get.snackbar("Error", "Failed to fetch country list");
       }
     } catch (e) {
-      // Get.snackbar("Error", "Unable to fetch countries. Please check your internet connection.");
+      Get.snackbar("Error", "Unable to fetch countries. Please check your internet connection.");
+      // print(e);
     }
   }
 
@@ -173,7 +175,7 @@ class SelfCheckInController extends GetxController {
   // Fetch state list based on selected country
   Future<void> fetchStates(String countryCode) async {
     try {
-      final response = await http.get(Uri.parse('http://api.geonames.org/childrenJSON?geonameId=$countryCode&username=wandercrew'));
+      final response = await http.get(Uri.parse('https://secure.geonames.org/childrenJSON?geonameId=$countryCode&username=wandercrew'));
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body)['geonames'];
         states.value = data.map((state) => state['name'].toString()).toList();
@@ -285,9 +287,11 @@ class SelfCheckInController extends GetxController {
         signatureUrl = await uploadSignature();
         // print("3");
 
+        String addId = randomAlphaNumeric(10);
         if (frontDocumentUrl != null && backDocumentUrl != null && signatureUrl != null) {
           // Handle optional fields: email, address, city, arrivingFrom, goingTo
           SelfCheckInModel selfCheckInData = SelfCheckInModel(
+            id: addId,
             documentType: documentType.value ?? "",
             frontDocumentUrl: frontDocumentUrl,
             backDocumentUrl: backDocumentUrl,

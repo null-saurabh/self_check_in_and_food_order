@@ -1,7 +1,7 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:flutter/cupertino.dart';
 //
-// import '../models/product_model.dart';
+// import '../models/menu_item_model.dart';
 //
 //
 // class ProductProvider with ChangeNotifier {

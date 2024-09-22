@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
-import '../../models/product_model.dart';
+import '../../models/menu_item_model.dart';
 import '../menu_screen/menu_screen_controller.dart';
 
 class CartScreenController extends GetxController {
@@ -19,9 +19,9 @@ class CartScreenController extends GetxController {
       // Generate the order name from cart items
       String orderName = "";
       cartItems.forEach((productId, quantity) {
-        ProductModel? product = menuScreenController.getProductById(productId);
+        MenuItemModel? product = menuScreenController.getProductById(productId);
         if (product != null) {
-          orderName += "${product.productName}($quantity), ";
+          orderName += "${product.name}($quantity), ";
         }
       });
 
@@ -146,9 +146,9 @@ class CartScreenController extends GetxController {
     int tempTotal = 0;
 
     cartItems.forEach((productId, quantity) {
-      ProductModel? product = menuScreenController.getProductById(productId);
+      MenuItemModel? product = menuScreenController.getProductById(productId);
       if (product != null) {
-        tempTotal += int.parse(product.productPrice) * quantity;
+        tempTotal += (product.price * quantity) as int;
       }
     });
 

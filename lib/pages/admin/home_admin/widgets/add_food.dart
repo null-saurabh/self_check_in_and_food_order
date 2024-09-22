@@ -65,7 +65,7 @@ class AddFoodItem extends StatelessWidget {
             const SizedBox(height: 30.0),
             _buildTextField("Item Price", controller.priceController),
             const SizedBox(height: 30.0),
-            _buildTextField("Item Detail", controller.detailController, maxLines: 6),
+            _buildTextField("Item Description", controller.descriptionController, maxLines: 6),
             const SizedBox(height: 30.0),
             Text("Select Category", style: AppWidget.semiBoldTextFeildStyle()),
             const SizedBox(height: 10.0),
@@ -73,7 +73,7 @@ class AddFoodItem extends StatelessWidget {
               return DropdownButton<String>(
                 value: controller.selectedCategory.value,
                 hint: const Text("Select Category"),
-                items: controller.foodItems.map((item) {
+                items: controller.categories.map((item) {
                   return DropdownMenuItem<String>(
                     value: item,
                     child: Text(item, style: const TextStyle(fontSize: 18.0, color: Colors.black)),

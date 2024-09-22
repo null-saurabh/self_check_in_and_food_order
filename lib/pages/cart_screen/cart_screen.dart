@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../models/product_model.dart';
-import '../../service/razorpay_web.dart';
+import '../../models/menu_item_model.dart';
 import '../../widgets/widget_support.dart';
 import '../menu_screen/menu_screen_controller.dart';
 import 'cart_screen_controller.dart';
-
-
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final MenuScreenController menuScreenController = Get.find<MenuScreenController>();
-
+    final MenuScreenController menuScreenController =
+        Get.find<MenuScreenController>();
 
     return GetBuilder<CartScreenController>(
         init: CartScreenController(),
@@ -31,9 +28,9 @@ class CartScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: Center(
                               child: Text(
-                                "Food Cart",
-                                style: AppWidget.HeadlineTextFeildStyle(),
-                              )))),
+                            "Food Cart",
+                            style: AppWidget.HeadlineTextFeildStyle(),
+                          )))),
                   const SizedBox(
                     height: 20.0,
                   ),
@@ -42,48 +39,54 @@ class CartScreen extends StatelessWidget {
                       child: cartScreenController.cartItems.isEmpty
                           ? const Center(child: Text('Your cart is empty'))
                           : ListView.builder(
-                        itemCount: cartScreenController.cartItems.length,
-                        itemBuilder: (context, index) {
-                          String productId = cartScreenController.cartItems.keys.elementAt(index);
-                          int quantity = cartScreenController.cartItems[productId]!;
-                          ProductModel? product = menuScreenController.getProductById(productId);
-                          // Fetch additional product data as needed
+                              itemCount: cartScreenController.cartItems.length,
+                              itemBuilder: (context, index) {
+                                String productId = cartScreenController
+                                    .cartItems.keys
+                                    .elementAt(index);
+                                int quantity =
+                                    cartScreenController.cartItems[productId]!;
+                                MenuItemModel? product = menuScreenController
+                                    .getProductById(productId);
+                                // Fetch additional product data as needed
 
-                          if (product == null) {
-                            return const SizedBox(); // Skip if the product is not found
-                          }
+                                if (product == null) {
+                                  return const SizedBox(); // Skip if the product is not found
+                                }
 
-
-                          return ListTile(
-                            leading: Image.network(
-                              product.productImage,
-                              width: 65,
-                              height: 65,
-                            ),
-                            title: Text(product.productName),
-                            subtitle: Text('Price: ${product.productPrice}'),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.remove),
-                                  onPressed: () {
-                                    cartScreenController.decreaseItem(productId);
-                                  },
-                                ),
-                                Text('$quantity'),
-                                IconButton(
-                                  icon: const Icon(Icons.add),
-                                  onPressed: () {
-                                    cartScreenController.addItem(productId, 1);
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      )
-                  ),
+                                return ListTile(
+                                  leading: product.image != null
+                                      ? Image.network(
+                                          product.image!,
+                                          width: 65,
+                                          height: 65,
+                                        )
+                                      : null,
+                                  title: Text(product.name),
+                                  subtitle: Text('Price: ${product.price}'),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.remove),
+                                        onPressed: () {
+                                          cartScreenController
+                                              .decreaseItem(productId);
+                                        },
+                                      ),
+                                      Text('$quantity'),
+                                      IconButton(
+                                        icon: const Icon(Icons.add),
+                                        onPressed: () {
+                                          cartScreenController.addItem(
+                                              productId, 1);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            )),
                   const Spacer(),
                   const Divider(),
                   Padding(
@@ -124,20 +127,18 @@ class CartScreen extends StatelessWidget {
                           left: 20.0, right: 20.0, bottom: 20.0),
                       child: const Center(
                           child: Text(
-                            "CheckOut",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold),
-                          )),
+                        "CheckOut",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold),
+                      )),
                     ),
                   )
                 ],
               ),
             ),
           );
-        }
-    );
+        });
   }
 }
-

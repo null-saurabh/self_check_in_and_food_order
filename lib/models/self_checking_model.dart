@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class SelfCheckInModel {
+  final String id;        // Required
   final String documentType;
   final String frontDocumentUrl;
   final String backDocumentUrl;
@@ -14,8 +17,16 @@ class SelfCheckInModel {
   final String? arrivingFrom; // Optional
   final String? goingTo; // Optional
   final String signatureUrl;
+  final String? notes;// Additional notes for the item
+  final List<String>? tags;      // Tags for search optimization (e.g., spicy, gluten-free)
+  dynamic createdAt;  // Change to dynamic to allow FieldValue
+  dynamic updatedAt;  // Change to dynamic to allow FieldValue  // Timestamp when the item was last updated
+  String? updatedBy;       // The user/admin who last updated the item
+
+
 
   SelfCheckInModel({
+    required this.id,
     required this.documentType,
     required this.frontDocumentUrl,
     required this.backDocumentUrl,
@@ -31,11 +42,17 @@ class SelfCheckInModel {
     this.arrivingFrom,
     this.goingTo,
     required this.signatureUrl,
+    this.notes,
+    this.tags,
+    this.createdAt,
+    this.updatedAt,
+    this.updatedBy
   });
 
   // Factory constructor for mapping Firestore data to SelfCheckInModel
   factory SelfCheckInModel.fromMap(Map<String, dynamic> data) {
     return SelfCheckInModel(
+      id: data['productId'],
       documentType: data['documentType'],
       frontDocumentUrl: data['frontDocumentUrl'],
       backDocumentUrl: data['backDocumentUrl'],
@@ -51,11 +68,17 @@ class SelfCheckInModel {
       arrivingFrom: data['arrivingFrom'], // May be null
       goingTo: data['goingTo'], // May be null
       signatureUrl: data['signatureUrl'],
+      notes: data['notes'],
+      tags: data['tags'] != null ? List<String>.from(data['tags']) : null,
+      updatedBy: data['updatedBy'],
+      createdAt: data['createdAt'],  // It can be FieldValue or DateTime
+      updatedAt: data['updatedAt'],
     );
   }
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
+      'productId': id,
       'documentType': documentType,
       'frontDocumentUrl': frontDocumentUrl,
       'backDocumentUrl': backDocumentUrl,
@@ -66,7 +89,14 @@ class SelfCheckInModel {
       'country': country,
       'regionState': regionState,
       'signatureUrl': signatureUrl,
+      'updatedBy': updatedBy,
+      'createdAt': createdAt ?? FieldValue.serverTimestamp(), // Handle dynamic value
+      "updatedAt": updatedAt ?? FieldValue.serverTimestamp(), // Handle dynamic value
+      'notes': notes,
+      'tags': tags,
+
     };
+
 
     // Add optional fields only if they're not null or empty
     if (email != null && email!.isNotEmpty) data['email'] = email;

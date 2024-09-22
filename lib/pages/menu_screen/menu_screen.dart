@@ -65,15 +65,14 @@ class MenuScreen extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        menuScreenController.isVeg.value = true;
-                        menuScreenController.isNonVeg.value = false;
+                        menuScreenController.toggleVegFilter();
                       },
                       child: Material(
                         elevation: 5.0,
                         borderRadius: BorderRadius.circular(10),
                         child: Container(
                           decoration: BoxDecoration(
-                              color: menuScreenController.isVeg.value ? Colors.black : Colors.white,
+                              color: menuScreenController.isVegSelected.value ? Colors.black : Colors.white,
                               borderRadius: BorderRadius.circular(10)),
                           padding: const EdgeInsets.all(8),
                           child: Image.asset(
@@ -81,7 +80,7 @@ class MenuScreen extends StatelessWidget {
                             height: 40,
                             width: 40,
                             fit: BoxFit.cover,
-                            color: menuScreenController.isVeg.value ? Colors.white : Colors.black,
+                            color: menuScreenController.isVegSelected.value ? Colors.white : Colors.black,
                           ),
                         ),
                       ),
@@ -89,8 +88,8 @@ class MenuScreen extends StatelessWidget {
                     const SizedBox(width: 20,),
                     GestureDetector(
                       onTap: () {
-                        menuScreenController.isVeg.value = false;
-                        menuScreenController.isNonVeg.value = true;
+                        menuScreenController.toggleNonVegFilter();
+
 
                       },
                       child: Material(
@@ -98,7 +97,7 @@ class MenuScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                         child: Container(
                           decoration: BoxDecoration(
-                              color: menuScreenController.isNonVeg.value ? Colors.black : Colors.white,
+                              color: menuScreenController.isNonVegSelected.value ? Colors.black : Colors.white,
                               borderRadius: BorderRadius.circular(10)),
                           padding: const EdgeInsets.all(8),
                           child: Image.asset(
@@ -106,7 +105,7 @@ class MenuScreen extends StatelessWidget {
                             height: 40,
                             width: 40,
                             fit: BoxFit.cover,
-                            color: menuScreenController.isNonVeg.value ? Colors.white : Colors.black,
+                            color: menuScreenController.isNonVegSelected.value ? Colors.white : Colors.black,
                           ),
                         ),
                       ),
@@ -124,25 +123,25 @@ class MenuScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 20),
                   child: Text('Breakfast'),
                 ),
-                SizedBox(
-                  height: 4000,
-                  child: Column(
-                    children: menuScreenController.getBreakfastMenuDataList.map(
-                          (breakfastMenuData) {
-                            // print("AAAAABB " + breakfastMenuData.productImage);
-                        return SingleProduct(
-                          productId: breakfastMenuData.productId,
-                          productPrice: breakfastMenuData.productPrice,
-                          productImage: breakfastMenuData.productImage,
-                          productName: breakfastMenuData.productName,
-                        );
-                      },
-                    ).toList(),
-                    // children: [
-
-                    // ],
-                  ),
-                ),
+                // SizedBox(
+                //   height: 4000,
+                //   child: Column(
+                //     children: menuScreenController.filteredMenuByCategory.map(
+                //           (breakfastMenuData) {
+                //             // print("AAAAABB " + breakfastMenuData.productImage);
+                //         return SingleProduct(
+                //           productId: breakfastMenuData.id,
+                //           productPrice: breakfastMenuData.productPrice,
+                //           productImage: breakfastMenuData.image,
+                //           productName: breakfastMenuData.productName,
+                //         );
+                //       },
+                //     ).toList(),
+                //     // children: [
+                //
+                //     // ],
+                //   ),
+                // ),
               ],
             )
               ],
