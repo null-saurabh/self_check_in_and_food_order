@@ -26,6 +26,14 @@ class AppWidget{
                   fontFamily: 'Poppins');
   }
 
+  static TextStyle white12TextStyle(){
+    return  const TextStyle(
+        color: Colors.white,
+        fontSize: 12.0,
+        fontWeight: FontWeight.w600,
+        fontFamily: 'Poppins');
+  }
+
         static TextStyle semiBoldTextFieldStyle(){
     return  const TextStyle(
                   color: Colors.black,

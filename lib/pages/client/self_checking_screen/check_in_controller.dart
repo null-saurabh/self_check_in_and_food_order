@@ -28,21 +28,17 @@ class CheckInController extends GetxController {
   final GlobalKey<FormState> formKeyPage1 = GlobalKey<FormState>();
   final GlobalKey<FormState> formKeyPage2 = GlobalKey<FormState>();
   final GlobalKey<FormState> formKeyPage3 = GlobalKey<FormState>();
+  RxString receptionistText = "Hi, Enter your details below!".obs;
 
   // Page 1
   var documentIssueCountry = Rx<Map<String, String>?>(null);
   var documentType = RxnString();
   Rxn<dynamic> frontDocument = Rxn<dynamic>();
-  // var frontDocument = Rxn<File>();
   var frontDocumentName = Rxn<String>();
   Rxn<dynamic> backDocument = Rxn<dynamic>();
-  // var backDocument = Rxn<File>();
   var backDocumentName = Rxn<String>();
   var termsAccepted = false.obs;
   var propertyTermsAccepted = false.obs;
-
-  // Country List
-  // RxList<String> countries = <String>[].obs;
   RxList<Map<String, String>> countries = <Map<String, String>>[].obs;
   // Image picker
   final ImagePicker _picker = ImagePicker();

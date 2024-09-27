@@ -10,6 +10,7 @@ import 'package:wandercrew/pages/admin/orders_admin/orders_list_screen.dart';
 import 'package:wandercrew/pages/client/cart_screen/cart_screen.dart';
 import 'package:wandercrew/pages/client/menu_screen/menu_screen.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/reception_home_screen.dart';
+import 'package:wandercrew/pages/client/self_checking_screen/check_in_screen.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/self_check_in_one_document_info.dart';
 import 'package:wandercrew/service/auth_services.dart';
 
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(
           name: '/reception/checkIn',
-          page: () => const CheckInFormOneDocument(),
+          page: () => const CheckInScreen(),
         ),
         GetPage(
           name: '/reception/menu/cart',
