@@ -1,19 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import '../../../models/menu_item_model.dart';
 import 'count.dart';
 import '../../../widgets/widget_support.dart';
 
-
 class SingleProduct extends StatelessWidget {
-  final String productImage;
-  final String productName;
-  final String productPrice;
-  final String productId;
-  const SingleProduct({super.key,required this.productId,
-      required this.productImage,
-      required this.productName,
-      required this.productPrice
-      });
+  final MenuItemModel menuItem;
+  const SingleProduct({
+    super.key,
+    required this.menuItem,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,16 +29,19 @@ class SingleProduct extends StatelessWidget {
                 children: [
                   // HtmlElementView(viewType: 'image-view'),
                   // CachedNetworkImage(imageUrl: productImage),
-                  Image.network(
-                    productImage, // Ensure URL is properly encoded
-                    fit: BoxFit.cover,
-                    width: 65,
-                    height: 65,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const Center(child: CircularProgressIndicator());
-                    },
-                  ),
+                  menuItem.image == null
+                      ? const SizedBox()
+                      : Image.network(
+                          menuItem.image!, // Ensure URL is properly encoded
+                          fit: BoxFit.cover,
+                          width: 65,
+                          height: 65,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          },
+                        ),
                   const SizedBox(
                     width: 20.0,
                   ),
@@ -53,35 +51,35 @@ class SingleProduct extends StatelessWidget {
                         SizedBox(
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
-                              productName,
+                              menuItem.name,
                               style: AppWidget.semiBoldTextFeildStyle(),
                             )),
                         const SizedBox(
                           height: 5.0,
                         ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width / 2,
-                            child: Text(
-                              "Honey got cheese",
-                              style: AppWidget.LightTextFeildStyle(),
-                            )),
+                        menuItem.description == null
+                            ? const SizedBox()
+                            : SizedBox(
+                                width: MediaQuery.of(context).size.width / 2,
+                                child: Text(
+                                  menuItem.description!,
+                                  style: AppWidget.LightTextFeildStyle(),
+                                )),
                         const SizedBox(
                           height: 5.0,
                         ),
                         SizedBox(
-                            width: MediaQuery.of(context).size.width / 2,
-                            child: Text(
-                              "\$ $productPrice",
-                              style: AppWidget.semiBoldTextFeildStyle(),
-                            )),
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: Text(
+                            '\u{20B9}${menuItem.price}',
+                            style: AppWidget.semiBoldTextFeildStyle(),
+                          ),
+                        ),
                         const SizedBox(
                           height: 10,
                         ),
                         Count(
-                          productId: productId,
-                          productImage: productImage,
-                          productName: productName,
-                          productPrice: productPrice,
+                          menuItem: menuItem,
                         ),
                         const SizedBox(
                           height: 10,
@@ -101,4 +99,3 @@ class SingleProduct extends StatelessWidget {
     );
   }
 }
-

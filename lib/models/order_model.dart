@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OrderStatusUpdate {
-  String status;         // e.g., Pending, Confirmed, Preparing, etc.
+  String status;         // e.g., Pending, Confirmed, Preparing, Delivered etc.
   DateTime updatedTime;   // The time the status was updated
   String updatedBy;       // The person who updated the status (e.g., admin, user)
 
@@ -71,6 +71,7 @@ class OrderStatusUpdate {
 class OrderModel {
 
   String orderId;                       // Unique ID for each order
+  String transactionId;                 // from razorpay
   String dinerName;                        // Reference to the user placing the order
   List<OrderStatusUpdate> orderStatusHistory;  // Track order status changes with time
   // String orderStatus;                   // e.g., Pending, Confirmed, Delivered, Cancelled
@@ -83,14 +84,15 @@ class OrderModel {
   String? specialInstructions;          // Any special instructions for the order
   double? discount;                     // Any discount applied to the order
   String? couponCode;                   // Coupon code applied, if any
-  String deliveryStatus;                // Status of delivery (e.g., Preparing, Out for Delivery, Delivered)
-  String estimatedDeliveryTime;         // Estimated time for delivery
+  // String deliveryStatus;                // Status of delivery (e.g., Preparing, Out for Delivery, Delivered)
+  String? estimatedDeliveryTime;         // Estimated time for delivery
   String paymentStatus;                 // e.g., Paid, Unpaid, Pending
   DateTime? createdAt;                  // Timestamp when the order was created
   DateTime? updatedAt;                  // Timestamp when the order was last updated
 
   OrderModel({
     required this.orderId,
+    required this.transactionId,
     required this.dinerName,
     required this.orderStatusHistory,
     // required this.orderStatus,
@@ -103,8 +105,8 @@ class OrderModel {
     this.specialInstructions,
     this.discount,
     this.couponCode,
-    required this.deliveryStatus,
-    required this.estimatedDeliveryTime,
+    // required this.deliveryStatus,
+    this.estimatedDeliveryTime,
     required this.paymentStatus,
     this.createdAt,
     this.updatedAt,
@@ -114,6 +116,7 @@ class OrderModel {
   Map<String, dynamic> toMap() {
     return {
       'orderId': orderId,
+      'transactionId': transactionId,
       'dinerName': dinerName,
       // 'orderStatus': orderStatus,
       'orderStatusHistory': orderStatusHistory.map((status) => status.toMap()).toList(),
@@ -126,7 +129,7 @@ class OrderModel {
       'specialInstructions': specialInstructions,
       'discount': discount,
       'couponCode': couponCode,
-      'deliveryStatus': deliveryStatus,
+      // 'deliveryStatus': deliveryStatus,
       'estimatedDeliveryTime': estimatedDeliveryTime,
       'paymentStatus': paymentStatus,
       'createdAt': createdAt?.toIso8601String(),
@@ -138,6 +141,7 @@ class OrderModel {
   factory OrderModel.fromMap(Map<String, dynamic> data) {
     return OrderModel(
       orderId: data['orderId'],
+      transactionId: data['transactionId'],
       dinerName: data['dinerName'],
       orderStatusHistory: List<OrderStatusUpdate>.from(
           data['orderStatusHistory'].map((status) => OrderStatusUpdate.fromMap(status))
@@ -153,7 +157,7 @@ class OrderModel {
       specialInstructions: data['specialInstructions'],
       discount: data['discount'] != null ? (data['discount'] as num).toDouble() : null,
       couponCode: data['couponCode'],
-      deliveryStatus: data['deliveryStatus'],
+      // deliveryStatus: data['deliveryStatus'],
       estimatedDeliveryTime: data['estimatedDeliveryTime'],
       paymentStatus: data['paymentStatus'],
       createdAt: data['createdAt'] != null ? DateTime.parse(data['createdAt']) : null,

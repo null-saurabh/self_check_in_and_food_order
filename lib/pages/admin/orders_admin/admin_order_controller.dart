@@ -35,6 +35,6 @@ class AdminOrderListController extends GetxController {
   }
 
 
-  // No need for separate getter, you can directly access `orderList`
-  List<OrderModel> get getOrderList => orderList;
+  // // No need for separate getter, you can directly access `orderList`
+  // List<OrderModel> get getOrderList => orderList;
 }

@@ -142,7 +142,7 @@ class AddFoodItemController extends GetxController {
 
         // Add the item to the Firestore database
         await DatabaseMethods()
-            .addFoodItem(newItem.toMap(), selectedCategory.value!)
+            .addFoodItem(newItem.toMap())
             .then((_) {
           Get.back(); // Close loading dialog
           Get.snackbar(

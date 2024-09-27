@@ -8,9 +8,9 @@ class DatabaseMethods {
         .set(userInfoMap);
   }
 
-  Future addFoodItem(Map<String, dynamic> foodItemData, String name) async {
+  Future addFoodItem(Map<String, dynamic> foodItemData) async {
     return await FirebaseFirestore.instance
-        .collection(name)
+        .collection("Menu")
         .add(foodItemData);
   }
 

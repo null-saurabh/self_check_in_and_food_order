@@ -80,14 +80,14 @@ class MenuScreenController extends GetxController {
     isNonVegSelected.value = false;
     applyFilters(); // Reapply filters
   }
-
-  MenuItemModel? getProductById(String productId) {
-    try {
-      return allMenuItems.firstWhere(
-            (product) => product.id == productId,
-      );
-    } catch (e) {
-      return null; // Return null if productId is not found
-    }
-  }
+  //
+  // MenuItemModel? getProductById(String productId) {
+  //   try {
+  //     return allMenuItems.firstWhere(
+  //           (product) => product.id == productId,
+  //     );
+  //   } catch (e) {
+  //     return null; // Return null if productId is not found
+  //   }
+  // }
 }

@@ -4,6 +4,7 @@ import 'package:wandercrew/pages/admin/login_admin/admin_login.dart';
 import 'package:wandercrew/pages/cart_screen/cart_screen.dart';
 import 'package:wandercrew/pages/menu_screen/menu_screen_controller.dart';
 import 'package:wandercrew/pages/menu_screen/widgets/single_product.dart';
+import '../../models/menu_item_model.dart';
 import '../../widgets/widget_support.dart';
 
 
@@ -123,25 +124,20 @@ class MenuScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 20),
                   child: Text('Breakfast'),
                 ),
-                // SizedBox(
-                //   height: 4000,
-                //   child: Column(
-                //     children: menuScreenController.filteredMenuByCategory.map(
-                //           (breakfastMenuData) {
-                //             // print("AAAAABB " + breakfastMenuData.productImage);
-                //         return SingleProduct(
-                //           productId: breakfastMenuData.id,
-                //           productPrice: breakfastMenuData.productPrice,
-                //           productImage: breakfastMenuData.image,
-                //           productName: breakfastMenuData.productName,
-                //         );
-                //       },
-                //     ).toList(),
-                //     // children: [
-                //
-                //     // ],
-                //   ),
-                // ),
+                menuScreenController.filteredMenuByCategory['Breakfast'] == null
+                ?SizedBox()
+                :Container(
+                  height: 4000,
+                  child: ListView.builder(
+                    itemCount: menuScreenController.filteredMenuByCategory['Breakfast']!.length,
+                    itemBuilder: (context, index) {
+                      MenuItemModel menuItem = menuScreenController.filteredMenuByCategory['Breakfast']![index];
+                      return SingleProduct(
+                        menuItem: menuItem, // Ensure correct property name
+                      );
+                    },
+                  ),
+                )
               ],
             )
               ],

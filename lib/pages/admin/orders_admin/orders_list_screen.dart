@@ -21,7 +21,7 @@ class OrdersListScreen extends StatelessWidget {
                   height: 2000,
                   child: Obx(() {
                     return Column(
-                      children: orderController.getOrderList.map(
+                      children: orderController.orderList.map(
                             (orderData) {
                           return SingleOrder(
                             orderName: orderData.dinerName,

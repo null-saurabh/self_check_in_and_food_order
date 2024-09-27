@@ -1,174 +1,201 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:random_string/random_string.dart';
 
+import '../../models/cart_model.dart';
 import '../../models/menu_item_model.dart';
-import '../menu_screen/menu_screen_controller.dart';
+import '../../models/order_model.dart';
+import '../../service/razorpay_web.dart';
 
 class CartScreenController extends GetxController {
+  @override
+  void onInit() {
+    super.onInit();
+    fetchRazorpayKey();
+  }
 
-  RxInt total = 0.obs;
+  TextEditingController deliveryAddressController = TextEditingController();
+  TextEditingController contactNumberController = TextEditingController();
+  TextEditingController dinerName = TextEditingController();
 
+  RxDouble totalAmount = 0.0.obs;
+  var cartItems = <String, CartItemModel>{}
+      .obs; // Key is menuItemID, value is CartItemModel
+  String razorpayKey = ""; // Variable to hold the Razorpay key
 
   Future<void> onSuccess(response) async {
     try {
-      final MenuScreenController menuScreenController = Get.find<MenuScreenController>();
+      print('aaa');
+      // String paymentStatus = response['status']; // From Razorpay response
+      // String paymentMethod = response['method']; // From Razorpay response
+      String transactionID =
+          response['paymentId']; // From Razorpay response
+
+      print('aaaa');
+      print(transactionID);
 
       // Get today's date
       String todayDate = DateTime.now().toIso8601String();
 
-      // Generate the order name from cart items
-      String orderName = "";
-      cartItems.forEach((productId, quantity) {
-        MenuItemModel? product = menuScreenController.getProductById(productId);
-        if (product != null) {
-          orderName += "${product.name}($quantity), ";
-        }
-      });
+      // Create a list of OrderedItemModels from cart items
+      List<OrderedItemModel> orderedItems = cartItems.entries.map((entry) {
+        return OrderedItemModel(
+          menuItemId: entry.value.menuItem.id,
+          menuItemName: entry.value.menuItem.name,
+          quantity: entry.value.quantity,
+          price: entry.value.menuItem.price,
+        );
+      }).toList();
 
-      // Remove trailing comma and space
-      if (orderName.isNotEmpty) {
-        orderName = orderName.substring(0, orderName.length - 2);
-      }
+      String addId = randomAlphaNumeric(10);
 
-      // Create the order map to store in Firebase
-      Map<String, dynamic> orderData = {
-        "orderName": orderName,
-        "amount": total.value,
-        "date": todayDate,
-      };
-
-      // Add the order to Firebase
-      await FirebaseFirestore.instance.collection('orders').add(orderData);
-
-      // Clear the cart after successful payment
-      clearCart();
-
-      // Display a success message
-      Get.snackbar(
-        "Success",
-        "Order placed successfully!",
-        snackPosition: SnackPosition.BOTTOM,
+      // Create order model
+      OrderModel orderData = OrderModel(
+        orderId: addId, // Firebase will generate the ID
+        transactionId: transactionID,
+        dinerName: "kk", //dinerName.text,
+        orderStatusHistory: [
+          OrderStatusUpdate(
+              status: "Pending",
+              updatedTime: DateTime.now(),
+              updatedBy: "System")
+        ],
+        items: orderedItems,
+        totalAmount: 11,//totalAmount.value,
+        paymentMethod: "", // Or other payment methods
+        orderDate: todayDate,
+        deliveryAddress:
+        "kk", //deliveryAddressController.text, // Replace with dynamic data
+        contactNumber:
+        "kk", //contactNumberController.text, // Replace with dynamic data
+        estimatedDeliveryTime: "30 mins", // Dynamically adjust
+        paymentStatus: "",
       );
+
+// Add the order to Firebase
+      await FirebaseFirestore.instance
+          .collection('orders')
+          .add(orderData.toMap());
+
+      clearCart();
+      Get.snackbar("Success", "Order placed successfully!",
+          snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
       // Handle any errors that occur during the order process
+      print(e);
+      print("aaaaaaa");
       Get.snackbar(
         "Error",
-        "Failed to place the order. Please try again.",
+        "Payment Complete!, But Failed to place the order. Contact Staff.",
         snackPosition: SnackPosition.BOTTOM,
       );
     }
   }
 
-  // Future<void> onSuccess(response) async {
-  //
-  //   final cartProvider = Provider.of<CartProvider>(context, listen: false);
-  //   final productProvider = Provider.of<ProductProvider>(context, listen: false);
-  //
-  //   Get today's date
-  //   String todayDate = DateTime.now().toIso8601String();
-  //
-  //   Generate the order name from cart items
-  //   String orderName = "";
-  //   cartProvider.cartItems.forEach((productId, quantity) {
-  //     ProductModel? product = productProvider.getProductById(productId);
-  //     if (product != null) {
-  //       orderName += "${product.productName}(${quantity}), ";
-  //     }
-  //   });
-  //
-  //   // Remove trailing comma and space
-  //   if (orderName.isNotEmpty) {
-  //     orderName = orderName.substring(0, orderName.length - 2);
-  //   }
-  //
-  //   // Create the order map
-  //   Map<String, dynamic> orderData = {
-  //     "orderName": orderName,
-  //     "amount": total,
-  //     "date": todayDate,
-  //   };
-  //
-  //   // Add the order to Firebase
-  //   await DatabaseMethods().addOrder(orderData);
-  //
-  //   // Optionally, clear the cart after successful payment
-  //   cartProvider.clearCart();
-  //
-  //   Display a success message (optional)
-  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //     content: Text("Order placed successfully!"),
-  //   ));
-  //
-  //
-  // }
-
+  // Handle payment failure
   void onFail(response) {
-
+    Get.snackbar("Payment Failed", "${response['message']} Please try again.",
+        snackPosition: SnackPosition.BOTTOM);
   }
 
   void onDismiss(response) {
-
+    Get.snackbar("Payment Dismissed!", "${response['message']} Please try again.",
+        snackPosition: SnackPosition.BOTTOM);
   }
 
-
-  var cartItems = <String, int>{}.obs; // Using a reactive map to store product ID and quantity
-
-  // Add item to cart or update quantity if it already exists
-  void addItem(String productId, int quantity) {
-    if (cartItems.containsKey(productId)) {
-      cartItems[productId] = cartItems[productId]! + quantity;
+  // Add item to cart or update quantity
+  void addItem(MenuItemModel menuItem, int quantity) {
+    if (cartItems.containsKey(menuItem.id)) {
+      cartItems[menuItem.id]!.quantity += quantity;
     } else {
-      cartItems[productId] = quantity;
+      cartItems[menuItem.id] =
+          CartItemModel(menuItem: menuItem, quantity: quantity);
     }
-    calculateTotalAmount(); // Calculate total after updating
-    update();
-  }
-
-  // Remove item from cart
-  void removeItem(String productId) {
-    cartItems.remove(productId);
     calculateTotalAmount();
-  }
-
-  // Decrease item quantity or remove it if quantity is 0
-  void decreaseItem(String productId) {
-    if (cartItems.containsKey(productId) && cartItems[productId]! > 1) {
-      cartItems[productId] = cartItems[productId]! - 1;
-    } else {
-      cartItems.remove(productId); // Remove item if the quantity is 1 and it gets decremented
-    }
-    calculateTotalAmount(); // Calculate total after updating
     update();
   }
 
-  void calculateTotalAmount() {
-    final MenuScreenController menuScreenController = Get.find<MenuScreenController>();
-    int tempTotal = 0;
+// // Remove item from cart
+//   void removeItem(String productId) {
+//     cartItems.remove(productId);
+//     calculateTotalAmount();
+//   }
 
-    cartItems.forEach((productId, quantity) {
-      MenuItemModel? product = menuScreenController.getProductById(productId);
-      if (product != null) {
-        tempTotal += (product.price * quantity) as int;
+  // Decrease item quantity
+  void decreaseItem(String menuItemId) {
+    if (cartItems.containsKey(menuItemId)) {
+      if (cartItems[menuItemId]!.quantity > 1) {
+        cartItems[menuItemId]!.quantity -= 1;
+      } else {
+        cartItems.remove(menuItemId);
       }
-    });
+    }
+    calculateTotalAmount();
+    update();
+  }
 
-    total.value = tempTotal; // Update the total
+  // Calculate total amount of the cart
+  void calculateTotalAmount() {
+    double tempTotal = 0.0;
+    cartItems.forEach((key, cartItem) {
+      tempTotal += cartItem.totalPrice;
+    });
+    totalAmount.value = tempTotal;
   }
 
   // Clear all items from the cart
   void clearCart() {
     cartItems.clear();
-    total.value  = 0;
+    totalAmount.value = 0.0;
   }
 
-  // Get item count
+  Future<void> initiatePayment() async {
+    if (totalAmount > 0) {
+      if (razorpayKey.isNotEmpty) {
+        // Check if the key is valid
+        RazorpayService razorpay = RazorpayService();
+        razorpay.openCheckout(
+          amount: (totalAmount.value * 100).toInt(),
+          key: razorpayKey,
+          onSuccess: onSuccess,
+          onDismiss: onDismiss,
+          onFail: onFail,
+        );
+      } else {
+        Get.snackbar(
+            "Error", "Razorpay is not available. Please Contact Wander Team.");
+      }
+    } else {
+      Get.snackbar("Error", "Total amount must be greater than zero.");
+    }
+  }
+
+  // Get the quantity of a specific item in the cart
   int getItemCount(String productId) {
-    return cartItems[productId] ?? 0;
+    return cartItems.containsKey(productId)
+        ? cartItems[productId]!.quantity
+        : 0;
   }
-
-  // Get total items in the cart (counts how many different products are in the cart)
-  int get totalItems => cartItems.length;
 
   // Get total quantity of all items in the cart
-  int get totalQuantity => cartItems.values.fold(0, (sums, quantity) => sums + quantity);
+  int get totalQuantity =>
+      cartItems.values.fold(0, (sums, item) => sums + item.quantity);
+
+  Future<void> fetchRazorpayKey() async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection("Razorpay")
+          .doc("i1m8ZJztxSYL35B7rboh")
+          .get();
+
+      if (snapshot.exists) {
+        razorpayKey = snapshot.get("testKey");
+      } else {
+        Get.snackbar("Error", "Razorpay key not found");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Failed to fetch Razorpay key: $e");
+    }
+  }
 }
