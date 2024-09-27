@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wandercrew/pages/self_checking_screen/self_check_in_controller.dart';
-import 'package:wandercrew/pages/self_checking_screen/self_check_in_two_personal_info.dart';
+import 'package:wandercrew/pages/client/self_checking_screen/check_in_controller.dart';
+import 'package:wandercrew/pages/client/self_checking_screen/self_check_in_two_personal_info.dart';
 
-class SelfCheckInOneDocumentInfo extends StatelessWidget {
-  const SelfCheckInOneDocumentInfo({super.key});
+class CheckInFormOneDocument extends StatelessWidget {
+  const CheckInFormOneDocument({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SelfCheckInController>(
-      init: SelfCheckInController(),
+    return GetBuilder<CheckInController>(
+      init: CheckInController(),
       builder: (selfCheckingController) {
         return Scaffold(
-          appBar: AppBar(title: const Text("Document Information")),
+          backgroundColor: const Color(0xffecfdfc),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(

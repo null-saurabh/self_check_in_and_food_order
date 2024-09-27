@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wandercrew/pages/self_checking_screen/self_check_in_controller.dart';
-import 'package:wandercrew/pages/self_checking_screen/self_check_in_three_signature_info.dart';
+import 'package:wandercrew/pages/client/self_checking_screen/check_in_controller.dart';
+import 'package:wandercrew/pages/client/self_checking_screen/self_check_in_three_signature_info.dart';
 
-import '../../widgets/edittext.dart';
+import '../../../widgets/edittext.dart';
 
 class SelfCheckInTwoPersonalInfo extends StatelessWidget {
   const SelfCheckInTwoPersonalInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SelfCheckInController>(
-      init: SelfCheckInController(),
+    return GetBuilder<CheckInController>(
+      init: CheckInController(),
       builder: (selfCheckingController) {
         return Scaffold(
           appBar: AppBar(title: const Text("Personal Information")),

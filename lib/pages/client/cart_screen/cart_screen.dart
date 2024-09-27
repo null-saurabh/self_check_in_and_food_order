@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../models/cart_model.dart';
-import '../../models/menu_item_model.dart';
-import '../../widgets/widget_support.dart';
+import '../../../models/cart_model.dart';
+import '../../../models/menu_item_model.dart';
+import '../../../widgets/widget_support.dart';
 import 'cart_screen_controller.dart';
 
 class CartScreen extends StatelessWidget {
@@ -26,7 +26,7 @@ class CartScreen extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "Food Cart",
-                        style: AppWidget.HeadlineTextFeildStyle(),
+                        style: AppWidget.headingBoldTextStyle(),
                       ),
                     ),
                   ),
@@ -89,11 +89,11 @@ class CartScreen extends StatelessWidget {
                     children: [
                       Text(
                         "Total Price",
-                        style: AppWidget.boldTextFeildStyle(),
+                        style: AppWidget.semiBoldTextFieldStyle(),
                       ),
                       Text(
                         "\$${cartScreenController.totalAmount.value.toStringAsFixed(2)}", // Update to totalAmount
-                        style: AppWidget.semiBoldTextFeildStyle(),
+                        style: AppWidget.semiBoldTextFieldStyle(),
                       ),
                     ],
                   ),

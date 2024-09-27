@@ -71,7 +71,7 @@ class Count extends StatelessWidget {
                         },
                         child: Text(
                           "ADD",
-                          style: AppWidget.LightTextFeildStyle(),
+                          style: AppWidget.subHeadingTextStyle(),
                         ),
                       ),
                     ),

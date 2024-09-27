@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import '../../models/menu_item_model.dart';
+import '../../../models/menu_item_model.dart';
 
 class MenuScreenController extends GetxController {
   RxBool isVegSelected = false.obs;

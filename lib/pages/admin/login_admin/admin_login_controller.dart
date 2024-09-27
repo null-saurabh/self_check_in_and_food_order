@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../service/auth_services.dart';
-import '../home_admin/home_admin.dart';
+import '../home_admin/admin_home_screen.dart';
 
 class AdminLoginController extends GetxController {
   final usernameController = TextEditingController();

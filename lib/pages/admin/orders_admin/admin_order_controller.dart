@@ -27,7 +27,6 @@ class AdminOrderListController extends GetxController {
         return OrderModel.fromMap(data);  // Using fromMap factory constructor
       }).toList();
 
-      // Updating observable list
       orderList.assignAll(newList);
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch orders: $e');

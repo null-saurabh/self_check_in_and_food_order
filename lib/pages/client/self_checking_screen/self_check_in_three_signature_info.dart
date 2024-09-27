@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:signature/signature.dart';
-import 'package:wandercrew/pages/self_checking_screen/self_check_in_controller.dart';
+import 'package:wandercrew/pages/client/self_checking_screen/check_in_controller.dart';
 
 class SelfCheckInThreeSignatureInfo extends StatelessWidget {
   const SelfCheckInThreeSignatureInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SelfCheckInController>(
-      init: SelfCheckInController(),
+    return GetBuilder<CheckInController>(
+      init: CheckInController(),
       builder: (selfCheckingController) {
         return Scaffold(
           appBar: AppBar(title: const Text("Additional Information")),

@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:random_string/random_string.dart';
 
-import '../../models/cart_model.dart';
-import '../../models/menu_item_model.dart';
-import '../../models/order_model.dart';
-import '../../service/razorpay_web.dart';
+import '../../../models/cart_model.dart';
+import '../../../models/menu_item_model.dart';
+import '../../../models/order_model.dart';
+import '../../../service/database.dart';
+import '../../../service/razorpay_web.dart';
+
 
 class CartScreenController extends GetxController {
   @override
@@ -26,14 +28,14 @@ class CartScreenController extends GetxController {
 
   Future<void> onSuccess(response) async {
     try {
-      print('aaa');
+      // print('aaa');
       // String paymentStatus = response['status']; // From Razorpay response
       // String paymentMethod = response['method']; // From Razorpay response
-      String transactionID =
-          response['paymentId']; // From Razorpay response
-
-      print('aaaa');
-      print(transactionID);
+      // String transactionID =
+      //     response['paymentId']; // From Razorpay response
+      //
+      // print('aaaa');
+      // print(transactionID);
 
       // Get today's date
       String todayDate = DateTime.now().toIso8601String();
@@ -53,7 +55,7 @@ class CartScreenController extends GetxController {
       // Create order model
       OrderModel orderData = OrderModel(
         orderId: addId, // Firebase will generate the ID
-        transactionId: transactionID,
+        transactionId: addId,
         dinerName: "kk", //dinerName.text,
         orderStatusHistory: [
           OrderStatusUpdate(
@@ -62,29 +64,28 @@ class CartScreenController extends GetxController {
               updatedBy: "System")
         ],
         items: orderedItems,
-        totalAmount: 11,//totalAmount.value,
+        totalAmount: 11, //totalAmount.value,
         paymentMethod: "", // Or other payment methods
         orderDate: todayDate,
         deliveryAddress:
-        "kk", //deliveryAddressController.text, // Replace with dynamic data
+            "kk", //deliveryAddressController.text, // Replace with dynamic data
         contactNumber:
-        "kk", //contactNumberController.text, // Replace with dynamic data
+            "kk", //contactNumberController.text, // Replace with dynamic data
         estimatedDeliveryTime: "30 mins", // Dynamically adjust
         paymentStatus: "",
       );
 
-// Add the order to Firebase
-      await FirebaseFirestore.instance
-          .collection('orders')
-          .add(orderData.toMap());
+      // Add the order to Firebase
 
-      clearCart();
-      Get.snackbar("Success", "Order placed successfully!",
-          snackPosition: SnackPosition.BOTTOM);
+      await DatabaseMethods().addOrder(orderData.toMap()).then((_) {
+        clearCart();
+        Get.snackbar("Success", "Order placed successfully!",
+            snackPosition: SnackPosition.BOTTOM);
+      });
     } catch (e) {
       // Handle any errors that occur during the order process
-      print(e);
-      print("aaaaaaa");
+      // print(e);
+      // print("aaaaaaa");
       Get.snackbar(
         "Error",
         "Payment Complete!, But Failed to place the order. Contact Staff.",
@@ -100,7 +101,8 @@ class CartScreenController extends GetxController {
   }
 
   void onDismiss(response) {
-    Get.snackbar("Payment Dismissed!", "${response['message']} Please try again.",
+    Get.snackbar(
+        "Payment Dismissed!", "${response['message']} Please try again.",
         snackPosition: SnackPosition.BOTTOM);
   }
 

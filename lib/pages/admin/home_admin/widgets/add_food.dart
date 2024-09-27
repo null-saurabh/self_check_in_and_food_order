@@ -20,14 +20,14 @@ class AddFoodItem extends StatelessWidget {
         //   onPressed: () => Get.back(),
         // ),
         centerTitle: true,
-        title: Text("Add Item", style: AppWidget.HeadlineTextFeildStyle()),
+        title: Text("Add Item", style: AppWidget.headingBoldTextStyle()),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Upload the Item Picture", style: AppWidget.semiBoldTextFeildStyle()),
+            Text("Upload the Item Picture", style: AppWidget.semiBoldTextFieldStyle()),
             const SizedBox(height: 20.0),
             Obx(() {
               return GestureDetector(
@@ -67,7 +67,7 @@ class AddFoodItem extends StatelessWidget {
             const SizedBox(height: 30.0),
             _buildTextField("Item Description", controller.descriptionController, maxLines: 6),
             const SizedBox(height: 30.0),
-            Text("Select Category", style: AppWidget.semiBoldTextFeildStyle()),
+            Text("Select Category", style: AppWidget.semiBoldTextFieldStyle()),
             const SizedBox(height: 10.0),
             Obx(() {
               return DropdownButton<String>(
@@ -104,7 +104,7 @@ class AddFoodItem extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppWidget.semiBoldTextFeildStyle()),
+        Text(label, style: AppWidget.semiBoldTextFieldStyle()),
         const SizedBox(height: 10.0),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -118,7 +118,7 @@ class AddFoodItem extends StatelessWidget {
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: "Enter $label",
-              hintStyle: AppWidget.LightTextFeildStyle(),
+              hintStyle: AppWidget.light16TextStyle(),
             ),
           ),
         ),

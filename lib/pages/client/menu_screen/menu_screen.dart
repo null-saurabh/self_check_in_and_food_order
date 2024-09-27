@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wandercrew/pages/admin/login_admin/admin_login.dart';
-import 'package:wandercrew/pages/cart_screen/cart_screen.dart';
-import 'package:wandercrew/pages/menu_screen/menu_screen_controller.dart';
-import 'package:wandercrew/pages/menu_screen/widgets/single_product.dart';
-import '../../models/menu_item_model.dart';
-import '../../widgets/widget_support.dart';
+import 'package:wandercrew/pages/client/menu_screen/widgets/single_product.dart';
+import '../../../models/menu_item_model.dart';
+import '../../../widgets/widget_support.dart';
+import 'menu_screen_controller.dart';
 
 
 class MenuScreen extends StatelessWidget {
@@ -31,7 +29,7 @@ class MenuScreen extends StatelessWidget {
                       Get.toNamed('/admin-login');
 
                       // Navigator.push(context, MaterialPageRoute(builder: (context)=> const AdminLogin()));
-                    },child: Text("Wander Crew,", style: AppWidget.boldTextFeildStyle())),
+                    },child: Text("Wander Crew,", style: AppWidget.headingBoldTextStyle())),
                     GestureDetector(
                       onTap: (){
                         Get.toNamed('/cart');
@@ -55,9 +53,9 @@ class MenuScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20.0,
                 ),
-                Text("Food Menu", style: AppWidget.HeadlineTextFeildStyle()),
+                Text("Food Menu", style: AppWidget.subHeadingTextStyle()),
                 Text("Discover and Get Great Food",
-                    style: AppWidget.LightTextFeildStyle()),
+                    style: AppWidget.light16TextStyle()),
                 const SizedBox(
                   height: 20.0,
                 ),
@@ -125,8 +123,8 @@ class MenuScreen extends StatelessWidget {
                   child: Text('Breakfast'),
                 ),
                 menuScreenController.filteredMenuByCategory['Breakfast'] == null
-                ?SizedBox()
-                :Container(
+                ?const SizedBox()
+                :SizedBox(
                   height: 4000,
                   child: ListView.builder(
                     itemCount: menuScreenController.filteredMenuByCategory['Breakfast']!.length,

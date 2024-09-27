@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../models/menu_item_model.dart';
+import '../../../../models/menu_item_model.dart';
+import '../../../../widgets/widget_support.dart';
 import 'count.dart';
-import '../../../widgets/widget_support.dart';
 
 class SingleProduct extends StatelessWidget {
   final MenuItemModel menuItem;
@@ -52,7 +52,7 @@ class SingleProduct extends StatelessWidget {
                             width: MediaQuery.of(context).size.width / 2,
                             child: Text(
                               menuItem.name,
-                              style: AppWidget.semiBoldTextFeildStyle(),
+                              style: AppWidget.semiBoldTextFieldStyle(),
                             )),
                         const SizedBox(
                           height: 5.0,
@@ -63,7 +63,7 @@ class SingleProduct extends StatelessWidget {
                                 width: MediaQuery.of(context).size.width / 2,
                                 child: Text(
                                   menuItem.description!,
-                                  style: AppWidget.LightTextFeildStyle(),
+                                  style: AppWidget.light16TextStyle(),
                                 )),
                         const SizedBox(
                           height: 5.0,
@@ -72,7 +72,7 @@ class SingleProduct extends StatelessWidget {
                           width: MediaQuery.of(context).size.width / 2,
                           child: Text(
                             '\u{20B9}${menuItem.price}',
-                            style: AppWidget.semiBoldTextFeildStyle(),
+                            style: AppWidget.semiBoldTextFieldStyle(),
                           ),
                         ),
                         const SizedBox(

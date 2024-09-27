@@ -1,8 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:wandercrew/pages/menu_screen/menu_screen.dart';
 
-import '../pages/self_checking_screen/self_check_in_one_document_info.dart';
+import '../pages/client/menu_screen/menu_screen.dart';
+import '../pages/client/self_checking_screen/self_check_in_one_document_info.dart';
 
 
 class BottomNav extends StatefulWidget {
@@ -17,14 +17,14 @@ class _BottomNavState extends State<BottomNav> {
 
   late List<Widget> pages;
   late Widget currentPage;
-  late SelfCheckInOneDocumentInfo selfcheckIn;
+  late CheckInFormOneDocument selfcheckIn;
   late MenuScreen menuScreen;
 
 
   @override
   void initState() {
-    selfcheckIn = SelfCheckInOneDocumentInfo();
-    menuScreen = MenuScreen();
+    selfcheckIn = const CheckInFormOneDocument();
+    menuScreen = const MenuScreen();
     pages = [menuScreen,selfcheckIn];
     super.initState();
   }
@@ -36,13 +36,13 @@ class _BottomNavState extends State<BottomNav> {
           height: 65,
           backgroundColor: Colors.white,
           color: Colors.black,
-          animationDuration: Duration(milliseconds: 500),
+          animationDuration: const Duration(milliseconds: 500),
           onTap: (int index) {
             setState(() {
               currentTabIndex = index;
             });
           },
-          items: [
+          items: const [
             Icon(
               Icons.home_outlined,
               color: Colors.white,

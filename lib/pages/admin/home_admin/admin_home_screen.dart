@@ -5,8 +5,8 @@ import 'package:wandercrew/widgets/widget_support.dart';
 import '../orders_admin/admin_order_controller.dart';
 import '../orders_admin/widgets/single_order.dart';
 
-class HomeAdmin extends StatelessWidget {
-  const HomeAdmin({super.key});
+class AdminHomeScreen extends StatelessWidget {
+  const AdminHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class HomeAdmin extends StatelessWidget {
                   Center(
                     child: Text(
                       "Home Admin",
-                      style: AppWidget.HeadlineTextFeildStyle(),
+                      style: AppWidget.headingBoldTextStyle(),
                     ),
                   ),
                   const SizedBox(height: 50.0),

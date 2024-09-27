@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:get/get.dart';
 import 'package:wandercrew/pages/admin/check_in_list_admin/check_in_list_admin.dart';
-import 'package:wandercrew/pages/admin/home_admin/home_admin.dart';
+import 'package:wandercrew/pages/admin/home_admin/admin_home_screen.dart';
 import 'package:wandercrew/pages/admin/home_admin/widgets/add_food.dart';
 import 'package:wandercrew/pages/admin/login_admin/admin_login.dart';
 import 'package:wandercrew/pages/admin/orders_admin/orders_list_screen.dart';
-import 'package:wandercrew/pages/cart_screen/cart_screen.dart';
+import 'package:wandercrew/pages/client/cart_screen/cart_screen.dart';
+import 'package:wandercrew/pages/client/menu_screen/menu_screen.dart';
+import 'package:wandercrew/pages/client/reception_home_screen/reception_home_screen.dart';
+import 'package:wandercrew/pages/client/self_checking_screen/self_check_in_one_document_info.dart';
 import 'package:wandercrew/service/auth_services.dart';
-import 'package:wandercrew/widgets/bottom_nav.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,23 +40,31 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/',
+      initialRoute: '/reception',
       getPages: [
         GetPage(
-          name: '/',
-          page: () => const BottomNav(),
+          name: '/reception',
+          page: () => const ReceptionHomeScreen(),
         ),
         GetPage(
-          name: '/admin-login',
-          page: () => const AdminLogin(),
+          name: '/reception/menu',
+          page: () => const MenuScreen(),
         ),
         GetPage(
-          name: '/cart',
+          name: '/reception/checkIn',
+          page: () => const CheckInFormOneDocument(),
+        ),
+        GetPage(
+          name: '/reception/menu/cart',
           page: () => const CartScreen(),
         ),
         GetPage(
-          name: '/admin/home',
-          page: () => const HomeAdmin(),
+          name: '/admin/login',
+          page: () => const AdminLogin(),
+        ),
+        GetPage(
+          name: '/admin',
+          page: () => const AdminHomeScreen(),
           middlewares: [AuthMiddleware()],
         ),
         GetPage(

@@ -8,12 +8,13 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:random_string/random_string.dart';
 import 'package:signature/signature.dart';
-import '../../models/self_checking_model.dart';
-import '../../service/database.dart';
-import '../../widgets/bottom_nav.dart';
+import '../../../models/self_checking_model.dart';
+import '../../../service/database.dart';
+import '../../../widgets/bottom_nav.dart';
 
 
-class SelfCheckInController extends GetxController {
+
+class CheckInController extends GetxController {
 
 
   @override

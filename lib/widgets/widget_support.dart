@@ -2,32 +2,32 @@ import 'package:flutter/material.dart';
 
 class AppWidget{
 
-  static TextStyle boldTextFeildStyle(){
-    return  TextStyle(
+  static TextStyle headingBoldTextStyle(){
+    return  const TextStyle(
                   color: Colors.black,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 32.0,
+                  fontWeight: FontWeight.w700,
                   fontFamily: 'Poppins');
   }
 
-    static TextStyle HeadlineTextFeildStyle(){
-    return  TextStyle(
+    static TextStyle subHeadingTextStyle(){
+    return  const TextStyle(
                   color: Colors.black,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w400,
                   fontFamily: 'Poppins');
   }
 
-      static TextStyle LightTextFeildStyle(){
-    return  TextStyle(
-                  color: Colors.black54,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.w500,
+      static TextStyle light16TextStyle(){
+    return  const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w400,
                   fontFamily: 'Poppins');
   }
 
-        static TextStyle semiBoldTextFeildStyle(){
-    return  TextStyle(
+        static TextStyle semiBoldTextFieldStyle(){
+    return  const TextStyle(
                   color: Colors.black,
                   fontSize: 18.0,
                   fontWeight: FontWeight.w500,
