@@ -3,17 +3,15 @@ import 'package:get/get.dart';
 import 'package:signature/signature.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_controller.dart';
 
-class SelfCheckInThreeSignatureInfo extends StatelessWidget {
-  const SelfCheckInThreeSignatureInfo({super.key});
+class CheckInFormThreeSignature extends StatelessWidget {
+  const CheckInFormThreeSignature({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CheckInController>(
       init: CheckInController(),
       builder: (selfCheckingController) {
-        return Scaffold(
-          appBar: AppBar(title: const Text("Additional Information")),
-          body: Padding(
+        return  Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(
               key: selfCheckingController.formKeyPage3,
@@ -73,8 +71,7 @@ class SelfCheckInThreeSignatureInfo extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        );
+          );
       },
     );
   }

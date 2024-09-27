@@ -2,7 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/client/menu_screen/menu_screen.dart';
-import '../pages/client/self_checking_screen/self_check_in_one_document_info.dart';
+import '../pages/client/self_checking_screen/check_in_one_document.dart';
 
 
 class BottomNav extends StatefulWidget {

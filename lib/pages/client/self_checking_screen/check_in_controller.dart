@@ -28,7 +28,28 @@ class CheckInController extends GetxController {
   final GlobalKey<FormState> formKeyPage1 = GlobalKey<FormState>();
   final GlobalKey<FormState> formKeyPage2 = GlobalKey<FormState>();
   final GlobalKey<FormState> formKeyPage3 = GlobalKey<FormState>();
-  RxString receptionistText = "Hi, Enter your details below!".obs;
+  RxString receptionistText = "Hi, Please Enter your details!".obs;
+
+  PageController pageController = PageController(); // For form navigation
+  var currentPage = 0.obs; // To track the current form page
+
+  void nextPage() {
+    if (currentPage.value < 2) {
+      currentPage.value++;
+      // pageController.nextPage(
+      //   duration: const Duration(milliseconds: 300),
+      //   curve: Curves.easeInOut,
+      // );
+    }
+    update();
+  }
+  void previousPage() {
+    if (currentPage.value > 0) {
+      currentPage.value--;
+      update();
+
+    }
+  }
 
   // Page 1
   var documentIssueCountry = Rx<Map<String, String>?>(null);
@@ -61,6 +82,8 @@ class CheckInController extends GetxController {
         );
         fetchStates(selectedCountry.value!['code']!);
         documentIssueCountry.value = selectedCountry.value;
+
+        update();
 
       } else {
         // print("self country:");

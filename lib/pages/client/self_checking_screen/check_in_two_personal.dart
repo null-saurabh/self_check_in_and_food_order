@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_controller.dart';
-import 'package:wandercrew/pages/client/self_checking_screen/self_check_in_three_signature_info.dart';
+import 'package:wandercrew/pages/client/self_checking_screen/check_in_three_signature.dart';
 
 import '../../../widgets/edittext.dart';
 
-class SelfCheckInTwoPersonalInfo extends StatelessWidget {
-  const SelfCheckInTwoPersonalInfo({super.key});
+class CheckInFormTwoPersonal extends StatelessWidget {
+  const CheckInFormTwoPersonal({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CheckInController>(
       init: CheckInController(),
       builder: (selfCheckingController) {
-        return Scaffold(
-          appBar: AppBar(title: const Text("Personal Information")),
-          body: Padding(
+        return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(
               key: selfCheckingController.formKeyPage2,
@@ -210,7 +208,7 @@ class SelfCheckInTwoPersonalInfo extends StatelessWidget {
                       onPressed: () {
                         if (selfCheckingController.formKeyPage1.currentState!.validate()) {
                           // Form is valid, proceed to next page
-                          Get.to(() => const SelfCheckInThreeSignatureInfo());
+                          Get.to(() => const CheckInFormThreeSignature());
                         } else {
                           // Show error message
                           Get.snackbar("Error", "Please fill all mandatory fields.");
@@ -222,8 +220,7 @@ class SelfCheckInTwoPersonalInfo extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        );
+          );
       },
     );
   }

@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 
 class CheckInGradientTexture extends StatelessWidget {
-  final Alignment alignment;
   final String assetPath;
-  const CheckInGradientTexture({super.key, required this.alignment, required this.assetPath});
+  final double? top;
+  final double? bottom;
+  final double? left;
+  final double? right;
+  const CheckInGradientTexture({super.key, required this.assetPath, this.top, this.bottom, this.left, this.right});
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-        child: Align(
-          alignment: alignment,
-          child: Opacity(
-            opacity: 0.9, // Adjust opacity as needed
-            child: Image.asset(
-              assetPath, // Your gradient texture image path
-              width: 104, // Adjust size of the gradient
-              height: 96,
-              fit: BoxFit.cover, // Ensure the image fits well
-            ),
+      top: top,
+        bottom: bottom,
+        left: left,
+        right: right,
+        child: Opacity(
+          opacity: 0.9, // Adjust opacity as needed
+          child: Image.asset(
+            assetPath, // Your gradient texture image path
+            width: 180, // Adjust size of the gradient
+            height: 180,
           ),
         ),
       );
