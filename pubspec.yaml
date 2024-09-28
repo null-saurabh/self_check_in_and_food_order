@@ -49,6 +49,7 @@ dependencies:
   get: ^4.6.6
   http: ^1.2.2
   cached_network_image: ^3.4.1
+  dropdown_button2: ^2.3.9
 
 
 dev_dependencies:

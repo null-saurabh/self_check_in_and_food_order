@@ -36,10 +36,6 @@ class CheckInController extends GetxController {
   void nextPage() {
     if (currentPage.value < 2) {
       currentPage.value++;
-      // pageController.nextPage(
-      //   duration: const Duration(milliseconds: 300),
-      //   curve: Curves.easeInOut,
-      // );
     }
     update();
   }
@@ -51,17 +47,25 @@ class CheckInController extends GetxController {
     }
   }
 
+
+
   // Page 1
+
   var documentIssueCountry = Rx<Map<String, String>?>(null);
-  var documentType = RxnString();
+  RxnString documentType = RxnString();
+
   Rxn<dynamic> frontDocument = Rxn<dynamic>();
   var frontDocumentName = Rxn<String>();
+  var isFrontDocumentInvalid = false.obs;
+
   Rxn<dynamic> backDocument = Rxn<dynamic>();
   var backDocumentName = Rxn<String>();
+  var isBackDocumentInvalid = false.obs;
+
   var termsAccepted = false.obs;
-  var propertyTermsAccepted = false.obs;
+  var isTermAccepted = false.obs;
+
   RxList<Map<String, String>> countries = <Map<String, String>>[].obs;
-  // Image picker
   final ImagePicker _picker = ImagePicker();
 
   Future<void> fetchCountries() async {
@@ -141,8 +145,34 @@ class CheckInController extends GetxController {
     }
   }
 
+  bool validateFormPage1() {
 
+    final isValid = formKeyPage1.currentState?.validate() ?? false;
 
+    // Manually validate the front document and back document
+    if (frontDocument.value == null) {
+      isFrontDocumentInvalid.value = true;
+    } else {
+      isFrontDocumentInvalid.value = false;
+    }
+
+    if (backDocument.value == null) {
+      isBackDocumentInvalid.value = true;
+    } else {
+      isBackDocumentInvalid.value = false;
+    }
+
+    if (!termsAccepted.value) {
+      isTermAccepted.value = true;
+    } else {
+      isTermAccepted.value = false;
+    }
+
+    update();
+
+    // Return whether the entire form is valid
+    return isValid && !isFrontDocumentInvalid.value && !isBackDocumentInvalid.value;
+  }
 
 
 
@@ -226,6 +256,7 @@ class CheckInController extends GetxController {
   TextEditingController arrivingFromController = TextEditingController();
   TextEditingController goingToController = TextEditingController();
   final SignatureController signatureController = SignatureController(penStrokeWidth: 5, penColor: Colors.black);
+  var propertyTermsAccepted = false.obs;
 
 
   bool isSignatureEmpty() {
