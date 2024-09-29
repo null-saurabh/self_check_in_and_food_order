@@ -53,20 +53,15 @@ class CheckInFormTwoPersonal extends StatelessWidget {
                   onValidate: Validators.validatePhoneNumber,
                   prefixSize: 71,
                   prefixHeight: 40,
-                  prefix: Material(
-                    elevation: 5.0,
-                    color: Colors.grey,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(12.0),
-                      bottomLeft: Radius.circular(12.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: AppDropDown(
-                        items:
-                            selfCheckingController.countryCodes.map((codeData) {
-                          return DropdownMenuItem(
-                            value: codeData['code'],
+                  prefix: Padding(
+                    padding: const EdgeInsets.only(left: 0.0),
+                    child: AppDropDown(
+                      items:
+                          selfCheckingController.countryCodes.map((codeData) {
+                        return DropdownMenuItem(
+                          value: codeData['code'],
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -82,7 +77,7 @@ class CheckInFormTwoPersonal extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 6),
                                 SizedBox(
-                                  width: 32,
+                                  width: 34,
                                   child: Text(
                                     codeData['code']!.removeAllWhitespace,
                                     style: const TextStyle(fontSize: 12),
@@ -93,37 +88,37 @@ class CheckInFormTwoPersonal extends StatelessWidget {
                                 ), // Safely use code as text
                               ],
                             ),
-                          );
-                        }).toList(),
-                        onChange: (value) {
-                          if (value != null) {
-                            selfCheckingController.selectedCountryCode.value =
-                                value;
-                          } else {}
-                        },
-                        // value: selfCheckingController.selectedCountryCode.value,
-                        value: selfCheckingController
-                                .selectedCountryCode.value.isNotEmpty
-                            ? selfCheckingController.selectedCountryCode.value
-                            : '+91',
-                        // labelText: "Code",
-                        oneSideBorder: true,
-                        contentPadding: const EdgeInsets.all(0),
-                        height: 39,
-                        width: 60,
-                        dropDownWidth: 200,
-                        filled: true,
-                        fillColor: Colors.grey,
-                        showSearch: true,
-                        searchCtrl: TextEditingController(),
-                        searchMatchFn: (item, searchValue) {
-                          searchValue = searchValue.toLowerCase();
-                          return item.value
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchValue);
-                        },
-                      ),
+                          ),
+                        );
+                      }).toList(),
+                      onChange: (value) {
+                        if (value != null) {
+                          selfCheckingController.selectedCountryCode.value =
+                              value;
+                        } else {}
+                      },
+                      // value: selfCheckingController.selectedCountryCode.value,
+                      value: selfCheckingController
+                              .selectedCountryCode.value.isNotEmpty
+                          ? selfCheckingController.selectedCountryCode.value
+                          : '+91',
+                      // labelText: "Code",
+                      oneSideBorder: true,
+                      contentPadding: const EdgeInsets.all(0),
+                      height: 39,
+                      width: 69,
+                      dropDownWidth: 200,
+                      filled: true,
+                      fillColor: Colors.grey.withOpacity(0.4),
+                      showSearch: true,
+                      searchCtrl: TextEditingController(),
+                      searchMatchFn: (item, searchValue) {
+                        searchValue = searchValue.toLowerCase();
+                        return item.value
+                            .toString()
+                            .toLowerCase()
+                            .contains(searchValue);
+                      },
                     ),
                   ),
                 ),
@@ -190,6 +185,22 @@ class CheckInFormTwoPersonal extends StatelessWidget {
                                 onSelected: (isSelected) {
                                   selfCheckingController.gender.value =
                                       isSelected ? "F" : null;
+                                },
+                              ),
+                              const SizedBox(width: 8),
+                              ChoiceChip(
+                                label: const Text("O"),
+                                backgroundColor: const Color(0xffECFDFC),
+                                selectedColor: const Color(0xffECFDFC),
+                                side: const BorderSide(
+                                    width: 1, color: Colors.grey),
+                                selected:
+                                    selfCheckingController.gender.value == "0",
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                onSelected: (isSelected) {
+                                  selfCheckingController.gender.value =
+                                      isSelected ? "0" : null;
                                 },
                               ),
                             ],

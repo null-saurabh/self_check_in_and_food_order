@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SelfCheckInModel {
   final String id;        // Required
+  final String documentIssueCountry;
   final String documentType;
   final String frontDocumentUrl;
   final String backDocumentUrl;
@@ -27,6 +28,7 @@ class SelfCheckInModel {
 
   SelfCheckInModel({
     required this.id,
+    required this.documentIssueCountry,
     required this.documentType,
     required this.frontDocumentUrl,
     required this.backDocumentUrl,
@@ -54,6 +56,7 @@ class SelfCheckInModel {
     return SelfCheckInModel(
       id: data['productId'],
       documentType: data['documentType'],
+      documentIssueCountry: data['documentIssueCountry'],
       frontDocumentUrl: data['frontDocumentUrl'],
       backDocumentUrl: data['backDocumentUrl'],
       fullName: data['fullName'],
@@ -80,6 +83,7 @@ class SelfCheckInModel {
     final Map<String, dynamic> data = {
       'productId': id,
       'documentType': documentType,
+      'documentIssueCountry': documentIssueCountry,
       'frontDocumentUrl': frontDocumentUrl,
       'backDocumentUrl': backDocumentUrl,
       'fullName': fullName,

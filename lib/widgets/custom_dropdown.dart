@@ -27,60 +27,63 @@ class CustomDropdownButton<T> extends StatelessWidget {
       children: [
         Text(labelText, style: AppWidget.textField16Style()),
         const SizedBox(height: 8),
-        DropdownButtonFormField(
-          value: value,
-          items: items,
-          onChanged: onChanged,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Colors.grey.withOpacity(0.6),
-                width: 1,
-              ),
+        SizedBox(
+          height: 40,
+          child: DropdownButtonFormField(
+            value: value,
+            items: items,
+            onChanged: onChanged,
+            decoration: InputDecoration(
+              // border: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(12),
+              //   borderSide: BorderSide(
+              //     color: Colors.grey.withOpacity(0.6),
+              //     width: 1,
+              //   ),
+              // ),
+              // enabledBorder: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(12),
+              //   borderSide: BorderSide(
+              //     color: Colors.grey.withOpacity(0.6),
+              //     width: 1,
+              //   ),
+              // ),
+              // disabledBorder: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(12),
+              //   borderSide: BorderSide(
+              //     color: Colors.grey.withOpacity(0.6),
+              //     width: 1,
+              //   ),
+              // ),
+              // errorBorder: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(12),
+              //   borderSide: BorderSide(
+              //     color: Colors.grey.withOpacity(0.6),
+              //     width: 1,
+              //   ),
+              // ),
+              // focusedBorder: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(12),
+              //   borderSide: BorderSide(
+              //     color: Colors.grey.withOpacity(0.6),
+              //     width: 1,
+              //   ),
+              // ),
+              // focusedErrorBorder: OutlineInputBorder(
+              //   borderRadius: BorderRadius.circular(12),
+              //   borderSide: BorderSide(
+              //     color: Colors.grey.withOpacity(0.6),
+              //     width: 1,
+              //   ),
+              // ),
+              hintText: hintText,
+              hintStyle: AppWidget.opaque16TextStyle(),
             ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Colors.grey.withOpacity(0.6),
-                width: 1,
-              ),
-            ),
-            disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Colors.grey.withOpacity(0.6),
-                width: 1,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Colors.grey.withOpacity(0.6),
-                width: 1,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Colors.grey.withOpacity(0.6),
-                width: 1,
-              ),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Colors.grey.withOpacity(0.6),
-                width: 1,
-              ),
-            ),
-            hintText: hintText,
-            hintStyle: AppWidget.opaque16TextStyle(),
+            dropdownColor: Colors.white,
+
+            validator: onValidate,
+
           ),
-          dropdownColor: Colors.white,
-
-          validator: onValidate,
-
         ),
       ],
     );

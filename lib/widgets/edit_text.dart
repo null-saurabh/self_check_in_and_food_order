@@ -123,95 +123,98 @@ class EditText extends StatelessWidget {
             height: 4,
           ),
         ],
-        TextFormField(
-          // focusNode: focusNode,
-          validator: (value) {
-            var result = onValidate?.call(value);
-            showError.value = result;
-            // return showError.value;
-            return result;
-          },
+        SizedBox(
+          height: 40,
+          child: TextFormField(
+            // focusNode: focusNode,
+            validator: (value) {
+              var result = onValidate?.call(value);
+              showError.value = result;
+              // return showError.value;
+              return result;
+            },
 
-          readOnly: onTap != null,
-          onTap: onTap,
-          enabled: enable,
-          controller: controller,
-          textAlign: textAlign!,
+            readOnly: onTap != null,
+            onTap: onTap,
+            enabled: enable,
+            controller: controller,
+            textAlign: textAlign!,
 
-          style: TextStyle(
-            fontWeight: textFontWeight,
-            color: textColor,
-            fontSize: textSize,
-            fontFamily: "poppins",
-          ),
-          keyboardType: inputType ?? TextInputType.name,
-
-          maxLength: maxLength,
-          minLines: minLine,
-
-          maxLines: maxLine,
-          onFieldSubmitted: onSubmit,
-          onChanged: onChange,
-          obscureText: obscureText!,
-          focusNode: focusNode,
-
-          decoration: InputDecoration(
-
-            isDense: true,
-            counterText: "",
-            hintText: hint ?? '',
-            filled: filled,
-            fillColor:fillColor,
-            errorStyle: const TextStyle(height: 0.1, fontSize: 0),
-            errorMaxLines: 2,
-            hintStyle: TextStyle(
-                color: hintColor,
-                fontSize: hintTextSize,
-                fontFamily:"poppins",
-                fontWeight: hintFontWeight),
-            suffixIcon: suffix,
-            prefixIcon: prefix,
-            // contentPadding: contentPadding,
-            // suffixIconConstraints:
-            // BoxConstraints(maxWidth: suffixSize!, maxHeight: suffixSize!),
-            prefixIconConstraints: BoxConstraints(
-                maxWidth: prefixSize!,
-                maxHeight: prefixHeight,
-                minHeight: prefixHeight,
-                minWidth: prefixSize!
+            style: TextStyle(
+              fontWeight: textFontWeight,
+              color: textColor,
+              fontSize: textSize,
+              fontFamily: "poppins",
             ),
-            border: showBorder
-                ? borderColor != null
-                ? border
-                : Get.theme.inputDecorationTheme.border
-                : InputBorder.none,
-            enabledBorder: showBorder
-                ? borderColor != null
-                ? border
-                : Get.theme.inputDecorationTheme.enabledBorder
-                : InputBorder.none,
-            errorBorder: showBorder
-                ? borderColor != null
-                ? border
-                : Get.theme.inputDecorationTheme.errorBorder
-                : InputBorder.none,
-            focusedBorder: showBorder
-                ? borderColor != null
-                ? border
-                : Get.theme.inputDecorationTheme.focusedBorder
-                : InputBorder.none,
-            disabledBorder: showBorder
-                ? borderColor != null
-                ? border
-                : Get.theme.inputDecorationTheme.disabledBorder
-                : InputBorder.none,
-            focusedErrorBorder: showBorder
-                ? borderColor != null
-                ? border
-                : Get.theme.inputDecorationTheme.focusedErrorBorder
-                : InputBorder.none,
+            keyboardType: inputType ?? TextInputType.name,
+
+            maxLength: maxLength,
+            minLines: minLine,
+
+            maxLines: maxLine,
+            onFieldSubmitted: onSubmit,
+            onChanged: onChange,
+            obscureText: obscureText!,
+            focusNode: focusNode,
+
+            decoration: InputDecoration(
+
+              isDense: true,
+              counterText: "",
+              hintText: hint ?? '',
+              filled: filled,
+              fillColor:fillColor,
+              errorStyle: const TextStyle(height: 0.1, fontSize: 0),
+              errorMaxLines: 2,
+              hintStyle: TextStyle(
+                  color: hintColor,
+                  fontSize: hintTextSize,
+                  fontFamily:"poppins",
+                  fontWeight: hintFontWeight),
+              suffixIcon: suffix,
+              prefixIcon: prefix,
+              // contentPadding: contentPadding,
+              // suffixIconConstraints:
+              // BoxConstraints(maxWidth: suffixSize!, maxHeight: suffixSize!),
+              prefixIconConstraints: BoxConstraints(
+                  maxWidth: prefixSize!,
+                  maxHeight: prefixHeight,
+                  minHeight: prefixHeight,
+                  minWidth: prefixSize!
+              ),
+              border: showBorder
+                  ? borderColor != null
+                  ? border
+                  : Get.theme.inputDecorationTheme.border
+                  : InputBorder.none,
+              enabledBorder: showBorder
+                  ? borderColor != null
+                  ? border
+                  : Get.theme.inputDecorationTheme.enabledBorder
+                  : InputBorder.none,
+              errorBorder: showBorder
+                  ? borderColor != null
+                  ? border
+                  : Get.theme.inputDecorationTheme.errorBorder
+                  : InputBorder.none,
+              focusedBorder: showBorder
+                  ? borderColor != null
+                  ? border
+                  : Get.theme.inputDecorationTheme.focusedBorder
+                  : InputBorder.none,
+              disabledBorder: showBorder
+                  ? borderColor != null
+                  ? border
+                  : Get.theme.inputDecorationTheme.disabledBorder
+                  : InputBorder.none,
+              focusedErrorBorder: showBorder
+                  ? borderColor != null
+                  ? border
+                  : Get.theme.inputDecorationTheme.focusedErrorBorder
+                  : InputBorder.none,
+            ),
+            inputFormatters: inputformats,
           ),
-          inputFormatters: inputformats,
         ),
 
 

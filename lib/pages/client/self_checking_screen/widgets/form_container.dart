@@ -86,9 +86,9 @@ class CheckInFormContainer extends StatelessWidget {
                         child: child,
                       );
                     },
-                    child: checkInController.currentPage.value == 0
+                    child: checkInController.currentPage.value == 1
                         ? const CheckInFormOneDocument(key: ValueKey('Page1'))
-                        : checkInController.currentPage.value == 1
+                        : checkInController.currentPage.value == 0
                             ? const CheckInFormTwoPersonal(
                                 key: ValueKey('Page2'))
                             : const CheckInFormThreeSignature(

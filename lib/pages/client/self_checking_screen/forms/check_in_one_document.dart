@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_controller.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/widgets/upload_document_widget.dart';
 
-import '../../../../widgets/custom_dropdown.dart';
+import '../../../../widgets/app_dropdown.dart';
+import '../../../../widgets/widget_support.dart';
 
 class CheckInFormOneDocument extends StatelessWidget {
   const CheckInFormOneDocument({super.key});
@@ -21,46 +22,53 @@ class CheckInFormOneDocument extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Country Dropdown with dynamic list
-                Obx(() {
-                  return CustomDropdownButton<Map<String, String>>(
-                    value: selfCheckingController.documentIssueCountry.value,
-                    items: selfCheckingController.countries.map((country) {
-                      return DropdownMenuItem(
-                          value: country, child: Text(country['name']!));
-                    }).toList(),
-                    onChanged: (value) => selfCheckingController
-                        .documentIssueCountry.value = value!,
-                    hintText: "-------------",
-                    labelText: "Document Issue Country",
-                    onValidate: (p0) {
-                      if (p0 == null) {
-                        return "*Required";
-                      }
-                      return null;
-                    },
-                  );
-                }),
+                // Obx(() {
+                // }),
+
+                AppDropDown(
+                  items: selfCheckingController.countries.map((country) {
+                    return DropdownMenuItem(
+                        value: country['name'], child: Text(country['name']!));
+                  }).toList(),
+                  onChange: (value) => selfCheckingController
+                      .documentIssueCountry.value = value!,
+                  value: selfCheckingController.documentIssueCountry.value,
+                  hintText: "-------------",
+                  labelText: "Document Issue Country",
+                  showLabel: true,
+                  height: 40,
+                  iconColor: Colors.grey,
+
+                  showSearch: true,
+                  searchCtrl: TextEditingController(),
+                  searchMatchFn: (item, searchValue) {
+                    searchValue = searchValue.toLowerCase();
+                    return item.value
+                        .toString()
+                        .toLowerCase()
+                        .contains(searchValue);
+                  },
+                  onValidate: Validators.requiredField,
+                ),
 
                 const SizedBox(height: 16),
                 // Obx(() { return
-                CustomDropdownButton(
-                  value: selfCheckingController.documentType.value,
+
+                AppDropDown(
                   items: ['Aadhaar', 'Driver License', 'Voter ID', 'Passport']
                       .map((type) {
                     return DropdownMenuItem(value: type, child: Text(type));
                   }).toList(),
-                  onChanged: (value) =>
-                      selfCheckingController.documentType.value = value,
-                  hintText: "-------------",
+                  onChange: (value) =>
+                  selfCheckingController.documentType.value = value,
+                  value: selfCheckingController.documentType.value,
                   labelText: "Document Type",
-                  onValidate: (p0) {
-                    if (p0 == null) {
-                      return "*Required";
-                    }
-                    return null;
-                  },
+                  showLabel: true,
+                  height: 40,
+                  iconColor: Colors.grey,
+                  onValidate: Validators.requiredField,
                 ),
-                // }),
+
 
                 // Document Type Dropdown
                 const SizedBox(height: 16),

@@ -107,7 +107,7 @@ class AppDropDown<T> extends StatelessWidget {
           ),
         SizedBox(
           width: width,
-          // height: 40,
+          height: 40,
           child: DropdownButtonFormField2<T>(
             style: TextStyle(
               color: textColor ?? ThemeColor.black,
@@ -131,7 +131,7 @@ class AppDropDown<T> extends StatelessWidget {
             ),
             decoration: const InputDecoration(
               contentPadding: EdgeInsets.zero,
-              isDense: true,
+              // isDense: true,
               errorStyle: TextStyle(height: 0.1, fontSize: 0),
               errorMaxLines: 1,
               border: OutlineInputBorder(
@@ -165,7 +165,7 @@ class AppDropDown<T> extends StatelessWidget {
                 border: showBorder
                     ? oneSideBorder
                         ? const Border(
-                  right: BorderSide(color: Colors.grey, width: 1),
+                            right: BorderSide(color: Colors.grey, width: 1),
                             // top: BorderSide(color: Colors.grey, width: 1),
                             // bottom: BorderSide(color: Colors.grey, width: 1),
                           )
@@ -173,14 +173,17 @@ class AppDropDown<T> extends StatelessWidget {
                             color: borderColor ?? ThemeColor.grey, width: 1)
                     : const Border(),
                 borderRadius: oneSideBorder
-                    ? BorderRadius.circular(0)
+                    ? const BorderRadius.only(
+                        topLeft: Radius.circular(12.0),
+                        bottomLeft: Radius.circular(12.0),
+                      )
                     : BorderRadius.circular(borderRadius ?? 12),
               ),
               height: height,
               width: width,
               padding: contentPadding ??
                   const EdgeInsets.only(
-                    right: 5,
+                    right: 0,
                     left: 5,
                   ),
             ),
@@ -222,10 +225,10 @@ class AppDropDown<T> extends StatelessWidget {
               width: dropDownWidth ?? width,
               elevation: 1,
               decoration: BoxDecoration(
-                color: filled ? dropDownColor : Colors.white,
+                color: filled ? Colors.white : Colors.white,
               ),
             ),
-            // isExpanded: true,
+            isExpanded: true,
           ),
         ),
         if (!hideError)
@@ -234,15 +237,15 @@ class AppDropDown<T> extends StatelessWidget {
             builder: (context, snapshot) {
               return snapshot.data != null
                   ? Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
                         snapshot.data ?? '',
                         style: const TextStyle(
                           fontSize: 12,
                           color: Color.fromARGB(255, 211, 63, 63),
                         ),
                       ),
-                  )
+                    )
                   : SizedBox(
                       height: showErrorPadding ? 14 : 0,
                     );

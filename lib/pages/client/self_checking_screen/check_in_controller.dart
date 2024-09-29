@@ -50,7 +50,8 @@ class CheckInController extends GetxController {
 
   // Page 1
 
-  var documentIssueCountry = Rx<Map<String, String>?>(null);
+  var documentIssueCountry = RxnString();
+  // var documentIssueCountry = Rx<Map<String, String>?>(null);
   RxnString documentType = RxnString();
 
   Rxn<dynamic> frontDocument = Rxn<dynamic>();
@@ -95,7 +96,7 @@ class CheckInController extends GetxController {
         // print("fetching country 6");
         fetchStates(selectedCountry.value!['code']!);
         // print("fetching country 6");
-        documentIssueCountry.value = selectedCountry.value;
+        documentIssueCountry.value = selectedCountry.value!['name'];
         // print("fetching country 6");
 
         update();
@@ -379,6 +380,7 @@ class CheckInController extends GetxController {
           // Handle optional fields: email, address, city, arrivingFrom, goingTo
           SelfCheckInModel selfCheckInData = SelfCheckInModel(
             id: addId,
+            documentIssueCountry: documentIssueCountry.value ?? "",
             documentType: documentType.value ?? "",
             frontDocumentUrl: frontDocumentUrl,
             backDocumentUrl: backDocumentUrl,

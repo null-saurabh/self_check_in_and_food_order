@@ -16,8 +16,8 @@ class FormButton extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        height: 40,  // Set your desired height
-        width: 100,  // Set to full width or a specific width
+        height: 44,  // Set your desired height
+        width: 108,  // Set to full width or a specific width
         decoration: BoxDecoration(
           image: const DecorationImage(
             image: AssetImage('assets/textures/button_texture.png'),  // Background image from assets
