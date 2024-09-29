@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:signature/signature.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_controller.dart';
 
+import '../../../widgets/edit_text.dart';
+import '../../../widgets/widget_support.dart';
+
 class CheckInFormThreeSignature extends StatelessWidget {
   const CheckInFormThreeSignature({super.key});
 
@@ -11,67 +14,104 @@ class CheckInFormThreeSignature extends StatelessWidget {
     return GetBuilder<CheckInController>(
       init: CheckInController(),
       builder: (selfCheckingController) {
-        return  Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: selfCheckingController.formKeyPage3,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextFormField(
-                    controller: selfCheckingController.arrivingFromController,
-                    decoration: const InputDecoration(labelText: "Arriving From"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter where you are arriving from.";
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: selfCheckingController.goingToController,
-                    decoration: const InputDecoration(labelText: "Going To"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter where you are going to.";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    height: 150,
-                    decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-                    child: Signature(
-                      controller: selfCheckingController.signatureController,
-                      backgroundColor: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  CheckboxListTile(
-                    title: const Text("I agree to the property terms & conditions"),
-                    value: selfCheckingController.propertyTermsAccepted.value,
-                    onChanged: (value) {
-                      selfCheckingController.propertyTermsAccepted.value = value!;
-                      selfCheckingController.update();
-                    },
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (selfCheckingController.formKeyPage3.currentState!.validate() && !selfCheckingController.isSignatureEmpty()) {
-                        selfCheckingController.submitData(); // Call to submit data
-                      } else {
-                        if (selfCheckingController.isSignatureEmpty()) {
-                          Get.snackbar("Error", "Please provide your signature.");
-                        }
-                      }
-                    },
-                    child: const Text("Submit"),
-                  ),
-                ],
-              ),
+        return Padding(
+          padding: const EdgeInsets.all(0.0),
+          child: Form(
+            key: selfCheckingController.formKeyPage3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                EditText(
+                  labelText: "Arriving From*",
+                  hint: "Enter Place",
+                  controller: selfCheckingController.arrivingFromController,
+                  onValidate: Validators.requiredField,
+                ),
+                EditText(
+                  labelText: "Going To*",
+                  hint: "Enter Place",
+                  controller: selfCheckingController.goingToController,
+                  onValidate: Validators.requiredField,
+                ),
+
+
+                FormField<String>(validator: (value) {
+                  if (selfCheckingController.signatureController.isEmpty) {
+                    // print("signature verification 1");
+                    return "Signature Required";
+                  }
+                  // print("signature verification 2");
+                  return null;
+                }, builder: (formState) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 150,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Signature(
+                            controller: selfCheckingController.signatureController,
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
+                      ),
+                      if (formState.hasError)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Text(
+                            formState.errorText ?? '',
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 211, 63, 63),
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                }),
+
+
+                const SizedBox(height: 16),
+
+
+                FormField<String>(validator: (value) {
+                  if (selfCheckingController.propertyTermsAccepted.value ==
+                      false) {
+                    return "You must accept property's terms and conditions";
+                  }
+                  return null;
+                }, builder: (formState) {
+                  return Obx(() {
+                    return CheckboxListTile(
+                        title: const Text(
+                            "I agree to the property terms & conditions"),
+                        value:
+                            selfCheckingController.propertyTermsAccepted.value,
+                        onChanged: (value) {
+                          selfCheckingController.propertyTermsAccepted.value =
+                              value!;
+                        },
+                        subtitle: formState.hasError
+                            ? Text(
+                                formState.errorText ?? '',
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 211, 63, 63),
+                                  fontSize: 12,
+                                ),
+                              )
+                            : null // If accepted, return an empty widget (SizedBox.shrink)
+
+                        );
+                  });
+                }),
+              ],
             ),
-          );
+          ),
+        );
       },
     );
   }

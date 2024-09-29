@@ -10,7 +10,6 @@ import 'package:random_string/random_string.dart';
 import 'package:signature/signature.dart';
 import '../../../models/self_checking_model.dart';
 import '../../../service/database.dart';
-import '../../../widgets/bottom_nav.dart';
 
 
 
@@ -70,24 +69,37 @@ class CheckInController extends GetxController {
 
   Future<void> fetchCountries() async {
     try {
+      // print("fetching country 1");
+
       final response = await http.get(Uri.parse('https://secure.geonames.org/countryInfoJSON?username=wandercrew'));
+      // print("fetching country 2");
       if (response.statusCode == 200) {
+        // print("fetching country 3");
+
         final List<dynamic> data = jsonDecode(response.body)['geonames'];
+        // print("fetching country 4");
+
         countries.value = data.map((country) {
           return {
             'name': country['countryName'] as String,
             'code': country['geonameId'].toString(),
           };
         }).toList();
+        // print("fetching country 5");
+
         countries.sort((a, b) => (a['name'] ?? '').compareTo(b['name'] ?? ''));// Sort countries alphabetically
         selectedCountry.value = countries.firstWhere(
               (country) => country['name'] == 'India',
           orElse: () => countries.first,
         );
+        // print("fetching country 6");
         fetchStates(selectedCountry.value!['code']!);
+        // print("fetching country 6");
         documentIssueCountry.value = selectedCountry.value;
+        // print("fetching country 6");
 
         update();
+        // print("fetching country 7");
 
       } else {
         // print("self country:");
@@ -97,6 +109,8 @@ class CheckInController extends GetxController {
       }
     } catch (e) {
       Get.snackbar("Error", "Unable to fetch countries. Please check your internet connection.");
+
+      // print("eeee");
       // print(e);
     }
   }
@@ -184,35 +198,57 @@ class CheckInController extends GetxController {
   TextEditingController address = TextEditingController();
   TextEditingController city = TextEditingController();
 
-  var gender = ''.obs;
+  RxnString gender = RxnString();
   var country = 'India'.obs;
   var regionState = ''.obs;
 
   RxList<String> states = <String>[].obs;
 
   RxList<Map<String, String>> countryCodes = <Map<String, String>>[].obs;
+  // Ensure the countryCodes list is populated correctly
+  // RxList<Map<String, String>> countryCodes = <Map<String, String>>[
+  //   {
+  //     'code': '+91',
+  //     'flag': 'https://example.com/india_flag.png'  // Replace with actual image URL
+  //   },
+  //   {
+  //     'code': '+1',
+  //     'flag': 'https://example.com/us_flag.png'  // Replace with actual image URL
+  //   },
+  //   // Add more countries here...
+  // ].obs;
   var selectedCountry = Rx<Map<String, String>?>(null);
-  var selectedCountryCode = '+91'.obs;  // Default to India
+  RxString selectedCountryCode = '+91'.obs;  // Default to India
   // var selectedCountryCode = RxnString();
 
 
   // Fetch country codes (with flags) from API
   Future<void> fetchCountryCodes() async {
     try {
+      // print("fetching country codes 1");
       final response = await http.get(Uri.parse('https://restcountries.com/v3.1/all'));
       if (response.statusCode == 200) {
+        // print("fetching country codes 2");
+
         final List<dynamic> data = jsonDecode(response.body);
+        // print("fetching country codes 3");
+
         countryCodes.value = data.map((country) {
           final root = country['idd']?['root']?.toString() ?? '';
           final suffix = (country['idd']?['suffixes'] is List && country['idd']?['suffixes']?.isNotEmpty == true)
               ? country['idd']['suffixes'][0].toString()
               : '';
+          // print("fetching country codes 4");
           return {
             'name': country['name']['common']?.toString() ?? '',
             'code': (root + suffix).isNotEmpty ? root + suffix : '',  // Ensure root+suffix is combined correctly
             'flag': country['flags']?['png']?.toString() ?? '',  // Safely access the flag URL
           };
         }).where((code) => code['code'] != null && code['code']!.isNotEmpty).toList().cast<Map<String, String>>();  // Filter invalid entries and cast correctly
+        // print("fetching country codes 5");
+        // print(countryCodes.length);
+        update();
+
       } else {
         Get.snackbar("Error", "Failed to fetch country codes");
       }
@@ -352,7 +388,7 @@ class CheckInController extends GetxController {
             age: age.text,
             address: address.text.isNotEmpty ? address.text : null,  // Handle address
             city: city.text.isNotEmpty ? city.text : null,  // Handle city
-            gender: gender.value,
+            gender: gender.value!,
             country: country.value,
             regionState: regionState.value,
             arrivingFrom: arrivingFromController.text.isNotEmpty ? arrivingFromController.text : null,  // Handle arrivingFrom
@@ -388,7 +424,7 @@ class CheckInController extends GetxController {
       } finally {
         // print("AAAA");
         // Get.back();
-        Get.to(() => const BottomNav());
+        Get.toNamed("/reception");
         //Close loading dialog
       }
 

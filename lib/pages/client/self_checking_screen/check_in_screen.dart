@@ -23,22 +23,22 @@ class CheckInScreen extends StatelessWidget {
                   const CheckInGradientTexture(
                     top: 48,
                     right: -33,
-                    assetPath: 'assets/icons/check_in_texture_1.png',
+                    assetPath: 'assets/textures/check_in_texture_1.png',
                   ),
                   const CheckInGradientTexture(
                     top: 112,
                     left: -29,
-                    assetPath: 'assets/icons/check_in_texture_2.png',
+                    assetPath: 'assets/textures/check_in_texture_2.png',
                   ),
                   const CheckInGradientTexture(
                     bottom: 60,
                     left: -32,
-                    assetPath: 'assets/icons/check_in_texture_3.png',
+                    assetPath: 'assets/textures/check_in_texture_3.png',
                   ),
                   const CheckInGradientTexture(
                     bottom: 60,
                     right: -28,
-                    assetPath: 'assets/icons/check_in_texture_4.png',
+                    assetPath: 'assets/textures/check_in_texture_4.png',
                   ),
 
                   Positioned(
@@ -96,7 +96,7 @@ class CheckInScreen extends StatelessWidget {
                                     bottomLeft: Radius.circular(12)),
                                 image: DecorationImage(
                                   image: AssetImage(
-                                      "assets/icons/receptionist_text_texture.png"),
+                                      "assets/textures/receptionist_text_texture.png"),
                                   fit: BoxFit.cover,
                                 ),
                               ),

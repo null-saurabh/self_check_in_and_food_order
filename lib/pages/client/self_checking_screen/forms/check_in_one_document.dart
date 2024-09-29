@@ -21,24 +21,28 @@ class CheckInFormOneDocument extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Country Dropdown with dynamic list
-                CustomDropdownButton<Map<String, String>>(
-                  value: selfCheckingController.documentIssueCountry.value,
-                  items: selfCheckingController.countries.map((country) {
-                    return DropdownMenuItem(
-                        value: country, child: Text(country['name']!));
-                  }).toList(),
-                  onChanged: (value) => selfCheckingController
-                      .documentIssueCountry.value = value!,
-                  hintText: "-------------",
-                  labelText: "Document Issue Country",
-                  onValidate: (p0) {
-                    if (p0 == null) {
-                      return "*Required";
-                    }
-                    return null;
-                  },
-                ),
+                Obx(() {
+                  return CustomDropdownButton<Map<String, String>>(
+                    value: selfCheckingController.documentIssueCountry.value,
+                    items: selfCheckingController.countries.map((country) {
+                      return DropdownMenuItem(
+                          value: country, child: Text(country['name']!));
+                    }).toList(),
+                    onChanged: (value) => selfCheckingController
+                        .documentIssueCountry.value = value!,
+                    hintText: "-------------",
+                    labelText: "Document Issue Country",
+                    onValidate: (p0) {
+                      if (p0 == null) {
+                        return "*Required";
+                      }
+                      return null;
+                    },
+                  );
+                }),
+
                 const SizedBox(height: 16),
+                // Obx(() { return
                 CustomDropdownButton(
                   value: selfCheckingController.documentType.value,
                   items: ['Aadhaar', 'Driver License', 'Voter ID', 'Passport']
@@ -56,6 +60,7 @@ class CheckInFormOneDocument extends StatelessWidget {
                     return null;
                   },
                 ),
+                // }),
 
                 // Document Type Dropdown
                 const SizedBox(height: 16),

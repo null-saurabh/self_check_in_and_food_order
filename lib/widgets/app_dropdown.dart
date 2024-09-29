@@ -15,10 +15,12 @@ class AppDropDown<T> extends StatelessWidget {
   final double? width;
   final double? dropDownWidth;
   final double? height;
-  final bool? filled;
+  final bool filled;
   final Color? fillColor;
   final bool showBorder;
+  final bool oneSideBorder;
   final bool showErrorPadding;
+  final double dropDownMenuHeight;
 
   final String? hintText;
   final EdgeInsets? contentPadding;
@@ -50,12 +52,13 @@ class AppDropDown<T> extends StatelessWidget {
     // this.borderColor = ThemeColor.dividerColor,
     this.borderColor = ThemeColor.grey,
     this.showBorder = true,
-    this.filled,
+    this.oneSideBorder = false,
+    this.filled = false,
     this.height,
     this.contentPadding,
     this.hintText,
     this.hideError = false,
-    this.labelText = "",
+    this.labelText,
     this.paddingBottom = false,
     this.dropDownColor,
     this.width,
@@ -66,7 +69,7 @@ class AppDropDown<T> extends StatelessWidget {
     this.labelColor,
     this.textColor,
     this.showSearch = false,
-    this.showErrorPadding = true,
+    this.showErrorPadding = false,
     this.onValidate,
     this.focusNode,
     this.searchCtrl,
@@ -74,6 +77,7 @@ class AppDropDown<T> extends StatelessWidget {
     this.showIndiactionTop = false,
     this.fillColor,
     this.selectedValue,
+    this.dropDownMenuHeight = 400,
   });
 
   final RxnString showError = RxnString();
@@ -83,26 +87,27 @@ class AppDropDown<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
+      // mainAxisSize: MainAxisSize.min,
       children: [
-        if (labelText!.isNotEmpty || showLabel) ...[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+        if (labelText != null || showLabel)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextView(
                 labelText ?? '',
-                textColor: labelColor ?? ThemeColor.grey,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+                textColor: labelColor ?? ThemeColor.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              const SizedBox(
+                height: 4,
               ),
             ],
           ),
-          const SizedBox(
-            height: 6,
-          ),
-        ],
         SizedBox(
           width: width,
+          // height: 40,
           child: DropdownButtonFormField2<T>(
             style: TextStyle(
               color: textColor ?? ThemeColor.black,
@@ -122,13 +127,13 @@ class AppDropDown<T> extends StatelessWidget {
             hint: TextView(
               hintText ?? '',
               fontSize: 12,
-              textColor: textColor ?? ThemeColor.black,
+              textColor: textColor ?? ThemeColor.grey,
             ),
             decoration: const InputDecoration(
               contentPadding: EdgeInsets.zero,
               isDense: true,
               errorStyle: TextStyle(height: 0.1, fontSize: 0),
-              errorMaxLines: 2,
+              errorMaxLines: 1,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.zero,
                 borderSide: BorderSide.none,
@@ -156,13 +161,20 @@ class AppDropDown<T> extends StatelessWidget {
             ),
             buttonStyleData: ButtonStyleData(
               decoration: BoxDecoration(
-                color: filled! ? fillColor : Colors.white,
+                color: filled ? fillColor : Colors.white,
                 border: showBorder
-                    ? Border.all(
-                        color: borderColor ?? ThemeColor.grey,
-                        width: .5)
+                    ? oneSideBorder
+                        ? const Border(
+                  right: BorderSide(color: Colors.grey, width: 1),
+                            // top: BorderSide(color: Colors.grey, width: 1),
+                            // bottom: BorderSide(color: Colors.grey, width: 1),
+                          )
+                        : Border.all(
+                            color: borderColor ?? ThemeColor.grey, width: 1)
                     : const Border(),
-                borderRadius: BorderRadius.circular(borderRadius ?? 10),
+                borderRadius: oneSideBorder
+                    ? BorderRadius.circular(0)
+                    : BorderRadius.circular(borderRadius ?? 12),
               ),
               height: height,
               width: width,
@@ -173,19 +185,23 @@ class AppDropDown<T> extends StatelessWidget {
                   ),
             ),
             iconStyleData: IconStyleData(
-              icon: Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: iconColor ?? ThemeColor.black,
-              ),
-              openMenuIcon: Icon(
-                Icons.keyboard_arrow_up_rounded,
-                color: iconColor ?? ThemeColor.black,
-              ),
+              icon: oneSideBorder
+                  ? const SizedBox.shrink()
+                  : Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: iconColor ?? ThemeColor.black,
+                    ),
+              openMenuIcon: oneSideBorder
+                  ? const SizedBox.shrink()
+                  : Icon(
+                      Icons.keyboard_arrow_up_rounded,
+                      color: iconColor ?? ThemeColor.black,
+                    ),
             ),
             dropdownSearchData: showSearch
                 ? DropdownSearchData(
                     searchInnerWidget: Container(
-                      height: 90,
+                      height: 75,
                       padding: const EdgeInsets.only(
                         left: 8,
                         right: 8,
@@ -193,24 +209,23 @@ class AppDropDown<T> extends StatelessWidget {
                       child: EditText(
                         // focusNode: searchFocusNode,
                         showBorder: true,
-                        height: 45,
                         controller: searchCtrl,
                       ),
                     ),
                     searchController: searchCtrl,
-                    searchInnerWidgetHeight: 45,
+                    searchInnerWidgetHeight: 25,
                     searchMatchFn: searchMatchFn,
                   )
                 : null,
             dropdownStyleData: DropdownStyleData(
-              maxHeight: 200,
+              maxHeight: dropDownMenuHeight,
               width: dropDownWidth ?? width,
               elevation: 1,
               decoration: BoxDecoration(
-                color: filled! ? dropDownColor : Colors.white,
+                color: filled ? dropDownColor : Colors.white,
               ),
             ),
-            isExpanded: true,
+            // isExpanded: true,
           ),
         ),
         if (!hideError)
@@ -218,13 +233,16 @@ class AppDropDown<T> extends StatelessWidget {
             stream: showError.stream,
             builder: (context, snapshot) {
               return snapshot.data != null
-                  ? Text(
-                      snapshot.data ?? '',
-                      style: const TextStyle(
-                        fontSize: 10,
-                        color: Color.fromARGB(255, 252, 70, 70),
+                  ? Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                        snapshot.data ?? '',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color.fromARGB(255, 211, 63, 63),
+                        ),
                       ),
-                    )
+                  )
                   : SizedBox(
                       height: showErrorPadding ? 14 : 0,
                     );

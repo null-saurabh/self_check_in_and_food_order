@@ -24,7 +24,7 @@ class ReceptionHomeScreen extends StatelessWidget {
                   child: Opacity(
                     opacity: 0.4, // Adjust opacity as needed
                     child: Image.asset(
-                      'assets/icons/reception_textures.png', // Your gradient texture image path
+                      'assets/textures/reception_textures.png', // Your gradient texture image path
                       width: 456, // Adjust size of the gradient
                       height: 560,
                       fit: BoxFit.cover, // Ensure the image fits well
