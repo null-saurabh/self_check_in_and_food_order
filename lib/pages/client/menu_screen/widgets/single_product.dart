@@ -23,10 +23,10 @@ class SingleProduct extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(width: 1,color: Colors.grey.withOpacity(0.4)),
-                borderRadius:BorderRadius.circular(12)
-              ),
+                  color: Colors.white,
+                  border:
+                      Border.all(width: 1, color: Colors.grey.withOpacity(0.4)),
+                  borderRadius: BorderRadius.circular(12)),
               padding: const EdgeInsets.all(12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,9 +52,17 @@ class SingleProduct extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.asset("assets/icons/veg_icon.png",
-                          height: 16,
-                          width: 16,),
+                        menuItem.isVeg
+                            ? Image.asset(
+                                "assets/icons/veg_icon.png",
+                                height: 16,
+                                width: 16,
+                              )
+                            : Image.asset(
+                                "assets/icons/non_veg_icon.png",
+                                height: 16,
+                                width: 16,
+                              ),
                         const SizedBox(
                           height: 8.0,
                         ),
@@ -80,7 +88,6 @@ class SingleProduct extends StatelessWidget {
                           '\u{20B9}${menuItem.price}',
                           style: AppWidget.black14Text300Style(),
                         ),
-
                       ],
                     ),
                   ),
