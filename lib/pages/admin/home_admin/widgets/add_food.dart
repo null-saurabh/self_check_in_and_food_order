@@ -15,10 +15,6 @@ class AddFoodItem extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        // leading: IconButton(
-        //   icon: const Icon(Icons.arrow_back_ios_new_outlined, color: Color(0xFF373866)),
-        //   onPressed: () => Get.back(),
-        // ),
         centerTitle: true,
         title: Text("Add Item", style: AppWidget.headingBoldTextStyle()),
       ),
@@ -82,6 +78,21 @@ class AddFoodItem extends StatelessWidget {
                 onChanged: (value) => controller.selectedCategory.value = value,
               );
             }),
+            const SizedBox(height: 10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("Is Veg"),
+                Obx((){ return Switch(
+                  // This bool value toggles the switch.
+                  value: controller.isVeg.value,
+                  activeColor: Colors.green,
+                  onChanged: (bool value) {
+                    controller.isVeg.value = value;
+                  },
+                );}),
+              ],
+            ),
             const SizedBox(height: 30.0),
             Center(
               child: ElevatedButton(

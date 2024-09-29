@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wandercrew/pages/client/reception_home_screen/reception_controller.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/widgets/home_screen_menu_widget.dart';
 
 import '../../../widgets/widget_support.dart';
-import '../menu_screen/menu_screen_controller.dart';
 
 class ReceptionHomeScreen extends StatelessWidget {
   const ReceptionHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<MenuScreenController>(
-        init: MenuScreenController(),
-        builder: (menuScreenController) {
+    return GetBuilder<ReceptionController>(
+        init: ReceptionController(),
+        builder: (controller) {
           return Scaffold(
             backgroundColor: const Color(0xfffdfded),
             body: Stack(
               children: [
+
                 // The gradient image at the bottom right corner
                 Positioned(
                   bottom: 0,
@@ -31,6 +32,8 @@ class ReceptionHomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+
+
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -39,6 +42,9 @@ class ReceptionHomeScreen extends StatelessWidget {
                       Text("Wander Crew",style: AppWidget.headingBoldTextStyle()),
                       Text("Your Journey, Our Passion.",style: AppWidget.subHeadingTextStyle()),
                       const SizedBox(height: 48,),
+
+
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -48,7 +54,6 @@ class ReceptionHomeScreen extends StatelessWidget {
                         onTap: () {
                           // Add action for check-in
                           Get.toNamed('/reception/checkIn');
-
                         },
                       ),
                           const SizedBox(width: 24,),
@@ -59,12 +64,12 @@ class ReceptionHomeScreen extends StatelessWidget {
                             onTap: () {
                               // Add action for order food
                               Get.toNamed('/reception/menu');
-
                             },
                           )
                         ],
                       ),
                       const SizedBox(height: 24,),
+
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -74,8 +79,6 @@ class ReceptionHomeScreen extends StatelessWidget {
                             icon: "assets/icons/feedback.png",
                             label: "Feedback",
                             onTap: () {
-                              // Add action for feedback
-                              // Get.toNamed(page);
                             },
                           ),
                           const SizedBox(width: 24,),
@@ -86,6 +89,8 @@ class ReceptionHomeScreen extends StatelessWidget {
                             onTap: () {
                               // Add action for room service
                               // Get.toNamed(page);
+                              controller.makePhoneCall();
+
 
                             },
                           )

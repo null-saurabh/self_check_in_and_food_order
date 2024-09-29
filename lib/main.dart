@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/reception',
+      initialRoute: '/menu',
       getPages: [
         GetPage(
           name: '/reception',
@@ -116,7 +116,7 @@ class AuthMiddleware extends GetMiddleware {
       // print("ee");
 
       return RouteSettings(
-        name: '/admin-login',
+        name: '/admin/login',
         arguments: {
           'redirect': route,  // Pass the route where the user was trying to go
         },); // Pass the original route as an argument

@@ -26,7 +26,7 @@ class MenuScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector( onTap: (){
-                      Get.toNamed('/admin-login');
+                      Get.toNamed('/admin/login');
 
                       // Navigator.push(context, MaterialPageRoute(builder: (context)=> const AdminLogin()));
                     },child: Text("Wander Crew,", style: AppWidget.headingBoldTextStyle())),
@@ -59,85 +59,12 @@ class MenuScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20.0,
                 ),
-                Container(margin: const EdgeInsets.only(right: 20.0), child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        menuScreenController.toggleVegFilter();
-                      },
-                      child: Material(
-                        elevation: 5.0,
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: menuScreenController.isVegSelected.value ? Colors.black : Colors.white,
-                              borderRadius: BorderRadius.circular(10)),
-                          padding: const EdgeInsets.all(8),
-                          child: Image.asset(
-                            "assets/images/ice-cream.png",
-                            height: 40,
-                            width: 40,
-                            fit: BoxFit.cover,
-                            color: menuScreenController.isVegSelected.value ? Colors.white : Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 20,),
-                    GestureDetector(
-                      onTap: () {
-                        menuScreenController.toggleNonVegFilter();
-
-
-                      },
-                      child: Material(
-                        elevation: 5.0,
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: menuScreenController.isNonVegSelected.value ? Colors.black : Colors.white,
-                              borderRadius: BorderRadius.circular(10)),
-                          padding: const EdgeInsets.all(8),
-                          child: Image.asset(
-                            "assets/images/pizza.png",
-                            height: 40,
-                            width: 40,
-                            fit: BoxFit.cover,
-                            color: menuScreenController.isNonVegSelected.value ? Colors.white : Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-
-                  ],
-                )),
+                Container(margin: const EdgeInsets.only(right: 20.0), child:                     buildVegNonVegFilter(menuScreenController),
+                ),
                 const SizedBox(
                   height: 30.0,
                 ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Text('Breakfast'),
-                ),
-                menuScreenController.filteredMenuByCategory['Breakfast'] == null
-                ?const SizedBox()
-                :SizedBox(
-                  height: 4000,
-                  child: ListView.builder(
-                    itemCount: menuScreenController.filteredMenuByCategory['Breakfast']!.length,
-                    itemBuilder: (context, index) {
-                      MenuItemModel menuItem = menuScreenController.filteredMenuByCategory['Breakfast']![index];
-                      return SingleProduct(
-                        menuItem: menuItem, // Ensure correct property name
-                      );
-                    },
-                  ),
-                )
-              ],
-            )
+                buildExpandableMenu(menuScreenController),
               ],
             ),
           )),
@@ -146,6 +73,95 @@ class MenuScreen extends StatelessWidget {
     );
   }
 
+
+  // Build Veg/Non-Veg filter buttons
+  Widget buildVegNonVegFilter(MenuScreenController controller) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () => controller.toggleVegFilter(),
+          child: Material(
+            elevation: 5.0,
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              decoration: BoxDecoration(
+                color: controller.isVegSelected.value ? Colors.black : Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: const EdgeInsets.all(8),
+              child: Image.asset(
+                "assets/images/ice-cream.png",
+                height: 40,
+                width: 40,
+                fit: BoxFit.cover,
+                color: controller.isVegSelected.value ? Colors.white : Colors.black,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 20),
+        GestureDetector(
+          onTap: () => controller.toggleNonVegFilter(),
+          child: Material(
+            elevation: 5.0,
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              decoration: BoxDecoration(
+                color: controller.isNonVegSelected.value ? Colors.black : Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: const EdgeInsets.all(8),
+              child: Image.asset(
+                "assets/images/pizza.png",
+                height: 40,
+                width: 40,
+                fit: BoxFit.cover,
+                color: controller.isNonVegSelected.value ? Colors.white : Colors.black,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Build Expandable List of Categories
+  Widget buildExpandableMenu(MenuScreenController controller) {
+    return ExpansionPanelList(
+      elevation: 1,
+      expandedHeaderPadding: const EdgeInsets.all(0),
+      expansionCallback: (int index, bool isExpanded) {
+        controller.toggleCategoryExpansion(index);
+      },
+      children: controller.filteredMenuByCategory.entries
+          .where((entry) => entry.value.isNotEmpty) // Filter out empty categories
+          .toList()
+          .asMap()
+          .map((index, entry) => MapEntry(
+        index,
+        ExpansionPanel(
+          headerBuilder: (context, isExpanded) {
+            return ListTile(
+              title: Text(
+                entry.key,
+                style: const TextStyle(
+                    fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            );
+          },
+          body: Column(
+            children: entry.value.map((menuItem) {
+              return SingleProduct(menuItem: menuItem);
+            }).toList(),
+          ),
+          isExpanded: controller.expandedCategories[index],
+        ),
+      ))
+          .values
+          .toList(),
+    );
+  }
 
 
 }

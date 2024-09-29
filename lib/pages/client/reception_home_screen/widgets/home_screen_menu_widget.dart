@@ -15,6 +15,12 @@ class ReceptionHomeGridItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap, // Handle the tap event
       child: Container(
+        // constraints: BoxConstraints(
+        //   maxWidth: 148,
+        //   maxHeight: 168,
+        //     minHeight: 108,
+        //     minWidth: 128
+        // ),
         width: 148,
         height: 168, // Fixed size for each grid item
         decoration: BoxDecoration(

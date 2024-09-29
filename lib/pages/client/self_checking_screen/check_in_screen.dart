@@ -124,13 +124,6 @@ class CheckInScreen extends StatelessWidget {
 
                               ),
 
-                              // Center(
-                              //   child: Text(
-                              //     checkInController.receptionistText.value,
-                              //     style: AppWidget.white12TextStyle(),
-                              //     textAlign: TextAlign.center,
-                              //   ),
-                              // ),
                             ),
                           ),
                         ],

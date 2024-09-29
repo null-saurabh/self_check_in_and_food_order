@@ -12,6 +12,8 @@ class MenuScreenController extends GetxController {
   // This will hold the filtered items for each category
   Map<String, List<MenuItemModel>> filteredMenuByCategory = {};
 
+  RxList<bool> expandedCategories = RxList.empty();
+
   @override
   void onInit() {
     fetchMenuData();
@@ -24,10 +26,14 @@ class MenuScreenController extends GetxController {
 
     categorizeMenuItems(allMenuItems);
     applyFilters(); // Apply filters initially
+    initializeExpandedCategories(); // Initialize expanded categories
+
     update();
   }
 
   void categorizeMenuItems(List<MenuItemModel> allMenuItems) {
+    // print("aaa");
+    print(allMenuItems);
     for (var item in allMenuItems) {
       if (!categorizedMenuItems.containsKey(item.category)) {
         categorizedMenuItems[item.category] = [];
@@ -50,6 +56,8 @@ class MenuScreenController extends GetxController {
 
       // Assign the filtered items to the respective category
       filteredMenuByCategory[category] = items;
+      print("apply");
+      print(filteredMenuByCategory[category] );
     }
 
     update();
@@ -80,14 +88,16 @@ class MenuScreenController extends GetxController {
     isNonVegSelected.value = false;
     applyFilters(); // Reapply filters
   }
-  //
-  // MenuItemModel? getProductById(String productId) {
-  //   try {
-  //     return allMenuItems.firstWhere(
-  //           (product) => product.id == productId,
-  //     );
-  //   } catch (e) {
-  //     return null; // Return null if productId is not found
-  //   }
+
+  // Initialize expanded categories based on the number of categories
+  void initializeExpandedCategories() {
+    expandedCategories.value = List.filled(filteredMenuByCategory.length, true); // True means expanded by default
+  }
+
+  void toggleCategoryExpansion(int index) {
+    expandedCategories[index] = !expandedCategories[index];
+    update();
+  }
+
   // }
 }
