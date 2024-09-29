@@ -129,7 +129,7 @@ class AddFoodItem extends StatelessWidget {
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: "Enter $label",
-              hintStyle: AppWidget.light16TextStyle(),
+              hintStyle: AppWidget.black16Text400Style(),
             ),
           ),
         ),

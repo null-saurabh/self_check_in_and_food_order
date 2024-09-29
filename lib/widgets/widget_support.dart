@@ -18,11 +18,20 @@ class AppWidget{
                   fontFamily: 'Poppins');
   }
 
-      static TextStyle light16TextStyle(){
+      static TextStyle black16Text400Style(){
     return  const TextStyle(
                   color: Colors.black,
                   fontSize: 16.0,
                   fontWeight: FontWeight.w400,
+                  fontFamily: 'Poppins'
+    );
+  }
+
+  static TextStyle black14Text300Style(){
+    return  const TextStyle(
+                  color: Colors.black,
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w300,
                   fontFamily: 'Poppins');
   }
 

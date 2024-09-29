@@ -45,7 +45,7 @@ class ReceptionHomeGridItem extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               label,
-              style: AppWidget.light16TextStyle(),
+              style: AppWidget.black16Text400Style(),
             ), // Text below the icon
           ],
         ),

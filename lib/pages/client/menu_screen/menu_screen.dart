@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wandercrew/pages/client/menu_screen/widgets/single_product.dart';
-import '../../../models/menu_item_model.dart';
 import '../../../widgets/widget_support.dart';
+import '../cart_screen/cart_screen_controller.dart';
 import 'menu_screen_controller.dart';
 
 
@@ -15,13 +15,19 @@ class MenuScreen extends StatelessWidget {
       init: MenuScreenController(),
         builder:(menuScreenController) {
         return Scaffold(
+          backgroundColor: const Color(0xffF4F5FA),
           body: SingleChildScrollView(child: Container(
-            margin: const EdgeInsets.only(top: 50.0, left: 20.0),
+            margin: const EdgeInsets.only(top: 32.0, left: 20.0),
 
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
+                IconButton(
+                    onPressed: () {
+                        Get.back();
+                    },
+                    icon: const Icon(Icons.keyboard_backspace_rounded)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -31,22 +37,55 @@ class MenuScreen extends StatelessWidget {
                       // Navigator.push(context, MaterialPageRoute(builder: (context)=> const AdminLogin()));
                     },child: Text("Wander Crew,", style: AppWidget.headingBoldTextStyle())),
                     GestureDetector(
-                      onTap: (){
-                        Get.toNamed('/cart');
+                      onTap: () {
+                        Get.toNamed('/reception/menu/cart');
                         // Navigator.push(context, MaterialPageRoute(builder: (context)=> const CartScreen()));
                       },
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 20.0),
-                        padding: const EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: const Icon(
-                          Icons.shopping_cart_outlined,
-                          color: Colors.white,
-                        ),
+                      child: Stack(
+                        children: [
+                          Obx(() => Positioned(
+                            right: 10,
+                            top: 0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                '${Get.put(CartScreenController()).cartItems.length}', // Replace with your CartScreenController instance
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          )),
+
+                          SizedBox(
+                            height: 60,
+                            width: 60,
+                            child: Center(
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 8.0),
+                                padding: const EdgeInsets.all(4),
+
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const Icon(
+                                  Icons.shopping_cart_outlined,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Display cart item count
+                        ],
                       ),
-                    ),
+                    )
+
 
                   ],
                 ),
@@ -55,11 +94,11 @@ class MenuScreen extends StatelessWidget {
                 ),
                 Text("Food Menu", style: AppWidget.subHeadingTextStyle()),
                 Text("Discover and Get Great Food",
-                    style: AppWidget.light16TextStyle()),
+                    style: AppWidget.black16Text400Style()),
                 const SizedBox(
                   height: 20.0,
                 ),
-                Container(margin: const EdgeInsets.only(right: 20.0), child:                     buildVegNonVegFilter(menuScreenController),
+                Container(margin: const EdgeInsets.only(right: 16.0), child:                     buildVegNonVegFilter(menuScreenController),
                 ),
                 const SizedBox(
                   height: 30.0,
@@ -128,38 +167,75 @@ class MenuScreen extends StatelessWidget {
 
   // Build Expandable List of Categories
   Widget buildExpandableMenu(MenuScreenController controller) {
-    return ExpansionPanelList(
-      elevation: 1,
-      expandedHeaderPadding: const EdgeInsets.all(0),
-      expansionCallback: (int index, bool isExpanded) {
-        controller.toggleCategoryExpansion(index);
-      },
+    return ListView(
+      physics: const NeverScrollableScrollPhysics(), // Disable scrolling for parent list
+      shrinkWrap: true, // Allow the ListView to take only the necessary height
       children: controller.filteredMenuByCategory.entries
           .where((entry) => entry.value.isNotEmpty) // Filter out empty categories
-          .toList()
-          .asMap()
-          .map((index, entry) => MapEntry(
-        index,
-        ExpansionPanel(
-          headerBuilder: (context, isExpanded) {
-            return ListTile(
-              title: Text(
-                entry.key,
-                style: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.bold),
+          .map((entry) {
+        int index = controller.filteredMenuByCategory.keys.toList().indexOf(entry.key);
+        return Column(
+          children: [
+            GestureDetector(
+              onTap: () {
+                controller.toggleCategoryExpansion(index);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                  border: const Border(bottom: BorderSide.none,),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      entry.key,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Icon(
+                      controller.expandedCategories[index]
+                          ? Icons.expand_less
+                          : Icons.expand_more,
+                    ),
+                  ],
+                ),
               ),
-            );
-          },
-          body: Column(
-            children: entry.value.map((menuItem) {
-              return SingleProduct(menuItem: menuItem);
-            }).toList(),
-          ),
-          isExpanded: controller.expandedCategories[index],
-        ),
-      ))
-          .values
-          .toList(),
+            ),
+            if (controller.expandedCategories[index]) ...[ // Show items only if expanded
+              Padding(
+                padding: const EdgeInsets.only(bottom: 0.0),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    // borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: Colors.grey.withOpacity(0.2),
+                    //     spreadRadius: 1,
+                    //     blurRadius: 5,
+                    //   ),
+                    // ],
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: entry.value.map((menuItem) {
+                      return SingleProduct(menuItem: menuItem);
+                    }).toList(),
+                  ),
+                ),
+              ),]
+          ],
+        );
+      }).toList(),
     );
   }
 

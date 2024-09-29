@@ -23,26 +23,28 @@ class Count extends StatelessWidget {
             int count = cartScreenController.getItemCount(menuItem.id);
 
             return Container(
-              height: 35,
-              width: 75,
+              height: 36,
+              width: 82,
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: const Color(0xff36DCA4)),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: count > 0
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        InkWell(
-                          onTap: () {
-
-                              cartScreenController.decreaseItem(menuItem.id);
-
-                          },
-                          child: const Icon(
-                            Icons.remove,
-                            size: 20,
-                            color: Color(0xffd0b84c),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                          
+                                cartScreenController.decreaseItem(menuItem.id);
+                          
+                            },
+                            child: const Icon(
+                              Icons.remove,
+                              size: 20,
+                              color: Color(0xffd0b84c),
+                            ),
                           ),
                         ),
                         Text(
@@ -52,14 +54,16 @@ class Count extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        InkWell(
-                          onTap: () {
-                            cartScreenController.addItem(menuItem, 1);
-                          },
-                          child: const Icon(
-                            Icons.add,
-                            size: 20,
-                            color: Color(0xffd0b84c),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              cartScreenController.addItem(menuItem, 1);
+                            },
+                            child: const Icon(
+                              Icons.add,
+                              size: 20,
+                              color: Color(0xffd0b84c),
+                            ),
                           ),
                         ),
                       ],
@@ -69,9 +73,15 @@ class Count extends StatelessWidget {
                         onTap: () {
                           cartScreenController.addItem(menuItem, 1);
                         },
-                        child: Text(
-                          "ADD",
-                          style: AppWidget.subHeadingTextStyle(),
+                        child: SizedBox(
+                          height: double.infinity,
+                          width: double.infinity,
+                          child: Center(
+                            child: Text(
+                              "ADD",
+                              style: AppWidget.subHeadingTextStyle(),
+                            ),
+                          ),
                         ),
                       ),
                     ),
