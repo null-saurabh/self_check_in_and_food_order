@@ -56,11 +56,10 @@ class MenuScreenController extends GetxController {
 
       // Assign the filtered items to the respective category
       filteredMenuByCategory[category] = items;
-      print("apply");
-      print(filteredMenuByCategory[category] );
+      // print("apply");
+      // print(filteredMenuByCategory[category] );
     }
 
-    update();
   }
 
   // Retrieve the filtered items for display in the UI

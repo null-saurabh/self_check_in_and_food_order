@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 import 'dart:html' as html;
 class ReceptionController extends GetxController{
 
@@ -29,7 +29,7 @@ class ReceptionController extends GetxController{
   // }
 
   void makePhoneCall() {
-    final String phoneNumber = '+919709568649';
+    const String phoneNumber = '+919709568649';
     html.window.open('tel:$phoneNumber', '_self');
   }
 

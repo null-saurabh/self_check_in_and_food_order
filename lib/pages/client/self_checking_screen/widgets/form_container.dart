@@ -4,9 +4,9 @@ import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/widgets/form_button.dart';
 
 import '../check_in_controller.dart';
-import '../forms/check_in_one_document.dart';
-import '../check_in_three_signature.dart';
-import '../check_in_two_personal.dart';
+import '../forms/form_one_document.dart';
+import '../forms/form_three_signature.dart';
+import '../forms/form_two_personal.dart';
 
 class CheckInFormContainer extends StatelessWidget {
   const CheckInFormContainer({

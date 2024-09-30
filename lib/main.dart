@@ -2,17 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:get/get.dart';
-import 'package:wandercrew/pages/admin/check_in_list_admin/check_in_list_admin.dart';
-import 'package:wandercrew/pages/admin/home_admin/admin_home_screen.dart';
-import 'package:wandercrew/pages/admin/home_admin/widgets/add_food.dart';
-import 'package:wandercrew/pages/admin/login_admin/admin_login.dart';
-import 'package:wandercrew/pages/admin/orders_admin/orders_list_screen.dart';
-import 'package:wandercrew/pages/client/cart_screen/cart_screen.dart';
-import 'package:wandercrew/pages/client/menu_screen/menu_screen.dart';
-import 'package:wandercrew/pages/client/reception_home_screen/reception_home_screen.dart';
-import 'package:wandercrew/pages/client/self_checking_screen/check_in_screen.dart';
-import 'package:wandercrew/pages/client/self_checking_screen/forms/check_in_one_document.dart';
 import 'package:wandercrew/service/auth_services.dart';
+import 'package:wandercrew/utils/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,49 +32,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/reception',
-      getPages: [
-        GetPage(
-          name: '/reception',
-          page: () => const ReceptionHomeScreen(),
-        ),
-        GetPage(
-          name: '/reception/menu',
-          page: () => const MenuScreen(),
-        ),
-        GetPage(
-          name: '/reception/checkIn',
-          page: () => const CheckInScreen(),
-        ),
-        GetPage(
-          name: '/reception/menu/cart',
-          page: () => const CartScreen(),
-        ),
-        GetPage(
-          name: '/admin/login',
-          page: () => const AdminLogin(),
-        ),
-        GetPage(
-          name: '/admin',
-          page: () => const AdminHomeScreen(),
-          middlewares: [AuthMiddleware()],
-        ),
-        GetPage(
-          name: '/admin/add-menu',
-          page: () => const AddFoodItem(),
-          middlewares: [AuthMiddleware()],
-        ),
-        GetPage(
-          name: '/admin/order-list',
-          page: () => const OrdersListScreen(),
-          middlewares: [AuthMiddleware()],
-        ),
-        GetPage(
-          name: '/admin/check-in-list',
-          page: () => const CheckInListAdmin(),
-          middlewares: [AuthMiddleware()],
-        ),
-      ],
+      initialRoute: Routes.adminHome, // Use routes from routes.dart
+      getPages: AppPages.pages,       // Use pages from app_pages.dart
       unknownRoute: GetPage(
         name: '/not-found',
         page: () => const Scaffold(
@@ -99,28 +49,3 @@ class MyApp extends StatelessWidget {
 }
 
 
-class AuthMiddleware extends GetMiddleware {
-  @override
-  RouteSettings? redirect(String? route) {
-    // Store the original route the user tried to access
-    // bool isLoggedIn = false;  // Replace this with actual authentication logic
-
-    // final AuthService authService = AuthService();
-
-    final AuthService authService = AuthService.to;
-    // print("e");
-    // print( route ?? "");
-    // print(authService.isLoggedIn.value);
-
-    if (!authService.isLoggedIn.value) {
-      // print("ee");
-
-      return RouteSettings(
-        name: '/admin/login',
-        arguments: {
-          'redirect': route,  // Pass the route where the user was trying to go
-        },); // Pass the original route as an argument
-    }
-    return null; // Allow access if logged in
-  }
-}

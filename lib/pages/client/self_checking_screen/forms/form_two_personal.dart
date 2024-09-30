@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_controller.dart';
-import '../../../widgets/app_dropdown.dart';
-import '../../../widgets/edit_text.dart';
-import '../../../widgets/text_view.dart';
-import '../../../widgets/widget_support.dart';
+import '../../../../widgets/app_dropdown.dart';
+import '../../../../widgets/edit_text.dart';
+import '../../../../widgets/text_view.dart';
+import '../../../../widgets/widget_support.dart';
 
 class CheckInFormTwoPersonal extends StatelessWidget {
   const CheckInFormTwoPersonal({super.key});

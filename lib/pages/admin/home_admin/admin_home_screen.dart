@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wandercrew/pages/admin/home_admin/widgets/add_food.dart';
 import 'package:wandercrew/widgets/widget_support.dart';
+import '../../client/reception_home_screen/widgets/home_screen_menu_widget.dart';
 import '../orders_admin/admin_order_controller.dart';
-import '../orders_admin/widgets/single_order.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});
@@ -14,149 +13,78 @@ class AdminHomeScreen extends StatelessWidget {
       init: AdminOrderListController(),
       builder: (orderController) {
         return Scaffold(
-          body: SingleChildScrollView(
-            child: Container(
-              margin: const EdgeInsets.only(top: 50.0, left: 20.0, right: 20.0),
-              child: Column(
-                children: [
-                  Center(
-                    child: Text(
-                      "Home Admin",
-                      style: AppWidget.headingBoldTextStyle(),
+          backgroundColor: const Color(0xffFDFDED),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("WANDER",style: AppWidget.headingBoldTextStyle()),
+                    const SizedBox(width: 4,),
+                    Text("CREW",style: AppWidget.headingYellowBoldTextStyle()),
+                  ],
+                ),
+                Text("Admin",style: AppWidget.heading2BoldTextStyle()),
+                const SizedBox(height: 48,),
+
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ReceptionHomeGridItem(
+                      icon: "assets/icons/check_in.png",
+                      label: "Check In List",
+                      onTap: () {
+                        // Add action for check-in
+                        Get.toNamed('/admin/check-in-list');
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 50.0),
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed('/admin/add-menu');
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => const AddFoodItem()),
-                      // );
-                    },
-                    child: Material(
-                      elevation: 10.0,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Center(
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Image.asset(
-                                  "assets/images/food.jpg",
-                                  height: 100,
-                                  width: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              const SizedBox(width: 30.0),
-                              const Text(
-                                "Add Food Items",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                    const SizedBox(width: 24,),
+                    ReceptionHomeGridItem(
+                      icon: "assets/icons/order_list.png",
+                      label: "Order List",
+                      onTap: () {
+                        Get.toNamed("/admin/order-list");
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 50.0),
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed('/admin/check-in-list');
-                      // Navigator.push(context, MaterialPageRoute(builder: (context)=> SelfCheckinList()));
-                    },
-                    child: Material(
-                      elevation: 10.0,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Center(
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Image.asset(
-                                  "assets/images/food.jpg",
-                                  height: 100,
-                                  width: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              const SizedBox(width: 30.0),
-                              const Text(
-                                "Self Checking List",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+
+                  ],
+                ),
+                const SizedBox(height: 24,),
+
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+
+                  children: [
+                    ReceptionHomeGridItem(
+                      icon: "assets/icons/burger.png",
+                      label: "Manage Menu",
+                      onTap: () {
+                        // Add action for order food
+                        Get.toNamed('/admin/add-menu');
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 50.0),
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed('/admin/order-list');
-                      // Navigator.push(context, MaterialPageRoute(builder: (context)=> SelfCheckinList()));
-                    },
-                    child: Material(
-                      elevation: 10.0,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Center(
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Image.asset(
-                                  "assets/images/food.jpg",
-                                  height: 100,
-                                  width: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              const SizedBox(width: 30.0),
-                              const Text(
-                                "Order List",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20.0),
-                ],
-              ),
+                    const SizedBox(width: 24,),
+
+                    ReceptionHomeGridItem(
+                      icon: "assets/icons/room_service.png",
+                      label: "Manage Users",
+                      onTap: () {
+                        // Add action for room service
+                        // Get.toNamed(page);
+
+                      },
+                    )
+
+                  ],
+                ),
+
+              ],
             ),
           ),
         );

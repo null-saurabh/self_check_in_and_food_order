@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../../models/self_checking_model.dart';
 
 class CheckInListController extends GetxController{
@@ -11,6 +12,7 @@ class CheckInListController extends GetxController{
   }
 
   RxList<SelfCheckInModel> checkInList = <SelfCheckInModel>[].obs;  // Using observable list
+  RxMap<String, List<SelfCheckInModel>> groupedCheckIns = <String, List<SelfCheckInModel>>{}.obs;
 
 
   Future<void> fetchCheckInList() async {
@@ -23,15 +25,33 @@ class CheckInListController extends GetxController{
 
         return SelfCheckInModel.fromMap(data);  // Using fromMap factory constructor
       }).toList();
-      // print("aaa");
+      // print(newList);
 
 
       // Updating observable list
       checkInList.assignAll(newList);
+      groupCheckInsByDate();
       update();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch orders');
+      Get.snackbar('Error', 'Failed to fetch list $e');
+      // print(e);
     }
+  }
+
+
+  void groupCheckInsByDate() {
+    Map<String, List<SelfCheckInModel>> groupedData = {};
+    for (var checkIn in checkInList) {
+      // Formatting DateTime to a string date
+      String formattedDate = DateFormat('dd/MM/yyyy').format(checkIn.createdAt!
+       );
+      if (!groupedData.containsKey(formattedDate)) {
+        groupedData[formattedDate] = [];
+      }
+      groupedData[formattedDate]!.add(checkIn);
+    }
+    groupedCheckIns.assignAll(groupedData);
+    update();
   }
 
 }

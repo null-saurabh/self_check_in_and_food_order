@@ -10,6 +10,30 @@ class AppWidget{
                   fontFamily: 'Poppins');
   }
 
+  static TextStyle headingYellowBoldTextStyle(){
+    return  const TextStyle(
+                  color: Color(0XFFFFD12B),
+                  fontSize: 32.0,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Poppins');
+  }
+
+  static TextStyle heading2BoldTextStyle(){
+    return  const TextStyle(
+                  color: Colors.black,
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Poppins');
+  }
+
+  static TextStyle heading3BoldTextStyle(){
+    return  const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins');
+  }
+
     static TextStyle subHeadingTextStyle(){
     return  const TextStyle(
                   color: Colors.black,
@@ -64,6 +88,14 @@ class AppWidget{
   static TextStyle textField16Style(){
     return  const TextStyle(
                   color: Colors.black,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Poppins');
+  }
+
+  static TextStyle red16Text500Style(){
+    return  const TextStyle(
+                  color: Colors.red,
                   fontSize: 16.0,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Poppins');

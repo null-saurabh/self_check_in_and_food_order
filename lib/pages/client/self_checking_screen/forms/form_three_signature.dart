@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:signature/signature.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_controller.dart';
 
-import '../../../widgets/edit_text.dart';
-import '../../../widgets/widget_support.dart';
+import '../../../../widgets/edit_text.dart';
+import '../../../../widgets/widget_support.dart';
 
 class CheckInFormThreeSignature extends StatelessWidget {
   const CheckInFormThreeSignature({super.key});
