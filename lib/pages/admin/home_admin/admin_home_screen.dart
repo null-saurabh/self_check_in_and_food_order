@@ -36,6 +36,7 @@ class AdminHomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ReceptionHomeGridItem(
+                      height: 168, // Fixed size for each grid item
                       icon: "assets/icons/check_in.png",
                       label: "Check In List",
                       onTap: () {
@@ -45,7 +46,7 @@ class AdminHomeScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: 24,),
                     ReceptionHomeGridItem(
-                      icon: "assets/icons/order_list.png",
+                      height: 168, // Fixed size for each grid item
                       label: "Order List",
                       onTap: () {
                         Get.toNamed("/admin/order-list");
@@ -62,6 +63,8 @@ class AdminHomeScreen extends StatelessWidget {
 
                   children: [
                     ReceptionHomeGridItem(
+                      height: 168, // Fixed size for each grid item
+
                       icon: "assets/icons/burger.png",
                       label: "Manage Menu",
                       onTap: () {
@@ -72,6 +75,8 @@ class AdminHomeScreen extends StatelessWidget {
                     const SizedBox(width: 24,),
 
                     ReceptionHomeGridItem(
+                      height: 168, // Fixed size for each grid item
+
                       icon: "assets/icons/room_service.png",
                       label: "Manage Users",
                       onTap: () {

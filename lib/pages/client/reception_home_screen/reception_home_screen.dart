@@ -19,19 +19,19 @@ class ReceptionHomeScreen extends StatelessWidget {
               children: [
 
                 // The gradient image at the bottom right corner
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Opacity(
-                    opacity: 0.4, // Adjust opacity as needed
-                    child: Image.asset(
-                      'assets/textures/reception_textures.png', // Your gradient texture image path
-                      width: 456, // Adjust size of the gradient
-                      height: 560,
-                      fit: BoxFit.cover, // Ensure the image fits well
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   bottom: 0,
+                //   right: 0,
+                //   child: Opacity(
+                //     opacity: 0.4, // Adjust opacity as needed
+                //     child: Image.asset(
+                //       'assets/textures/reception_textures.png', // Your gradient texture image path
+                //       width: 456, // Adjust size of the gradient
+                //       height: 560,
+                //       fit: BoxFit.cover, // Ensure the image fits well
+                //     ),
+                //   ),
+                // ),
 
 
                 Padding(
@@ -39,63 +39,86 @@ class ReceptionHomeScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Wander Crew",style: AppWidget.headingBoldTextStyle()),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Wander Crew",style: AppWidget.headingBoldTextStyle()),
+                          const SizedBox(width: 4,),
+                          Text("CREW",style: AppWidget.headingYellowBoldTextStyle()),
+                        ],
+                      ),
+
                       Text("Your Journey, Our Passion.",style: AppWidget.subHeadingTextStyle()),
                       const SizedBox(height: 48,),
 
 
+Row(
+  crossAxisAlignment: CrossAxisAlignment.center,
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ReceptionHomeGridItem(
+          height: 249,
+          iconWidth: 152,
+          iconHeight: 152,
+          isCheckIn: true,
+          icon: "assets/icons/check_in.png",
+          label: "Check In",
+          onTap: () {
+            // Add action for check-in
+            Get.toNamed('/reception/checkIn');
+          },
+        ),
+        const SizedBox(height: 12,),
+        ReceptionHomeGridItem(
+          height: 83,
+          isRoomService: true,
+          labelIcon: Icon(Icons.call, color: Colors.green,size: 20,),
+          label: "Room Service",
+          onTap: () {
+            controller.makePhoneCall();
+          },
+        )
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                        ReceptionHomeGridItem(
-                        icon: "assets/icons/check_in.png",
-                        label: "Check In",
-                        onTap: () {
-                          // Add action for check-in
-                          Get.toNamed('/reception/checkIn');
-                        },
-                      ),
-                          const SizedBox(width: 24,),
-
-                          ReceptionHomeGridItem(
-                            icon: "assets/icons/burger.png",
-                            label: "Order Food",
-                            onTap: () {
-                              // Add action for order food
-                              Get.toNamed('/reception/menu');
-                            },
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 24,),
-
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-
-                        children: [
-                          ReceptionHomeGridItem(
-                            icon: "assets/icons/feedback.png",
-                            label: "Feedback",
-                            onTap: () {
-                            },
-                          ),
-                          const SizedBox(width: 24,),
-
-                          ReceptionHomeGridItem(
-                            icon: "assets/icons/room_service.png",
-                            label: "Room Service",
-                            onTap: () {
-                              // Add action for room service
-                              // Get.toNamed(page);
-                              controller.makePhoneCall();
+      ],
+    ),
+    const SizedBox(width: 12,),
 
 
-                            },
-                          )
-                        ],
-                      ),
+    Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+
+      children: [
+        ReceptionHomeGridItem(
+          height: 199,
+          icon: "assets/icons/burger.png",
+          label: "Order Food",
+          onTap: () {
+            // Add action for order food
+            Get.toNamed('/reception/menu');
+          },
+        ),
+        const SizedBox(height: 12,),
+
+        ReceptionHomeGridItem(
+          height: 133,
+          iconHeight: 55,
+          iconWidth: 55,
+          icon: "assets/icons/feedback.png",
+          label: "Feedback",
+          onTap: () {
+          },
+        ),
+
+
+      ],
+    ),
+  ],
+)
+
                     ],
                   ),
                 ),
