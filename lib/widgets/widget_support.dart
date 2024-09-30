@@ -59,6 +59,14 @@ class AppWidget{
                   fontFamily: 'Poppins');
   }
 
+  static TextStyle black14Text400Style(){
+    return  const TextStyle(
+                  color: Colors.black,
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Poppins');
+  }
+
 
         static TextStyle opaque16TextStyle(){
     return  const TextStyle(
