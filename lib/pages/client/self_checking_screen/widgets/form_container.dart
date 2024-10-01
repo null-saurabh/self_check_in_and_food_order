@@ -24,7 +24,7 @@ class CheckInFormContainer extends StatelessWidget {
             padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),

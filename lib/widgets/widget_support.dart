@@ -26,6 +26,14 @@ class AppWidget{
                   fontFamily: 'Poppins');
   }
 
+  static TextStyle heading24Bold500TextStyle(){
+    return  const TextStyle(
+                  color: Colors.black,
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Poppins');
+  }
+
   static TextStyle heading3BoldTextStyle(){
     return  const TextStyle(
                   color: Colors.black,

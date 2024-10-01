@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wandercrew/pages/client/menu_screen/widgets/expandable_menu_item.dart';
-import 'package:wandercrew/pages/client/menu_screen/widgets/veg_filter.dart';
+import 'package:wandercrew/pages/client/menu_screen/widgets/menu_button.dart';
+import 'package:wandercrew/utils/routes.dart';
 import '../../../widgets/widget_support.dart';
-import '../cart_screen/cart_screen_controller.dart';
+import '../self_checking_screen/widgets/gradient_texture.dart';
 import 'menu_screen_controller.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -17,99 +18,223 @@ class MenuScreen extends StatelessWidget {
           return Scaffold(
             backgroundColor: const Color(0xffF4F5FA),
             body: SingleChildScrollView(
-                child: Container(
-              margin: const EdgeInsets.only(top: 32.0, left: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      icon: const Icon(Icons.keyboard_backspace_rounded)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                          onTap: () {
-                            Get.toNamed('/admin/login');
+                child: SizedBox(
+                  // height: MediaQuery.of(context).size.height,
+                  child: Stack(
+                    children:[
 
-                            // Navigator.push(context, MaterialPageRoute(builder: (context)=> const AdminLogin()));
-                          },
-                          child: Text("Wander Crew,",
-                              style: AppWidget.headingBoldTextStyle())),
-                      GestureDetector(
-                        onTap: () {
-                          Get.toNamed('/reception/menu/cart');
-                          // Navigator.push(context, MaterialPageRoute(builder: (context)=> const CartScreen()));
-                        },
-                        child: Stack(
-                          children: [
-                            Obx(() => Positioned(
-                                  right: 10,
-                                  top: 0,
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 6, vertical: 2),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Text(
-                                      '${Get.put(CartScreenController()).cartItems.length}', // Replace with your CartScreenController instance
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                )),
+                      // The gradient image at the bottom right corner
+                      // Using the helper function to add gradient textures
+                      const CheckInGradientTexture(
+                        top: 48,
+                        right: -38,
+                        assetPath: 'assets/textures/menu_texture_2.png',
+                      ),
+                      const CheckInGradientTexture(
+                        top: 68,
+                        right: 116,
+                        width: 79,
+                        height: 116,
+                        assetPath: 'assets/textures/menu_texture_4.png',
+                      ),
+                      const CheckInGradientTexture(
+                        top: 188,
+                        right: 116,
+                        width: 79,
+                        height: 116,
+                        assetPath: 'assets/textures/menu_texture_4.png',
+                      ),
+                      const CheckInGradientTexture(
+                        top: 112,
+                        left: -36,
+                        assetPath: 'assets/textures/menu_texture_1.png',
+                      ),
+                      const CheckInGradientTexture(
+                        top: 16,
+                        right: 122,
+                        width: 70,
+                        height: 77,
+                        assetPath: 'assets/textures/menu_texture_3.png',
+                      ),
+                      const CheckInGradientTexture(
+                        bottom: 60,
+                        left: -36,
+                        assetPath: 'assets/textures/menu_texture_1.png',
+                      ),
+                      const CheckInGradientTexture(
+                        bottom: 60,
+                        right: -38,
+                        assetPath: 'assets/textures/menu_texture_2.png',
+                      ),
 
-                            SizedBox(
-                              height: 60,
-                              width: 60,
-                              child: Center(
-                                child: Container(
-                                  margin: const EdgeInsets.only(right: 8.0),
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: const Icon(
-                                    Icons.shopping_cart_outlined,
-                                    color: Colors.white,
-                                  ),
+                      Positioned(
+                        top: 32,
+                        left: 16,
+                        child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25),
+                                color: Colors.white),
+                            child: IconButton(
+                                onPressed: () {
+
+                                    Get.toNamed(Routes.receptionHome);
+
+                                },
+                                icon: const Icon(Icons.keyboard_backspace_rounded))),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            right: 10, left: 16.0, top: 132, bottom: 12),
+                        child: Center(
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              // White container with form and button
+
+                              const Column(
+                                children: [
+                                  SizedBox(height:88,child: MenuButton()),
+                                  SizedBox(height:8),
+                                  ExpandableMenuItem(),
+
+                                ],
+                              ),
+
+                              // Girl's image positioned at the top left of the container
+                              Positioned(
+                                top: -124,
+                                right: 0,
+                                child: Image.asset(
+                                  'assets/icons/cafe_receptionist.png', // Replace with your image asset path
+                                  width: 124,
+                                  height: 124,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                            ),
-                            // Display cart item count
-                          ],
+
+                              // Speech bubble container next to the girl image
+                              Positioned(
+                                top: -76,
+                                right: 108,
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  width: 145,
+                                  // height: 52,
+                                  decoration: const BoxDecoration(
+                                    // color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(12),
+                                        topRight: Radius.circular(12),
+                                        bottomLeft: Radius.circular(12)),
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/textures/cafe_receptionist_texture.png"),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  child:
+                                  Center(
+                                    child: Text(
+                                      menuScreenController.receptionistText.value, // "Hi, "
+                                      style: AppWidget.white12BoldTextStyle(), // Regular style
+                                    ),
+
+                                  ),
+
+                                ),
+                              ),
+
+
+
+                            ],
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  Text("Food Menu", style: AppWidget.subHeadingTextStyle()),
-                  Text("Discover and Get Great Food",
-                      style: AppWidget.black16Text400Style()),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 16.0),
-                    child: const VegFilterMenu(),
-                  ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                  const ExpandableMenuItem(),
-                ],
-              ),
-            )),
+                      ),
+
+                  ]),
+                )),
           );
         });
   }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Row(
+//   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//   children: [
+//     Stack(
+//       children: [
+//         Obx(() => Positioned(
+//           right: 10,
+//           top: 0,
+//           child: Container(
+//             padding: const EdgeInsets.symmetric(
+//                 horizontal: 6, vertical: 2),
+//             decoration: BoxDecoration(
+//               color: Colors.red,
+//               borderRadius: BorderRadius.circular(12),
+//             ),
+//             child: Text(
+//               '${Get.put(CartScreenController()).cartItems.length}', // Replace with your CartScreenController instance
+//               style: const TextStyle(
+//                 color: Colors.white,
+//                 fontSize: 12,
+//               ),
+//             ),
+//           ),
+//         )),
+//
+//         SizedBox(
+//           height: 60,
+//           width: 60,
+//           child: Center(
+//             child: Container(
+//               margin: const EdgeInsets.only(right: 8.0),
+//               padding: const EdgeInsets.all(4),
+//               decoration: BoxDecoration(
+//                 color: Colors.black,
+//                 borderRadius: BorderRadius.circular(8),
+//               ),
+//               child: const Icon(
+//                 Icons.shopping_cart_outlined,
+//                 color: Colors.white,
+//               ),
+//             ),
+//           ),
+//         ),
+//         // Display cart item count
+//       ],
+//     ),
+//   ],
+// ),
+// VegFilterMenu(),

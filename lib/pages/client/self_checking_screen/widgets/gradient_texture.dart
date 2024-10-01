@@ -6,7 +6,9 @@ class CheckInGradientTexture extends StatelessWidget {
   final double? bottom;
   final double? left;
   final double? right;
-  const CheckInGradientTexture({super.key, required this.assetPath, this.top, this.bottom, this.left, this.right});
+  final double? height;
+  final double? width;
+  const CheckInGradientTexture({super.key, required this.assetPath, this.top, this.bottom, this.left, this.right, this.height, this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +18,11 @@ class CheckInGradientTexture extends StatelessWidget {
         left: left,
         right: right,
         child: Opacity(
-          opacity: 0.9, // Adjust opacity as needed
+          opacity:1, // Adjust opacity as needed
           child: Image.asset(
             assetPath, // Your gradient texture image path
-            width: 180, // Adjust size of the gradient
-            height: 180,
+            width: width ?? 180, // Adjust size of the gradient
+            height: height ?? 180,
           ),
         ),
       );

@@ -26,7 +26,7 @@ class Count extends StatelessWidget {
               height: 36,
               width: 82,
               decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xff36DCA4)),
+                border: Border.all(color: const Color(0xffEDCC23)),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: count > 0

@@ -13,6 +13,14 @@ class MenuScreenController extends GetxController {
   Map<String, List<MenuItemModel>> filteredMenuByCategory = {};
 
   RxList<bool> expandedCategories = RxList.empty();
+  RxString receptionistText = "Welcome! Delicious Food Awaits You".obs;
+
+  int selectedCategoryIndex = 0;
+
+  void selectCategory(int index) {
+    selectedCategoryIndex = index;
+    update();
+  }
 
   @override
   void onInit() {

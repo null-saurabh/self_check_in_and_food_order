@@ -14,7 +14,7 @@ class CheckInScreen extends StatelessWidget {
         init: CheckInController(),
         builder: (checkInController) {
           return Scaffold(
-            backgroundColor: const Color(0xffECFDFC),
+            backgroundColor: const Color(0xffF4F5FA),
             body: SingleChildScrollView(
               child: Stack(
                 children: [
@@ -41,7 +41,7 @@ class CheckInScreen extends StatelessWidget {
                     assetPath: 'assets/textures/check_in_texture_4.png',
                   ),
 
-                  Positioned(
+              Positioned(
                     top: 32,
                     left: 16,
                     child: Container(
