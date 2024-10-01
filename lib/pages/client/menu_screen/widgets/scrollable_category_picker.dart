@@ -30,7 +30,8 @@ class ScrollableMenuCategoryPicker extends StatelessWidget {
                 childCount: controller.filteredMenuByCategory.keys.length,
                 builder: (context, index) {
                   String category = controller.filteredMenuByCategory.keys.elementAt(index);
-                  bool isSelected = controller.selectedCategoryIndex == index;
+                  bool isSelected = controller.selectedCategoryIndex.value == index;
+
                   return Center(
                     child: Text(
                       category,

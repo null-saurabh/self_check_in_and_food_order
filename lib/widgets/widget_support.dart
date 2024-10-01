@@ -50,6 +50,14 @@ class AppWidget{
                   fontFamily: 'Poppins');
   }
 
+  static TextStyle black12Text500Style(){
+    return  const TextStyle(
+                  color: Colors.black,
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Poppins');
+  }
+
       static TextStyle black16Text400Style(){
     return  const TextStyle(
                   color: Colors.black,
@@ -85,11 +93,19 @@ class AppWidget{
   }
 
 
-  static TextStyle bold16TextStyle(){
+  static TextStyle black16Text600Style(){
     return  const TextStyle(
                   color: Colors.black,
                   fontSize: 16.0,
                   fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins');
+  }
+
+  static TextStyle black16Text500Style(){
+    return  const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
                   fontFamily: 'Poppins');
   }
 
@@ -117,16 +133,24 @@ class AppWidget{
                   fontFamily: 'Poppins');
   }
 
-  static TextStyle white12BoldTextStyle(){
+  static TextStyle white12Bold600TextStyle(){
     return  const TextStyle(
         color: Colors.white,
         fontSize: 12.0,
         fontWeight: FontWeight.w600,
         fontFamily: 'Poppins');
   }
-  static TextStyle white12LightTextStyle(){
+  static TextStyle white12Light400TextStyle(){
     return  const TextStyle(
         color: Colors.white70,
+        fontSize: 12.0,
+        fontWeight: FontWeight.w400,
+        fontFamily: 'Poppins');
+  }
+
+  static TextStyle grey12Light400TextStyle(){
+    return  const TextStyle(
+        color: Colors.grey,
         fontSize: 12.0,
         fontWeight: FontWeight.w400,
         fontFamily: 'Poppins');
@@ -151,7 +175,7 @@ class Validators {
 
   static String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return "*Required";
+      return null;
     }
     final emailRegExp = RegExp(
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
@@ -169,7 +193,7 @@ class Validators {
     // Check if the phone number is a valid format (basic regex for digits)
     final phoneRegExp = RegExp(r'^[0-9]{10}$'); // Adjust regex for your specific needs
 
-    if (!phoneRegExp.hasMatch(value)) {
+    if (!phoneRegExp.hasMatch(value) || value.length != 10 ) {
       return "Invalid phone number";
     }
 

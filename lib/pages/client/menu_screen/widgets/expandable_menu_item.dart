@@ -25,7 +25,7 @@ class ExpandableMenuItem extends StatelessWidget {
               ),
 
               child: ListView(
-                physics: const NeverScrollableScrollPhysics(), // Disable scrolling for parent list
+                controller: controller.listViewScrollController,
                 shrinkWrap: true, // Allow the ListView to take only the necessary height
                 children: controller.filteredMenuByCategory.entries
                     .where((entry) => entry.value.isNotEmpty) // Filter out empty categories

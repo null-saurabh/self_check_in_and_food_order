@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../../models/menu_item_model.dart';
 
@@ -15,10 +16,25 @@ class MenuScreenController extends GetxController {
   RxList<bool> expandedCategories = RxList.empty();
   RxString receptionistText = "Welcome! Delicious Food Awaits You".obs;
 
-  int selectedCategoryIndex = 0;
+  ScrollController listViewScrollController = ScrollController();
+
+  RxInt selectedCategoryIndex = 0.obs;
 
   void selectCategory(int index) {
-    selectedCategoryIndex = index;
+    selectedCategoryIndex.value = index;
+
+    // Get the total height of each section (category header + items)
+    double heightPerSection = 100; // Approximate height for each section (adjust accordingly)
+
+    // Scroll to the specific section in the ListView
+    double offset = index * heightPerSection;
+
+    listViewScrollController.animateTo(
+      offset,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+
     update();
   }
 
@@ -105,6 +121,10 @@ class MenuScreenController extends GetxController {
     expandedCategories[index] = !expandedCategories[index];
     update();
   }
-
+  @override
+  void dispose() {
+    listViewScrollController.dispose();
+    super.dispose();
+  }
   // }
 }

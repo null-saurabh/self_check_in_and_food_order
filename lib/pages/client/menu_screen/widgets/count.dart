@@ -6,8 +6,9 @@ import '../../cart_screen/cart_screen_controller.dart';
 
 class Count extends StatelessWidget {
   final MenuItemModel menuItem;
+  final bool isCart;
 
-  const Count({super.key, required this.menuItem});
+  const Count({super.key, required this.menuItem, this.isCart = false});
 
   @override
   Widget build(BuildContext context) {
@@ -22,69 +23,80 @@ class Count extends StatelessWidget {
             // Retrieve the current item count reactively
             int count = cartScreenController.getItemCount(menuItem.id);
 
-            return Container(
-              height: 36,
-              width: 82,
-              decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xffEDCC23)),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: count > 0
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                          
-                                cartScreenController.decreaseItem(menuItem.id);
-                          
-                            },
-                            child: const Icon(
-                              Icons.remove,
-                              size: 20,
-                              color: Color(0xffd0b84c),
+            return Column(
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  height: 36,
+                  width: 82,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xffEDCC23)),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: count > 0
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+
+                                    cartScreenController.decreaseItem(menuItem.id);
+
+                                },
+                                child: const Icon(
+                                  Icons.remove,
+                                  size: 20,
+                                  color: Color(0xffd0b84c),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Text(
-                          "$count",
-                          style: const TextStyle(
-                            color: Color(0xffd0b84c),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Expanded(
+                            Text(
+                              "$count",
+                              style: const TextStyle(
+                                color: Color(0xffd0b84c),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  cartScreenController.addItem(menuItem, 1);
+                                },
+                                child: const Icon(
+                                  Icons.add,
+                                  size: 20,
+                                  color: Color(0xffd0b84c),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Center(
                           child: InkWell(
                             onTap: () {
                               cartScreenController.addItem(menuItem, 1);
                             },
-                            child: const Icon(
-                              Icons.add,
-                              size: 20,
-                              color: Color(0xffd0b84c),
+                            child: SizedBox(
+                              height: double.infinity,
+                              width: double.infinity,
+                              child: Center(
+                                child: Text(
+                                  "ADD",
+                                  style: AppWidget.subHeadingTextStyle(),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ],
-                    )
-                  : Center(
-                      child: InkWell(
-                        onTap: () {
-                          cartScreenController.addItem(menuItem, 1);
-                        },
-                        child: SizedBox(
-                          height: double.infinity,
-                          width: double.infinity,
-                          child: Center(
-                            child: Text(
-                              "ADD",
-                              style: AppWidget.subHeadingTextStyle(),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                ),
+                if(isCart)
+                Text(
+                  '\u{20B9} ${menuItem.price * count}',
+                  style: AppWidget.black14Text300Style(),
+                ),
+              ],
             );
           });
         });

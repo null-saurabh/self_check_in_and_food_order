@@ -22,22 +22,22 @@ class CheckInScreen extends StatelessWidget {
                   // Using the helper function to add gradient textures
                   const CheckInGradientTexture(
                     top: 48,
-                    right: -33,
+                    right: -44,
                     assetPath: 'assets/textures/check_in_texture_1.png',
                   ),
                   const CheckInGradientTexture(
                     top: 112,
-                    left: -29,
+                    left: -38,
                     assetPath: 'assets/textures/check_in_texture_2.png',
                   ),
                   const CheckInGradientTexture(
                     bottom: 60,
-                    left: -32,
+                    left: -42,
                     assetPath: 'assets/textures/check_in_texture_3.png',
                   ),
                   const CheckInGradientTexture(
                     bottom: 60,
-                    right: -28,
+                    right: -40,
                     assetPath: 'assets/textures/check_in_texture_4.png',
                   ),
 
@@ -107,15 +107,15 @@ class CheckInScreen extends StatelessWidget {
                                     children: [
                                       TextSpan(
                                         text: checkInController.receptionistText.value.substring(0, 4), // "Hi, "
-                                        style: AppWidget.white12BoldTextStyle(), // Regular style
+                                        style: AppWidget.white12Bold600TextStyle(), // Regular style
                                       ),
                                       TextSpan(
                                         text: checkInController.receptionistText.value.substring(4, 11), // "Please"
-                                        style: AppWidget.white12LightTextStyle(), // Different style
+                                        style: AppWidget.white12Bold600TextStyle(), // Different style
                                       ),
                                       TextSpan(
                                         text: checkInController.receptionistText.value.substring(11), // " Enter your details!"
-                                        style: AppWidget.white12BoldTextStyle(), // Regular style
+                                        style: AppWidget.white12Bold600TextStyle(), // Regular style
                                       ),
                                     ],
                                   ),

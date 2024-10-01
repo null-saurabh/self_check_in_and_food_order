@@ -35,6 +35,9 @@ class CheckInFormTwoPersonal extends StatelessWidget {
                   hint: "Enter Your Email Address",
                   inputType: TextInputType.emailAddress,
                   controller: selfCheckingController.email,
+                  onValidate: (p0) {
+                    return Validators.validateEmail(p0);
+                  },
                   // onValidate: (p0) {
                   //   if (p0!.isEmpty) {
                   //     return "Please Enter Mobile";
@@ -48,9 +51,11 @@ class CheckInFormTwoPersonal extends StatelessWidget {
                 EditText(
                   labelText: "Contact",
                   hint: "Enter Contact Number",
-                  inputType: TextInputType.emailAddress,
+                  inputType: TextInputType.number,
                   controller: selfCheckingController.contact,
-                  onValidate: Validators.validatePhoneNumber,
+                  onValidate: (p0) {
+                    return Validators.validatePhoneNumber(p0);
+                  },
                   prefixSize: 71,
                   prefixHeight: 40,
                   prefix: Padding(
@@ -207,16 +212,16 @@ class CheckInFormTwoPersonal extends StatelessWidget {
                           );
                         }),
                         if (formState.hasError)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: Text(
-                            formState.errorText ?? '',
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 211, 63, 63),
-                              fontSize: 12,
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Text(
+                              formState.errorText ?? '',
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 211, 63, 63),
+                                fontSize: 12,
+                              ),
                             ),
                           ),
-                        ),
                       ]);
                 }),
                 const SizedBox(
@@ -229,7 +234,6 @@ class CheckInFormTwoPersonal extends StatelessWidget {
                   controller: selfCheckingController.address,
                   onValidate: Validators.requiredField,
                 ),
-
 
                 // City
                 EditText(

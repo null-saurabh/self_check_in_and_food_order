@@ -5,8 +5,10 @@ import 'count.dart';
 
 class SingleProduct extends StatelessWidget {
   final MenuItemModel menuItem;
+  final bool isCart;
   const SingleProduct({
     super.key,
+    this.isCart = false,
     required this.menuItem,
   });
 
@@ -17,7 +19,7 @@ class SingleProduct extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 104,
+          height: isCart ? 124 : 104,
           width: double.infinity,
           decoration: BoxDecoration(
               color: Colors.white,
@@ -109,11 +111,12 @@ class SingleProduct extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '\u{20B9}${menuItem.price}',
+                            '\u{20B9} ${menuItem.price}',
                             style: AppWidget.black14Text300Style(),
                           ),
                           // Spacer(),
                           Count(
+                            isCart: isCart,
                             menuItem: menuItem,
                           ),
                         ],
@@ -127,8 +130,9 @@ class SingleProduct extends StatelessWidget {
             ],
           ),
         ),
+        // if(!isCart)
         const SizedBox(
-          height: 16,
+          height: 12 ,
         )
       ],
     );

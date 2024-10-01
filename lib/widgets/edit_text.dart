@@ -80,7 +80,7 @@ class EditText extends StatelessWidget {
     this.hint,
     this.suffixIcon,
     this.inputformats,
-    this.paddingBottom = false,
+    this.paddingBottom = true,
     this.showLeading = false,
     this.labelFontWeight = FontWeight.w500,
     this.labelText = "",
@@ -158,10 +158,12 @@ class EditText extends StatelessWidget {
             focusNode: focusNode,
 
             decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top:0, bottom:12, left:12, right:12),
 
               isDense: true,
               counterText: "",
               hintText: hint ?? '',
+              hintMaxLines: 1,
               filled: filled,
               fillColor:fillColor,
               errorStyle: const TextStyle(height: 0.1, fontSize: 0),
@@ -247,7 +249,7 @@ class EditText extends StatelessWidget {
             },
           ),
         ],
-        // if (showLabel && paddingBottom) ...[
+        if (paddingBottom)
           const SizedBox(
             height: 12,
           ),
