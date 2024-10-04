@@ -231,7 +231,7 @@ class MenuScreenController extends GetxController {
           // If exceeded max retries, stop the scrolling and log an error
           isScrollLocked.value = false;
           hasStartedScrolling.value = false;
-          print("Max retries reached, stopping scroll.");
+          // print("Max retries reached, stopping scroll.");
           return;
         }
 
@@ -286,7 +286,7 @@ class MenuScreenController extends GetxController {
           // If the context is still null, scroll by smaller increments
           retryCount++; // Increment the retry count
 
-          print("distance $approxScrollIncrement");
+          // print("distance $approxScrollIncrement");
           double scrollIncrement = approxScrollIncrement;
           double maxScrollExtent = listViewScrollController.position.maxScrollExtent;
           double minScrollExtent = listViewScrollController.position.minScrollExtent;

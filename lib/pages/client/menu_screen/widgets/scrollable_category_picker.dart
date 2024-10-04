@@ -38,7 +38,7 @@ class ScrollableMenuCategoryPicker extends StatelessWidget {
                   if (controller.selectedCategoryIndex.value != index) {
                     controller.selectCategory(index);
                     // Use the stored starting index for scrolling
-                    print("Starting picker 2: ${controller.pickerStartingIndex.value} : $index");
+                    // print("Starting picker 2: ${controller.pickerStartingIndex.value} : $index");
 
                     controller.scrollToCategory(index,MediaQuery.of(context).size.height * 0.75);
                   }
