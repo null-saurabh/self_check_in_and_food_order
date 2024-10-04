@@ -89,40 +89,84 @@ class MenuScreenController extends GetxController {
     }
   }
 
-  void scrollToCategory(int index) {
-
+  void scrollToCategory(int targetIndex) {
+    // Cancel any previous scroll requests
     if (_scrollDebounce != null && _scrollDebounce!.isActive) {
       _scrollDebounce!.cancel();
     }
 
     isScrollLocked.value = true;
     calculateSectionOffsets();
+
     // Debounce the scroll action to avoid multiple triggers in a short time
     _scrollDebounce = Timer(const Duration(milliseconds: 300), () {
-      if (sectionOffsets.containsKey(index)) {
-        // If we already have the offset for this section, scroll directly to it
-        final offset = sectionOffsets[index]!;
-        // print("Using cached offset: $offset");
+      // Define a helper function to scroll incrementally
+      void scrollIncrementally(int currentIndex) {
+        if (currentIndex >= sectionKeys.length) {
+          // We've reached the end of the list
+          isScrollLocked.value = false;
+          return;
+        }
 
-        listViewScrollController.animateTo(
-          offset,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        ).then((_) => isScrollLocked.value = false); // Reset after scroll complete;
-      }
-      else {
-        // If the offset is not cached, scroll approximately to the right section
-        // print("Scrolling approximately to section: $index");
+        final context = sectionKeys[currentIndex].currentContext;
 
-        final approximateOffset = index * 300.0; // Estimate a rough offset
-        listViewScrollController.animateTo(
-          approximateOffset,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        ).then((_) => isScrollLocked.value = false); // Reset after scroll complete;
+        if (context != null) {
+          final renderBox = context.findRenderObject() as RenderBox;
+          final offset = renderBox.localToGlobal(Offset.zero).dy +
+              listViewScrollController.offset -
+              228;
+
+          // If we reach the target index, scroll to the exact offset
+          if (currentIndex == targetIndex) {
+            listViewScrollController.animateTo(
+              offset,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            ).then((_) => isScrollLocked.value = false);
+          } else {
+            // Scroll to the last known section and continue
+            listViewScrollController.animateTo(
+              offset,
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOut,
+            ).then((_) {
+              // After the scroll, try to scroll to the next available section
+              scrollIncrementally(currentIndex + 1);
+            });
+          }
+        } else {
+          // If the context is still null, scroll by smaller increments
+          const double scrollIncrement = 400.0;
+
+          // Check if we've reached close to the end of the list
+          double maxScrollExtent = listViewScrollController.position.maxScrollExtent;
+
+          // Get the current scroll position
+          double currentScrollPosition = listViewScrollController.offset;
+
+          // Make sure we don't scroll beyond the list's end
+          double targetScrollPosition = (currentScrollPosition + scrollIncrement) > maxScrollExtent
+              ? maxScrollExtent
+              : currentScrollPosition + scrollIncrement;
+
+          // Scroll by a smaller increment and retry
+          listViewScrollController.animateTo(
+            targetScrollPosition,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+          ).then((_) {
+            // Retry after scrolling by a smaller increment
+            scrollIncrementally(currentIndex);
+          });
+        }
       }
+
+      // Start by scrolling incrementally from the first available section
+      scrollIncrementally(selectedCategoryIndex.value);
     });
   }
+
+
 
 
 
