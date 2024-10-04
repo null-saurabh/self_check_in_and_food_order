@@ -20,6 +20,9 @@ class MenuScreenController extends GetxController {
 
   ScrollController listViewScrollController = ScrollController();
   ScrollController categoryPickerScrollController = ScrollController();
+  RxInt pickerStartingIndex = RxInt(0);
+  RxBool hasStartedScrolling = false.obs;
+
 
   List<GlobalKey> sectionKeys = [];
 
@@ -89,7 +92,125 @@ class MenuScreenController extends GetxController {
     }
   }
 
-  void scrollToCategory(int targetIndex) {
+
+
+  // void scrollToCategory(int targetIndex) {
+  //   // Cancel any previous scroll requests
+  //   if (_scrollDebounce != null && _scrollDebounce!.isActive) {
+  //     _scrollDebounce!.cancel();
+  //   }
+  //
+  //   isScrollLocked.value = true;
+  //   calculateSectionOffsets();
+  //
+  //   int retryCount = 0; // Track the number of retries
+  //   const int maxRetries = 25; // Maximum number of retries to avoid endless scrolling
+  //
+  //   // Debounce the scroll action to avoid multiple triggers in a short time
+  //   _scrollDebounce = Timer(const Duration(milliseconds: 300), () {
+  //     // Define a helper function to scroll incrementally
+  //     void scrollIncrementally(int currentIndex) {
+  //       // print("in scroll $currentIndex, $targetIndex");
+  //       // Check retry count to avoid endless scrolls
+  //       if (retryCount > maxRetries) {
+  //         // If exceeded max retries, stop the scrolling and log an error
+  //         isScrollLocked.value = false;
+  //         // print("Max retries reached, stopping scroll.");
+  //         return;
+  //       }
+  //
+  //       // Check bounds for currentIndex
+  //       if (currentIndex >= sectionKeys.length || currentIndex < 0) {
+  //         // We've reached the end or start of the list
+  //         isScrollLocked.value = false;
+  //         return;
+  //       }
+  //
+  //       final context = sectionKeys[currentIndex].currentContext;
+  //
+  //       if (context != null) {
+  //         retryCount = 0; // Reset retries if we find a valid context
+  //         final renderBox = context.findRenderObject() as RenderBox;
+  //         final offset = renderBox.localToGlobal(Offset.zero).dy +
+  //             listViewScrollController.offset - 228;
+  //
+  //         // Scroll to the exact offset of the current section
+  //         listViewScrollController.animateTo(
+  //           offset,
+  //           duration: const Duration(milliseconds: 300),
+  //           curve: Curves.easeInOut,
+  //         ).then((_) {
+  //           // After scrolling, check if we've reached the target index
+  //           if (currentIndex == targetIndex) {
+  //             // If we reach the target, stop scrolling
+  //             isScrollLocked.value = false;
+  //             // print("Reached target index: $targetIndex");
+  //           } else {
+  //             // Check direction and update index
+  //             if (targetIndex > currentIndex) {
+  //               // print("scroll down ${targetIndex} : ${currentIndex}");
+  //               scrollIncrementally(currentIndex + 1); // Scroll down
+  //             } else if (targetIndex < currentIndex) {
+  //               // print("scroll up ${targetIndex} : ${currentIndex}");
+  //               scrollIncrementally(currentIndex - 1); // Scroll up
+  //             }
+  //           }
+  //         });
+  //       } else {
+  //         // If the context is still null, scroll by smaller increments
+  //         retryCount++; // Increment the retry count
+  //
+  //         const double scrollIncrement = 200.0; // Use smaller increments
+  //         double maxScrollExtent = listViewScrollController.position.maxScrollExtent;
+  //         double minScrollExtent = listViewScrollController.position.minScrollExtent;
+  //         double currentScrollPosition = listViewScrollController.offset;
+  //         double targetScrollPosition;
+  //
+  //         // Determine the target scroll position based on direction
+  //         if (targetIndex > currentIndex) {
+  //           // Scrolling down
+  //           print("scroll down (incremental) ${targetIndex} : ${currentIndex}");
+  //           targetScrollPosition = (currentScrollPosition + scrollIncrement) > maxScrollExtent
+  //               ? maxScrollExtent
+  //               : currentScrollPosition + scrollIncrement;
+  //         } else {
+  //           // Scrolling up
+  //           print("scroll up (incremental) ${targetIndex} : ${currentIndex}");
+  //           targetScrollPosition = (currentScrollPosition - scrollIncrement) < minScrollExtent
+  //               ? minScrollExtent
+  //               : currentScrollPosition - scrollIncrement;
+  //         }
+  //
+  //         listViewScrollController.animateTo(
+  //           targetScrollPosition,
+  //           duration: const Duration(milliseconds: 200),
+  //           curve: Curves.easeInOut,
+  //         ).then((_) {
+  //           // Retry after scrolling by a smaller increment
+  //           scrollIncrementally(pickerStartingIndex.value!);
+  //         });
+  //       }
+  //     }
+  //
+  //     print("starting scroll increment: ${pickerStartingIndex.value}");
+  //     // Start from the selected category index
+  //     scrollIncrementally(pickerStartingIndex.value);
+  //   });
+  // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  void scrollToCategory(int targetIndex,double approxScrollIncrement) {
     // Cancel any previous scroll requests
     if (_scrollDebounce != null && _scrollDebounce!.isActive) {
       _scrollDebounce!.cancel();
@@ -98,73 +219,110 @@ class MenuScreenController extends GetxController {
     isScrollLocked.value = true;
     calculateSectionOffsets();
 
+    int retryCount = 0; // Track the number of retries
+    const int maxRetries = 10; // Maximum number of retries to avoid endless scrolling
+
     // Debounce the scroll action to avoid multiple triggers in a short time
     _scrollDebounce = Timer(const Duration(milliseconds: 300), () {
       // Define a helper function to scroll incrementally
       void scrollIncrementally(int currentIndex) {
-        if (currentIndex >= sectionKeys.length) {
-          // We've reached the end of the list
+        // Check retry count to avoid endless scrolls
+        if (retryCount > maxRetries) {
+          // If exceeded max retries, stop the scrolling and log an error
           isScrollLocked.value = false;
+          hasStartedScrolling.value = false;
+          print("Max retries reached, stopping scroll.");
+          return;
+        }
+
+        if (currentIndex >= sectionKeys.length || currentIndex < 0) {
+          // We've reached the end or start of the list
+          isScrollLocked.value = false;
+          hasStartedScrolling.value = false;
           return;
         }
 
         final context = sectionKeys[currentIndex].currentContext;
 
         if (context != null) {
+          retryCount = 0; // Reset retries if we find a valid context
           final renderBox = context.findRenderObject() as RenderBox;
           final offset = renderBox.localToGlobal(Offset.zero).dy +
-              listViewScrollController.offset -
-              228;
+              listViewScrollController.offset - 228;
 
           // If we reach the target index, scroll to the exact offset
           if (currentIndex == targetIndex) {
             listViewScrollController.animateTo(
               offset,
-              duration: const Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 100),
               curve: Curves.easeInOut,
-            ).then((_) => isScrollLocked.value = false);
-          } else {
+            ).then((_) {
+              hasStartedScrolling.value = false;
+              isScrollLocked.value = false;
+              // sayad return here;
+            } );
+          }
+          else {
             // Scroll to the last known section and continue
             listViewScrollController.animateTo(
               offset,
-              duration: const Duration(milliseconds: 400),
+              duration: const Duration(milliseconds: 100),
               curve: Curves.easeInOut,
             ).then((_) {
-              // After the scroll, try to scroll to the next available section
-              scrollIncrementally(currentIndex + 1);
+              // Check if we need to scroll up or down
+              if (targetIndex > currentIndex) {
+                // Scroll down
+                scrollIncrementally(currentIndex + 1);
+
+              } else if (targetIndex < currentIndex) {
+                // Scroll up
+                scrollIncrementally(currentIndex - 1);
+
+              }
             });
           }
-        } else {
+        }
+        else {
           // If the context is still null, scroll by smaller increments
-          const double scrollIncrement = 400.0;
+          retryCount++; // Increment the retry count
 
-          // Check if we've reached close to the end of the list
+          print("distance $approxScrollIncrement");
+          double scrollIncrement = approxScrollIncrement;
           double maxScrollExtent = listViewScrollController.position.maxScrollExtent;
-
-          // Get the current scroll position
+          double minScrollExtent = listViewScrollController.position.minScrollExtent;
           double currentScrollPosition = listViewScrollController.offset;
+          double targetScrollPosition;
 
-          // Make sure we don't scroll beyond the list's end
-          double targetScrollPosition = (currentScrollPosition + scrollIncrement) > maxScrollExtent
-              ? maxScrollExtent
-              : currentScrollPosition + scrollIncrement;
+          if (targetIndex > pickerStartingIndex.value) {
+            // print("scroll down (incremental) ${targetIndex} : ${pickerStartingIndex.value}");
+            // Scrolling down
+            targetScrollPosition = (currentScrollPosition + scrollIncrement) > maxScrollExtent
+                ? maxScrollExtent
+                : currentScrollPosition + scrollIncrement;
+          } else {
+            // print("scroll up (incremental) ${targetIndex} : ${pickerStartingIndex.value}");
+            // Scrolling up
+            targetScrollPosition = (currentScrollPosition - scrollIncrement) < minScrollExtent
+                ? minScrollExtent
+                : currentScrollPosition - scrollIncrement;
+          }
 
-          // Scroll by a smaller increment and retry
           listViewScrollController.animateTo(
             targetScrollPosition,
-            duration: const Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 100),
             curve: Curves.easeInOut,
           ).then((_) {
-            // Retry after scrolling by a smaller increment
-            scrollIncrementally(currentIndex);
+            scrollIncrementally(currentIndex); // Retry after scrolling by a smaller increment
           });
         }
       }
 
-      // Start by scrolling incrementally from the first available section
+      // Start scrolling incrementally from the current section
       scrollIncrementally(selectedCategoryIndex.value);
     });
   }
+
+
 
 
 

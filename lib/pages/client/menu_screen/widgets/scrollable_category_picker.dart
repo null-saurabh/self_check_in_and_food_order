@@ -20,26 +20,36 @@ class ScrollableMenuCategoryPicker extends StatelessWidget {
           Expanded(
             child: NotificationListener<ScrollNotification>(
               onNotification: (scrollNotification) {
-                if (scrollNotification is ScrollEndNotification ||
-                    scrollNotification is UserScrollNotification) {
-                  // Get the current item index when scrolling stops
-
-                  // if (controller.isScrollLocked.value) {
-                  //   return true; // Ignore updates if scrolling is locked
-                  // }
-
-                  double offset = controller.categoryPickerScrollController.offset;
-                  int index = (offset / 20.0).round(); // Assuming item height is 20.0
-                  // print("1 : ${index}");
-                  // Update the selected category index if it has changed
-                  if (controller.selectedCategoryIndex.value != index) {
-                    // print("111 : ${index}");
-                    //
-                    controller.selectCategory(index);
-                    controller.scrollToCategory(index);
-
+                if (scrollNotification is ScrollStartNotification) {
+                  // Only set starting index if it hasn't been set yet
+                  if (!controller.hasStartedScrolling.value) {
+                    double offset = controller.categoryPickerScrollController.offset;
+                    controller.pickerStartingIndex.value = (offset / 20.0).round(); // Assuming item height is 20.0
+                    // print("Starting picker: ${controller.pickerStartingIndex.value}");
+                    controller.hasStartedScrolling.value = true; // Mark as started
                   }
                 }
+
+                if (scrollNotification is ScrollEndNotification || scrollNotification is UserScrollNotification) {
+                  double offset = controller.categoryPickerScrollController.offset;
+                  int index = (offset / 20.0).round(); // Assuming item height is 20.0
+
+                  // Update the selected category index if it has changed
+                  if (controller.selectedCategoryIndex.value != index) {
+                    controller.selectCategory(index);
+                    // Use the stored starting index for scrolling
+                    print("Starting picker 2: ${controller.pickerStartingIndex.value} : $index");
+
+                    controller.scrollToCategory(index,MediaQuery.of(context).size.height * 0.75);
+                  }
+                }
+
+                // // Reset the flag if scrolling has ended
+                // if (scrollNotification is ScrollEndNotification) {
+                //   print(4);
+                //   hasStartedScrolling = false; // Allow starting a new scroll
+                // }
+
                 return true;
               },
               child: ListWheelScrollView.useDelegate(
@@ -49,7 +59,6 @@ class ScrollableMenuCategoryPicker extends StatelessWidget {
                 // physics: const FixedExtentScrollPhysics(),
                 // diameterRatio: 3.0, // Adjust to make the list less curved
                 // onSelectedItemChanged: (index) {
-                //   print("bbbb");
                 //   controller.selectCategory(index);
                 //   controller.scrollToCategory(index);
                 // },
@@ -75,7 +84,7 @@ class ScrollableMenuCategoryPicker extends StatelessWidget {
             ),
           ),
           const Icon(Icons.arrow_drop_down,size: 12),
-      
+
         ],
       ),
     );

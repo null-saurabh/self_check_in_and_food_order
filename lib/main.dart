@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: Routes.receptionMenu, // Use routes from routes.dart
+      initialRoute: Routes.receptionHome, // Use routes from routes.dart
       getPages: AppPages.pages,       // Use pages from app_pages.dart
       unknownRoute: GetPage(
         name: '/not-found',
