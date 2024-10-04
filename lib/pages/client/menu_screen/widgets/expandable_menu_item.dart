@@ -32,6 +32,7 @@ class ExpandableMenuItem extends StatelessWidget {
                     .map((entry) {
                   int index = controller.filteredMenuByCategory.keys.toList().indexOf(entry.key);
                   return Column(
+                    key: controller.sectionKeys[index],
                     children: [
                       GestureDetector(
                         onTap: () {
