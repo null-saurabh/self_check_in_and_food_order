@@ -55,7 +55,7 @@ class CheckInFormOneDocument extends StatelessWidget {
                 // Obx(() { return
 
                 AppDropDown(
-                  items: ['Aadhaar', 'Driver License', 'Voter ID', 'Passport']
+                  items: ['Aadhaar Card', "Driving License", 'Voter ID', 'Passport']
                       .map((type) {
                     return DropdownMenuItem(value: type, child: Text(type));
                   }).toList(),

@@ -5,15 +5,31 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:random_string/random_string.dart';
+import 'package:wandercrew/pages/admin/menu_admin/menu_admin_controller.dart';
 import '../../../../models/menu_item_model.dart';
 import '../../../../service/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddFoodItemController extends GetxController {
+
+
+  // Add this property
+  var isEditing = false.obs;
+  var editingItem = Rxn<MenuItemModel>();
+
+  // Modify the constructor to accept an item
+  AddFoodItemController({MenuItemModel? item}) {
+    if (item != null) {
+      isEditing.value = true;
+      setEditingItem(item);
+    }
+  }
+
+
+
   var categories =
       <String>[].obs; // List of food categories fetched from Firebase
   var selectedCategory = Rxn<String>(); // Currently selected category
-  Rxn<dynamic> selectedImage = Rxn<dynamic>(); // Selected image
 
   // TextEditingControllers for required fields
   var idController = TextEditingController();
@@ -34,8 +50,44 @@ class AddFoodItemController extends GetxController {
   var isAvailable = true.obs;
   var isVeg = true.obs;
   var isFeatured = false.obs;
+  var showImage = false.obs;
 
   final ImagePicker _picker = ImagePicker();
+
+  Rxn<dynamic> selectedImage = Rxn<dynamic>(); // Selected image
+  var itemImageName = Rxn<String>();
+  var isItemImageInvalid = false.obs;
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+
+
+
+
+  void setEditingItem(MenuItemModel item) {
+    editingItem.value = item;
+    // Populate fields with item data
+    idController.text = item.id;
+    nameController.text = item.name;
+    priceController.text = item.price.toString();
+    descriptionController.text = item.description ?? '';
+    // Set other fields similarly
+    // For the image, use just the URL
+    // itemImageName.value = item.image;
+    // Set selected category
+    selectedCategory.value = item.category;
+    isAvailable.value = item.isAvailable;
+    isVeg.value = item.isVeg;
+    discountPriceController.text = item.discountPrice?.toString() ?? "";
+    stockCountController.text = item.stockCount?.toString() ?? "";
+    notesController.text = item.notes ?? "";
+    isFeatured.value = item.isFeatured ?? false;
+    tagsController.text = item.tags?.join(",") ?? "";
+    ingredientsController.text = item.ingredients?.join(",") ?? "";
+
+    update();
+  }
+
 
   @override
   void onInit() {
@@ -52,10 +104,11 @@ class AddFoodItemController extends GetxController {
       for (var doc in categorySnapshot.docs) {
         categories.add(doc['categoryName']); // Add categories to the list
       }
-      if (categories.isNotEmpty) {
-        selectedCategory.value =
-            categories[0]; // Set the first category as default
-      }
+      // if (categories.isNotEmpty) {
+      //   selectedCategory.value =
+      //       categories[0]; // Set the first category as default
+      // }
+      update();
     } catch (e) {
       Get.snackbar("Error", "Failed to load categories from Firebase.");
     }
@@ -66,12 +119,14 @@ class AddFoodItemController extends GetxController {
     if (kIsWeb) {
       final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
       if (pickedImage != null) {
+        itemImageName.value = pickedImage.name;
         final imageBytes = await pickedImage.readAsBytes();
         selectedImage.value = imageBytes; // Store bytes for web
       }
     } else {
       final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
       if (pickedImage != null) {
+        itemImageName.value = pickedImage.name;
         selectedImage.value = File(pickedImage.path); // Store file for mobile
       }
     }
@@ -79,32 +134,46 @@ class AddFoodItemController extends GetxController {
 
   // Uploads the food item to Firebase, mapping it using the MenuItemModel class
   Future<void> uploadItem() async {
-    if (selectedImage.value != null &&
-        nameController.text.isNotEmpty &&
-        priceController.text.isNotEmpty &&
-        selectedCategory.value != null) {
+
+    if (formKey.currentState!
+        .validate()) {
+
+    //
+    // if (selectedImage.value != null &&
+    //     nameController.text.isNotEmpty &&
+    //     priceController.text.isNotEmpty &&
+    //     selectedCategory.value != null) {
       Get.dialog(
         const Center(child: CircularProgressIndicator()),
         barrierDismissible: false,
       );
 
       try {
-        String addId = randomAlphaNumeric(10);
+        String? downloadUrl;
+        if(isEditing.value){
+          downloadUrl = editingItem.value?.image ?? " ";
+        }
+        else if(selectedImage.value != null) {
+          String addId = randomAlphaNumeric(10);
 
-        // Upload image to Firebase Storage
-        Reference firebaseStorageRef =
-            FirebaseStorage.instance.ref().child("foodImages").child(addId);
-        SettableMetadata metadata = SettableMetadata(contentType: 'image/jpeg');
-        UploadTask task;
-        if (kIsWeb) {
-          task = firebaseStorageRef.putData(
-              selectedImage.value as Uint8List, metadata);
-        } else {
-          task = firebaseStorageRef.putFile(selectedImage.value as File);
+          // Upload image to Firebase Storage
+          Reference firebaseStorageRef =
+          FirebaseStorage.instance.ref().child("foodImages").child(addId);
+          SettableMetadata metadata = SettableMetadata(
+              contentType: 'image/jpeg');
+          UploadTask task;
+          if (kIsWeb) {
+            task = firebaseStorageRef.putData(
+                selectedImage.value as Uint8List, metadata);
+          } else {
+            task = firebaseStorageRef.putFile(selectedImage.value as File);
+          }
+
+          TaskSnapshot taskSnapshot = await task;
+          String url = await taskSnapshot.ref.getDownloadURL();
+          downloadUrl =url;
         }
 
-        TaskSnapshot taskSnapshot = await task;
-        String downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
         // Prepare the data using the MenuItemModel class
         MenuItemModel newItem = MenuItemModel(
@@ -140,10 +209,74 @@ class AddFoodItemController extends GetxController {
           createdAt: FieldValue.serverTimestamp(),
         );
 
+        if(isEditing.value){
+          try {
+            // Query the document with matching custom 'id' field
+            QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+                .collection("Menu")
+                .where("productId", isEqualTo: editingItem.value!.id) // Assuming 'id' is the custom field name in Firestore
+                .get();
+            if (querySnapshot.docs.isNotEmpty) {
+              // Get the document ID
+              String docId = querySnapshot.docs.first.id;
+
+              await DatabaseMethods().updateFoodItem( docId,newItem.toMap());
+
+
+              // Update the item in the lists
+              MenuAdminController controller = Get.find<MenuAdminController>();
+              // Find the index of the item to update
+              int index = controller.allMenuItems.indexWhere((item) => item.id == editingItem.value!.id);
+              if (index != -1) {
+                controller.allMenuItems[index] = newItem; // Update the item in allMenuItems
+                // Optionally update in originalMenuItems if needed
+                int originalIndex = controller.originalMenuItems.indexWhere((item) => item.id == editingItem.value!.id);
+                if (originalIndex != -1) {
+                  controller.originalMenuItems[originalIndex] = newItem; // Update in originalMenuItems if needed
+                }
+                controller.update();
+              }
+              Get.back();
+              Get.back();
+
+              // Show success snackbar
+              Get.snackbar(
+                "Success",
+                "Menu item updated successfully.",
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Colors.green,
+                colorText: Colors.white,
+              );
+
+            }
+            else {
+              // No matching document found
+              Get.snackbar(
+                "Error",
+                "Menu item not found.",
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Colors.red,
+                colorText: Colors.white,
+              );
+            }
+          } catch (error) {
+            // Show error snackbar
+            Get.snackbar(
+              "Error",
+              "Failed to update menu item. Please try again.",
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+            );
+          }
+
+        }
+        else {
         // Add the item to the Firestore database
         await DatabaseMethods()
             .addFoodItem(newItem.toMap())
             .then((_) {
+          Get.back(); // Close loading dialog
           Get.back(); // Close loading dialog
           Get.snackbar(
             "Success",
@@ -151,8 +284,16 @@ class AddFoodItemController extends GetxController {
             backgroundColor: Colors.orangeAccent,
             colorText: Colors.white,
           );
+
+
+
+          MenuAdminController controller = Get.find<MenuAdminController>();
+          controller.allMenuItems.add(newItem);
+          controller.originalMenuItems.add(newItem);
           clearFields();
-        });
+        }
+        );
+        }
       } catch (e) {
         Get.snackbar(
           "Error",
@@ -161,7 +302,6 @@ class AddFoodItemController extends GetxController {
           colorText: Colors.white,
         );
       } finally {
-        Get.toNamed('/admin/home');
       }
     } else {
       Get.snackbar(
@@ -172,6 +312,8 @@ class AddFoodItemController extends GetxController {
       );
     }
   }
+
+
 
   // Clears all input fields after submission
   void clearFields() {

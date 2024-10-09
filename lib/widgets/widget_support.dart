@@ -10,6 +10,14 @@ class AppWidget{
                   fontFamily: 'Poppins');
   }
 
+  static TextStyle white32Heading700TextStyle(){
+    return  const TextStyle(
+                  color: Colors.white,
+                  fontSize: 32.0,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Poppins');
+  }
+
   static TextStyle headingYellowBoldTextStyle(){
     return  const TextStyle(
                   color: Color(0XFFFFD12B),
@@ -45,6 +53,14 @@ class AppWidget{
     static TextStyle subHeadingTextStyle(){
     return  const TextStyle(
                   color: Colors.black,
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Poppins');
+  }
+
+  static TextStyle white12SubHeadingTextStyle(){
+    return  const TextStyle(
+                  color: Colors.white,
                   fontSize: 12.0,
                   fontWeight: FontWeight.w400,
                   fontFamily: 'Poppins');
@@ -173,6 +189,27 @@ class Validators {
     return null;
   }
 
+  static String? validateInt(String? value) {
+    if (value == null || value.isEmpty) {
+      return "*Required";
+    }
+    final intValue = int.tryParse(value);
+    if (intValue == null) {
+      return "Invalid integer";
+    }
+    return null;
+  }
+
+  static String? validateDouble(String? value) {
+    if (value == null || value.isEmpty) {
+      return "*Required";
+    }
+    final doubleValue = double.tryParse(value);
+    if (doubleValue == null) {
+      return "Invalid number";
+    }
+    return null;
+  }
   static String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return null;
@@ -184,6 +221,7 @@ class Validators {
     }
     return null;
   }
+
 
   static String? validatePhoneNumber(String? value) {
     if (value == null || value.isEmpty) {

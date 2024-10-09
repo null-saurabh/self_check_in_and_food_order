@@ -2,8 +2,9 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:wandercrew/pages/admin/check_in_list_admin/check_in_list_admin.dart';
 import 'package:wandercrew/pages/admin/home_admin/admin_home_screen.dart';
-import 'package:wandercrew/pages/admin/home_admin/widgets/add_food.dart';
+import 'package:wandercrew/pages/admin/menu_admin/widgets/add_food.dart';
 import 'package:wandercrew/pages/admin/login_admin/admin_login.dart';
+import 'package:wandercrew/pages/admin/menu_admin/menu_admin_screen.dart';
 import 'package:wandercrew/pages/admin/orders_admin/orders_list_screen.dart';
 import 'package:wandercrew/pages/client/cart_screen/cart_screen.dart';
 import 'package:wandercrew/pages/client/menu_screen/menu_screen.dart';
@@ -37,6 +38,11 @@ class AppPages {
     GetPage(
       name: Routes.adminHome,
       page: () => const AdminHomeScreen(),
+      // middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: Routes.adminMenu,
+      page: () => const MenuAdminScreen(),
       // middlewares: [AuthMiddleware()],
     ),
     GetPage(
@@ -74,6 +80,7 @@ class Routes {
 
   static const String adminLogin = '/admin/login';
   static const String adminHome = '/admin';
+  static const String adminMenu = '/admin/menu';
   static const String adminAddMenu = '/admin/add-menu';
   static const String adminOrderList = '/admin/order-list';
   static const String adminCheckInList = '/admin/check-in-list';

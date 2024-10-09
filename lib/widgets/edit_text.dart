@@ -124,7 +124,7 @@ class EditText extends StatelessWidget {
           ),
         ],
         SizedBox(
-          height: 40,
+          height: height,
           child: TextFormField(
             // focusNode: focusNode,
             validator: (value) {
@@ -158,7 +158,7 @@ class EditText extends StatelessWidget {
             focusNode: focusNode,
 
             decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top:0, bottom:12, left:12, right:12),
+              contentPadding: EdgeInsets.only(top:12, bottom:12, left:12, right:12),
 
               isDense: true,
               counterText: "",

@@ -14,6 +14,13 @@ class DatabaseMethods {
         .add(foodItemData);
   }
 
+  Future updateFoodItem(String itemId,Map<String, dynamic> foodItemData) async {
+    return await FirebaseFirestore.instance
+        .collection("Menu")
+        .doc(itemId)
+        .update(foodItemData);
+  }
+
   Future addOrder(Map<String, dynamic> userInfoMap) async {
     return await FirebaseFirestore.instance
         .collection("Orders")
