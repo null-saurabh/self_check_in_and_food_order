@@ -142,12 +142,12 @@ class CartScreenController extends GetxController {
       // print('aaa');
       // String paymentStatus = response['status']; // From Razorpay response
       // String paymentMethod = response['method']; // From Razorpay response
-      // String transactionID =
-      //     response['paymentId']; // From Razorpay response
+      String transactionID =
+          response['razorpay_payment_id']; // From Razorpay response
       //
       // print('aaaa');
       // print(transactionID);
-
+      //
       // Get today's date
       String todayDate = DateTime.now().toIso8601String();
 
@@ -166,7 +166,7 @@ class CartScreenController extends GetxController {
       // Create order model
       OrderModel orderData = OrderModel(
         orderId: addId, // Firebase will generate the ID
-        transactionId: addId,
+        transactionId: transactionID,
         dinerName: dinerName.text, //dinerName.text,
         orderStatusHistory: [
           OrderStatusUpdate(
@@ -271,6 +271,7 @@ class CartScreenController extends GetxController {
         // Check if the key is valid
         RazorpayService razorpay = RazorpayService();
         razorpay.openCheckout(
+          number: contactNumberController.text,
           amount: isTipSelected.value ? (itemTotalAmount.value * 100 ).toInt() : (double.parse((itemTotalAmount.value + itemTotalAmount.value / 20).toStringAsFixed(2)) * 100).toInt(),
           key: razorpayKey,
           onSuccess: onSuccess,
@@ -279,7 +280,7 @@ class CartScreenController extends GetxController {
         );
       } else {
         Get.snackbar(
-            "Error", "Razorpay is not available. Please Contact Wander Team.");
+            "Error", "Razorpay is not available. Please Contact WanderCrew Team.");
       }
     } else {
       Get.snackbar("Error", "Total amount must be greater than zero.");

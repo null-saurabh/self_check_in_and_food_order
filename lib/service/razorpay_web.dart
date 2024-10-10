@@ -2,16 +2,16 @@ import 'dart:js' as js;
 
 
 class RazorpayService {
-  void openCheckout({required int amount,required String key,required Function onSuccess,required Function onFail,required Function onDismiss}) {
+  void openCheckout({required int amount,required String number,required String key,required Function onSuccess,required Function onFail,required Function onDismiss}) {
     final options = js.JsObject.jsify({
       'key': key,
       'amount': amount, // Amount in paise
       'name': 'WanderCrew',
       'description': 'WanderCrew',
-      // 'prefill': {
-      //   'contact': '1234567890',
-      //   'email': 'email@example.com',
-      // },
+      'prefill': {
+        'contact': number,
+        // 'email': 'email@example.com',
+      },
       'theme': {
         'color': '#F37254'
       },

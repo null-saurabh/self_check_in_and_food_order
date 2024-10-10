@@ -105,7 +105,8 @@ class MenuAdminController extends GetxController {
             backgroundColor: Colors.green,
             colorText: Colors.white,
           );
-        } else {
+        }
+        else {
           // No matching document found
           Get.snackbar(
             "Error",

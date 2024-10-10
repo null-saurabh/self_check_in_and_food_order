@@ -72,7 +72,7 @@ class OrderModel {
 
   String orderId;                       // Unique ID for each order
   String transactionId;                 // from razorpay
-  String dinerName;                        // Reference to the user placing the order
+  String dinerName;// Reference to the user placing the order
   List<OrderStatusUpdate> orderStatusHistory;  // Track order status changes with time
   // String orderStatus;                   // e.g., Pending, Confirmed, Delivered, Cancelled
   List<OrderedItemModel> items;         // List of ordered items with details
@@ -89,7 +89,7 @@ class OrderModel {
   String paymentStatus;                 // e.g., Paid, Unpaid, Pending
   DateTime? createdAt;                  // Timestamp when the order was created
   DateTime? updatedAt;                  // Timestamp when the order was last updated
-
+  bool isCancelled;
   OrderModel({
     required this.orderId,
     required this.transactionId,
@@ -110,6 +110,7 @@ class OrderModel {
     required this.paymentStatus,
     this.createdAt,
     this.updatedAt,
+    this.isCancelled = false,
   });
 
   // Convert to map for database storage
@@ -132,6 +133,7 @@ class OrderModel {
       // 'deliveryStatus': deliveryStatus,
       'estimatedDeliveryTime': estimatedDeliveryTime,
       'paymentStatus': paymentStatus,
+      'isCancelled': isCancelled,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
     };
@@ -160,6 +162,7 @@ class OrderModel {
       // deliveryStatus: data['deliveryStatus'],
       estimatedDeliveryTime: data['estimatedDeliveryTime'],
       paymentStatus: data['paymentStatus'],
+      isCancelled: data['isCancelled'] != null ? data['isCancelled'] : false,
       createdAt: data['createdAt'] != null ? DateTime.parse(data['createdAt']) : null,
       updatedAt: data['updatedAt'] != null ? DateTime.parse(data['updatedAt']) : null,
     );

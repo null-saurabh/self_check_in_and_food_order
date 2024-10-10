@@ -75,10 +75,18 @@ class AppWidget{
     );
   }
 
-  static TextStyle black16Text500Style() {
+  static TextStyle black16Text500Style({Color? color}) {
+    return GoogleFonts.poppins(
+      color: color ?? Colors.black,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w500,
+    );
+  }
+
+  static TextStyle black20Text500Style() {
     return GoogleFonts.poppins(
       color: Colors.black,
-      fontSize: 16.0,
+      fontSize: 20.0,
       fontWeight: FontWeight.w500,
     );
   }
@@ -144,6 +152,15 @@ class AppWidget{
       color: Colors.black,
       fontSize: 16.0,
       fontWeight: FontWeight.w600,
+    );
+  }
+
+  static TextStyle black24Text600Style({Color? color}) {
+    return GoogleFonts.poppins(
+      color: color ?? Colors.black,
+      fontSize: 24.0,
+      fontWeight: FontWeight.w600,
+
     );
   }
 
