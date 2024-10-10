@@ -51,27 +51,30 @@ class CheckInListAdmin extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 20,bottom: 12),
-                        child: TextField(
-                          // onChanged: (value) => controller
-                          //     .filterMenuItems(value), // Call the search function
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.zero,
-                            hintText: "Search by item name",
-                            hintStyle: TextStyle(color: Colors.grey),
-                            prefixIcon: Icon(Icons.search, color: Colors.grey),
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Color(0xffEDCC23)),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Color(0xffEDCC23)),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Color(0xffEDCC23)),
+                        child: SizedBox(
+                          height:40,
+                          child: TextField(
+                            // onChanged: (value) => controller
+                            //     .filterMenuItems(value), // Call the search function
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.zero,
+                              hintText: "Search by item name",
+                              hintStyle: TextStyle(color: Colors.grey),
+                              prefixIcon: Icon(Icons.search, color: Colors.grey),
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(color: Color(0xffEDCC23)),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(color: Color(0xffEDCC23)),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(color: Color(0xffEDCC23)),
+                              ),
                             ),
                           ),
                         ),

@@ -49,22 +49,25 @@ class MenuAdminScreen extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      onChanged: (value) => controller
-                          .filterMenuItems(value), // Call the search function
-                      decoration: InputDecoration(
-                        hintText: "Search by item name",
-                        hintStyle: TextStyle(color: Colors.grey),
-                        prefixIcon: Icon(Icons.search, color: Colors.grey),
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Color(0xff36DCA4)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Color(0xff36DCA4)),
+                    child: SizedBox(
+                      height:40,
+                      child: TextField(
+                        onChanged: (value) => controller
+                            .filterMenuItems(value), // Call the search function
+                        decoration: InputDecoration(
+                          hintText: "Search by item name",
+                          hintStyle: TextStyle(color: Colors.grey),
+                          prefixIcon: Icon(Icons.search, color: Colors.grey),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Color(0xff36DCA4)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Color(0xff36DCA4)),
+                          ),
                         ),
                       ),
                     ),

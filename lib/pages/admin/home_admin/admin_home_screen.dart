@@ -129,7 +129,7 @@ class AdminHomeScreen extends StatelessWidget {
                         label: "Manage User",
                         onTap: () {
                           // Add action for order food
-                          Get.toNamed('/admin/add-menu');
+                          Get.toNamed(Routes.adminManageUsers);
                         },
                       ),
                       const SizedBox(  width: 12,
@@ -146,7 +146,7 @@ class AdminHomeScreen extends StatelessWidget {
                         onTap: () {
                           // Add action for room service
                           // Get.toNamed(page);
-                            Get.toNamed('/admin/check-in-list');
+                            Get.toNamed(Routes.adminCheckInList);
 
                         },
                       )
@@ -165,6 +165,8 @@ class AdminHomeScreen extends StatelessWidget {
                         icon: "assets/icons/feedback.png",
                         label: "Vouchers",
                         onTap: () {
+                          Get.toNamed(Routes.adminManageVoucher);
+
                           // Add action for room service
                           // Get.toNamed(page);
                         },
