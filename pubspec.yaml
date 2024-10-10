@@ -57,6 +57,7 @@ dependencies:
   path_provider: ^2.1.4
   pdf: ^3.11.1
   printing: ^5.13.3
+  google_fonts: ^6.2.1
 
 
 
@@ -118,10 +119,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Poppins
-      fonts:
-        - asset: assets/font/Poppins-SemiBold.ttf
+#  fonts:
+#    - family: Poppins
+#      fonts:
+#        - asset: assets/font/Poppins-SemiBold.ttf
 #        - asset: fonts/Schyler-Italic.ttf
 #          style: italic
   #   - family: Trajan Pro

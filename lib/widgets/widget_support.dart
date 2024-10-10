@@ -1,184 +1,200 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppWidget{
 
-  static TextStyle headingBoldTextStyle(){
-    return  const TextStyle(
-                  color: Colors.black,
-                  fontSize: 32.0,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Poppins');
-  }
-
-  static TextStyle white32Heading700TextStyle(){
-    return  const TextStyle(
-                  color: Colors.white,
-                  fontSize: 32.0,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Poppins');
-  }
-
-  static TextStyle headingYellowBoldTextStyle(){
-    return  const TextStyle(
-                  color: Color(0XFFFFD12B),
-                  fontSize: 32.0,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Poppins');
-  }
-
-  static TextStyle heading2BoldTextStyle(){
-    return  const TextStyle(
-                  color: Colors.black,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Poppins');
-  }
-
-  static TextStyle heading24Bold500TextStyle(){
-    return  const TextStyle(
-                  color: Colors.black,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Poppins');
-  }
-
-  static TextStyle heading3BoldTextStyle(){
-    return  const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Poppins');
-  }
-
-    static TextStyle subHeadingTextStyle(){
-    return  const TextStyle(
-                  color: Colors.black,
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Poppins');
-  }
-
-  static TextStyle white12SubHeadingTextStyle(){
-    return  const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Poppins');
-  }
-
-  static TextStyle black12Text500Style(){
-    return  const TextStyle(
-                  color: Colors.black,
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Poppins');
-  }
-
-      static TextStyle black16Text400Style(){
-    return  const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Poppins'
+  static TextStyle headingBoldTextStyle() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 32.0,
+      fontWeight: FontWeight.w700,
     );
   }
 
-  static TextStyle black14Text300Style(){
-    return  const TextStyle(
-                  color: Colors.black,
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w300,
-                  fontFamily: 'Poppins');
+  static TextStyle white32Heading700TextStyle() {
+    return GoogleFonts.poppins(
+      color: Colors.white,
+      fontSize: 32.0,
+      fontWeight: FontWeight.w700,
+    );
   }
 
-  static TextStyle black14Text400Style(){
-    return  const TextStyle(
-                  color: Colors.black,
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Poppins');
+  static TextStyle headingYellowBoldTextStyle() {
+    return GoogleFonts.poppins(
+      color: Color(0XFFFFD12B),
+      fontSize: 32.0,
+      fontWeight: FontWeight.w700,
+    );
   }
 
-
-        static TextStyle opaque16TextStyle(){
-    return  const TextStyle(
-                  color: Colors.black45,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Poppins');
+  static TextStyle heading2BoldTextStyle() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 24.0,
+      fontWeight: FontWeight.w700,
+    );
   }
 
-
-  static TextStyle black16Text600Style(){
-    return  const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Poppins');
+  static TextStyle heading24Bold500TextStyle() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 24.0,
+      fontWeight: FontWeight.w500,
+    );
   }
 
-  static TextStyle black16Text500Style(){
-    return  const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Poppins');
+  static TextStyle heading3BoldTextStyle() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 20.0,
+      fontWeight: FontWeight.w600,
+    );
   }
 
-  static TextStyle whiteBold16TextStyle(){
-    return  const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Poppins');
+  static TextStyle subHeadingTextStyle() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 12.0,
+      fontWeight: FontWeight.w400,
+    );
   }
 
-  static TextStyle textField16Style(){
-    return  const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Poppins');
+  static TextStyle white12SubHeadingTextStyle() {
+    return GoogleFonts.poppins(
+      color: Colors.white,
+      fontSize: 12.0,
+      fontWeight: FontWeight.w400,
+    );
   }
 
-  static TextStyle red16Text500Style(){
-    return  const TextStyle(
-                  color: Colors.red,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Poppins');
+  static TextStyle black12Text500Style() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 12.0,
+      fontWeight: FontWeight.w500,
+    );
   }
 
-  static TextStyle white12Bold600TextStyle(){
-    return  const TextStyle(
-        color: Colors.white,
-        fontSize: 12.0,
-        fontWeight: FontWeight.w600,
-        fontFamily: 'Poppins');
-  }
-  static TextStyle white12Light400TextStyle(){
-    return  const TextStyle(
-        color: Colors.white70,
-        fontSize: 12.0,
-        fontWeight: FontWeight.w400,
-        fontFamily: 'Poppins');
+  static TextStyle black16Text500Style() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w500,
+    );
   }
 
-  static TextStyle grey12Light400TextStyle(){
-    return  const TextStyle(
-        color: Colors.grey,
-        fontSize: 12.0,
-        fontWeight: FontWeight.w400,
-        fontFamily: 'Poppins');
+  static TextStyle black16Text400Style() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w400,
+    );
   }
 
-        static TextStyle semiBoldTextFieldStyle(){
-    return  const TextStyle(
-                  color: Colors.black,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Poppins');
+  static TextStyle black16Text300Style() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w300,
+    );
   }
+
+  static TextStyle black10Text400Style() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 10.0,
+      fontWeight: FontWeight.w400,
+    );
+  }
+
+  static TextStyle black14Text300Style() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 14.0,
+      fontWeight: FontWeight.w300,
+    );
+  }
+
+  static TextStyle black14Text400Style() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 14.0,
+      fontWeight: FontWeight.w400,
+    );
+  }
+
+  static TextStyle opaque16TextStyle() {
+    return GoogleFonts.poppins(
+      color: Colors.black45,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w400,
+    );
+  }
+
+  static TextStyle black16Text600Style() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w600,
+    );
+  }
+
+  static TextStyle whiteBold16TextStyle() {
+    return GoogleFonts.poppins(
+      color: Colors.white,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w600,
+    );
+  }
+
+  static TextStyle textField16Style() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w500,
+    );
+  }
+
+  static TextStyle red16Text500Style() {
+    return GoogleFonts.poppins(
+      color: Colors.red,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w500,
+    );
+  }
+
+  static TextStyle white12Bold600TextStyle() {
+    return GoogleFonts.poppins(
+      color: Colors.white,
+      fontSize: 12.0,
+      fontWeight: FontWeight.w600,
+    );
+  }
+
+  static TextStyle white12Light400TextStyle() {
+    return GoogleFonts.poppins(
+      color: Colors.white70,
+      fontSize: 12.0,
+      fontWeight: FontWeight.w400,
+    );
+  }
+
+  static TextStyle grey12Light400TextStyle() {
+    return GoogleFonts.poppins(
+      color: Colors.grey,
+      fontSize: 12.0,
+      fontWeight: FontWeight.w400,
+    );
+  }
+
+  static TextStyle semiBoldTextFieldStyle() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 18.0,
+      fontWeight: FontWeight.w500,
+    );
+  }
+
 }
 
 class Validators {

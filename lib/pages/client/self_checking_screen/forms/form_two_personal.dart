@@ -38,13 +38,6 @@ class CheckInFormTwoPersonal extends StatelessWidget {
                   onValidate: (p0) {
                     return Validators.validateEmail(p0);
                   },
-                  // onValidate: (p0) {
-                  //   if (p0!.isEmpty) {
-                  //     return "Please Enter Mobile";
-                  //   }
-                  //   return null;
-                  // },
-                  // onValidate: Validators.validateEmail,
                 ),
 
                 // Contact with Country Code Dropdown
@@ -194,7 +187,7 @@ class CheckInFormTwoPersonal extends StatelessWidget {
                               ),
                               const SizedBox(width: 8),
                               ChoiceChip(
-                                label: const Text("O"),
+                                label: const Text("Other"),
                                 backgroundColor: const Color(0xffECFDFC),
                                 selectedColor: const Color(0xffECFDFC),
                                 side: const BorderSide(

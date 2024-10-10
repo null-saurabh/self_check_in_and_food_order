@@ -172,7 +172,12 @@ class CheckInController extends GetxController {
     }
 
     if (backDocument.value == null) {
-      isBackDocumentInvalid.value = true;
+      if (documentType == "Passport"){
+        isBackDocumentInvalid.value = false;
+
+      } else {
+        isBackDocumentInvalid.value = true;
+      }
     } else {
       isBackDocumentInvalid.value = false;
     }

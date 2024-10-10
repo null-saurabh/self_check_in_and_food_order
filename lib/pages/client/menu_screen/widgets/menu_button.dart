@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wandercrew/pages/client/menu_screen/menu_screen_controller.dart';
 import 'package:wandercrew/pages/client/menu_screen/widgets/scrollable_category_picker.dart';
-import 'package:wandercrew/utils/routes.dart';
 import 'package:wandercrew/widgets/widget_support.dart';
 
 class MenuButton extends StatelessWidget {
@@ -45,15 +44,10 @@ class MenuButton extends StatelessWidget {
             Positioned(
               top: 18,
               right:-12,
-              child: GestureDetector(
-                onTap: (){
-                  Get.toNamed(Routes.receptionCart);
-                },
-                child: Image.asset(
-                  'assets/icons/menu_sandwich.png', // Your sandwich image
-                  height: 112,
-                  width: 84,
-                ),
+              child: Image.asset(
+                'assets/icons/menu_sandwich.png', // Your sandwich image
+                height: 112,
+                width: 84,
               ),
             ),
           ],

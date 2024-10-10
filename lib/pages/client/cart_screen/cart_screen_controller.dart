@@ -37,6 +37,7 @@ class CartScreenController extends GetxController {
   }
 
   final GlobalKey<FormState> cartFormKey= GlobalKey<FormState>();
+  final GlobalKey<FormState> cartDinnerInfoFormKey= GlobalKey<FormState>();
 
   TextEditingController deliveryAddressController = TextEditingController();
   TextEditingController contactNumberController = TextEditingController();
@@ -105,7 +106,7 @@ class CartScreenController extends GetxController {
         orElse: () => PromoCodeModel(code: '', discount: 0));
 
     if (promo.code.isEmpty) {
-      print("aaaa");
+      // print("aaaa");
       return 'Invalid promo code';
     } else {
 

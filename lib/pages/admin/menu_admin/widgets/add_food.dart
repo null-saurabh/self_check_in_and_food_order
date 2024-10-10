@@ -20,7 +20,7 @@ class AddFoodItem extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(16.0),
-      height: Get.height * 0.75, // Set height to 75% of screen height
+      height: Get.height * 0.84, // Set height to 75% of screen height
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,

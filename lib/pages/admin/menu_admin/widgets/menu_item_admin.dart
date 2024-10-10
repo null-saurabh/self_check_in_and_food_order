@@ -148,6 +148,8 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
       value: value,
       onChanged: widget.onToggleAvailability,
+      inactiveThumbColor: Colors.grey,
+      inactiveTrackColor: Colors.white,
       activeTrackColor: Color(0xff2563EB),
       activeColor: Colors.white,
     );

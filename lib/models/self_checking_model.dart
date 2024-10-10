@@ -20,8 +20,8 @@ class SelfCheckInModel {
   final String signatureUrl;
   final String? notes;// Additional notes for the item
   final List<String>? tags;      // Tags for search optimization (e.g., spicy, gluten-free)
-  DateTime? createdAt;  // Change to dynamic to allow FieldValue
-  DateTime? updatedAt;  // Change to dynamic to allow FieldValue  // Timestamp when the item was last updated
+  dynamic createdAt;  // Change to dynamic to allow FieldValue
+  dynamic updatedAt;  // Change to dynamic to allow FieldValue  // Timestamp when the item was last updated
   String? updatedBy;       // The user/admin who last updated the item
 
 
@@ -75,8 +75,8 @@ class SelfCheckInModel {
       notes: data['notes'],
       tags: data['tags'] != null ? List<String>.from(data['tags']) : null,
       updatedBy: data['updatedBy'],
-      createdAt: (data['createdAt'] as Timestamp).toDate(),  // It can be FieldValue or DateTime
-      updatedAt: (data['updatedAt'] as Timestamp).toDate(),
+      createdAt:data['createdAt'] != null ? (data['createdAt'] as Timestamp).toDate() : null ,  // It can be FieldValue or DateTime
+      updatedAt:data['updatedAt'] != null ?  (data['updatedAt'] as Timestamp).toDate() : null,
     );
   }
 
@@ -95,9 +95,9 @@ class SelfCheckInModel {
       'regionState': regionState,
       'signatureUrl': signatureUrl,
       'updatedBy': updatedBy,
-      'createdAt': createdAt != null ?Timestamp.fromDate(createdAt!) : FieldValue.serverTimestamp(),
+      'createdAt': createdAt,
       // 'createdAt': Timestamp.fromDate(createdAt),//createdAt ?? FieldValue.serverTimestamp(), // Handle dynamic value
-      // "updatedAt": updatedAt ?? FieldValue.serverTimestamp(), // Handle dynamic value
+      "updatedAt": updatedAt, // Handle dynamic value
       // "updatedAt": Timestamp.fromDate(updatedAt), // Handle dynamic value
       'notes': notes,
       'tags': tags,
@@ -107,7 +107,7 @@ class SelfCheckInModel {
 
     // Add optional fields only if they're not null or empty
     // if (createdAt != null) data[
-    if (updatedAt != null) data['updatedAt'] = Timestamp.fromDate(updatedAt!);
+    // if (updatedAt != null) data['updatedAt'] = Timestamp.fromDate(updatedAt!);
     if (email != null && email!.isNotEmpty) data['email'] = email;
     if (address != null && address!.isNotEmpty) data['address'] = address;
     if (city != null && city!.isNotEmpty) data['city'] = city;

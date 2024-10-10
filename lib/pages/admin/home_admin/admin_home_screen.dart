@@ -139,9 +139,9 @@ class AdminHomeScreen extends StatelessWidget {
                         height: 182,
                         width: 186,
                         widthRatio: 0.42,
-                        iconHeight: 55,
-                        iconWidth: 55,
-                        icon: "assets/icons/check_in.png",
+                        iconHeight: 86,
+                        iconWidth: 86,
+                        icon: "assets/icons/check_in_circle.png",
                         label: "Check In List",
                         onTap: () {
                           // Add action for room service

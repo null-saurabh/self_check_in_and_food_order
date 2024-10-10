@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wandercrew/pages/admin/menu_admin/widgets/add_food.dart';
 import 'package:wandercrew/pages/admin/menu_admin/widgets/menu_item_admin.dart';
-import 'package:wandercrew/utils/routes.dart';
 import 'menu_admin_controller.dart';
 
 class MenuAdminScreen extends StatelessWidget {

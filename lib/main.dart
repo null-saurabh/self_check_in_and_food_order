@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:wandercrew/service/auth_services.dart';
 import 'package:wandercrew/utils/routes.dart';
 
@@ -28,10 +29,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Wander Crew',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme:  _buildTheme(),
       initialRoute: Routes.adminHome, // Use routes from routes.dart
       getPages: AppPages.pages,       // Use pages from app_pages.dart
       unknownRoute: GetPage(
@@ -46,6 +44,20 @@ class MyApp extends StatelessWidget {
       // home: const BottomNav(),
     );
   }
+
+  ThemeData _buildTheme() {
+    var baseTheme = ThemeData(
+      // colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+      // fontFamily: 'Poppins',
+      useMaterial3: true,
+    );
+
+    return baseTheme.copyWith(
+      textTheme: GoogleFonts.poppinsTextTheme(baseTheme.textTheme),
+    );
+  }
 }
+
+
 
 

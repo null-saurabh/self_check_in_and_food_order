@@ -59,8 +59,11 @@ class CheckInFormOneDocument extends StatelessWidget {
                       .map((type) {
                     return DropdownMenuItem(value: type, child: Text(type));
                   }).toList(),
-                  onChange: (value) =>
-                  selfCheckingController.documentType.value = value,
+                  onChange: (value) {
+                    selfCheckingController.documentType.value = value;
+                    selfCheckingController.update();
+
+                  },
                   value: selfCheckingController.documentType.value,
                   labelText: "Document Type",
                   showLabel: true,
@@ -85,6 +88,7 @@ class CheckInFormOneDocument extends StatelessWidget {
                 }),
                 const SizedBox(height: 16),
 
+                if(selfCheckingController.documentType.value != 'Passport') ... [
                 // Upload Back Document
                 Obx(() {
                   return UploadDocumentWidget(
@@ -97,6 +101,7 @@ class CheckInFormOneDocument extends StatelessWidget {
                 }),
                 const SizedBox(height: 16),
 
+                ],
                 // Terms and Conditions Checkbox
                 Obx(() {
                   return Column(

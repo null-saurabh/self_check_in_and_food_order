@@ -6,6 +6,7 @@ import 'package:wandercrew/pages/client/cart_screen/widgets/donation_widget.dart
 import 'package:wandercrew/widgets/app_elevated_button.dart';
 import '../../../models/cart_model.dart';
 import '../../../models/menu_item_model.dart';
+import '../../../utils/routes.dart';
 import '../../../widgets/widget_support.dart';
 import '../menu_screen/widgets/single_product.dart';
 import '../self_checking_screen/widgets/gradient_texture.dart';
@@ -94,12 +95,34 @@ class CartScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: controller.cartItems.isEmpty
-                              ? const Center(child: Text('Your cart is empty'))
+                              ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    const Center(child: Text('Your cart is empty')),
+                                    SizedBox(height: 4,),
+                                    AppElevatedButton(
+                                      backgroundColor: Color(0xffFFDE1A),
+                                      onPressed: (){
+                                        Get.offNamed(Routes.receptionMenu);
+                                      },
+                                      title: "Menu",
+                                      titleTextColor: Colors.black,
+                                    )
+                                  ],
+                                ),
+                              )
                               : Padding(
-                                padding: const EdgeInsets.only(top: 12.0,left: 12,right:12,),
-                                child: ListView.builder(
-                                                            shrinkWrap: true, // This makes the ListView take only required height
-                                                            physics: const NeverScrollableScrollPhysics(), // Disables internal scrolling, lets parent handle scrolling
+                                  padding: const EdgeInsets.only(
+                                    top: 12.0,
+                                    left: 12,
+                                    right: 12,
+                                  ),
+                                  child: ListView.builder(
+                                    shrinkWrap:
+                                        true, // This makes the ListView take only required height
+                                    physics:
+                                        const NeverScrollableScrollPhysics(), // Disables internal scrolling, lets parent handle scrolling
                                     itemCount: controller.cartItems.length,
                                     itemBuilder: (context, index) {
                                       String menuItemId = controller
@@ -108,12 +131,16 @@ class CartScreen extends StatelessWidget {
 
                                       CartItemModel cartItem =
                                           controller.cartItems[menuItemId]!;
-                                      MenuItemModel menuItem = cartItem.menuItem;
+                                      MenuItemModel menuItem =
+                                          cartItem.menuItem;
 
-                                      return SingleProduct(menuItem: menuItem,isCart: true,);
+                                      return SingleProduct(
+                                        menuItem: menuItem,
+                                        isCart: true,
+                                      );
                                     },
                                   ),
-                              ),
+                                ),
                         ),
                         const SizedBox(
                           height: 16,
@@ -127,15 +154,17 @@ class CartScreen extends StatelessWidget {
                         const CartCustomerInfoWidget(),
                         const SizedBox(height: 16.0),
                         AppElevatedButton(
-                          width:120,
-                          title: "Pay Now",
-                          titleTextColor: Colors.white,
-                          titleTextSize: 16,
-                          titleFontWeight: FontWeight.w400,
-                          onPressed: controller.dinerName.text != "" && controller.contactNumberController.text != "" ? () async {
-                              await controller.initiatePayment();
-                          }: null,
-                        ),
+                            width: 120,
+                            title: "Pay Now",
+                            titleTextColor: Colors.white,
+                            titleTextSize: 16,
+                            titleFontWeight: FontWeight.w400,
+                            onPressed: () async {
+                              if (controller.cartDinnerInfoFormKey.currentState!
+                                  .validate()) {
+                                await controller.initiatePayment();
+                              }
+                            }),
                         const SizedBox(height: 24),
                         // ExpandableMenuItem(),
                       ],
@@ -173,13 +202,13 @@ class CartScreen extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         ),
-                        child: Center(
-                          child: Text(
-                            controller.receptionistText.value, // "Hi, "
-                            style: AppWidget
-                                .white12Bold600TextStyle(), // Regular style
-                          ),
-                        ),
+                            child: Center(
+                              child: Text(
+                                controller.receptionistText.value, // "Hi, "
+                                style: AppWidget
+                                    .white12Bold600TextStyle(), // Regular style
+                              ),
+                            ),
                       ),
                     ),
                   ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../menu_screen_controller.dart';
 
@@ -71,11 +72,11 @@ class ScrollableMenuCategoryPicker extends StatelessWidget {
                     return Center(
                       child: Text(
                         category,
-                        style: TextStyle(
-                          fontSize: isSelected ? 16 : 14,
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        style: GoogleFonts.poppins(
+                          fontSize: isSelected ? 14 : 10,
+                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                           color: isSelected ? Colors.black : Colors.grey,
-                        ),
+                        )
                       ),
                     );
                   },

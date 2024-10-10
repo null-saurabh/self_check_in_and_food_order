@@ -70,7 +70,7 @@ class SingleProduct extends StatelessWidget {
                 
                           Text(
                             menuItem.name,
-                            style: AppWidget.black16Text400Style(),
+                            style: AppWidget.black16Text500Style(),
                           ),
                           const SizedBox(
                             width: 8.0,
@@ -101,7 +101,7 @@ class SingleProduct extends StatelessWidget {
                           // width: MediaQuery.of(context).size.width / 2,
                           child: Text(
                             menuItem.description!,
-                            style: AppWidget.black16Text400Style(),
+                            style: AppWidget.black10Text400Style(),
                           )),
                       // const SizedBox(
                       //   height: 4.0,
@@ -110,9 +110,16 @@ class SingleProduct extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            '\u{20B9} ${menuItem.price}',
-                            style: AppWidget.black14Text300Style(),
+                          Row(
+                            children: [
+                              Text(
+                                '\u{20B9}',
+                                style: AppWidget.black16Text500Style(),
+                              ),Text(
+                                ' ${menuItem.price}',
+                                style: AppWidget.black16Text300Style(),
+                              ),
+                            ],
                           ),
                           // Spacer(),
                           Count(

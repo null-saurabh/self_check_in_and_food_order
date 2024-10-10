@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:signature/signature.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_controller.dart';
+import 'package:wandercrew/widgets/app_elevated_button.dart';
 
 import '../../../../widgets/edit_text.dart';
 import '../../../../widgets/widget_support.dart';
@@ -54,11 +55,49 @@ class CheckInFormThreeSignature extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Signature(
+                            dynamicPressureSupported: true,
                             controller: selfCheckingController.signatureController,
                             backgroundColor: Colors.white,
                           ),
                         ),
                       ),
+
+                      SizedBox(height: 4,),
+                      // Buttons for undo and reset
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Undo Button
+                          AppElevatedButton(
+                            onPressed: () {
+                              if (selfCheckingController.signatureController.isNotEmpty) {
+                                selfCheckingController.signatureController.undo();
+                              }
+                              },
+                            title: "Undo",
+                            borderRadius: 4,
+                            titleTextColor: Colors.white,
+                            height: 28,
+                            backgroundColor: Color(0xff43B8F3),
+                          ),
+
+                          Text("Sign Above",style: AppWidget.black12Text500Style(),),
+                          // Reset Button
+                          AppElevatedButton(
+                            onPressed: () {
+                              selfCheckingController.signatureController.clear();
+                            },
+                            title: "Clear",
+                            borderRadius: 4,
+                            titleTextColor: Colors.black,
+                            height: 28,
+                            backgroundColor: Color(0xffFFDE1A),
+                          )
+
+                        ],
+                      ),
+
+
                       if (formState.hasError)
                         Padding(
                           padding: const EdgeInsets.only(top: 4.0),

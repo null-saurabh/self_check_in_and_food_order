@@ -31,7 +31,7 @@ class ExpandableCheckInItem extends StatelessWidget {
               children: [
                 Text(
                   checkInItem.fullName,
-                  style: AppWidget.whiteBold16TextStyle(),
+                  style: AppWidget.black16Text600Style(),
                 ),
                 Text(' (${checkInItem.age}, ${checkInItem.gender})',
                     style: AppWidget.black14Text400Style()),
@@ -103,7 +103,7 @@ class ExpandableCheckInItem extends StatelessWidget {
         children: [
           Text(
             '$label: ',
-            style: AppWidget.whiteBold16TextStyle(),
+            style: AppWidget.black16Text600Style(),
           ),
           Expanded(
             child: Text(value ?? "", style: AppWidget.black16Text400Style()),
