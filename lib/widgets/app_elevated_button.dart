@@ -12,6 +12,7 @@ class AppElevatedButton extends StatelessWidget {
   Color? backgroundColor;
   Color? titleTextColor;
   Color? borderColor;
+  Color? disableColor;
   double? width;
   double? height;
   double? titleTextSize;
@@ -30,6 +31,7 @@ class AppElevatedButton extends StatelessWidget {
     this.onPressed,
     this.backgroundColor,
     this.titleTextColor = Colors.white,
+    this.disableColor,
     this.showBorder = false,
     this.borderColor,
     this.width,
@@ -65,7 +67,7 @@ class AppElevatedButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           alignment: childAlign,
-          disabledBackgroundColor: ThemeColor.disableColor,
+          disabledBackgroundColor: disableColor ?? ThemeColor.disableColor,
           elevation: elevation,
           padding: contentPadding,
           shape: RoundedRectangleBorder(

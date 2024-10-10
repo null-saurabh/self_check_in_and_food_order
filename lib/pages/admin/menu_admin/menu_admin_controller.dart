@@ -105,8 +105,7 @@ class MenuAdminController extends GetxController {
             backgroundColor: Colors.green,
             colorText: Colors.white,
           );
-        }
-        else {
+        } else {
           // No matching document found
           Get.snackbar(
             "Error",
@@ -280,7 +279,7 @@ class MenuAdminController extends GetxController {
                 // Query to get the correct document by custom 'id' field
                 QuerySnapshot querySnapshot = await FirebaseFirestore.instance
                     .collection("Menu")
-                    .where("productId   ", isEqualTo: item.id)
+                    .where("productId", isEqualTo: item.id)
                     .get();
 
                 if (querySnapshot.docs.isNotEmpty) {

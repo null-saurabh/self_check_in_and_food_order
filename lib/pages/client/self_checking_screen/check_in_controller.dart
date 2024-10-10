@@ -391,7 +391,7 @@ class CheckInController extends GetxController {
             backDocumentUrl: backDocumentUrl,
             fullName: fullName.text,
             email: email.text.isNotEmpty ? email.text : null,  // Handle email
-            contact: contact.text,
+            contact: selectedCountryCode.value + contact.text,
             age: age.text,
             address: address.text.isNotEmpty ? address.text : null,  // Handle address
             city: city.text.isNotEmpty ? city.text : null,  // Handle city

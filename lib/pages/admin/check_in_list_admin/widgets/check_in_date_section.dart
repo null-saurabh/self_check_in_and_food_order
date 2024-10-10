@@ -20,14 +20,17 @@ class CheckInDateSection extends StatelessWidget {
           style: AppWidget.red16Text500Style(),
         ),
         const SizedBox(height: 16),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: checkInAtDate.length,
-          itemBuilder: (context, index) {
-            final checkIn = checkInAtDate[index];
-            return ExpandableCheckInItem(checkInItem: checkIn,);
-          },
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: checkInAtDate.length,
+            itemBuilder: (context, index) {
+              final checkIn = checkInAtDate[index];
+              return ExpandableCheckInItem(checkInItem: checkIn,);
+            },
+          ),
         ),
         const SizedBox(height: 8),
 

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
@@ -19,6 +20,12 @@ class CheckInListController extends GetxController {
     fetchCheckInList(); // Fetch data when controller is initialized
   }
 
+  void makePhoneCall(String number) {
+    String phoneNumber = '$number';
+    html.window.open('tel:$phoneNumber', '_self');
+  }
+
+
   RxList<SelfCheckInModel> checkInList =
       <SelfCheckInModel>[].obs; // Using observable list
   RxMap<String, List<SelfCheckInModel>> groupedCheckIns =
@@ -27,7 +34,7 @@ class CheckInListController extends GetxController {
   Future<void> fetchCheckInList() async {
     try {
       QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection("Self_Check_In").get();
+      await FirebaseFirestore.instance.collection("Self_Check_In").get();
 
       // Mapping Fire store data to model and updating observable list
       List<SelfCheckInModel> newList = querySnapshot.docs.map((doc) {
@@ -53,7 +60,7 @@ class CheckInListController extends GetxController {
     for (var checkIn in checkInList) {
       // Formatting DateTime to a string date
       String formattedDate =
-          DateTimeUtils.formatDDMMYYYYWithSlashes(checkIn.createdAt!);
+      DateTimeUtils.formatDDMMYYYYWithSlashes(checkIn.createdAt!);
       if (!groupedData.containsKey(formattedDate)) {
         groupedData[formattedDate] = [];
       }
@@ -64,10 +71,11 @@ class CheckInListController extends GetxController {
   }
 
   // Function to download an image (works for both Android and Web)
-  void downloadFile({required String imageUrl, required String fileName}) async {
+  void downloadFile(
+      {required String imageUrl, required String fileName}) async {
     if (kIsWeb) {
       // For Web
-      downloadFileWeb(imageUrl,fileName);
+      downloadFileWeb(imageUrl, fileName);
     } else {
       // For Android
       await downloadFileAndroid(imageUrl, fileName);
@@ -75,8 +83,7 @@ class CheckInListController extends GetxController {
   }
 
 
-
-  static Future<void> downloadFileWeb(String imageUrl,String imageName) async {
+  static Future<void> downloadFileWeb(String imageUrl, String imageName) async {
     try {
       // Fetch the image data from the URL
       final http.Response response = await http.get(Uri.parse(imageUrl));
@@ -106,8 +113,8 @@ class CheckInListController extends GetxController {
   }
 
   // Function for Android download
-  static Future<void> downloadFileAndroid(
-      String imageUrl, String fileName) async {
+  static Future<void> downloadFileAndroid(String imageUrl,
+      String fileName) async {
     try {
       // Get directory to save the file
       var directory = await getExternalStorageDirectory();
@@ -131,16 +138,6 @@ class CheckInListController extends GetxController {
   }
 
 
-
-
-
-
-
-
-
-
-
-
 // Function to download the PDF
   Future<void> downloadCheckInAsPdf(SelfCheckInModel checkInItem) async {
     final pdf = pw.Document();
@@ -153,45 +150,52 @@ class CheckInListController extends GetxController {
     // Add a page with text and images
     pdf.addPage(
       pw.Page(
-        build: (pw.Context context) => pw.Column(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-          children: [
-            pw.Text('Check-In Details',
-                style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
-            pw.SizedBox(height: 10),
-            _buildInfoRow('Full Name', checkInItem.fullName),
-            _buildInfoRow('Document Type', checkInItem.documentType),
-            _buildInfoRow('Contact', checkInItem.contact),
-            _buildInfoRow('Age', checkInItem.age.toString()),
-            _buildInfoRow('Gender', checkInItem.gender),
-            _buildInfoRow('Country', checkInItem.country),
-            _buildInfoRow('State', checkInItem.regionState),
-            if (checkInItem.email != null)
-              _buildInfoRow('Email', checkInItem.email!),
-            if (checkInItem.address != null)
-              _buildInfoRow('Address', checkInItem.address!),
-            if (checkInItem.city != null)
-              _buildInfoRow('City', checkInItem.city!),
-            if (checkInItem.arrivingFrom != null)
-              _buildInfoRow('Arriving From', checkInItem.arrivingFrom!),
-            if (checkInItem.goingTo != null)
-              _buildInfoRow('Going To', checkInItem.goingTo!),
-            pw.SizedBox(height: 10),
-            pw.Text('Documents',
-                style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
-            pw.SizedBox(height: 10),
-            pw.Image(frontImage, height: 150, width: 150, fit: pw.BoxFit.cover),
-            pw.SizedBox(height: 10),
-            pw.Image(backImage, height: 150, width: 150, fit: pw.BoxFit.cover),
-            pw.SizedBox(height: 10),
-            pw.Image(signatureImage, height: 150, width: 150, fit: pw.BoxFit.cover),
-          ],
-        ),
+        build: (pw.Context context) =>
+            pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Text('Check-In Details',
+                    style: pw.TextStyle(
+                        fontSize: 24, fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(height: 10),
+                _buildInfoRow('Full Name', checkInItem.fullName),
+                _buildInfoRow('Document Type', checkInItem.documentType),
+                _buildInfoRow('Contact', checkInItem.contact),
+                _buildInfoRow('Age', checkInItem.age.toString()),
+                _buildInfoRow('Gender', checkInItem.gender),
+                _buildInfoRow('Country', checkInItem.country),
+                _buildInfoRow('State', checkInItem.regionState),
+                if (checkInItem.email != null)
+                  _buildInfoRow('Email', checkInItem.email!),
+                if (checkInItem.address != null)
+                  _buildInfoRow('Address', checkInItem.address!),
+                if (checkInItem.city != null)
+                  _buildInfoRow('City', checkInItem.city!),
+                if (checkInItem.arrivingFrom != null)
+                  _buildInfoRow('Arriving From', checkInItem.arrivingFrom!),
+                if (checkInItem.goingTo != null)
+                  _buildInfoRow('Going To', checkInItem.goingTo!),
+                pw.SizedBox(height: 10),
+                pw.Text('Documents',
+                    style: pw.TextStyle(
+                        fontSize: 18, fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(height: 10),
+                pw.Image(
+                    frontImage, height: 150, width: 150, fit: pw.BoxFit.cover),
+                pw.SizedBox(height: 10),
+                pw.Image(
+                    backImage, height: 150, width: 150, fit: pw.BoxFit.cover),
+                pw.SizedBox(height: 10),
+                pw.Image(signatureImage, height: 150,
+                    width: 150,
+                    fit: pw.BoxFit.cover),
+              ],
+            ),
       ),
     );
 
     // Generate the PDF as bytes and save it
-    await _savePdf(pdf,"${checkInItem.fullName} Check In Details.pdf");
+    await _savePdf(pdf, "${checkInItem.fullName} Check In Details.pdf");
   }
 
 // Helper function to fetch images from URL
@@ -217,10 +221,8 @@ class CheckInListController extends GetxController {
   }
 
 
-
-
   // Function to save and download the PDF file
-  static Future<void> _savePdf(pw.Document pdf,String fileName) async {
+  static Future<void> _savePdf(pw.Document pdf, String fileName) async {
     // For Web
     if (kIsWeb) {
       final pdfBytes = await pdf.save();
@@ -240,4 +242,123 @@ class CheckInListController extends GetxController {
       await Printing.sharePdf(bytes: pdfBytes, filename: 'checkin_details.pdf');
     }
   }
+
+
+  Future<void> addNote(SelfCheckInModel item) async {
+    TextEditingController noteController = TextEditingController(
+        text: item.notes ?? "");
+
+    if (item.notes != null) {
+      noteController.text = item.notes!;
+    }
+    // Show a confirmation dialog
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Edit Note"),
+          content: TextField(
+            controller: noteController,
+            keyboardType: TextInputType.text,
+            decoration: const InputDecoration(labelText: "Note"),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                Get.dialog(
+                  const Center(child: CircularProgressIndicator()),
+                  barrierDismissible: false,
+                );
+
+                String newNote = noteController.text;
+
+                // Query to get the correct document by custom 'id' field
+                QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+                    .collection("Self_Check_In")
+                    .where("productId", isEqualTo: item.id)
+                    .get();
+
+                if (querySnapshot.docs.isNotEmpty) {
+                  String docId = querySnapshot.docs.first.id;
+
+                  // Update the note in the database
+                  await FirebaseFirestore.instance.collection("Self_Check_In")
+                      .doc(docId)
+                      .update({'notes': newNote});
+
+                  // Update local item note
+                  item.notes = newNote;
+                  update();
+
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                } else {
+                  // Show error snackbar if no matching document is found
+                  Get.snackbar(
+                    "Error",
+                    "User Data not found.",
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: Colors.red,
+                    colorText: Colors.white,
+                  );
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                }
+              },
+              child: const Text("Save"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  Future<void> deleteNote(SelfCheckInModel item) async {
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
+
+
+    // Query to get the correct document by custom 'id' field
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("Self_Check_In")
+        .where("productId", isEqualTo: item.id)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      String docId = querySnapshot.docs.first.id;
+
+      // Update the note in the database
+      await FirebaseFirestore.instance.collection("Self_Check_In")
+          .doc(docId)
+          .update({'notes': null});
+
+      // Update local item note
+      item.notes = null;
+      update();
+
+      Get.back();
+    } else {
+      // Show error snackbar if no matching document is found
+      Get.snackbar(
+        "Error",
+        "User Data not found.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      Get.back();
+
+    }
+  }
+
 }

@@ -123,9 +123,9 @@ class AppWidget{
     );
   }
 
-  static TextStyle black14Text400Style() {
+  static TextStyle black14Text400Style({Color? color}) {
     return GoogleFonts.poppins(
-      color: Colors.black,
+      color: color ?? Colors.black,
       fontSize: 14.0,
       fontWeight: FontWeight.w400,
     );
@@ -136,6 +136,13 @@ class AppWidget{
       color: Colors.black,
       fontSize: 14.0,
       fontWeight: FontWeight.w600,
+    );
+  }
+  static TextStyle black14Text500Style() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 14.0,
+      fontWeight: FontWeight.w500,
     );
   }
 

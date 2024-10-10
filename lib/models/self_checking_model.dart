@@ -18,7 +18,7 @@ class SelfCheckInModel {
   final String? arrivingFrom; // Optional
   final String? goingTo; // Optional
   final String signatureUrl;
-  final String? notes;// Additional notes for the item
+  String? notes;// Additional notes for the item
   final List<String>? tags;      // Tags for search optimization (e.g., spicy, gluten-free)
   dynamic createdAt;  // Change to dynamic to allow FieldValue
   dynamic updatedAt;  // Change to dynamic to allow FieldValue  // Timestamp when the item was last updated

@@ -18,6 +18,7 @@ class AdminOrderListController extends GetxController {
 
   RxList<OrderModel> orderList = <OrderModel>[].obs;  // Using observable list
 
+  TextEditingController refundAmountController = TextEditingController();
 
   Future<void> fetchOrderData() async {
     try {
@@ -183,6 +184,7 @@ class AdminOrderListController extends GetxController {
     required String paymentId,
     required double refundAmount,
   }) async {
+
     // This would ideally be a server-side API call, but shown here for simplicity
     try {
       await fetchRazorpayKey();
