@@ -18,20 +18,31 @@ class CheckInListAdmin extends StatelessWidget {
             children: [
               Container(
                 color: Colors.white,
-                height: 132,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                height: 96,
+                child: Stack(
+                  // mainAxisAlignment: MainAxisAlignment.center,
                   // crossAxisAlignment: CrossAxisAlignment.s,
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () => Get.back(),
+                    Positioned(
+                      left: 0,
+                      top: 28,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: IconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: () => Get.back(),
+                          ),
+                        ),
+                      ),
                     ),
-                    Text(
-                      'Self Check-In List',
-                      style: AppWidget.heading3BoldTextStyle(),
+                    Center(
+                      child: Text(
+                        'Self Check-In List',
+                        style: AppWidget.heading3BoldTextStyle(),
+                      ),
                     ),
-                    const SizedBox()
+                    // const SizedBox()
                   ],
                 ),
               ),

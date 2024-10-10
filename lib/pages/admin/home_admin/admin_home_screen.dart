@@ -72,7 +72,7 @@ class AdminHomeScreen extends StatelessWidget {
                             label: "Ordered Food",
                             onTap: () {
                               // Add action for order food
-                              Get.toNamed('/admin/add-menu');
+                              Get.toNamed(Routes.adminOrderList);
                             },
                             // iconWidth: 152,
                             // iconHeight: 152,
@@ -163,7 +163,7 @@ class AdminHomeScreen extends StatelessWidget {
                         iconHeight: 55,
                         iconWidth: 55,
                         icon: "assets/icons/feedback.png",
-                        label: "Feedback",
+                        label: "Vouchers",
                         onTap: () {
                           // Add action for room service
                           // Get.toNamed(page);
