@@ -144,7 +144,8 @@ class CheckInListController extends GetxController {
 
     // Fetch images first
     final frontImage = await _fetchImage(checkInItem.frontDocumentUrl);
-    final backImage = await _fetchImage(checkInItem.backDocumentUrl);
+    var backImage;
+    if(checkInItem.backDocumentUrl != null ) backImage = await _fetchImage(checkInItem.backDocumentUrl!);
     final signatureImage = await _fetchImage(checkInItem.signatureUrl);
 
     // Add a page with text and images
@@ -183,6 +184,7 @@ class CheckInListController extends GetxController {
                 pw.Image(
                     frontImage, height: 150, width: 150, fit: pw.BoxFit.cover),
                 pw.SizedBox(height: 10),
+                if(checkInItem.backDocumentUrl !=null)
                 pw.Image(
                     backImage, height: 150, width: 150, fit: pw.BoxFit.cover),
                 pw.SizedBox(height: 10),

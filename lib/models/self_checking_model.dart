@@ -5,7 +5,7 @@ class SelfCheckInModel {
   final String? documentIssueCountry;
   final String documentType;
   final String frontDocumentUrl;
-  final String backDocumentUrl;
+  final String? backDocumentUrl;
   final String fullName;
   final String? email; // Optional
   final String contact;
@@ -31,7 +31,7 @@ class SelfCheckInModel {
     this.documentIssueCountry,
     required this.documentType,
     required this.frontDocumentUrl,
-    required this.backDocumentUrl,
+    this.backDocumentUrl,
     required this.fullName,
     required this.contact,
     required this.age,
@@ -88,11 +88,16 @@ class SelfCheckInModel {
       'frontDocumentUrl': frontDocumentUrl,
       'backDocumentUrl': backDocumentUrl,
       'fullName': fullName,
+      'email' : email,
       'contact': contact,
       'age': age,
+      'address': address,
+      'city':city,
       'gender': gender,
       'country': country,
       'regionState': regionState,
+      'arrivingFrom':arrivingFrom,
+      'goingTo':goingTo,
       'signatureUrl': signatureUrl,
       'updatedBy': updatedBy,
       'createdAt': createdAt,

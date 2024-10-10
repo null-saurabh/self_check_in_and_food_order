@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wandercrew/pages/admin/users_admin/manage_user_controller.dart';
+import 'package:wandercrew/pages/admin/users_admin/widgets/add_user_data.dart';
 import 'package:wandercrew/pages/admin/users_admin/widgets/user_data_item.dart';
 import 'package:wandercrew/widgets/app_elevated_button.dart';
 
@@ -92,7 +93,16 @@ class ManageUserAdmin extends StatelessWidget {
                                 borderWidth: 1,
                                 titleTextColor: Colors.black,
                                 title: "Add User",
-                                onPressed: (){},
+                                onPressed: (){
+                                  Get.bottomSheet(
+                                    AddNewUserAdmin(),
+                                    isScrollControlled: true, // Allows the bottom sheet to expand with keyboard
+                                    backgroundColor: Color(0xffF4F5FA),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                                    ),
+                                  );
+                                },
                               )
                             ],
                           ),

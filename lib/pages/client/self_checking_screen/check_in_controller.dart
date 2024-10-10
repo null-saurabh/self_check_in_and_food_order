@@ -381,7 +381,8 @@ class CheckInController extends GetxController {
         // print("3");
 
         String addId = randomAlphaNumeric(10);
-        if (frontDocumentUrl != null && backDocumentUrl != null && signatureUrl != null) {
+        if (frontDocumentUrl != null  && signatureUrl != null) {
+          if (documentType.value == "Passport" ? true : backDocumentUrl != null) {
           // Handle optional fields: email, address, city, arrivingFrom, goingTo
           SelfCheckInModel selfCheckInData = SelfCheckInModel(
             id: addId,
@@ -418,7 +419,7 @@ class CheckInController extends GetxController {
             // print("6");
             clearFields();
           });
-        } else {
+        } }else {
           Get.snackbar("Error", "Failed to upload documents/signature. Please try again.");
         }
       } catch (e) {

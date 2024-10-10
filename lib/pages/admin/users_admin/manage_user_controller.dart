@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:wandercrew/pages/admin/users_admin/widgets/add_user_data.dart';
+import 'dart:html' as html;
 import '../../../models/user_model.dart';
 
 class ManageUserAdminController extends GetxController {
@@ -16,11 +17,14 @@ class ManageUserAdminController extends GetxController {
     fetchUserDataList(); // Fetch data when controller is initialized
   }
 
-
+  void makePhoneCall(String number) {
+    String phoneNumber = '$number';
+    html.window.open('tel:$phoneNumber', '_self');
+  }
   Future<void> fetchUserDataList() async {
     try {
       QuerySnapshot querySnapshot =
-      await FirebaseFirestore.instance.collection("Admin").get();
+      await FirebaseFirestore.instance.collection("AdminAccount").get();
 
       // Mapping Fire store data to model and updating observable list
       List<AdminUserModel> newList = querySnapshot.docs.map((doc) {
@@ -41,6 +45,8 @@ class ManageUserAdminController extends GetxController {
   }
 
   Future<void> deleteUser(AdminUserModel userData) async {
+
+
     // Show a confirmation dialog
     bool? confirmed = await showDialog(
       context: Get.context!,
@@ -63,11 +69,16 @@ class ManageUserAdminController extends GetxController {
     );
 
     if (confirmed == true) {
+      Get.dialog(
+        const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false,
+      );
+
       try {
         // Query the document with matching custom 'id' field
         QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-            .collection("Admin")
-            .where("userId", isEqualTo: userData.userId) // Assuming 'id' is the custom field name in Firestore
+            .collection("AdminAccount")
+            .where("id", isEqualTo: userData.id) // Assuming 'id' is the custom field name in Firestore
             .get();
 
         if (querySnapshot.docs.isNotEmpty) {
@@ -75,9 +86,10 @@ class ManageUserAdminController extends GetxController {
           String docId = querySnapshot.docs.first.id;
 
           // Delete the document using the retrieved document ID
-          await FirebaseFirestore.instance.collection("Admin").doc(docId).delete();
+          await FirebaseFirestore.instance.collection("AdminAccount").doc(docId).delete();
           userDataList.remove(userData);
           update();
+          Get.back();
 
           // Show success snackbar
           Get.snackbar(
@@ -88,6 +100,8 @@ class ManageUserAdminController extends GetxController {
             colorText: Colors.white,
           );
         } else {
+          Get.back();
+
           // No matching document found
           Get.snackbar(
             "Error",
@@ -98,6 +112,7 @@ class ManageUserAdminController extends GetxController {
           );
         }
       } catch (error) {
+        Get.back();
         // Show error snackbar
         Get.snackbar(
           "Error",
@@ -110,6 +125,19 @@ class ManageUserAdminController extends GetxController {
     }
   }
 
+  Future<void> editUserData(AdminUserModel data) async {
+    // Implement edit logic
+    // This is a placeholder
+    Get.bottomSheet(
+      AddNewUserAdmin(data: data,isEdit: true,),
+      isScrollControlled: true, // Allows the bottom sheet to expand with keyboard
+      backgroundColor: Color(0xffF4F5FA),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+    );
+    // print("Edit Menu Item: ${item.name}");
+  }
 
   void toggleUserOnlineStatus(AdminUserModel userData, bool isOnline) async {
     // Update UI first (optimistic update)

@@ -186,10 +186,11 @@ class ExpandableCheckInItem extends StatelessWidget {
                         fileName:
                             '${checkInItem.fullName}_${checkInItem.documentType}_front.jpg');
                   }),
+                  if(checkInItem.backDocumentUrl != null)
                   _buildDocumentSection(
-                      'Back Document', checkInItem.backDocumentUrl, () {
+                      'Back Document', checkInItem.backDocumentUrl!, () {
                     controller.downloadFile(
-                        imageUrl: checkInItem.backDocumentUrl,
+                        imageUrl: checkInItem.backDocumentUrl!,
                         fileName:
                             '${checkInItem.fullName}_${checkInItem.documentType}_back.jpg');
                   }),

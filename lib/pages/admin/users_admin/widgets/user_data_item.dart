@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:wandercrew/models/user_model.dart';
 import 'package:wandercrew/widgets/app_elevated_button.dart';
 
+import '../../../../utils/date_time.dart';
 import '../../../../widgets/widget_support.dart';
 import '../manage_user_controller.dart';
 
@@ -38,9 +39,10 @@ class UserDataItemAdmin extends StatelessWidget {
             child: Column(
               children: [
                 _buildInfoRow(label: 'Name',value:userData.name ),
+                _buildNumberRow( onCallPressed: (){controller.makePhoneCall(userData.number);} ),
                 _buildInfoRow(label: 'Username',value:userData.userId),
                 _buildPasswordRow(),
-                _buildInfoRow(label: 'Role',value:userData.role,noBottomPadding: true ),
+                _buildInfoRow(label: 'Role',value:userData.role),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -62,8 +64,8 @@ class UserDataItemAdmin extends StatelessWidget {
 
                   ],
                 ),
-                SizedBox(height: 4,),
-                // _buildInfoRow('Last Login', userData.loginData.last.toString()),
+                _buildInfoRow(label: 'Last Login', value: DateTimeUtils.formatDateTime(userData.loginData.last,format: "dd-MMM HH:mm a"),),
+                SizedBox(height: 16,),
 
                 Row(
                   children: [
@@ -71,7 +73,9 @@ class UserDataItemAdmin extends StatelessWidget {
                       title: "Edit",
                       titleTextColor: Colors.white,
                       backgroundColor: Color(0xff007AFF),
-                      onPressed: (){},
+                      onPressed: (){
+                        controller.editUserData(userData);
+                      },
                     ),
                     SizedBox(width: 8,),
                     AppElevatedButton(
@@ -85,7 +89,50 @@ class UserDataItemAdmin extends StatelessWidget {
                     SizedBox(width: 8),
                     GestureDetector(
                       onTap: (){
-
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Login History"),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Divider(color: Colors.grey), // Divider below heading
+                                  // If loginData is not null, show the login dates
+                                  if (userData.loginData.isNotEmpty)
+                                    ...userData.loginData.map(
+                                          (loginDate) => Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(DateTimeUtils.formatDateTime(loginDate), // Use your preferred date format
+                                                style: TextStyle(fontSize: 16)),
+                                            SizedBox(width: 4,),
+                                            Text("Login",
+                                                style: TextStyle(fontSize: 16, color: Colors.grey)),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  else
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                      child: Text("No history available."),
+                                    ),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: Text("Close"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                       child: Icon(Icons.history,color: Colors.black,),
                     )
@@ -100,12 +147,12 @@ class UserDataItemAdmin extends StatelessWidget {
         const SizedBox(height: 8),
 
       ],
-    );;
+    );
     } );
   }
 
 
-  Widget _buildInfoRow({required String label, String? value, bool? noBottomPadding, bool? noTopPadding}) {
+  Widget _buildInfoRow({required String label, String? value,}) {
     return Row(
       children: [
         Text(
@@ -115,6 +162,23 @@ class UserDataItemAdmin extends StatelessWidget {
         Expanded(
           child: Text(value ?? "", style: AppWidget.black16Text600Style()),
         ),
+      ],
+    );
+  }
+
+  Widget _buildNumberRow({required VoidCallback onCallPressed}) {
+    return Row(
+      children: [
+        Text(
+          'Number: ',
+          style: AppWidget.black16Text400Style(),
+        ),
+        Text(userData.number ?? "", style: AppWidget.black16Text600Style()),
+        SizedBox(width: 4,),
+        GestureDetector(
+          onTap: onCallPressed,
+          child: Icon(Icons.call,color: Colors.green,size: 20,),
+        )
       ],
     );
   }

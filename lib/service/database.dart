@@ -21,6 +21,13 @@ class DatabaseMethods {
         .update(foodItemData);
   }
 
+  Future updateUserData(String itemId,Map<String, dynamic> foodItemData) async {
+    return await FirebaseFirestore.instance
+        .collection("AdminAccount")
+        .doc(itemId)
+        .update(foodItemData);
+  }
+
   Future addOrder(Map<String, dynamic> userInfoMap) async {
     return await FirebaseFirestore.instance
         .collection("Orders")
@@ -31,6 +38,12 @@ class DatabaseMethods {
     await FirebaseFirestore.instance
         .collection('Self_Check_In')
         .add(checkInData);
+  }
+
+  Future<void> addNewUser(Map<String, dynamic> newUserData) async {
+    await FirebaseFirestore.instance
+        .collection('AdminAccount')
+        .add(newUserData);
   }
 
 }
