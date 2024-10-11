@@ -77,7 +77,10 @@ class AddVoucherAdmin extends StatelessWidget {
                               controller: controller.voucherCodeController,
                               onValidate: Validators.requiredField,
                               suffixWidget: AppElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  String generatedCode = controller.generateVoucherCode(8); // Generate 8-char code
+                                  controller.voucherCodeController.text = generatedCode; // Set to the controller
+                                },
                                 title: "Auto Generate",
                                 titleTextColor: Colors.white,
                                 contentPadding: EdgeInsets.all(8),

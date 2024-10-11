@@ -55,6 +55,7 @@ class CouponModel {
   double? minOrderValue;              // Optional: Minimum order value required to apply the coupon
   double? maxDiscount;                // Optional: Maximum discount value (applicable for percentage coupons)
   bool isActive;                      // Status to track if the coupon is active
+  bool isUsed;
   int? usageLimit;                    // Number of times the coupon can be used
   int? remainingLimit;                    // Number of times the coupon can be used
   int usageCount;                     // Number of times the coupon has been used
@@ -71,6 +72,7 @@ class CouponModel {
     this.remainingDiscountValue,
     required this.validFrom,
     required this.validUntil,
+    required this.isUsed,
     this.minOrderValue,
     this.maxDiscount,
     required this.isActive,
@@ -96,6 +98,7 @@ class CouponModel {
       'minOrderValue': minOrderValue,
       'maxDiscount': maxDiscount,
       'isActive': isActive,
+      'isUsed': isUsed,
       'usageLimit': usageLimit,
       'remainingLimit': remainingLimit,
       'usageCount': usageCount,
@@ -119,6 +122,7 @@ class CouponModel {
       minOrderValue: data['minOrderValue'],
       maxDiscount: data['maxDiscount'],
       isActive: data['isActive'],
+      isUsed: data['isUsed'],
       usageLimit: data['usageLimit'],
       remainingLimit: data['remainingLimit'],
       usageCount: data['usageCount'],

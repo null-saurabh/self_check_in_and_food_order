@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +19,23 @@ class AddVoucherAdminController extends GetxController {
       setEditingItem(data);
     }
   }
+
+  @override
+  void onInit() {
+    super.onInit();
+    voucherCodeController.addListener(() {
+      final text = voucherCodeController.text.toUpperCase(); // Convert to uppercase
+      voucherCodeController.value = voucherCodeController.value.copyWith(
+        text: text,
+        selection: TextSelection(
+          baseOffset: text.length,
+          extentOffset: text.length,
+        ),
+        composing: TextRange.empty,
+      );
+    });}
+
+
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -43,7 +62,7 @@ class AddVoucherAdminController extends GetxController {
   );
 
   RxString selectedVoucherType = RxString("single-use");
-  RxString selectedDiscountType = RxString("percentage");
+  RxString selectedDiscountType = RxString("fixed-discount");
 
   RxnString selectedCategories = RxnString();
 
@@ -73,6 +92,14 @@ class AddVoucherAdminController extends GetxController {
 
 
     update();
+  }
+
+  String generateVoucherCode(int length) {
+    const String chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    Random random = Random();
+
+    return List.generate(length, (index) => chars[random.nextInt(chars.length)])
+        .join();
   }
 
   Future<void> submitCouponData() async {
@@ -129,6 +156,7 @@ class AddVoucherAdminController extends GetxController {
         usageCount: usageCount.value, // Initialize with 0 for new coupons
         usedOnOrders: usedOnOrders,
         applicableCategories: [selectedCategories.value ?? "Food Voucher"],
+        isUsed: false,
       );
 
       if (isEditing.value) {
@@ -190,12 +218,21 @@ class AddVoucherAdminController extends GetxController {
             colorText: Colors.white,
           );
         }
-      } else {
+      }
+
+      else {
         // Saving a new coupon
         await FirebaseFirestore.instance
             .collection("Voucher")
             .add(newCoupon.toMap());
 
+        // Update locally
+        ManageVoucherAdminController couponController =
+        Get.find<ManageVoucherAdminController>();
+
+
+        couponController.voucherList.add(newCoupon);
+        couponController.update();
         Get.back(); // Close loading dialog
         Get.back(); // Return to previous page
 

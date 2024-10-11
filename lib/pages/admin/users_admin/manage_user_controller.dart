@@ -168,6 +168,7 @@ class ManageUserAdminController extends GetxController {
             .doc(docId)
             .update({'isOnline': isOnline});
       } else {
+        userData.isOnline = !isOnline;
         throw Exception("User not found");
       }
     } catch (error) {
