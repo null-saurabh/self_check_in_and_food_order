@@ -7,6 +7,7 @@ import 'package:wandercrew/pages/admin/login_admin/admin_login.dart';
 import 'package:wandercrew/pages/admin/menu_admin/menu_admin_screen.dart';
 import 'package:wandercrew/pages/admin/orders_admin/orders_list_screen.dart';
 import 'package:wandercrew/pages/admin/vouchers_admin/manage_voucher_admin.dart';
+import 'package:wandercrew/pages/admin/vouchers_admin/widgets/add_voucher.dart';
 import 'package:wandercrew/pages/client/cart_screen/cart_screen.dart';
 import 'package:wandercrew/pages/client/menu_screen/menu_screen.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/reception_home_screen.dart';
@@ -73,6 +74,11 @@ class AppPages {
       page: () => const ManageVoucherAdmin(),
       // middlewares: [AuthMiddleware()],
     ),
+    GetPage(
+      name: Routes.adminAddVoucher,
+      page: () => const AddVoucherAdmin(),
+      // middlewares: [AuthMiddleware()],
+    ),
 
     GetPage(
       name: Routes.notFound,
@@ -99,6 +105,7 @@ class Routes {
   static const String adminCheckInList = '/admin/check-in-list';
   static const String adminManageUsers = '/admin/manage-user';
   static const String adminManageVoucher = '/admin/manage-voucher';
+  static const String adminAddVoucher = '/admin/manage-voucher/add';
 
   static const String notFound = '/not-found';
 }

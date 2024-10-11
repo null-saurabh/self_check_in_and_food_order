@@ -3,10 +3,10 @@ import 'package:wandercrew/utils/date_time.dart';
 import 'package:wandercrew/widgets/app_elevated_button.dart';
 import 'package:wandercrew/widgets/widget_support.dart';
 
-import '../../../../models/order_model.dart';
+import '../../../../models/food_order_model.dart';
 
 class SingleOrder extends StatelessWidget {
-  final OrderModel orderData;
+  final FoodOrderModel orderData;
   final VoidCallback markAsConfirm;
   final VoidCallback markAsDelivered;
   final VoidCallback initiateRefund;

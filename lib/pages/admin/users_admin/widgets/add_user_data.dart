@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wandercrew/models/user_model.dart';
-import 'package:wandercrew/pages/admin/menu_admin/widgets/add_food.dart';
-
 import '../../../../widgets/app_dropdown.dart';
 import '../../../../widgets/app_elevated_button.dart';
 import '../../../../widgets/edit_text.dart';
+import '../../../../widgets/elevated_container.dart';
 import '../../../../widgets/widget_support.dart';
 import '../../../client/self_checking_screen/widgets/upload_document_widget.dart';
 import 'add_user_controller.dart';
@@ -28,7 +27,7 @@ class AddNewUserAdmin extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Center(
-                  child: Text("Add New User",
+                  child: Text(isEdit? "Edit User" :"Add New User",
                       style: AppWidget.heading3BoldTextStyle()),
                 ),
                 const SizedBox(height: 20.0),
@@ -144,7 +143,7 @@ class AddNewUserAdmin extends StatelessWidget {
                           // Upload Back Document
                           Obx(() {
                             return UploadDocumentWidget(
-                              title: "Back Side of Document",
+                              title: "Back  Side of Document",
                               onTap: () => controller.pickDocument(false),
                               fileName: controller.backDocumentName.value,
                               isDocumentInvalid:
@@ -179,7 +178,9 @@ class AddNewUserAdmin extends StatelessWidget {
                     ),
                     AppElevatedButton(
                       onPressed: () {
-                        controller.submitData();
+                        if (controller.validateForm()) {
+                          controller.submitData();
+                        }
                       },
                       backgroundColor: Colors.black,
                       child: Text(

@@ -6,6 +6,7 @@ import 'package:wandercrew/widgets/widget_support.dart';
 import '../../../../models/menu_item_model.dart';
 import '../../../../widgets/app_dropdown.dart';
 import '../../../../widgets/edit_text.dart';
+import '../../../../widgets/elevated_container.dart';
 import '../../../client/self_checking_screen/widgets/upload_document_widget.dart';
 import 'add_food_item_controller.dart';
 
@@ -27,7 +28,7 @@ class AddFoodItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Center(
-                  child: Text("Add Food Item",
+                  child: Text(isEdit? "Edit Food Item" :"Add Food Item",
                       style: AppWidget.heading3BoldTextStyle()),
                 ),
                 const SizedBox(height: 20.0),
@@ -249,28 +250,3 @@ class AddFoodItem extends StatelessWidget {
   }
 }
 
-class ElevatedContainer extends StatelessWidget {
-  final Widget child;
-
-  const ElevatedContainer({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 1,
-            offset: const Offset(0, 3), // changes position of shadow
-          ),
-        ],
-      ),
-      child: child,
-    );
-  }
-}

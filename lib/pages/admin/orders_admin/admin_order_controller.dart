@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wandercrew/models/order_model.dart';
+import 'package:wandercrew/models/food_order_model.dart';
 
 class AdminOrderListController extends GetxController {
 
@@ -16,7 +16,7 @@ class AdminOrderListController extends GetxController {
   }
 
 
-  RxList<OrderModel> orderList = <OrderModel>[].obs;  // Using observable list
+  RxList<FoodOrderModel> orderList = <FoodOrderModel>[].obs;  // Using observable list
 
   TextEditingController refundAmountController = TextEditingController();
 
@@ -25,10 +25,10 @@ class AdminOrderListController extends GetxController {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("Orders").get();
 
       // Mapping Firestore data to OrderModel and updating observable list
-      List<OrderModel> newList = querySnapshot.docs.map((doc) {
+      List<FoodOrderModel> newList = querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-        return OrderModel.fromMap(data);  // Using fromMap factory constructor
+        return FoodOrderModel.fromMap(data);  // Using fromMap factory constructor
       }).toList();
 
       orderList.assignAll(newList);
@@ -38,7 +38,7 @@ class AdminOrderListController extends GetxController {
   }
 
 
-  Future<void> confirmOrder(OrderModel item, String adminName) async {
+  Future<void> confirmOrder(FoodOrderModel item, String adminName) async {
     try {
       Get.dialog(
         const Center(child: CircularProgressIndicator()),
@@ -62,7 +62,7 @@ class AdminOrderListController extends GetxController {
           print("confirm 7");
 
           // Parse the order data into OrderModel
-          OrderModel order = OrderModel.fromMap(orderSnapshot.data() as Map<String, dynamic>);
+          FoodOrderModel order = FoodOrderModel.fromMap(orderSnapshot.data() as Map<String, dynamic>);
 
           // Add new status update for 'Preparing'
           order.orderStatusHistory.add(
@@ -109,7 +109,7 @@ class AdminOrderListController extends GetxController {
 
 
   // Function to mark the order as Delivered
-  Future<void> orderDelivered(OrderModel item, String adminName) async {
+  Future<void> orderDelivered(FoodOrderModel item, String adminName) async {
     try {
       Get.dialog(
         const Center(child: CircularProgressIndicator()),
@@ -126,7 +126,7 @@ class AdminOrderListController extends GetxController {
         DocumentSnapshot orderSnapshot = await FirebaseFirestore.instance.collection("Orders").doc(docId).get();
         if (orderSnapshot.exists) {
           // Parse the order data into OrderModel
-          OrderModel order = OrderModel.fromMap(orderSnapshot.data() as Map<String, dynamic>);
+          FoodOrderModel order = FoodOrderModel.fromMap(orderSnapshot.data() as Map<String, dynamic>);
 
           // Add new status update for 'Delivered'
           order.orderStatusHistory.add(

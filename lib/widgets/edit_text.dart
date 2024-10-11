@@ -44,6 +44,7 @@ class EditText extends StatelessWidget {
   Color? borderColor;
   String? imagePath;
   bool paddingBottom;
+  Widget? suffixWidget;
 
   FocusNode? focusNode;
   Widget? suffixIcon;
@@ -97,6 +98,7 @@ class EditText extends StatelessWidget {
     this.onChange,
     this.onSubmit,
     this.enable = true,
+    this.suffixWidget,
   });
   // {
     // if (prefix != null) {
@@ -123,100 +125,109 @@ class EditText extends StatelessWidget {
             height: 4,
           ),
         ],
-        SizedBox(
-          height: height,
-          child: TextFormField(
-            // focusNode: focusNode,
-            validator: (value) {
-              var result = onValidate?.call(value);
-              showError.value = result;
-              // return showError.value;
-              return result;
-            },
+        Row(
+          children: [
+            Expanded(
+              child: SizedBox(
+                height: height,
+                child: TextFormField(
+                  // focusNode: focusNode,
+                  validator: (value) {
+                    var result = onValidate?.call(value);
+                    showError.value = result;
+                    // return showError.value;
+                    return result;
+                  },
 
-            readOnly: onTap != null,
-            onTap: onTap,
-            enabled: enable,
-            controller: controller,
-            textAlign: textAlign!,
+                  readOnly: onTap != null,
+                  onTap: onTap,
+                  enabled: enable,
+                  controller: controller,
+                  textAlign: textAlign!,
 
-            style: TextStyle(
-              fontWeight: textFontWeight,
-              color: textColor,
-              fontSize: textSize,
-              fontFamily: "poppins",
-            ),
-            keyboardType: inputType ?? TextInputType.name,
+                  style: TextStyle(
+                    fontWeight: textFontWeight,
+                    color: textColor,
+                    fontSize: textSize,
+                    fontFamily: "poppins",
+                  ),
+                  keyboardType: inputType ?? TextInputType.name,
 
-            maxLength: maxLength,
-            minLines: minLine,
+                  maxLength: maxLength,
+                  minLines: minLine,
 
-            maxLines: maxLine,
-            onFieldSubmitted: onSubmit,
-            onChanged: onChange,
-            obscureText: obscureText!,
-            focusNode: focusNode,
+                  maxLines: maxLine,
+                  onFieldSubmitted: onSubmit,
+                  onChanged: onChange,
+                  obscureText: obscureText!,
+                  focusNode: focusNode,
 
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top:12, bottom:12, left:12, right:12),
+                  decoration: InputDecoration(
 
-              isDense: true,
-              counterText: "",
-              hintText: hint ?? '',
-              hintMaxLines: 1,
-              filled: filled,
-              fillColor:fillColor,
-              errorStyle: const TextStyle(height: 0.1, fontSize: 0),
-              errorMaxLines: 2,
-              hintStyle: TextStyle(
-                  color: hintColor,
-                  fontSize: hintTextSize,
-                  fontFamily:"poppins",
-                  fontWeight: hintFontWeight),
-              suffixIcon: suffix,
-              prefixIcon: prefix,
-              // contentPadding: contentPadding,
-              // suffixIconConstraints:
-              // BoxConstraints(maxWidth: suffixSize!, maxHeight: suffixSize!),
-              prefixIconConstraints: BoxConstraints(
-                  maxWidth: prefixSize!,
-                  maxHeight: prefixHeight,
-                  minHeight: prefixHeight,
-                  minWidth: prefixSize!
+                    contentPadding: EdgeInsets.only(top:12, bottom:12, left:12, right:12),
+                    isDense: true,
+                    counterText: "",
+                    hintText: hint ?? '',
+                    hintMaxLines: 1,
+                    filled: filled,
+                    fillColor:fillColor,
+                    errorStyle: const TextStyle(height: 0.1, fontSize: 0),
+                    errorMaxLines: 2,
+                    hintStyle: TextStyle(
+                        color: hintColor,
+                        fontSize: hintTextSize,
+                        fontFamily:"poppins",
+                        fontWeight: hintFontWeight),
+                    suffixIcon: suffix,
+                    prefixIcon: prefix,
+                    // suffixIconConstraints:
+                    // BoxConstraints(maxWidth: suffixSize!, maxHeight: suffixSize!),
+                    prefixIconConstraints: BoxConstraints(
+                        maxWidth: prefixSize!,
+                        maxHeight: prefixHeight,
+                        minHeight: prefixHeight,
+                        minWidth: prefixSize!
+                    ),
+                    border: showBorder
+                        ? borderColor != null
+                        ? border
+                        : Get.theme.inputDecorationTheme.border
+                        : InputBorder.none,
+                    enabledBorder: showBorder
+                        ? borderColor != null
+                        ? border
+                        : Get.theme.inputDecorationTheme.enabledBorder
+                        : InputBorder.none,
+                    errorBorder: showBorder
+                        ? borderColor != null
+                        ? border
+                        : Get.theme.inputDecorationTheme.errorBorder
+                        : InputBorder.none,
+                    focusedBorder: showBorder
+                        ? borderColor != null
+                        ? border
+                        : Get.theme.inputDecorationTheme.focusedBorder
+                        : InputBorder.none,
+                    disabledBorder: showBorder
+                        ? borderColor != null
+                        ? border
+                        : Get.theme.inputDecorationTheme.disabledBorder
+                        : InputBorder.none,
+                    focusedErrorBorder: showBorder
+                        ? borderColor != null
+                        ? border
+                        : Get.theme.inputDecorationTheme.focusedErrorBorder
+                        : InputBorder.none,
+                  ),
+                  inputFormatters: inputformats,
+                ),
               ),
-              border: showBorder
-                  ? borderColor != null
-                  ? border
-                  : Get.theme.inputDecorationTheme.border
-                  : InputBorder.none,
-              enabledBorder: showBorder
-                  ? borderColor != null
-                  ? border
-                  : Get.theme.inputDecorationTheme.enabledBorder
-                  : InputBorder.none,
-              errorBorder: showBorder
-                  ? borderColor != null
-                  ? border
-                  : Get.theme.inputDecorationTheme.errorBorder
-                  : InputBorder.none,
-              focusedBorder: showBorder
-                  ? borderColor != null
-                  ? border
-                  : Get.theme.inputDecorationTheme.focusedBorder
-                  : InputBorder.none,
-              disabledBorder: showBorder
-                  ? borderColor != null
-                  ? border
-                  : Get.theme.inputDecorationTheme.disabledBorder
-                  : InputBorder.none,
-              focusedErrorBorder: showBorder
-                  ? borderColor != null
-                  ? border
-                  : Get.theme.inputDecorationTheme.focusedErrorBorder
-                  : InputBorder.none,
             ),
-            inputFormatters: inputformats,
-          ),
+            if(suffixWidget != null) ...[
+              SizedBox(width: 8,),
+            suffixWidget!
+    ]
+          ],
         ),
 
 

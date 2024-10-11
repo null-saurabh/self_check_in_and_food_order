@@ -68,7 +68,7 @@ class OrderStatusUpdate {
 
 
 
-class OrderModel {
+class FoodOrderModel {
 
   String orderId;                       // Unique ID for each order
   String transactionId;                 // from razorpay
@@ -90,7 +90,7 @@ class OrderModel {
   DateTime? createdAt;                  // Timestamp when the order was created
   DateTime? updatedAt;                  // Timestamp when the order was last updated
   bool isCancelled;
-  OrderModel({
+  FoodOrderModel({
     required this.orderId,
     required this.transactionId,
     required this.dinerName,
@@ -140,8 +140,8 @@ class OrderModel {
   }
 
 
-  factory OrderModel.fromMap(Map<String, dynamic> data) {
-    return OrderModel(
+  factory FoodOrderModel.fromMap(Map<String, dynamic> data) {
+    return FoodOrderModel(
       orderId: data['orderId'],
       transactionId: data['transactionId'],
       dinerName: data['dinerName'],

@@ -42,6 +42,7 @@ class AppDropDown<T> extends StatelessWidget {
   final FocusNode? focusNode;
   final bool showIndiactionTop;
   final bool hideError;
+  final FontWeight? labelFontWeight;
 
   AppDropDown({
     super.key,
@@ -77,7 +78,7 @@ class AppDropDown<T> extends StatelessWidget {
     this.showIndiactionTop = false,
     this.fillColor,
     this.selectedValue,
-    this.dropDownMenuHeight = 400,
+    this.dropDownMenuHeight = 400,this.labelFontWeight,
   });
 
   final RxnString showError = RxnString();
@@ -98,7 +99,7 @@ class AppDropDown<T> extends StatelessWidget {
                 labelText ?? '',
                 textColor: labelColor ?? ThemeColor.black,
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
+                fontWeight: labelFontWeight ?? FontWeight.w500,
               ),
               const SizedBox(
                 height: 4,

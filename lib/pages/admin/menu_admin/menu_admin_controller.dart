@@ -252,6 +252,7 @@ class MenuAdminController extends GetxController {
       },
     );
   }
+
   Future<void> editMenuItemNote(BuildContext context, MenuItemModel item) async {
     TextEditingController noteController = TextEditingController(text: item.notes ?? "");
 

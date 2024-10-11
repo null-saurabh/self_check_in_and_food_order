@@ -250,6 +250,8 @@ class AddFoodItemController extends GetxController {
 
             }
             else {
+              Get.back();
+
               // No matching document found
               Get.snackbar(
                 "Error",
@@ -260,6 +262,8 @@ class AddFoodItemController extends GetxController {
               );
             }
           } catch (error) {
+            Get.back();
+
             // Show error snackbar
             Get.snackbar(
               "Error",
@@ -295,6 +299,8 @@ class AddFoodItemController extends GetxController {
         );
         }
       } catch (e) {
+        Get.back();
+
         Get.snackbar(
           "Error",
           "Failed to add the item: $e",
@@ -304,6 +310,7 @@ class AddFoodItemController extends GetxController {
       } finally {
       }
     } else {
+      Get.back();
       Get.snackbar(
         "Error",
         "Please fill in all fields and select an image.",

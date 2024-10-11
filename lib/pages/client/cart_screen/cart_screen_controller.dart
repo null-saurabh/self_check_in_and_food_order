@@ -7,7 +7,7 @@ import 'package:random_string/random_string.dart';
 
 import '../../../models/cart_model.dart';
 import '../../../models/menu_item_model.dart';
-import '../../../models/order_model.dart';
+import '../../../models/food_order_model.dart';
 import '../../../models/promo_code_model.dart';
 import '../../../service/database.dart';
 import '../../../service/razorpay_web.dart';
@@ -164,7 +164,7 @@ class CartScreenController extends GetxController {
       String addId = randomAlphaNumeric(10);
 
       // Create order model
-      OrderModel orderData = OrderModel(
+      FoodOrderModel orderData = FoodOrderModel(
         orderId: addId, // Firebase will generate the ID
         transactionId: transactionID,
         dinerName: dinerName.text, //dinerName.text,

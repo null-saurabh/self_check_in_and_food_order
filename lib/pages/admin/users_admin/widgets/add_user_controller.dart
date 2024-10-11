@@ -230,6 +230,8 @@ class AddNewUserAdminController extends GetxController{
 
               }
               else {
+                Get.back();
+
                 // No matching document found
                 Get.snackbar(
                   "Error",
@@ -240,6 +242,8 @@ class AddNewUserAdminController extends GetxController{
                 );
               }
             } catch (error) {
+              Get.back();
+
               // Show error snackbar
               Get.snackbar(
                 "Error",
@@ -272,9 +276,12 @@ class AddNewUserAdminController extends GetxController{
             clearFields();
           }); }
         } }else {
+        Get.back();
         Get.snackbar("Error", "Failed to upload documents. Please try again.");
       }
     } catch (e) {
+      Get.back();
+
       Get.snackbar(
         "Error",
         "Failed to add user: $e",
@@ -288,6 +295,37 @@ class AddNewUserAdminController extends GetxController{
     }
 
   }
+
+
+
+  bool validateForm() {
+
+    final isValid = formKey.currentState?.validate() ?? false;
+
+    // Manually validate the front document and back document
+    if (frontDocument.value == null) {
+      isFrontDocumentInvalid.value = true;
+    } else {
+      isFrontDocumentInvalid.value = false;
+    }
+
+    if (backDocument.value == null) {
+      if (documentType == "Passport"){
+        isBackDocumentInvalid.value = false;
+
+      } else {
+        isBackDocumentInvalid.value = true;
+      }
+    } else {
+      isBackDocumentInvalid.value = false;
+    }
+    update();
+    // Return whether the entire form is valid
+    return isValid && !isFrontDocumentInvalid.value && !isBackDocumentInvalid.value;
+  }
+
+
+
 
   void clearFields() {
     contact.clear();
