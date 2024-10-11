@@ -165,16 +165,14 @@ class UserDataItemAdmin extends StatelessWidget {
   }
 
 
-  Widget _buildInfoRow({required String label, String? value,}) {
+  Widget _buildInfoRow({required String label, String? value}) {
     return Row(
       children: [
         Text(
           '$label: ',
           style: AppWidget.black16Text400Style(),
         ),
-        Expanded(
-          child: Text(value ?? "", style: AppWidget.black16Text600Style()),
-        ),
+        Text(value ?? "", style: AppWidget.black16Text600Style()),
       ],
     );
   }
