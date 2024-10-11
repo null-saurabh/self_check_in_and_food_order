@@ -1,9 +1,16 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:printing/printing.dart';
 import 'package:wandercrew/pages/admin/users_admin/widgets/add_user_data.dart';
 import 'dart:html' as html;
 import '../../../models/user_model.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:http/http.dart' as http;
 
 class ManageUserAdminController extends GetxController {
 
@@ -21,6 +28,7 @@ class ManageUserAdminController extends GetxController {
     String phoneNumber = '$number';
     html.window.open('tel:$phoneNumber', '_self');
   }
+
   Future<void> fetchUserDataList() async {
     try {
       QuerySnapshot querySnapshot =
@@ -168,6 +176,105 @@ class ManageUserAdminController extends GetxController {
       update();
       Get.snackbar('Error', 'Failed to update online status: $error');
     }
+  }
+
+
+
+
+
+  static Future<pw.ImageProvider> _fetchImage(String url) async {
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final bytes = response.bodyBytes;
+      return pw.MemoryImage(bytes);
+    } else {
+      throw Exception('Failed to load image');
+    }
+  }
+
+  // Helper function to build a text row for info
+  static pw.Widget  _buildInfoRow(String label, String value) {
+    return pw.Row(
+      children: [
+        pw.Text('$label: ',
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+        pw.Text(value),
+      ],
+    );
+  }
+
+  static Future<void> _savePdf(pw.Document pdf, String fileName) async {
+    // For Web
+    if (kIsWeb) {
+      final pdfBytes = await pdf.save();
+      final blob = html.Blob([pdfBytes]);
+      final url = html.Url.createObjectUrlFromBlob(blob);
+      final html.AnchorElement anchorElement = html.AnchorElement(href: url)
+        ..setAttribute('download', fileName)
+        ..click();
+      html.Url.revokeObjectUrl(url);
+      // await Printing.sharePdf(bytes: pdfBytes, filename: 'checkin_details.pdf');
+    } else {
+      // For Mobile (Android/iOS)
+      final pdfBytes = await pdf.save();
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/checkin_details.pdf');
+      await file.writeAsBytes(pdfBytes);
+      await Printing.sharePdf(bytes: pdfBytes, filename: 'checkin_details.pdf');
+    }
+  }
+
+
+  Future<void> downloadUserData(AdminUserModel checkInItem) async {
+    final pdf = pw.Document();
+
+    // Fetch images first
+    final frontImage = await _fetchImage(checkInItem.frontDocumentUrl);
+    var backImage;
+    if(checkInItem.backDocumentUrl != null ) backImage = await _fetchImage(checkInItem.backDocumentUrl!);
+    // Add a page with text and images
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) =>
+            pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Text('Check-In Details',
+                    style: pw.TextStyle(
+                        fontSize: 24, fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(height: 10),
+                _buildInfoRow('id', checkInItem.id),
+                _buildInfoRow('Document Type', checkInItem.documentType),
+                _buildInfoRow('name', checkInItem.name),
+                _buildInfoRow('userId', checkInItem.userId.toString()),
+                _buildInfoRow('password', checkInItem.password),
+                _buildInfoRow('role', checkInItem.role),
+                _buildInfoRow('permission', checkInItem.permission),
+                _buildInfoRow('number', checkInItem.number),
+                _buildInfoRow('address', checkInItem.address),
+                _buildInfoRow('permission', checkInItem.permission),
+                // _buildInfoRow('loginData', checkInItem.loginData),
+
+                pw.SizedBox(height: 10),
+                pw.Text('Documents',
+                    style: pw.TextStyle(
+                        fontSize: 18, fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(height: 10),
+                pw.Image(
+                    frontImage, height: 150, width: 150, fit: pw.BoxFit.cover),
+                pw.SizedBox(height: 10),
+                if(checkInItem.backDocumentUrl !=null)
+                  pw.Image(
+                      backImage, height: 150, width: 150, fit: pw.BoxFit.cover),
+                pw.SizedBox(height: 10),
+
+              ],
+            ),
+      ),
+    );
+
+    // Generate the PDF as bytes and save it
+    await _savePdf(pdf, "${checkInItem.name} User Details.pdf");
   }
 
 }

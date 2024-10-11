@@ -26,19 +26,26 @@ class UserDataItemAdmin extends StatelessWidget {
             color: Colors.white,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
             border: Border.all(color: Colors.black.withOpacity(0.12)),
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: Colors.grey.withOpacity(0.2),
-            //     spreadRadius: 0.1,
-            //     blurRadius: 8,
-            //   ),
-            // ],
           ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                _buildInfoRow(label: 'Name',value:userData.name ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildInfoRow(label: 'Name',value:userData.name ),
+                    GestureDetector(
+                      onTap: () {
+                        controller.downloadUserData(userData);
+                      },
+                      child: const Icon(
+                        Icons.download,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
+                ),
                 _buildNumberRow( onCallPressed: (){controller.makePhoneCall(userData.number);} ),
                 _buildInfoRow(label: 'Username',value:userData.userId),
                 _buildPasswordRow(),
@@ -93,24 +100,30 @@ class UserDataItemAdmin extends StatelessWidget {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text("Login History"),
+                              backgroundColor: Colors.white,
                               content: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
+                                  Text("Login History",style: AppWidget.black16Text600Style()),
                                   Divider(color: Colors.grey), // Divider below heading
                                   // If loginData is not null, show the login dates
                                   if (userData.loginData.isNotEmpty)
-                                    ...userData.loginData.map(
+                                    ...userData.loginData
+                                        .reversed
+                                        .take(10) // take the last 10 entries
+                                        .map(
                                           (loginDate) => Padding(
                                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
-                                            Text(DateTimeUtils.formatDateTime(loginDate), // Use your preferred date format
-                                                style: TextStyle(fontSize: 16)),
+                                            Text(DateTimeUtils.formatDateTime(loginDate,format: "dd/MMM hh:MM a"), // Use your preferred date format
+                                                style: AppWidget.black16Text400Style()),
                                             SizedBox(width: 4,),
                                             Text("Login",
-                                                style: TextStyle(fontSize: 16, color: Colors.grey)),
+                                                style:  AppWidget.black16Text400Style()),
                                           ],
                                         ),
                                       ),
@@ -173,7 +186,7 @@ class UserDataItemAdmin extends StatelessWidget {
           'Number: ',
           style: AppWidget.black16Text400Style(),
         ),
-        Text(userData.number ?? "", style: AppWidget.black16Text600Style()),
+        Text(userData.number, style: AppWidget.black16Text600Style()),
         SizedBox(width: 4,),
         GestureDetector(
           onTap: onCallPressed,
