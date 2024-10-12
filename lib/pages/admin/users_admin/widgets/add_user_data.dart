@@ -136,8 +136,7 @@ class AddNewUserAdmin extends StatelessWidget {
                           const SizedBox(height: 16),
 
                           ElevatedContainer(
-                            child: Obx(() {
-                              return AppDropDown(
+                            child: AppDropDown(
                                 items: [
                                   'Admin',
                                 ].map((type) {
@@ -162,8 +161,7 @@ class AddNewUserAdmin extends StatelessWidget {
                                       .contains(searchValue);
                                 },
                                 onValidate: Validators.requiredField,
-                              );
-                            }),
+                              ),
                           ),
                           const SizedBox(height: 16),
 
@@ -176,7 +174,8 @@ class AddNewUserAdmin extends StatelessWidget {
                                 'Passport'
                               ].map((type) {
                                 return DropdownMenuItem(
-                                    value: type, child: Text(type));
+                                    value: type,
+                                    child: Text(type));
                               }).toList(),
                               onChange: (value) {
                                 controller.documentType.value = value;
@@ -184,6 +183,7 @@ class AddNewUserAdmin extends StatelessWidget {
                               },
                               value: controller.documentType.value,
                               labelText: "Document Type",
+                              hintText: "Select document type",
                               showLabel: true,
                               height: 40,
                               iconColor: Colors.grey,

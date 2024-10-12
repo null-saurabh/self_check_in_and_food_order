@@ -93,7 +93,7 @@ class ReceptionHomeScreen extends StatelessWidget {
                               ),
                               label: "Room Service",
                               onTap: () {
-                                controller.makePhoneCall();
+                                controller.showAdminContacts();
                               },
                             )
                           ],

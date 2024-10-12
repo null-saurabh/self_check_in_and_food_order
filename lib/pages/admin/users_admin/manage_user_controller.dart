@@ -180,7 +180,7 @@ class ManageUserAdminController extends GetxController {
     try {
       // Query the correct document by userId
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection("Admin")
+          .collection("AdminAccount")
           .where("userId", isEqualTo: userData.userId)
           .get();
 
@@ -189,7 +189,7 @@ class ManageUserAdminController extends GetxController {
 
         // Update the online status in the correct document
         await FirebaseFirestore.instance
-            .collection("Admin")
+            .collection("AdminAccount")
             .doc(docId)
             .update({'isOnline': isOnline});
       } else {

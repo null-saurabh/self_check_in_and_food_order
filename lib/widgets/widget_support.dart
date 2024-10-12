@@ -91,6 +91,14 @@ class AppWidget{
     );
   }
 
+  static TextStyle black20Text600Style() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 20.0,
+      fontWeight: FontWeight.w600,
+    );
+  }
+
   static TextStyle black18Text500Style() {
     return GoogleFonts.poppins(
       color: Colors.black,

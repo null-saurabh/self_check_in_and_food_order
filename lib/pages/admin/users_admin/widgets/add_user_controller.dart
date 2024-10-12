@@ -330,7 +330,6 @@ class AddNewUserAdminController extends GetxController{
   void clearFields() {
     contact.clear();
     address.clear();
-    documentType.value = '';
     userNameController.clear();
     roleController.clear();
     userNameController.clear();
