@@ -73,6 +73,20 @@ class AppWidget{
       fontSize: 12.0,
       fontWeight: FontWeight.w500,
     );
+  }  static TextStyle black12Text400Style() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 12.0,
+      fontWeight: FontWeight.w400,
+    );
+  }
+
+  static TextStyle black12Text600Style() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 12.0,
+      fontWeight: FontWeight.w600,
+    );
   }
 
   static TextStyle black16Text500Style({Color? color}) {

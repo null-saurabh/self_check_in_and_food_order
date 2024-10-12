@@ -22,11 +22,7 @@ class AdminOrderListController extends GetxController {
   TextEditingController refundAmountController = TextEditingController();
 
   var isLoading = true.obs; // Loading state
-
-  void makePhoneCall(String number) {
-    String phoneNumber = '$number';
-    html.window.open('tel:$phoneNumber', '_self');
-  }
+  var selectedFilter = 'None'.obs;  // To track the selected filter ('None' when no filter is applied)
 
 
   Future<void> fetchOrderData() async {
@@ -40,8 +36,13 @@ class AdminOrderListController extends GetxController {
         return FoodOrderModel.fromMap(data);  // Using fromMap factory constructor
       }).toList();
 
+      // Sort orders by orderDate, latest first
+      newList.sort((a, b) => b.orderDate.compareTo(a.orderDate));  // Descending order
+
+
       orderList.assignAll(newList);
       originalOrderList.assignAll(newList);
+      applyDefaultFilter();
       update();
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch orders: $e');
@@ -52,7 +53,50 @@ class AdminOrderListController extends GetxController {
   }
 
 
-  void filterOrderItems(String query) {
+  // Method to filter orders by status
+  void filterOrdersByStatus(String status,String label) {
+    if(selectedFilter.value == label) {
+      selectedFilter.value = "None";
+      applyDefaultFilter();
+      update();
+      return null;
+    }
+    selectedFilter.value = label;
+
+    if (status == 'All') {
+      // Show all orders
+      orderList.assignAll(originalOrderList);
+    } else {
+      // Filter by specific status (Pending, Completed, Refunded, etc.)
+      orderList.value = originalOrderList.where((order) {
+        return order.orderStatusHistory.last.status == status;
+      }).toList();
+    }
+
+    // Ensure orders are sorted by orderDate (latest first)
+    orderList.sort((a, b) => b.orderDate.compareTo(a.orderDate));
+    update();
+  }
+
+
+
+
+  // Default filter to show Pending and Processing orders when no filter is selected
+  void applyDefaultFilter() {
+    if (selectedFilter.value == 'None') {
+      orderList.value = originalOrderList.where((order) {
+        return order.orderStatusHistory.last.status == 'Pending' ||
+            order.orderStatusHistory.last.status == 'Processing';
+      }).toList();
+
+      // Ensure orders are sorted by orderDate (latest first)
+      orderList.sort((a, b) => b.orderDate.compareTo(a.orderDate));
+      update();
+    }
+  }
+
+
+  void SearchFilterOrderItems(String query) {
     if (query.isEmpty) {
       orderList.value = List.from(originalOrderList); // Restore the original data
     } else {
@@ -65,9 +109,14 @@ class AdminOrderListController extends GetxController {
         ;
       }).toList();
     }
+    // Ensure orders are sorted by orderDate (latest first)
+    orderList.sort((a, b) => b.orderDate.compareTo(a.orderDate));
     update();
   }
-
+  void makePhoneCall(String number) {
+    String phoneNumber = '$number';
+    html.window.open('tel:$phoneNumber', '_self');
+  }
 
   Future<void> confirmOrder(FoodOrderModel item, String adminName) async {
     try {

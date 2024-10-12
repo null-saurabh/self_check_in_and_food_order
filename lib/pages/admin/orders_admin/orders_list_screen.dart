@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wandercrew/pages/admin/orders_admin/widgets/single_order.dart';
+import '../../../widgets/filter_button.dart';
 import '../../../widgets/widget_support.dart';
 import 'admin_order_controller.dart';
 
@@ -51,35 +52,92 @@ class OrdersListScreen extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 20, bottom: 12),
-                        child: SizedBox(
-                          height: 40,
-                          child: TextField(
-                            onChanged: (value) => controller.filterOrderItems(
-                                value), // Call the search function
-                            decoration: InputDecoration(
-                              hintText: "Search by name, number, orderId",
-                              hintStyle: TextStyle(color: Colors.grey),
-                              prefixIcon:
-                                  Icon(Icons.search, color: Colors.grey),
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide:
-                                    BorderSide(color: Color(0xffEDCC23)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide:
-                                    BorderSide(color: Color(0xffEDCC23)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide:
-                                BorderSide(color: Color(0xffEDCC23)),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 40,
+                              child: TextField(
+                                onChanged: (value) =>
+                                    controller.SearchFilterOrderItems(
+                                        value), // Call the search function
+                                decoration: InputDecoration(
+                                  hintText: "Search by name, number, orderId",
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  prefixIcon:
+                                      Icon(Icons.search, color: Colors.grey),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide:
+                                        BorderSide(color: Color(0xffEDCC23)),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide:
+                                        BorderSide(color: Color(0xffEDCC23)),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide:
+                                        BorderSide(color: Color(0xffEDCC23)),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Row(
+                              children: [
+                                FilterButton(
+                                  label: "All",
+                                  isSelected:
+                                      controller.selectedFilter.value == "All",
+                                  onTap: () {
+                                    controller.filterOrdersByStatus(
+                                        "All", "All");
+                                  },
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                FilterButton(
+                                  label: "Pending",
+                                  isSelected: controller.selectedFilter.value ==
+                                      "Pending",
+                                  onTap: () {
+                                    controller.filterOrdersByStatus(
+                                        "Pending", "Pending");
+                                  },
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                FilterButton(
+                                  label: "Processing",
+                                  isSelected: controller.selectedFilter.value ==
+                                      "Processing",
+                                  onTap: () {
+                                    controller.filterOrdersByStatus(
+                                        "Confirmed", "Processing");
+                                  },
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                FilterButton(
+                                  label: "Completed",
+                                  isSelected: controller.selectedFilter.value ==
+                                      'Completed',
+                                  onTap: () {
+                                    controller.filterOrdersByStatus(
+                                        "Delivered", "Completed");
+                                  },
+                                ),
+                              ],
+                            )
+                          ],
                         ),
                       ),
                     ],
@@ -160,8 +218,25 @@ class OrdersListScreen extends StatelessWidget {
                   return Expanded(
                       child: const Center(child: CircularProgressIndicator()));
                 } else {
-                  return Expanded(
-                      child: const Center(child: Text("No orders found.")));
+                  switch (controller.selectedFilter.value) {
+                    case 'Completed':
+                      return Expanded(child: Center(child: Text('No completed orders found.')));
+                    case 'Pending':
+                      return Expanded(child: Center(child: Text('No pending orders found.')));
+                    case 'Processing':
+                      return Expanded(child: Center(child: Text('No processing orders found.')));
+                    case 'Refunded':
+                      return Expanded(child: Center(child: Text('No refunded orders found.')));
+                    case 'All':
+                      return Expanded(child: Center(child: Text('No orders found.')));
+                    default:
+                      // If no filter is selected (default), show a message for pending and processing orders
+                      return Expanded(
+                        child: Center(
+                            child:
+                                Text('No pending found.')),
+                      );
+                  }
                 }
               }),
             ],
