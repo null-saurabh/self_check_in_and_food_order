@@ -18,6 +18,7 @@ class ManageUserAdminController extends GetxController {
   RxList<AdminUserModel> userDataList = <AdminUserModel>[].obs;
   RxList<AdminUserModel> originalUserDataList = <AdminUserModel>[].obs;
 
+  var isLoading = true.obs; // Loading state
 
   @override
   void onInit() {
@@ -48,6 +49,8 @@ class ManageUserAdminController extends GetxController {
 
   Future<void> fetchUserDataList() async {
     try {
+      isLoading.value = true; // Start loading
+
       QuerySnapshot querySnapshot =
       await FirebaseFirestore.instance.collection("AdminAccount").get();
 
@@ -67,6 +70,9 @@ class ManageUserAdminController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch list $e');
       // print(e);
+    }
+    finally {
+      isLoading.value = false; // End loading
     }
   }
 

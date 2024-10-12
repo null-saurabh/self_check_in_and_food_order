@@ -86,29 +86,37 @@ class CheckInListAdmin extends StatelessWidget {
 
 
 
-
-              controller.checkInList.isEmpty
-                  ? Expanded(child: const Center(child: CircularProgressIndicator()))
-                  : Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 16.0, right: 16, top: 8, bottom: 16),
-                        child: ListView.builder(
-                          itemCount: controller.groupedCheckIns.length,
-                          itemBuilder: (context, index) {
-                            // print(controller.groupedCheckIns.length);
-                            final date = controller.groupedCheckIns.keys
-                                .elementAt(index);
-                            final checkInAtDate =
-                                controller.groupedCheckIns[date]!;
-                            return CheckInDateSection(
-                              date: date,
-                              checkInAtDate: checkInAtDate,
-                            );
-                          },
-                        ),
+              Obx(() {
+                if (controller.checkInList.isNotEmpty) {
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 16.0, right: 16, top: 8, bottom: 16),
+                      child: ListView.builder(
+                        itemCount: controller.groupedCheckIns.length,
+                        itemBuilder: (context, index) {
+                          // print(controller.groupedCheckIns.length);
+                          final date = controller.groupedCheckIns.keys
+                              .elementAt(index);
+                          final checkInAtDate =
+                          controller.groupedCheckIns[date]!;
+                          return CheckInDateSection(
+                            date: date,
+                            checkInAtDate: checkInAtDate,
+                          );
+                        },
                       ),
                     ),
+                  );
+                } else if (controller.isLoading.value) {
+                  return Expanded(
+                      child: const Center(child: CircularProgressIndicator()));
+                } else {
+                  return Expanded(
+                      child: const Center(child: Text("No Guest Data Found.")));
+                }
+              }),
+
             ],
           ),
         );

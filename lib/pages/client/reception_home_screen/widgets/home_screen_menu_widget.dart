@@ -15,8 +15,20 @@ class ReceptionHomeGridItem extends StatelessWidget {
   final bool? isCheckIn;
   final bool? isFeedbackList;
   final double? widthRatio;
-  const ReceptionHomeGridItem({super.key,
-    this.icon, required this.label, required this.onTap, required this.height, this.iconWidth = 86, this.iconHeight = 86, this.labelIcon, this.isRoomService, this.isCheckIn, this.width, this.isFeedbackList, this.widthRatio,
+  const ReceptionHomeGridItem({
+    super.key,
+    this.icon,
+    required this.label,
+    required this.onTap,
+    required this.height,
+    this.iconWidth = 86,
+    this.iconHeight = 86,
+    this.labelIcon,
+    this.isRoomService,
+    this.isCheckIn,
+    this.width,
+    this.isFeedbackList,
+    this.widthRatio,
   });
 
   @override
@@ -30,7 +42,13 @@ class ReceptionHomeGridItem extends StatelessWidget {
         //     minHeight: 108,
         //     minWidth: 128
         // ),
-        width: width != null ? (MediaQuery.of(context).size.width * widthRatio!) > width! ? width     :     MediaQuery.of(context).size.width * widthRatio!       : ((MediaQuery.of(context).size.width * 0.45) > 168 ? 168 : MediaQuery.of(context).size.width * 0.45),
+        width: width != null
+            ? (MediaQuery.of(context).size.width * widthRatio!) > width!
+                ? width
+                : MediaQuery.of(context).size.width * widthRatio!
+            : ((MediaQuery.of(context).size.width * 0.45) > 168
+                ? 168
+                : MediaQuery.of(context).size.width * 0.45),
         height: height, // Fixed size for each grid item
         decoration: BoxDecoration(
           color: Colors.white, // Elevated white box
@@ -46,50 +64,59 @@ class ReceptionHomeGridItem extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(4.0),
           child: Column(
-            mainAxisAlignment: isRoomService!= null && isRoomService! ? MainAxisAlignment.center :MainAxisAlignment.center,
+            mainAxisAlignment: isRoomService != null && isRoomService!
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-
             children: [
-              if(icon != null) ...[
-              Row(
-mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    icon!, // Load the asset image
-                    width: iconWidth,
-                    height: iconHeight,
-                  ),
-                  if(isFeedbackList != null)
-                    SizedBox(width: 8,),
-                  if(isFeedbackList != null)
-                  Text(
-                    label,
-                    style: AppWidget.textField16Style(),
-                  ),
-
-                ],
-              ), // Icon in the center
-              // const SizedBox(height: 12),
-                if(isCheckIn!= null && isCheckIn!) const Spacer(),
-
-              ],
-              if(isRoomService == null && isCheckIn == null && isFeedbackList == null)
-                const SizedBox(height: 18),
-              if(isFeedbackList == null)
+              if (icon != null) ...[
                 Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  if(labelIcon != null) ...[
-                  labelIcon!,
-                  const SizedBox(width: 4,)],
-                  Text(
-                    label,
-                    style: AppWidget.textField16Style(),
-                  ),
-                  if(isCheckIn != null && isCheckIn!) const SizedBox(height: 80,)
-                ],
-              ), // Text below the icon
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      icon!, // Load the asset image
+                      width: iconWidth,
+                      height: iconHeight,
+                    ),
+                    if (isFeedbackList != null)
+                      SizedBox(
+                        width: 8,
+                      ),
+                    if (isFeedbackList != null)
+                      Text(
+                        label,
+                        style: AppWidget.textField16Style(),
+                      ),
+                  ],
+                ), // Icon in the center
+                // const SizedBox(height: 12),
+                if (isCheckIn != null && isCheckIn!) const Spacer(),
+              ],
+              if (isRoomService == null &&
+                  isCheckIn == null &&
+                  isFeedbackList == null)
+                const SizedBox(height: 18),
+              if (isFeedbackList == null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  // crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    if (labelIcon != null) ...[
+                      labelIcon!,
+                      const SizedBox(
+                        width: 4,
+                      )
+                    ],
+                    Text(
+                      label,
+                      style: AppWidget.textField16Style(),
+                    ),
+                    if (isCheckIn != null && isCheckIn!)
+                      const SizedBox(
+                        height: 80,
+                      )
+                  ],
+                ), // Text below the icon
             ],
           ),
         ),

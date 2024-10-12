@@ -74,6 +74,11 @@ class MenuAdminScreen extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(12),
                                         borderSide: BorderSide(color: Color(0xffEDCC23)),//(0xffEDCC23)
                                       ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide:
+                                        BorderSide(color: Color(0xffEDCC23)),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -105,45 +110,56 @@ class MenuAdminScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, right: 16, top: 8, bottom: 16),
+                Obx(() {
+                  if (controller.allMenuItems.isNotEmpty) {
+                    return Expanded(
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16.0, right: 16, top: 8, bottom: 16),
 
-                      // padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: controller.allMenuItems.length,
-                              itemBuilder: (context, index) {
-                                return MenuItemWidget(
-                                  menuItem: controller.allMenuItems[index],
-                                  onEdit: () => controller.editMenuItem(
-                                      controller.allMenuItems[index]),
-                                  onDelete: () => controller.deleteMenuItem(
-                                      controller.allMenuItems[index]),
-                                  onToggleAvailability: (isAvailable) =>
-                                      controller.toggleAvailability(
-                                          controller.allMenuItems[index],
-                                          isAvailable),
-                                  onEditPrice: () =>
-                                      controller.editMenuItemPrice(context,
+                          // padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: controller.allMenuItems.length,
+                                  itemBuilder: (context, index) {
+                                    return MenuItemWidget(
+                                      menuItem: controller.allMenuItems[index],
+                                      onEdit: () => controller.editMenuItem(
                                           controller.allMenuItems[index]),
-                                  onEditNote: () =>
-                                      controller.editMenuItemNote(context,
+                                      onDelete: () => controller.deleteMenuItem(
                                           controller.allMenuItems[index]),
-                                );
-                              },
-                            ),
+                                      onToggleAvailability: (isAvailable) =>
+                                          controller.toggleAvailability(
+                                              controller.allMenuItems[index],
+                                              isAvailable),
+                                      onEditPrice: () =>
+                                          controller.editMenuItemPrice(context,
+                                              controller.allMenuItems[index]),
+                                      onEditNote: () =>
+                                          controller.editMenuItemNote(context,
+                                              controller.allMenuItems[index]),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
+                    );
+                  } else if (controller.isLoading.value) {
+                    return Expanded(
+                        child: const Center(child: CircularProgressIndicator()));
+                  } else {
+                    return Expanded(
+                        child: const Center(child: Text("No orders found.")));
+                  }
+                }),
+
               ],
             ),
           );

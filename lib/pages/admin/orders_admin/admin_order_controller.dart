@@ -21,6 +21,8 @@ class AdminOrderListController extends GetxController {
 
   TextEditingController refundAmountController = TextEditingController();
 
+  var isLoading = true.obs; // Loading state
+
   void makePhoneCall(String number) {
     String phoneNumber = '$number';
     html.window.open('tel:$phoneNumber', '_self');
@@ -29,6 +31,7 @@ class AdminOrderListController extends GetxController {
 
   Future<void> fetchOrderData() async {
     try {
+      isLoading.value = true; // Start loading
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("Orders").get();
 
       List<FoodOrderModel> newList = querySnapshot.docs.map((doc) {
@@ -39,8 +42,12 @@ class AdminOrderListController extends GetxController {
 
       orderList.assignAll(newList);
       originalOrderList.assignAll(newList);
+      update();
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch orders: $e');
+    }finally {
+      // print("Aaaaa");
+      isLoading.value = false; // End loading
     }
   }
 

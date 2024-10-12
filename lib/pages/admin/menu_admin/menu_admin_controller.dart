@@ -8,6 +8,7 @@ class MenuAdminController extends GetxController {
   RxList<MenuItemModel> allMenuItems = RxList<MenuItemModel>();
   List<MenuItemModel> originalMenuItems = []; // Store original data
 
+  var isLoading = true.obs; // Loading state
 
   @override
   void onInit() {
@@ -17,6 +18,8 @@ class MenuAdminController extends GetxController {
 
   Future<void> fetchMenuData() async {
     try {
+      isLoading.value = true; // Start loading
+
       QuerySnapshot value = await FirebaseFirestore.instance.collection("Menu").get();
       originalMenuItems = value.docs.map((doc) {
         return MenuItemModel.fromMap(doc.data() as Map<String, dynamic>);
@@ -26,6 +29,9 @@ class MenuAdminController extends GetxController {
       update();
     } catch (e) {
       print("Error fetching menu data: $e");
+    }finally {
+      // print("Aaaaa");
+      isLoading.value = false; // End loading
     }
   }
 

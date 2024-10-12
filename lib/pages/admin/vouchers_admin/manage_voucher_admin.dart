@@ -146,24 +146,32 @@ class ManageVoucherAdmin extends StatelessWidget {
                 ],
               ),
 
-              controller.voucherList.isEmpty
-                  ? Expanded(child: const Center(child: CircularProgressIndicator()))
-                  : Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 16.0, right: 16, top: 8, bottom: 16),
-                  child: ListView.builder(
-                    itemCount: controller.voucherList.length,
-                    itemBuilder: (context, index) {
-                      final data = controller.voucherList
-                          .elementAt(index);
-                      return VoucherItemAdmin(
-                        voucherData: data,
-                      );
-                    },
-                  ),
-                ),
-              ),
+              Obx(() {
+                if (controller.voucherList.isNotEmpty) {
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 16.0, right: 16, top: 8, bottom: 16),
+                      child: ListView.builder(
+                        itemCount: controller.voucherList.length,
+                        itemBuilder: (context, index) {
+                          final data = controller.voucherList
+                              .elementAt(index);
+                          return VoucherItemAdmin(
+                            voucherData: data,
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                } else if (controller.isLoading.value) {
+                  return Expanded(
+                      child: const Center(child: CircularProgressIndicator()));
+                } else {
+                  return Expanded(
+                      child: const Center(child: Text("No orders found.")));
+                }
+              }),
             ],
           ),
         );

@@ -7,6 +7,7 @@ import '../menu_screen_controller.dart';
 class ExpandableMenuItem extends StatelessWidget {
   const ExpandableMenuItem({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<MenuScreenController>(
@@ -24,7 +25,9 @@ class ExpandableMenuItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
 
-              child: ListView(
+              child: controller.filteredMenuByCategory.isEmpty
+                  ? const Center(child: CircularProgressIndicator())
+                  :ListView(
                 controller: controller.listViewScrollController,
                 shrinkWrap: true, // Allow the ListView to take only the necessary height
                 children: controller.filteredMenuByCategory.entries

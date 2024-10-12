@@ -9,6 +9,9 @@ class ManageVoucherAdminController extends GetxController {
   RxList<CouponModel> voucherList = <CouponModel>[].obs;
   RxList<CouponModel> originalVoucherList = <CouponModel>[].obs;
 
+  var isLoading = true.obs; // Loading state
+
+
   @override
   void onInit() {
     super.onInit();
@@ -37,6 +40,8 @@ class ManageVoucherAdminController extends GetxController {
 
   Future<void> fetchVoucherList() async {
     try {
+      isLoading.value = true; // Start loading
+
       QuerySnapshot querySnapshot =
       await FirebaseFirestore.instance.collection("Voucher").get();
 
@@ -56,6 +61,10 @@ class ManageVoucherAdminController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch list $e');
       // print(e);
+    }
+    finally {
+      // print("Aaaaa");
+      isLoading.value = false; // End loading
     }
   }
 

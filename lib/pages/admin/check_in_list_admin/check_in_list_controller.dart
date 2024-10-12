@@ -20,6 +20,9 @@ class CheckInListController extends GetxController {
     fetchCheckInList(); // Fetch data when controller is initialized
   }
 
+  var isLoading = true.obs; // Loading state
+
+
   void makePhoneCall(String number) {
     String phoneNumber = '$number';
     html.window.open('tel:$phoneNumber', '_self');
@@ -69,6 +72,8 @@ class CheckInListController extends GetxController {
 
   Future<void> fetchCheckInList() async {
     try {
+      isLoading.value = true; // Start loading
+
       QuerySnapshot querySnapshot =
       await FirebaseFirestore.instance.collection("Self_Check_In").get();
 
@@ -100,6 +105,9 @@ class CheckInListController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch list $e');
       // print(e);
+    }finally {
+      // print("Aaaaa");
+      isLoading.value = false; // End loading
     }
   }
 

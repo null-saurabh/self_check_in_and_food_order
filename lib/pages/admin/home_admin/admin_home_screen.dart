@@ -3,17 +3,13 @@ import 'package:get/get.dart';
 import 'package:wandercrew/utils/routes.dart';
 import 'package:wandercrew/widgets/widget_support.dart';
 import '../../client/reception_home_screen/widgets/home_screen_menu_widget.dart';
-import '../orders_admin/admin_order_controller.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AdminOrderListController>(
-      init: AdminOrderListController(),
-      builder: (orderController) {
-        return Scaffold(
+    return Scaffold(
           backgroundColor: const Color(0xffFDFDED),
           body: Container(
             decoration: BoxDecoration(
@@ -180,8 +176,6 @@ class AdminHomeScreen extends StatelessWidget {
             ),
           ),
         );
-      },
-    );
   }
 
 }

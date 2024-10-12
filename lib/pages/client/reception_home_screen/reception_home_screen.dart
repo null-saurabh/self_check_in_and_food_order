@@ -121,7 +121,7 @@ class ReceptionHomeScreen extends StatelessWidget {
                               iconHeight: 55,
                               iconWidth: 55,
                               icon: "assets/icons/feedback.png",
-                              label: "Feedback",
+                              label: "Track Order",
                               onTap: () {},
                             ),
                           ],
