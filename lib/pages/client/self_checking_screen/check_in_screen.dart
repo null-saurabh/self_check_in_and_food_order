@@ -20,22 +20,22 @@ class CheckInScreen extends StatelessWidget {
                 children: [
                   // The gradient image at the bottom right corner
                   // Using the helper function to add gradient textures
-                  const CheckInGradientTexture(
+                  const BackgroundGradientTexture(
                     top: 48,
                     right: -44,
                     assetPath: 'assets/textures/check_in_texture_1.png',
                   ),
-                  const CheckInGradientTexture(
+                  const BackgroundGradientTexture(
                     top: 112,
                     left: -38,
                     assetPath: 'assets/textures/check_in_texture_2.png',
                   ),
-                  const CheckInGradientTexture(
+                  const BackgroundGradientTexture(
                     bottom: 60,
                     left: -42,
                     assetPath: 'assets/textures/check_in_texture_3.png',
                   ),
-                  const CheckInGradientTexture(
+                  const BackgroundGradientTexture(
                     bottom: 60,
                     right: -40,
                     assetPath: 'assets/textures/check_in_texture_4.png',

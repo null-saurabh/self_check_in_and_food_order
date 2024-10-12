@@ -456,6 +456,7 @@ class CheckInController extends GetxController {
     propertyTermsAccepted.value = false;
     arrivingFromController.clear();
     goingToController.clear();
+    currentPage.value = 0;
   }
 
 }

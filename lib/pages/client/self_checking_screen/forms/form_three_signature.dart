@@ -36,6 +36,8 @@ class CheckInFormThreeSignature extends StatelessWidget {
                 ),
 
 
+                Text("Upload Signature*",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
+                SizedBox(height: 8,),
                 FormField<String>(validator: (value) {
                   if (selfCheckingController.signatureController.isEmpty) {
                     // print("signature verification 1");

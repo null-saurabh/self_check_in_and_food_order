@@ -24,43 +24,43 @@ class CartScreen extends StatelessWidget {
           backgroundColor: const Color(0xffF4F5FA),
           body: SingleChildScrollView(
               child: Stack(children: [
-            const CheckInGradientTexture(
+            const BackgroundGradientTexture(
               top: 48,
               right: -38,
               assetPath: 'assets/textures/menu_texture_2.png',
             ),
-            const CheckInGradientTexture(
+            const BackgroundGradientTexture(
               top: 68,
               right: 116,
               width: 79,
               height: 116,
               assetPath: 'assets/textures/menu_texture_4.png',
             ),
-            const CheckInGradientTexture(
+            const BackgroundGradientTexture(
               top: 188,
               right: 116,
               width: 79,
               height: 116,
               assetPath: 'assets/textures/menu_texture_4.png',
             ),
-            const CheckInGradientTexture(
+            const BackgroundGradientTexture(
               top: 48,
               left: -36,
               assetPath: 'assets/textures/menu_texture_1.png',
             ),
-            const CheckInGradientTexture(
+            const BackgroundGradientTexture(
               top: 16,
               right: 122,
               width: 70,
               height: 77,
               assetPath: 'assets/textures/menu_texture_3.png',
             ),
-            const CheckInGradientTexture(
+            const BackgroundGradientTexture(
               bottom: 60,
               left: -36,
               assetPath: 'assets/textures/menu_texture_1.png',
             ),
-            const CheckInGradientTexture(
+            const BackgroundGradientTexture(
               bottom: 60,
               right: -38,
               assetPath: 'assets/textures/menu_texture_2.png',
@@ -96,51 +96,55 @@ class CartScreen extends StatelessWidget {
                           ),
                           child: controller.cartItems.isEmpty
                               ? Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    const Center(child: Text('Your cart is empty')),
-                                    SizedBox(height: 4,),
-                                    AppElevatedButton(
-                                      backgroundColor: Color(0xffFFDE1A),
-                                      onPressed: (){
-                                        Get.offNamed(Routes.receptionMenu);
-                                      },
-                                      title: "Menu",
-                                      titleTextColor: Colors.black,
-                                    )
-                                  ],
-                                ),
-                              )
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      const Center(
+                                          child: Text('Your cart is empty')),
+                                      SizedBox(
+                                        height: 4,
+                                      ),
+                                      AppElevatedButton(
+                                        backgroundColor: Color(0xffFFDE1A),
+                                        onPressed: () {
+                                          Get.offNamed(Routes.receptionMenu);
+                                        },
+                                        title: "Menu",
+                                        titleTextColor: Colors.black,
+                                      )
+                                    ],
+                                  ),
+                                )
                               : Padding(
                                   padding: const EdgeInsets.only(
                                     top: 12.0,
                                     left: 12,
                                     right: 12,
                                   ),
-                                  child: ListView.builder(
-                                    shrinkWrap:
-                                        true, // This makes the ListView take only required height
-                                    physics:
-                                        const NeverScrollableScrollPhysics(), // Disables internal scrolling, lets parent handle scrolling
-                                    itemCount: controller.cartItems.length,
-                                    itemBuilder: (context, index) {
-                                      String menuItemId = controller
-                                          .cartItems.keys
-                                          .elementAt(index);
+                                  child: Obx(() {
+                                    return ListView.builder(
+                                      shrinkWrap:
+                                          true, // This makes the ListView take only required height
+                                      physics:
+                                          const NeverScrollableScrollPhysics(), // Disables internal scrolling, lets parent handle scrolling
+                                      itemCount: controller.cartItems.length,
+                                      itemBuilder: (context, index) {
+                                        String menuItemId = controller
+                                            .cartItems.keys
+                                            .elementAt(index);
 
-                                      CartItemModel cartItem =
-                                          controller.cartItems[menuItemId]!;
-                                      MenuItemModel menuItem =
-                                          cartItem.menuItem;
+                                        CartItemModel cartItem =
+                                            controller.cartItems[menuItemId]!;
+                                        MenuItemModel menuItem =
+                                            cartItem.menuItem;
 
-                                      return SingleProduct(
-                                        menuItem: menuItem,
-                                        isCart: true,
-                                      );
-                                    },
-                                  ),
-                                ),
+                                        return SingleProduct(
+                                          menuItem: menuItem,
+                                          isCart: true,
+                                        );
+                                      },
+                                    );
+                                  })),
                         ),
                         const SizedBox(
                           height: 16,
@@ -202,13 +206,13 @@ class CartScreen extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         ),
-                            child: Center(
-                              child: Text(
-                                controller.receptionistText.value, // "Hi, "
-                                style: AppWidget
-                                    .white12Bold600TextStyle(), // Regular style
-                              ),
-                            ),
+                        child: Center(
+                          child: Text(
+                            controller.receptionistText.value, // "Hi, "
+                            style: AppWidget
+                                .white12Bold600TextStyle(), // Regular style
+                          ),
+                        ),
                       ),
                     ),
                   ],

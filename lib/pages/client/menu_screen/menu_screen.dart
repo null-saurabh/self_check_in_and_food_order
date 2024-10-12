@@ -23,43 +23,43 @@ class MenuScreen extends StatelessWidget {
             body: Stack(children: [
               // The gradient image at the bottom right corner
               // Using the helper function to add gradient textures
-              const CheckInGradientTexture(
+              const BackgroundGradientTexture(
                 top: 48,
                 right: -38,
                 assetPath: 'assets/textures/menu_texture_2.png',
               ),
-              const CheckInGradientTexture(
+              const BackgroundGradientTexture(
                 top: 68,
                 right: 116,
                 width: 79,
                 height: 116,
                 assetPath: 'assets/textures/menu_texture_4.png',
               ),
-              const CheckInGradientTexture(
+              const BackgroundGradientTexture(
                 top: 188,
                 right: 116,
                 width: 79,
                 height: 116,
                 assetPath: 'assets/textures/menu_texture_4.png',
               ),
-              const CheckInGradientTexture(
+              const BackgroundGradientTexture(
                 top: 48,
                 left: -36,
                 assetPath: 'assets/textures/menu_texture_1.png',
               ),
-              const CheckInGradientTexture(
+              const BackgroundGradientTexture(
                 top: 16,
                 right: 122,
                 width: 70,
                 height: 77,
                 assetPath: 'assets/textures/menu_texture_3.png',
               ),
-              const CheckInGradientTexture(
+              const BackgroundGradientTexture(
                 bottom: 60,
                 left: -36,
                 assetPath: 'assets/textures/menu_texture_1.png',
               ),
-              const CheckInGradientTexture(
+              const BackgroundGradientTexture(
                 bottom: 60,
                 right: -38,
                 assetPath: 'assets/textures/menu_texture_2.png',

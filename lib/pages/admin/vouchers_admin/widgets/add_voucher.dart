@@ -78,8 +78,11 @@ class AddVoucherAdmin extends StatelessWidget {
                               onValidate: Validators.requiredField,
                               suffixWidget: AppElevatedButton(
                                 onPressed: () {
-                                  String generatedCode = controller.generateVoucherCode(8); // Generate 8-char code
-                                  controller.voucherCodeController.text = generatedCode; // Set to the controller
+                                  String generatedCode =
+                                      controller.generateVoucherCode(
+                                          8); // Generate 8-char code
+                                  controller.voucherCodeController.text =
+                                      generatedCode; // Set to the controller
                                 },
                                 title: "Auto Generate",
                                 titleTextColor: Colors.white,
@@ -128,7 +131,11 @@ class AddVoucherAdmin extends StatelessWidget {
                                             checkColor: Colors.white,
                                             activeColor: Color(0xff2563EB),
                                           ),
-                                          Text("Single Use",style: AppWidget.black12Text500Style(),),
+                                          Text(
+                                            "Single Use",
+                                            style:
+                                                AppWidget.black12Text500Style(),
+                                          ),
                                         ],
                                       ),
                                       Row(
@@ -145,7 +152,11 @@ class AddVoucherAdmin extends StatelessWidget {
                                             checkColor: Colors.white,
                                             activeColor: Color(0xff2563EB),
                                           ),
-                                          Text("Multi Use",style: AppWidget.black12Text500Style(),),
+                                          Text(
+                                            "Multi Use",
+                                            style:
+                                                AppWidget.black12Text500Style(),
+                                          ),
                                         ],
                                       ),
                                       Row(
@@ -162,7 +173,11 @@ class AddVoucherAdmin extends StatelessWidget {
                                             checkColor: Colors.white,
                                             activeColor: Color(0xff2563EB),
                                           ),
-                                          Text("Value Based",style: AppWidget.black12Text500Style(),),
+                                          Text(
+                                            "Value Based",
+                                            style:
+                                                AppWidget.black12Text500Style(),
+                                          ),
                                         ],
                                       ),
                                     ],
@@ -170,7 +185,6 @@ class AddVoucherAdmin extends StatelessWidget {
                                 }),
 
                                 // Heading for Discount Type
-
                               ],
                             ),
                           ),
@@ -182,7 +196,7 @@ class AddVoucherAdmin extends StatelessWidget {
                                 // Heading for Voucher Type
                                 Padding(
                                   padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
+                                      const EdgeInsets.symmetric(vertical: 8.0),
                                   child: Text(
                                     "Discount Type",
                                     style: AppWidget.black16Text600Style(),
@@ -195,8 +209,8 @@ class AddVoucherAdmin extends StatelessWidget {
                                         children: [
                                           Checkbox(
                                             value: controller
-                                                .selectedDiscountType
-                                                .value ==
+                                                    .selectedDiscountType
+                                                    .value ==
                                                 'percentage',
                                             onChanged: (bool? value) {
                                               controller.selectedDiscountType
@@ -205,15 +219,19 @@ class AddVoucherAdmin extends StatelessWidget {
                                             checkColor: Colors.white,
                                             activeColor: Color(0xff2563EB),
                                           ),
-                                          Text("Percentage Discount (%)",style: AppWidget.black12Text500Style(),),
+                                          Text(
+                                            "Percentage Discount (%)",
+                                            style:
+                                                AppWidget.black12Text500Style(),
+                                          ),
                                         ],
                                       ),
                                       Row(
                                         children: [
                                           Checkbox(
                                             value: controller
-                                                .selectedDiscountType
-                                                .value ==
+                                                    .selectedDiscountType
+                                                    .value ==
                                                 'fixed-discount',
                                             onChanged: (bool? value) {
                                               controller.selectedDiscountType
@@ -222,7 +240,11 @@ class AddVoucherAdmin extends StatelessWidget {
                                             checkColor: Colors.white,
                                             activeColor: Color(0xff2563EB),
                                           ),
-                                          Text("Fixed Discount (\u{20B9})",style: AppWidget.black12Text500Style(),),
+                                          Text(
+                                            "Fixed Discount (\u{20B9})",
+                                            style:
+                                                AppWidget.black12Text500Style(),
+                                          ),
                                         ],
                                       ),
                                     ],
@@ -230,7 +252,6 @@ class AddVoucherAdmin extends StatelessWidget {
                                 }),
 
                                 // Heading for Discount Type
-
                               ],
                             ),
                           ),
@@ -239,15 +260,14 @@ class AddVoucherAdmin extends StatelessWidget {
                           ElevatedContainer(
                             child: Obx(() {
                               return AppDropDown(
-                                items: [
-                                  'Food Voucher','Room Voucher'
-                                ].map((type) {
+                                items: ['Food Voucher', 'Room Voucher']
+                                    .map((type) {
                                   return DropdownMenuItem(
                                       value: type, child: Text(type));
                                 }).toList(),
                                 value: controller.selectedCategories.value,
                                 onChange: (value) =>
-                                controller.selectedCategories.value = value,
+                                    controller.selectedCategories.value = value,
                                 hintText: "Select Categories",
                                 labelText: "Applicable Category",
                                 labelFontWeight: FontWeight.w600,
@@ -269,17 +289,34 @@ class AddVoucherAdmin extends StatelessWidget {
                           ),
                           const SizedBox(height: 16.0),
 
-                          ElevatedContainer(
-                            child: EditText(
-                              labelFontWeight: FontWeight.w600,
-                              labelText: "Discount Value",
-                              hint: "Enter Discount Value",
-                              controller: controller.discountValueController,
-                              onValidate: Validators.validateInt,
-                              inputType: TextInputType.number,
-                            ),
-                          ),
-
+                          Obx(() {
+                            return ElevatedContainer(
+                              child: Column(
+                                children: [
+                                  EditText(
+                                    labelFontWeight: FontWeight.w600,
+                                    labelText: "Discount Value",
+                                    hint: "Enter Discount Value",
+                                    controller:
+                                        controller.discountValueController,
+                                    onValidate: Validators.validateInt,
+                                    inputType: TextInputType.number,
+                                  ),
+                                  if (controller.selectedVoucherType.value ==
+                                      "value-based")
+                                    EditText(
+                                      labelFontWeight: FontWeight.w600,
+                                      labelText: "Remaining value",
+                                      hint: "Enter Remaining Value",
+                                      controller: controller
+                                          .remainingDiscountValueController,
+                                      onValidate: Validators.validateInt,
+                                      inputType: TextInputType.number,
+                                    ),
+                                ],
+                              ),
+                            );
+                          }),
 
                           const SizedBox(height: 16.0),
                           Obx(() {
@@ -299,7 +336,8 @@ class AddVoucherAdmin extends StatelessWidget {
                                       labelFontWeight: FontWeight.w600,
                                       labelText: "Maximum Discount",
                                       hint: "Enter Max Discount",
-                                      controller: controller.maxDiscountController,
+                                      controller:
+                                          controller.maxDiscountController,
                                       onValidate: Validators.validateInt,
                                       inputType: TextInputType.number,
                                     ),
@@ -329,7 +367,8 @@ class AddVoucherAdmin extends StatelessWidget {
                                   validator: Validators.requiredField,
                                 ),
                                 AppDatePicker(
-                                  controller: controller.expirationDateController,
+                                  controller:
+                                      controller.expirationDateController,
                                   labelText: "Expiration Date",
                                   hintText: "Select expiration date",
                                   validator: Validators.requiredField,
@@ -337,7 +376,6 @@ class AddVoucherAdmin extends StatelessWidget {
                               ],
                             ),
                           ),
-
 
                           const SizedBox(height: 20.0),
 
@@ -361,7 +399,8 @@ class AddVoucherAdmin extends StatelessWidget {
                               ),
                               AppElevatedButton(
                                 onPressed: () {
-                                  if (controller.formKey.currentState!.validate()) {
+                                  if (controller.formKey.currentState!
+                                      .validate()) {
                                     controller.submitCouponData();
                                   }
                                 },

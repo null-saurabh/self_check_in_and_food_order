@@ -70,7 +70,7 @@ class AddVoucherAdminController extends GetxController {
   void setEditingItem(CouponModel item) {
     editingItem.value = item;
     // Populate fields with item data
-    voucherCodeController.text = item.code;
+    voucherCodeController.text = item.code.toUpperCase();
     discountValueController.text = item.discountValue.toString();
     titleController.text = item.title;
     minOrderValueController.text = item.minOrderValue.toString();
@@ -114,21 +114,19 @@ class AddVoucherAdminController extends GetxController {
 
       // If editing an existing coupon
       if (isEditing.value) {
-        couponId = editingItem.value!.id; // Use the existing coupon ID
+        couponId = editingItem.value!.voucherId; // Use the existing coupon ID
       }
 
       // Prepare coupon data
       CouponModel newCoupon = CouponModel(
-        id: couponId,
+        voucherId: couponId,
         title: titleController.text.trim(),
         code: voucherCodeController.text.trim(),
         voucherType: selectedVoucherType.value,
         discountType: selectedDiscountType.value,
         discountValue: double.parse(discountValueController.text.trim()),
         remainingDiscountValue: selectedVoucherType.value == "value-based"
-            ? isEditing.value
-                ? double.tryParse(remainingDiscountValueController.text.trim())
-                : double.tryParse(discountValueController.text.trim())
+            ? double.tryParse(remainingDiscountValueController.text.trim())
             : null,
         validFrom: DateFormat("dd-MMM-yy").parse(
             validFromController.text), // Use the date from the controller
@@ -181,7 +179,7 @@ class AddVoucherAdminController extends GetxController {
             ManageVoucherAdminController couponController =
                 Get.find<ManageVoucherAdminController>();
             int index = couponController.voucherList
-                .indexWhere((coupon) => coupon.id == couponId);
+                .indexWhere((coupon) => coupon.voucherId == couponId);
             if (index != -1) {
               couponController.voucherList[index] = newCoupon;
               couponController.update();
@@ -198,7 +196,8 @@ class AddVoucherAdminController extends GetxController {
               backgroundColor: Colors.green,
               colorText: Colors.white,
             );
-          } else {
+          }
+          else {
             Get.back();
             Get.snackbar(
               "Error",

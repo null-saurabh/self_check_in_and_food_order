@@ -119,7 +119,7 @@ class UserDataItemAdmin extends StatelessWidget {
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
-                                            Text(DateTimeUtils.formatDateTime(loginDate,format: "dd/MMM hh:MM a"), // Use your preferred date format
+                                            Text(DateTimeUtils.formatDateTime(loginDate,format: "dd-MMM HH:mm a"), // Use your preferred date format
                                                 style: AppWidget.black16Text400Style()),
                                             SizedBox(width: 4,),
                                             Text("Login",

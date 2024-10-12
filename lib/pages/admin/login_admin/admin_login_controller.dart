@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../service/auth_services.dart';
-import '../home_admin/admin_home_screen.dart';
 
 class AdminLoginController extends GetxController {
   final usernameController = TextEditingController();
@@ -21,45 +20,59 @@ class AdminLoginController extends GetxController {
 
     try {
       final QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection("Admin")
+          .collection("AdminAccount")
+          .where("userId", isEqualTo: usernameController.text.trim())
+          .limit(1)
           .get();
 
-      bool validUser = false;
+      if (snapshot.docs.isNotEmpty) {
+        final result = snapshot.docs.first;
 
-      for (var result in snapshot.docs) {
-        if (result['id'] == usernameController.text.trim() &&
-            result['password'] == passwordController.text.trim()) {
-          validUser = true;
-          // Get.offAllNamed('/admin/home');
-          // Get.offAll(() => const HomeAdmin()); // Navigate to HomeAdmin
-          // print("a");
-          // authService.login();
+        if (result['password'] == passwordController.text.trim()) {
+          // Add the current login timestamp to loginData
+
+          List<DateTime> loginData = List<DateTime>.from(
+              result['loginData'].map((timestamp) => (timestamp as Timestamp).toDate()));
+
+          print(DateTime.now());
+          loginData.add(DateTime.now());
+
+          // Update Firestore with new login data and set isOnline to true
+          await FirebaseFirestore.instance
+              .collection("AdminAccount")
+              .doc(result.id)
+              .update({
+            'loginData': loginData.map((date) => Timestamp.fromDate(date)).toList(),
+          });
+
+          // Proceed with the login flow
           AuthService.to.login();
 
-          // String? intendedRoute = Get.parameters['redirect'];
+          // Check for intended route (if any)
           Map<String, dynamic>? args = Get.arguments as Map<String, dynamic>?;
           String? intendedRoute = args != null ? args['redirect'] : null;
-          // print("b");
-          // print(intendedRoute);
-
 
           if (intendedRoute != null && intendedRoute.isNotEmpty) {
-            // If there is an intended route, navigate to it
-            // print("c");
             Get.offAllNamed(intendedRoute);
-          } else {
-            // print("d");
-            // If no intended route, navigate to admin home page
+          }
+          else {
             Get.offAllNamed('/admin/home');
           }
-          break;
+        } else {
+          Get.snackbar(
+            "Error",
+            "Invalid Password",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.orangeAccent,
+            colorText: Colors.white,
+          );
         }
       }
 
-      if (!validUser) {
+      else {
         Get.snackbar(
           "Error",
-          "Invalid username or password",
+          "Invalid username",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.orangeAccent,
           colorText: Colors.white,
@@ -77,6 +90,7 @@ class AdminLoginController extends GetxController {
       isLoading.value = false;
     }
   }
+
 
   @override
   void onClose() {

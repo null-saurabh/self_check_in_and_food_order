@@ -19,7 +19,7 @@ class TextView extends StatelessWidget {
   const TextView(
     this.text, {
     super.key,
-    this.fontFamily = "popins",
+    this.fontFamily = "poppins",
     this.fontSize = 14,
     this.fontWeight,
     this.maxLine,

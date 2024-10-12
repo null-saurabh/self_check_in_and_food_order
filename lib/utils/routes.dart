@@ -42,42 +42,42 @@ class AppPages {
     GetPage(
       name: Routes.adminHome,
       page: () => const AdminHomeScreen(),
-      // middlewares: [AuthMiddleware()],
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: Routes.adminMenu,
       page: () => const MenuAdminScreen(),
-      // middlewares: [AuthMiddleware()],
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: Routes.adminAddMenu,
       page: () => const AddFoodItem(),
-      // middlewares: [AuthMiddleware()],
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: Routes.adminOrderList,
       page: () => const OrdersListScreen(),
-      // middlewares: [AuthMiddleware()],
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: Routes.adminCheckInList,
       page: () => const CheckInListAdmin(),
-      // middlewares: [AuthMiddleware()],
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: Routes.adminManageUsers,
       page: () => const ManageUserAdmin(),
-      // middlewares: [AuthMiddleware()],
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: Routes.adminManageVoucher,
       page: () => const ManageVoucherAdmin(),
-      // middlewares: [AuthMiddleware()],
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: Routes.adminAddVoucher,
       page: () => const AddVoucherAdmin(),
-      // middlewares: [AuthMiddleware()],
+      middlewares: [AuthMiddleware()],
     ),
 
     GetPage(

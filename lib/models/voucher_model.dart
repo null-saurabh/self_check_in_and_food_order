@@ -43,7 +43,7 @@ class CouponUsage {
 
 
 class CouponModel {
-  String id;                          // Unique coupon ID (e.g., 'COUPON123')
+  String voucherId;                          // Unique coupon ID (e.g., 'COUPON123')
   String title;                       // Coupon title (e.g., "10% OFF Booking")
   String code;                        // The actual coupon code (e.g., 'SAVE20')
   String voucherType;                 // Coupon type: "single-use", "multi-use", "value-based"
@@ -63,7 +63,7 @@ class CouponModel {
   List<String> applicableCategories;   // Optional: Categories of food or booking the coupon is applicable for
 
   CouponModel({
-    required this.id,
+    required this.voucherId,
     required this.title,
     required this.code,
     required this.voucherType,
@@ -86,7 +86,7 @@ class CouponModel {
   // Convert to a map for Firebase storage
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'voucherId': voucherId,
       'title': title,
       'code': code,
       'voucherType': voucherType,
@@ -110,7 +110,7 @@ class CouponModel {
   // Create CouponModel from Firebase map
   factory CouponModel.fromMap(Map<String, dynamic> data) {
     return CouponModel(
-      id: data['id'],
+      voucherId: data['voucherId'],
       title: data['title'],
       code: data['code'],
       voucherType: data['voucherType'],

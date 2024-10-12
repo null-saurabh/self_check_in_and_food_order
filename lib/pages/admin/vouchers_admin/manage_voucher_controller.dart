@@ -46,7 +46,7 @@ class ManageVoucherAdminController extends GetxController {
       // Query the correct document by userId
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection("Voucher")
-          .where("id", isEqualTo: voucherData.id)
+          .where("id", isEqualTo: voucherData.voucherId)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
@@ -104,7 +104,7 @@ class ManageVoucherAdminController extends GetxController {
         // Query the document with matching custom 'id' field
         QuerySnapshot querySnapshot = await FirebaseFirestore.instance
             .collection("Voucher")
-            .where("id", isEqualTo: voucherData.id) // Assuming 'id' is the custom field name in Firestore
+            .where("id", isEqualTo: voucherData.voucherId) // Assuming 'id' is the custom field name in Firestore
             .get();
 
         if (querySnapshot.docs.isNotEmpty) {

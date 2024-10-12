@@ -8,7 +8,7 @@ import 'package:random_string/random_string.dart';
 import '../../../models/cart_model.dart';
 import '../../../models/menu_item_model.dart';
 import '../../../models/food_order_model.dart';
-import '../../../models/promo_code_model.dart';
+import '../../../models/voucher_model.dart';
 import '../../../service/database.dart';
 import '../../../service/razorpay_web.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +24,7 @@ class CartScreenController extends GetxController {
     fetchCountryCodes(); // Fetch countries from API when controller is initialized
 
     // Listen to any changes in relevant fields and recalculate the grand total
-    everAll([itemTotalAmount, taxChargesAmount, tipAmount, isPromoApplied], (_) {
+    everAll([itemTotalAmount, taxChargesAmount, tipAmount, isCouponApplied], (_) {
       calculateGrandTotal();
     });
 
@@ -45,29 +45,27 @@ class CartScreenController extends GetxController {
   TextEditingController dinerName = TextEditingController();
 
   TextEditingController promoCodeController = TextEditingController();
-  Rxn<PromoCodeModel> promoCode = Rxn<PromoCodeModel>();
+  Rxn<CouponModel> coupon = Rxn<CouponModel>();
+  RxBool isCouponApplied = false.obs;
 
-  List<PromoCodeModel> promoList = [
-    PromoCodeModel(code: 'DISCOUNT10', discount: 50),
-    PromoCodeModel(code: 'SAVE20', discount: 100),
-  ];
+  RxDouble itemTotalAmount = 0.0.obs;
+  RxDouble discountAmount = 0.0.obs;
+  RxDouble taxChargesAmount = 0.0.obs;
+  RxnDouble tipAmount = RxnDouble(); // Calculated tip amount
+  RxDouble grandTotal = 0.0.obs;
 
-  RxBool isPromoApplied = false.obs;
+  var tipPercentage = 5.obs; // Percentage of tip selected, default to 0
+
   RxBool isPromoWidgetVisible = false.obs;
 
 
   RxString receptionistText = "Your Cart is Empty".obs;
   RxBool isTipSelected  = true.obs;
 
+  RxnString voucherValidationMessage = RxnString();
 
-  RxDouble itemTotalAmount = 0.0.obs;
-  RxDouble taxChargesAmount = 0.0.obs;
 
-  var tipPercentage = 5.obs; // Percentage of tip selected, default to 0
-  RxnDouble tipAmount = RxnDouble(); // Calculated tip amount
 
-// Final grand total
-  var grandTotal = 0.0.obs;
 
   RxList<Map<String, String>> countryCodes = <Map<String, String>>[].obs;
   RxString selectedCountryCode = '+91'.obs;  // Default to India
@@ -78,7 +76,7 @@ class CartScreenController extends GetxController {
   var cartItems = <String, CartItemModel>{}
       .obs; // Key is menuItemID, value is CartItemModel
   String razorpayKey = ""; // Variable to hold the Razorpay key
-
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   void setTipPercentage(int percentage) {
     tipPercentage.value = percentage;
@@ -95,32 +93,210 @@ class CartScreenController extends GetxController {
   }
 
 
-  String? applyPromoCode(String code) {
 
+
+
+  Future<String?> applyCoupon(String code) async {
     if (code.isEmpty) {
-      return 'Promo code cannot be empty';
+      return 'Enter Voucher Code';
     }
 
-    final promo = promoList.firstWhere(
-            (promo) => promo.code.toLowerCase() == code.toLowerCase(),
-        orElse: () => PromoCodeModel(code: '', discount: 0));
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
 
-    if (promo.code.isEmpty) {
-      // print("aaaa");
-      return 'Invalid promo code';
-    } else {
+    try {
+    // print("1");
+    print(code.toUpperCase());
+    // Fetch coupon from Firebase where code matches and isUsed is false
+    final querySnapshot = await _firestore.collection('Voucher')
+        .where('code', isEqualTo: code.toUpperCase())
+        .where('isUsed', isEqualTo: false)
+        .where('isActive', isEqualTo: true)
+        .limit(1) // Limit to 1 document for efficiency
+        .get();
 
-      promoCode.value = promo;
-      isPromoApplied.value = true;
-      isPromoWidgetVisible.value = false;
-      // Get.snackbar('Success', 'Promo code applied successfully!');
-      return null;
+    // print("2");
+
+    if (querySnapshot.docs.isEmpty) {
+      // print("3");
+      Get.back();
+      return 'Invalid coupon code';
     }
+    // print("4");
+
+      String docId = querySnapshot.docs.first.id;
+      final couponDoc = await _firestore.collection('Voucher').doc(docId).get();
+    // print("5");
+
+      if (!couponDoc.exists) {
+        // print("6");
+        Get.back();
+        return 'Invalid coupon code';
+      }
+    // print("7");
+
+    coupon.value = CouponModel.fromMap(couponDoc.data() as Map<String, dynamic>);
+    // print("8");
+
+    final currentCoupon = coupon.value!;
+    // print("9");
+
+    // Validate minimum order value
+    if (currentCoupon.minOrderValue != null && itemTotalAmount.value < currentCoupon.minOrderValue!) {
+      Get.back();
+      return 'Minimum order value for this coupon is ₹${currentCoupon.minOrderValue}';
+    }
+    // print("10");
+
+    // // Validate applicable categories
+    // final applicableItems = cartItems.entries.where((entry) {
+    //   return currentCoupon.applicableCategories.contains(entry.value.menuItem.category);
+    // }).toList();
+    //
+    // if (applicableItems.isEmpty) {
+    //   return 'This coupon is not applicable for the items in your cart';
+    // }
+
+    // Validate applicable categories
+    if (!currentCoupon.applicableCategories.contains("Food Voucher")) {
+      Get.back();
+      // If the coupon is a food voucher, it's applicable to all items
+      return 'coupon not applicable';
+    }
+    // print("11");
+
+    // Calculate discount based on discountType (percentage or fixed)
+    if (currentCoupon.discountType == 'percentage') {
+      print("11");
+      double discount = itemTotalAmount.value * (currentCoupon.discountValue / 100);
+      // Apply max discount if applicable
+      print("12");
+      print(discount);
+
+      discountAmount.value = discount > currentCoupon.maxDiscount! ? currentCoupon.maxDiscount! : discount;
+      print("13");
+      print(discountAmount.value);
+
+    } else if (currentCoupon.discountType == 'fixed-discount') {
+      discountAmount.value =  itemTotalAmount.value < currentCoupon.discountValue ? itemTotalAmount.value :currentCoupon.discountValue ;
+    }
+    // print("12");
+
+    // Check for voucherType and update usageCount, remainingDiscountValue, etc.
+    if (currentCoupon.voucherType == 'single-use') {
+      if (currentCoupon.usageCount >= (currentCoupon.usageLimit ?? 1)) {
+        // Mark coupon as used if usage limit is reached
+        await _firestore.collection('Voucher').doc(docId).update({
+          'isUsed': true,
+        });
+        Get.back();
+        return 'This coupon has been used already';
+
+      }
+      // Increment usage count
+      // await _firestore.collection('Voucher').doc(docId).update({
+      //   'usageCount': FieldValue.increment(1),
+      // });
+      // await _firestore.collection('Voucher').doc(docId).update({
+      //   'isUsed': true,
+      // });
+
+    }
+
+    else if (currentCoupon.voucherType == 'multi-use') {
+
+      if (currentCoupon.usageCount >= (currentCoupon.usageLimit ?? 10)) {
+        // Mark coupon as used if usage limit is reached
+        await _firestore.collection('Voucher').doc(docId).update({
+          'isUsed': true,
+        });
+        Get.back();
+
+        return 'This coupon has reached its usage limit';
+      }
+      // await _firestore.collection('Voucher').doc(docId).update({
+      //   'usageCount': FieldValue.increment(1),
+      // });
+      //
+      // // Check if the coupon is now used
+      // if (currentCoupon.usageCount + 1 >= (currentCoupon.usageLimit ?? 10)) {
+      //   await _firestore.collection('Voucher').doc(docId).update({
+      //     'isUsed': true,
+      //   });
+      // }
+
+    }
+    else if (currentCoupon.voucherType == 'value-based') {
+
+      if (currentCoupon.remainingDiscountValue! <= 0) {
+        // print("13");
+
+        await _firestore.collection('Voucher').doc(docId).update({
+          'isUsed': true,
+        });
+        // print("14");
+        Get.back();
+
+        return 'This coupon has no remaining value';
+      }
+      if (currentCoupon.remainingDiscountValue! < discountAmount.value) {
+        // print("15");
+        discountAmount.value = currentCoupon.remainingDiscountValue!;
+      }
+
+
+      // print("16");
+      //
+      // if (currentCoupon.remainingDiscountValue! - discountAmount.value <= 0) {
+      //   print("17");
+      //
+      //   // await _firestore.collection('Voucher').doc(docId).update({
+      //   //   'remainingDiscountValue': FieldValue.increment(-discountAmount.value),
+      //   //   'isUsed': true,
+      //   // });
+      //   print("18");
+      //
+      // } else {
+      //   print("19");
+      //
+      //   // await _firestore.collection('Voucher').doc(docId).update({
+      //   //   'remainingDiscountValue': FieldValue.increment(-discountAmount.value),
+      //   // });
+      //   print("20");
+      //
+      // }
+      // print("21");
+
+
+
+
+    }
+    // print("22");
+
+
+    isCouponApplied.value = true;
+    isPromoWidgetVisible.value = false;
+    Get.back();
+    return null;
+  }
+    catch (e) {
+      Get.back();
+      Get.snackbar(
+        "Error",
+        "Failed to apply coupon: $e",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    }
+    return "Failed to apply voucher";
   }
 
   void removePromoCode() {
-    promoCode.value = null;
-    isPromoApplied.value = false;
+    coupon.value = null;
+    isCouponApplied.value = false;
+    discountAmount.value = 0;
   }
 
 // Calculate the grand total based on the item total, taxes, tips, and promo code discount
@@ -128,8 +304,8 @@ class CartScreenController extends GetxController {
     double total = itemTotalAmount.value + taxChargesAmount.value + (tipAmount.value ?? 0);
 
     // If a promo code is applied, subtract the discount
-    if (isPromoApplied.value) {
-      total -= promoCode.value!.discount;
+    if (isCouponApplied.value) {
+      total -= discountAmount.value;
     }
 
     // Ensure the grand total is not less than zero
@@ -194,6 +370,62 @@ class CartScreenController extends GetxController {
         Get.snackbar("Success", "Order placed successfully!",
             snackPosition: SnackPosition.BOTTOM);
       });
+
+      // Add logic to update the voucher data if a coupon was applied
+      if (isCouponApplied.value) {
+
+        final querySnapshot = await _firestore.collection('Voucher')
+            .where('code', isEqualTo: coupon.value!.code.toUpperCase())
+            .where('isUsed', isEqualTo: false)
+            .where('isActive', isEqualTo: true)
+            .limit(1) // Limit to 1 document for efficiency
+            .get();
+
+
+        String docId = querySnapshot.docs.first.id;// Use the id from the coupon model
+
+        // Example of updating voucher usage count and status
+        if (coupon.value!.voucherType == 'single-use') {
+          await _firestore.collection('Voucher').doc(docId).update({
+            'isUsed': true,
+            'usageCount': FieldValue.increment(1),
+          });
+        } else if (coupon.value!.voucherType == 'multi-use') {
+          await _firestore.collection('Voucher').doc(docId).update({
+            'usageCount': FieldValue.increment(1),
+          });
+          // Update isUsed if the usage limit is reached
+          if (coupon.value!.usageCount + 1 >= (coupon.value!.usageLimit ?? 10)) {
+            await _firestore.collection('Voucher').doc(docId).update({
+              'isUsed': true,
+            });
+          }
+        } else if (coupon.value!.voucherType == 'value-based') {
+          // Adjust remaining discount value
+
+          if (coupon.value!.remainingDiscountValue! - discountAmount.value <= 0) {
+            print("17");
+
+            await _firestore.collection('Voucher').doc(docId).update({
+              'remainingDiscountValue': FieldValue.increment(
+                  -discountAmount.value),
+              'isUsed': true,
+            });
+          } else {
+              print("19");
+
+              await _firestore.collection('Voucher').doc(docId).update({
+                'remainingDiscountValue': FieldValue.increment(-discountAmount.value),
+              });
+              print("20");
+
+            }
+        }
+      }
+
+
+
+
     } catch (e) {
       // Handle any errors that occur during the order process
       // print(e);
@@ -230,11 +462,6 @@ class CartScreenController extends GetxController {
     update();
   }
 
-// // Remove item from cart
-//   void removeItem(String productId) {
-//     cartItems.remove(productId);
-//     calculateTotalAmount();
-//   }
 
   // Decrease item quantity
   void decreaseItem(String menuItemId) {
@@ -263,6 +490,10 @@ class CartScreenController extends GetxController {
   void clearCart() {
     cartItems.clear();
     itemTotalAmount.value = 0.0;
+    tipAmount.value = 0;
+    grandTotal.value = 0;
+    taxChargesAmount.value = 0;
+    update();
   }
 
   Future<void> initiatePayment() async {
@@ -314,9 +545,6 @@ class CartScreenController extends GetxController {
       Get.snackbar("Error", "Failed to fetch Razorpay key: $e");
     }
   }
-
-
-
 
   Future<void> fetchCountryCodes() async {
     try {

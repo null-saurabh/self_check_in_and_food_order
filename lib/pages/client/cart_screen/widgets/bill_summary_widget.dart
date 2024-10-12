@@ -45,15 +45,15 @@ class CartBillSummaryWidget extends StatelessWidget {
                     if (controller.tipAmount.value != null)
                       CartRowItemWidget(
                           label: "Tip", amount: controller.tipAmount.value!),
-                    if (controller.isPromoApplied.value)
+                    if (controller.isCouponApplied.value)
                       CartRowItemWidget(
-                        label: 'Coupon (${controller.promoCode.value!.code})',
-                        amount: controller.promoCode.value!.discount,
+                        label: 'Coupon (${controller.coupon.value!.code})',
+                        amount: controller.discountAmount.value,
                         isCoupon: true,
                         onPressed: controller.removePromoCode,
                       ),
                     if (!controller.isPromoWidgetVisible.value &&
-                        !controller.isPromoApplied.value)
+                        !controller.isCouponApplied.value)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -78,8 +78,12 @@ class CartBillSummaryWidget extends StatelessWidget {
                         key: controller.cartFormKey,
                         child: ApplyCouponWidget(
                             promoCode: controller.promoCodeController,
-                            onPressed: (code) {
-                              return controller.applyPromoCode(code);
+                            onPressed: (code) async {
+                              final result = await controller.applyCoupon(code);
+                              if (result != null) {
+                                return result;
+                              }
+                              // return controller.applyCoupon(code);
                             }),
                       ),
                     ],

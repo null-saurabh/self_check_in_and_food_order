@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CheckInGradientTexture extends StatelessWidget {
+class BackgroundGradientTexture extends StatelessWidget {
   final String assetPath;
   final double? top;
   final double? bottom;
@@ -8,7 +8,7 @@ class CheckInGradientTexture extends StatelessWidget {
   final double? right;
   final double? height;
   final double? width;
-  const CheckInGradientTexture({super.key, required this.assetPath, this.top, this.bottom, this.left, this.right, this.height, this.width});
+  const BackgroundGradientTexture({super.key, required this.assetPath, this.top, this.bottom, this.left, this.right, this.height, this.width});
 
   @override
   Widget build(BuildContext context) {
