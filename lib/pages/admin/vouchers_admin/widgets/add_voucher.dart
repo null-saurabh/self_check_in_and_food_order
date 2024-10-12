@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wandercrew/pages/admin/vouchers_admin/manage_voucher_controller.dart';
 
 import '../../../../models/voucher_model.dart';
 import '../../../../widgets/app_date_picker.dart';
@@ -56,6 +57,7 @@ class AddVoucherAdmin extends StatelessWidget {
                         ),
                       ],
                     ),
+                    SizedBox(height: 8,)
                   ]),
                 ),
               ),
@@ -72,10 +74,24 @@ class AddVoucherAdmin extends StatelessWidget {
                           ElevatedContainer(
                             child: EditText(
                               labelFontWeight: FontWeight.w600,
-                              labelText: "Voucher Code",
+                              labelText: "Voucher Code*",
                               hint: "Voucher Code",
                               controller: controller.voucherCodeController,
-                              onValidate: Validators.requiredField,
+                              onValidate: (value) {
+                                // Check if the field is empty
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Voucher is required';
+                                }
+                                var voucherController = Get.find<ManageVoucherAdminController>();
+                                // Check if the username already exists in userDataList
+                                if(controller.isEditing.value == false){
+                                if ( voucherController.voucherList.any((voucher) => voucher.code == value.trim())) {
+                                  return 'Voucher already exists';
+                                }
+                                return null; // Return null if validation passes
+                              }
+                                return null;
+                                },
                               suffixWidget: AppElevatedButton(
                                 onPressed: () {
                                   String generatedCode =
@@ -94,7 +110,7 @@ class AddVoucherAdmin extends StatelessWidget {
                           ElevatedContainer(
                             child: EditText(
                               labelFontWeight: FontWeight.w600,
-                              labelText: "Title",
+                              labelText: "Title*",
                               hint: "Enter Voucher Title",
                               controller: controller.titleController,
                               onValidate: Validators.requiredField,
@@ -269,7 +285,7 @@ class AddVoucherAdmin extends StatelessWidget {
                                 onChange: (value) =>
                                     controller.selectedCategories.value = value,
                                 hintText: "Select Categories",
-                                labelText: "Applicable Category",
+                                labelText: "Applicable Category*",
                                 labelFontWeight: FontWeight.w600,
                                 showLabel: true,
                                 height: 40,
@@ -295,7 +311,7 @@ class AddVoucherAdmin extends StatelessWidget {
                                 children: [
                                   EditText(
                                     labelFontWeight: FontWeight.w600,
-                                    labelText: "Discount Value",
+                                    labelText: "Discount Value*",
                                     hint: "Enter Discount Value",
                                     controller:
                                         controller.discountValueController,
@@ -303,10 +319,10 @@ class AddVoucherAdmin extends StatelessWidget {
                                     inputType: TextInputType.number,
                                   ),
                                   if (controller.selectedVoucherType.value ==
-                                      "value-based")
+                                      "value-based" && controller.isEditing.value)
                                     EditText(
                                       labelFontWeight: FontWeight.w600,
-                                      labelText: "Remaining value",
+                                      labelText: "Remaining value*",
                                       hint: "Enter Remaining Value",
                                       controller: controller
                                           .remainingDiscountValueController,
@@ -334,7 +350,7 @@ class AddVoucherAdmin extends StatelessWidget {
                                       "percentage")
                                     EditText(
                                       labelFontWeight: FontWeight.w600,
-                                      labelText: "Maximum Discount",
+                                      labelText: "Maximum Discount*",
                                       hint: "Enter Max Discount",
                                       controller:
                                           controller.maxDiscountController,
@@ -345,7 +361,7 @@ class AddVoucherAdmin extends StatelessWidget {
                                       "multi-use")
                                     EditText(
                                       labelFontWeight: FontWeight.w600,
-                                      labelText: "Max Usage Limit",
+                                      labelText: "Max Usage Limit*",
                                       hint: "Enter number of usage",
                                       controller: controller.maxLimitController,
                                       onValidate: Validators.validateInt,

@@ -57,11 +57,11 @@ class ManageVoucherAdmin extends StatelessWidget {
                       child: SizedBox(
                         height: 40,
                         child: TextField(
-                          // onChanged: (value) => controller
-                          //     .filterMenuItems(value), // Call the search function
+                          onChanged: (value) => controller
+                              .filterVoucher(value), // Call the search function
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.zero,
-                            hintText: "Search by Code/Discount",
+                            hintText: "Search by Code, Discount, ....",
                             hintStyle: TextStyle(color: Colors.grey),
                             prefixIcon: Icon(Icons.search, color: Colors.grey),
                             filled: true,
@@ -131,6 +131,19 @@ class ManageVoucherAdmin extends StatelessWidget {
                     ],
                   ),
                 ),
+              ),
+              Row(
+                // crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0,top: 4,bottom: 4),
+                    child: GestureDetector(
+                      onTap: controller.refreshAndExpireCoupons,
+                      child: Icon(Icons.refresh),
+                    ),
+                  )
+                ],
               ),
 
               controller.voucherList.isEmpty

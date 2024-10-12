@@ -310,11 +310,10 @@ class AddFoodItemController extends GetxController {
       } finally {
       }
     } else {
-      Get.back();
       Get.snackbar(
         "Error",
-        "Please fill in all fields and select an image.",
-        backgroundColor: Colors.redAccent,
+        "Please fill in all fields",
+        backgroundColor: Colors.redAccent.withOpacity(0.9),
         colorText: Colors.white,
       );
     }

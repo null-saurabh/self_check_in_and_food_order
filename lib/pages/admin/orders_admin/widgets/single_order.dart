@@ -10,8 +10,9 @@ class SingleOrder extends StatelessWidget {
   final VoidCallback markAsConfirm;
   final VoidCallback markAsDelivered;
   final VoidCallback initiateRefund;
+  final VoidCallback onCallPressed;
 
-  const SingleOrder({super.key, required this.orderData, required this.markAsConfirm, required this.markAsDelivered, required this.initiateRefund});
+  const SingleOrder({super.key, required this.orderData, required this.markAsConfirm, required this.markAsDelivered, required this.initiateRefund, required this.onCallPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,51 @@ class SingleOrder extends StatelessWidget {
                       SizedBox(height: 8,),
                       Text(
                         orderData.dinerName,
-                        style: AppWidget.black20Text500Style(),
+                        style: AppWidget.black18Text500Style(),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Number: ',
+                            style: AppWidget.black16Text400Style(),
+                          ),
+                          Text(
+                            orderData.contactNumber,
+                            style: AppWidget.black16Text500Style(),
+                          ),
+                          SizedBox(width: 4,),
+                          GestureDetector(
+                            onTap: onCallPressed,
+                            child: Icon(Icons.call,color: Colors.green,size: 20,),
+                          )
+                        ],
+                      ),
+                      if(orderData.deliveryAddress.isNotEmpty)
+
+                      Row(
+                        children: [
+                          Text(
+                            'Table/Room: ',
+                            style: AppWidget.black16Text400Style(),
+                          ),
+                          Text(
+                            orderData.deliveryAddress,
+                            style: AppWidget.black16Text500Style(),
+                          ),
+                        ],
+                      ),
+                      if(orderData.specialInstructions != null && orderData.specialInstructions!.isNotEmpty)
+                      Row(
+                        children: [
+                          Text(
+                            'Instruction: ',
+                            style: AppWidget.black16Text400Style(),
+                          ),
+                          Text(
+                            orderData.specialInstructions!,
+                            style: AppWidget.black16Text500Style(),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 12,),
 

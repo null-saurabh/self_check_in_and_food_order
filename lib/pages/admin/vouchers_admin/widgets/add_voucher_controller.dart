@@ -24,7 +24,8 @@ class AddVoucherAdminController extends GetxController {
   void onInit() {
     super.onInit();
     voucherCodeController.addListener(() {
-      final text = voucherCodeController.text.toUpperCase(); // Convert to uppercase
+      final text =
+          voucherCodeController.text.toUpperCase(); // Convert to uppercase
       voucherCodeController.value = voucherCodeController.value.copyWith(
         text: text,
         selection: TextSelection(
@@ -33,9 +34,8 @@ class AddVoucherAdminController extends GetxController {
         ),
         composing: TextRange.empty,
       );
-    });}
-
-
+    });
+  }
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -65,7 +65,7 @@ class AddVoucherAdminController extends GetxController {
   RxString selectedDiscountType = RxString("fixed-discount");
 
   RxnString selectedCategories = RxnString();
-
+  RxnString createdAt = RxnString();
 
   void setEditingItem(CouponModel item) {
     editingItem.value = item;
@@ -89,7 +89,7 @@ class AddVoucherAdminController extends GetxController {
           item.remainingDiscountValue.toString();
     if (item.voucherType != "value-based")
       remainingLimitController.text = item.remainingLimit.toString();
-
+    createdAt.value = item.createdAt;
 
     update();
   }
@@ -119,50 +119,65 @@ class AddVoucherAdminController extends GetxController {
 
       // Prepare coupon data
       CouponModel newCoupon = CouponModel(
-        voucherId: couponId,
-        title: titleController.text.trim(),
-        code: voucherCodeController.text.trim(),
-        voucherType: selectedVoucherType.value,
-        discountType: selectedDiscountType.value,
-        discountValue: double.parse(discountValueController.text.trim()),
-        remainingDiscountValue: selectedVoucherType.value == "value-based"
-            ? double.tryParse(remainingDiscountValueController.text.trim())
-            : null,
-        validFrom: DateFormat("dd-MMM-yy").parse(
-            validFromController.text), // Use the date from the controller
-        validUntil: DateFormat("dd-MMM-yy").parse(
-            expirationDateController.text), // Use the date from the controller
-        minOrderValue: minOrderValueController.text.isNotEmpty
-            ? double.tryParse(minOrderValueController.text.trim())
-            : null,
-        maxDiscount: maxDiscountController.text.isNotEmpty
-            ? double.tryParse(maxDiscountController.text.trim())
-            : null,
-        isActive: isActive.value,
-        usageLimit: selectedVoucherType.value == "single-use"
-            ? 1
-            : maxLimitController.text.isNotEmpty
-                ? int.tryParse(maxLimitController.text.trim())
-                : null,
-        remainingLimit: isEditing.value
-            ? int.tryParse(remainingLimitController.text.trim())
-            : selectedVoucherType.value == "single-use"
-                ? 1
-                : selectedVoucherType.value == "multi-use"
-                    ? int.tryParse(maxLimitController.text.trim())
-                    : null,
-        usageCount: usageCount.value, // Initialize with 0 for new coupons
-        usedOnOrders: usedOnOrders,
-        applicableCategories: [selectedCategories.value ?? "Food Voucher"],
-        isUsed: false,
-      );
+          voucherId: couponId,
+          title: titleController.text.trim(),
+          code: voucherCodeController.text.trim(),
+          voucherType: selectedVoucherType.value,
+          discountType: selectedDiscountType.value,
+          discountValue: double.parse(discountValueController.text.trim()),
+          remainingDiscountValue: selectedVoucherType.value == "value-based"
+              ? isEditing.value
+                  ? double.tryParse(
+                      remainingDiscountValueController.text.trim())
+                  : double.tryParse(discountValueController.text.trim())
+              : null,
+          validFrom: DateFormat("dd-MMM-yy").parse(
+              validFromController.text), // Use the date from the controller
+          validUntil: DateFormat("dd-MMM-yy").parse(expirationDateController
+              .text), // Use the date from the controller
+          minOrderValue: minOrderValueController.text.isNotEmpty
+              ? double.tryParse(minOrderValueController.text.trim())
+              : null,
+          maxDiscount: maxDiscountController.text.isNotEmpty
+              ? double.tryParse(maxDiscountController.text.trim())
+              : null,
+          isActive: isActive.value,
+          usageLimit: selectedVoucherType.value == "single-use"
+              ? 1
+              : maxLimitController.text.isNotEmpty
+                  ? int.tryParse(maxLimitController.text.trim())
+                  : null,
+          remainingLimit: isEditing.value
+              ? int.tryParse(remainingLimitController.text.trim())
+              : selectedVoucherType.value == "single-use"
+                  ? 1
+                  : selectedVoucherType.value == "multi-use"
+                      ? int.tryParse(maxLimitController.text.trim())
+                      : null,
+          usageCount: usageCount.value, // Initialize with 0 for new coupons
+          usedOnOrders: usedOnOrders,
+          applicableCategories: [selectedCategories.value ?? "Food Voucher"],
+          isUsed: false,
+          createdAt: isEditing.value ? createdAt.value : DateTime.now(),
+          updatedAt: isEditing.value ? DateTime.now() : null,
+          updatedBy: isEditing.value ? "Admin" : null,
+          isExpired: isEditing.value
+              ? DateTime.now().isAfter(DateFormat("dd-MMM-yy")
+                      .parse(expirationDateController.text)
+                      .add(Duration(days: 1)))
+                  ? true
+                  : DateTime.now().isBefore(DateFormat("dd-MMM-yy")
+                          .parse(validFromController.text))
+                      ? true
+                      : false
+              : false);
 
       if (isEditing.value) {
         // Updating an existing coupon
         try {
           QuerySnapshot querySnapshot = await FirebaseFirestore.instance
               .collection("Voucher")
-              .where("id",
+              .where("voucherId",
                   isEqualTo: couponId) // Matching the existing coupon ID
               .get();
 
@@ -196,8 +211,7 @@ class AddVoucherAdminController extends GetxController {
               backgroundColor: Colors.green,
               colorText: Colors.white,
             );
-          }
-          else {
+          } else {
             Get.back();
             Get.snackbar(
               "Error",
@@ -217,9 +231,7 @@ class AddVoucherAdminController extends GetxController {
             colorText: Colors.white,
           );
         }
-      }
-
-      else {
+      } else {
         // Saving a new coupon
         await FirebaseFirestore.instance
             .collection("Voucher")
@@ -227,8 +239,7 @@ class AddVoucherAdminController extends GetxController {
 
         // Update locally
         ManageVoucherAdminController couponController =
-        Get.find<ManageVoucherAdminController>();
-
+            Get.find<ManageVoucherAdminController>();
 
         couponController.voucherList.add(newCoupon);
         couponController.update();

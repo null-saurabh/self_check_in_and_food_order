@@ -402,6 +402,7 @@ class CheckInController extends GetxController {
             arrivingFrom: arrivingFromController.text.isNotEmpty ? arrivingFromController.text : null,  // Handle arrivingFrom
             goingTo: goingToController.text.isNotEmpty ? goingToController.text : null,  // Handle goingTo
             signatureUrl: signatureUrl,
+            createdAt: DateTime.now(),
           );
 
           // print("4");

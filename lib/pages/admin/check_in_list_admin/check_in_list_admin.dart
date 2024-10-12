@@ -54,8 +54,8 @@ class CheckInListAdmin extends StatelessWidget {
                         child: SizedBox(
                           height:40,
                           child: TextField(
-                            // onChanged: (value) => controller
-                            //     .filterMenuItems(value), // Call the search function
+                            onChanged: (value) => controller
+                                .filterCheckInList(value), // Call the search function
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.zero,
                               hintText: "Search by item name",

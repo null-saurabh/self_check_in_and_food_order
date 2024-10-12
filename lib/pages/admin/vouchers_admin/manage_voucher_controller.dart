@@ -7,12 +7,33 @@ class ManageVoucherAdminController extends GetxController {
 
 
   RxList<CouponModel> voucherList = <CouponModel>[].obs;
+  RxList<CouponModel> originalVoucherList = <CouponModel>[].obs;
 
   @override
   void onInit() {
     super.onInit();
     fetchVoucherList(); // Fetch data when controller is initialized
   }
+
+  void filterVoucher(String query) {
+    if (query.isEmpty) {
+      voucherList.value = List.from(originalVoucherList); // Restore the original data
+    } else {
+      voucherList.value = originalVoucherList.where((item) {
+        final queryLower = query.toLowerCase();
+
+        print("$queryLower : ${item.discountValue}");
+        return item.code.toLowerCase().contains(queryLower) ||
+            item.discountValue.toString() == queryLower ||
+            item.usageCount.toString()  == queryLower ||
+            item.usageLimit.toString()  == queryLower ||
+            item.maxDiscount.toString()  == queryLower ||
+            item.minOrderValue.toString()  == queryLower;
+      }).toList();
+    }
+    update();
+  }
+
 
   Future<void> fetchVoucherList() async {
     try {
@@ -30,6 +51,7 @@ class ManageVoucherAdminController extends GetxController {
 
       // Updating observable list
       voucherList.assignAll(newList);
+      originalVoucherList.assignAll(newList);
       update();
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch list $e');
@@ -46,7 +68,7 @@ class ManageVoucherAdminController extends GetxController {
       // Query the correct document by userId
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection("Voucher")
-          .where("id", isEqualTo: voucherData.voucherId)
+          .where("voucherId", isEqualTo: voucherData.voucherId)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
@@ -66,6 +88,60 @@ class ManageVoucherAdminController extends GetxController {
       voucherData.isActive = !isActive;
       update();
       Get.snackbar('Error', 'Failed to update online status: $error');
+    }
+  }
+
+  Future<void> refreshAndExpireCoupons() async {
+
+    final now = DateTime.now();
+    final firestore = FirebaseFirestore.instance;
+
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
+
+    try {
+      // Fetch all active coupons that are not expired
+      final snapshot = await firestore
+          .collection('Voucher')
+          // .where('isActive', isEqualTo: true)
+          .where('isUsed', isEqualTo: false)
+          .get();
+
+      for (var doc in snapshot.docs) {
+        final couponData = doc.data();
+        final validUntil = (couponData['validUntil'] as Timestamp).toDate();
+        final validFrom = (couponData['validFrom'] as Timestamp).toDate();
+
+        // Expire the coupon if it's past the validUntil date
+        if (now.isAfter(validUntil.add(Duration(days: 1))) || now.isBefore(validFrom)) {
+          await doc.reference.update({'isExpired': true,'isActive':false});
+        }
+        else{
+          await doc.reference.update({'isExpired': false});
+        }
+      }
+
+      fetchVoucherList();
+      Get.back();
+      Get.snackbar(
+        "Success",
+        "Vouchers updated successfully.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      Get.back();
+      Get.snackbar(
+        "Error",
+        "Failed to update voucher.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      print('Error expiring coupons: $e');
     }
   }
 
@@ -104,7 +180,7 @@ class ManageVoucherAdminController extends GetxController {
         // Query the document with matching custom 'id' field
         QuerySnapshot querySnapshot = await FirebaseFirestore.instance
             .collection("Voucher")
-            .where("id", isEqualTo: voucherData.voucherId) // Assuming 'id' is the custom field name in Firestore
+            .where("voucherId", isEqualTo: voucherData.voucherId) // Assuming 'id' is the custom field name in Firestore
             .get();
 
         if (querySnapshot.docs.isNotEmpty) {

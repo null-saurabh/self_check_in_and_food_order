@@ -60,11 +60,11 @@ class ManageUserAdmin extends StatelessWidget {
                                 child: SizedBox(
                                   height:40,
                                   child: TextField(
-                                    // onChanged: (value) => controller
-                                    //     .filterMenuItems(value), // Call the search function
+                                    onChanged: (value) => controller
+                                        .filterUsers(value), // Call the search function
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.zero,
-                                      hintText: "Search",
+                                      hintText: "Search by name, number, username",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       prefixIcon: Icon(Icons.search, color: Colors.grey),
                                       filled: true,

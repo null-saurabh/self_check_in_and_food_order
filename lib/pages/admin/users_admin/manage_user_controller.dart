@@ -16,12 +16,29 @@ class ManageUserAdminController extends GetxController {
 
 
   RxList<AdminUserModel> userDataList = <AdminUserModel>[].obs;
+  RxList<AdminUserModel> originalUserDataList = <AdminUserModel>[].obs;
 
 
   @override
   void onInit() {
     super.onInit();
     fetchUserDataList(); // Fetch data when controller is initialized
+  }
+
+  void filterUsers(String query) {
+    if (query.isEmpty) {
+      userDataList.value = List.from(originalUserDataList); // Restore the original data
+    } else {
+      userDataList.value = originalUserDataList.where((item) {
+        final queryLower = query.toLowerCase();
+
+        return item.name.toLowerCase().contains(queryLower) ||
+            item.number.toLowerCase().contains(queryLower) ||
+            item.userId.toLowerCase().contains(queryLower)
+        ;
+      }).toList();
+    }
+    update();
   }
 
   void makePhoneCall(String number) {
@@ -44,6 +61,7 @@ class ManageUserAdminController extends GetxController {
       // print(newList);
 
       // Updating observable list
+      originalUserDataList.assignAll(newList);
       userDataList.assignAll(newList);
       update();
     } catch (e) {
@@ -95,7 +113,8 @@ class ManageUserAdminController extends GetxController {
 
           // Delete the document using the retrieved document ID
           await FirebaseFirestore.instance.collection("AdminAccount").doc(docId).delete();
-          userDataList.remove(userData);
+          originalUserDataList.remove(userData);
+
           update();
           Get.back();
 

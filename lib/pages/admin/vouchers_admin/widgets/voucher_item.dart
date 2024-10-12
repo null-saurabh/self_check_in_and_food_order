@@ -156,6 +156,7 @@ class VoucherItemAdmin extends StatelessWidget {
                           SizedBox(
                             height: 8,
                           ),
+                          if(!voucherData.isUsed)
                           Row(
                             children: [
                               AppElevatedButton(
@@ -205,15 +206,19 @@ class VoucherItemAdmin extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: voucherData.isUsed
-                            ? Colors.green
+                            ? Colors.blue
+                            :voucherData.isExpired
+                            ? Colors.red
                             : voucherData.isActive
-                            ? Color(0xffFFB700) // Yellow for preparing
-                            : Colors.red,
+                            ? Colors.green // Yellow for preparing
+                            : Colors.grey,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         voucherData.isUsed
                             ? "Used"
+                            :voucherData.isExpired
+                            ?"Expired"
                             : voucherData.isActive
                             ? "Active"
                             : "Disabled",

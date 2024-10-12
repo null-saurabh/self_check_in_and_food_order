@@ -56,11 +56,15 @@ class CouponModel {
   double? maxDiscount;                // Optional: Maximum discount value (applicable for percentage coupons)
   bool isActive;                      // Status to track if the coupon is active
   bool isUsed;
+  bool isExpired;
   int? usageLimit;                    // Number of times the coupon can be used
   int? remainingLimit;                    // Number of times the coupon can be used
   int usageCount;                     // Number of times the coupon has been used
   List<CouponUsage>? usedOnOrders;    // List of CouponUsage records
   List<String> applicableCategories;   // Optional: Categories of food or booking the coupon is applicable for
+  dynamic createdAt;  // Change to dynamic to allow FieldValue
+  dynamic updatedAt;  // Change to dynamic to allow FieldValue  // Timestamp when the item was last updated
+  String? updatedBy;       // The user/admin who last updated the item
 
   CouponModel({
     required this.voucherId,
@@ -73,6 +77,7 @@ class CouponModel {
     required this.validFrom,
     required this.validUntil,
     required this.isUsed,
+    required this.isExpired,
     this.minOrderValue,
     this.maxDiscount,
     required this.isActive,
@@ -81,6 +86,9 @@ class CouponModel {
     this.usageCount = 0,
     this.usedOnOrders,
     this.applicableCategories = const [],
+    required this.createdAt,
+    this.updatedAt,
+    this.updatedBy
   });
 
   // Convert to a map for Firebase storage
@@ -99,11 +107,15 @@ class CouponModel {
       'maxDiscount': maxDiscount,
       'isActive': isActive,
       'isUsed': isUsed,
+      'isExpired': isExpired,
       'usageLimit': usageLimit,
       'remainingLimit': remainingLimit,
       'usageCount': usageCount,
       'usedOnOrders': usedOnOrders?.map((usage) => usage.toMap()).toList(),
       'applicableCategories': applicableCategories,
+      'updatedBy': updatedBy,
+      'createdAt': createdAt,
+      "updatedAt": updatedAt,
     };
   }
 
@@ -123,11 +135,16 @@ class CouponModel {
       maxDiscount: data['maxDiscount'],
       isActive: data['isActive'],
       isUsed: data['isUsed'],
+      isExpired: data['isExpired'],
       usageLimit: data['usageLimit'],
       remainingLimit: data['remainingLimit'],
       usageCount: data['usageCount'],
       usedOnOrders: (data['usedOnOrders'] as List<dynamic>?)?.map((item) => CouponUsage.fromMap(item)).toList(),
       applicableCategories: List<String>.from(data['applicableCategories'] ?? []),
+      updatedBy: data['updatedBy'],
+      createdAt:data['createdAt'] != null ? (data['createdAt'] as Timestamp).toDate() : null ,  // It can be FieldValue or DateTime
+      updatedAt:data['updatedAt'] != null ?  (data['updatedAt'] as Timestamp).toDate() : null,
+
     );
   }
 }

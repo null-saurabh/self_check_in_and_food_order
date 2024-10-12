@@ -47,7 +47,7 @@ class SelfCheckInModel {
     this.goingTo,
     this.notes,
     this.tags,
-    this.createdAt,
+    required this.createdAt,
     this.updatedAt,
     this.updatedBy
   });

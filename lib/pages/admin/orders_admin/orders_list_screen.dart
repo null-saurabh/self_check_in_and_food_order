@@ -55,10 +55,10 @@ class OrdersListScreen extends StatelessWidget {
                         child: SizedBox(
                           height:40,
                           child: TextField(
-                            // onChanged: (value) => controller
-                            //     .filterMenuItems(value), // Call the search function
+                            onChanged: (value) => controller
+                                .filterOrderItems(value), // Call the search function
                             decoration: InputDecoration(
-                              hintText: "Search by item name",
+                              hintText: "Search by name, number, orderId",
                               hintStyle: TextStyle(color: Colors.grey),
                               prefixIcon: Icon(Icons.search, color: Colors.grey),
                               filled: true,
@@ -91,6 +91,7 @@ class OrdersListScreen extends StatelessWidget {
                           children: controller.orderList.map(
                             (orderData) {
                               return SingleOrder(
+                                onCallPressed:(){ controller.makePhoneCall(orderData.contactNumber);},
                                 orderData: orderData,
                                 initiateRefund: () {
                                   controller.refundAmountController.text = orderData.totalAmount.toString();

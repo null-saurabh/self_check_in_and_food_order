@@ -114,6 +114,7 @@ class CartScreenController extends GetxController {
         .where('code', isEqualTo: code.toUpperCase())
         .where('isUsed', isEqualTo: false)
         .where('isActive', isEqualTo: true)
+        .where('isExpired', isEqualTo: false)
         .limit(1) // Limit to 1 document for efficiency
         .get();
 
@@ -190,6 +191,7 @@ class CartScreenController extends GetxController {
         // Mark coupon as used if usage limit is reached
         await _firestore.collection('Voucher').doc(docId).update({
           'isUsed': true,
+          'isActive': false,
         });
         Get.back();
         return 'This coupon has been used already';
@@ -211,6 +213,8 @@ class CartScreenController extends GetxController {
         // Mark coupon as used if usage limit is reached
         await _firestore.collection('Voucher').doc(docId).update({
           'isUsed': true,
+          'isActive': false,
+
         });
         Get.back();
 
@@ -235,6 +239,8 @@ class CartScreenController extends GetxController {
 
         await _firestore.collection('Voucher').doc(docId).update({
           'isUsed': true,
+          'isActive': false,
+
         });
         // print("14");
         Get.back();
@@ -313,6 +319,8 @@ class CartScreenController extends GetxController {
   }
 
 
+
+
   Future<void> onSuccess(response) async {
     try {
       // print('aaa');
@@ -378,6 +386,7 @@ class CartScreenController extends GetxController {
             .where('code', isEqualTo: coupon.value!.code.toUpperCase())
             .where('isUsed', isEqualTo: false)
             .where('isActive', isEqualTo: true)
+            .where('isExpired', isEqualTo: false)
             .limit(1) // Limit to 1 document for efficiency
             .get();
 
@@ -388,6 +397,7 @@ class CartScreenController extends GetxController {
         if (coupon.value!.voucherType == 'single-use') {
           await _firestore.collection('Voucher').doc(docId).update({
             'isUsed': true,
+            'isActive': false,
             'usageCount': FieldValue.increment(1),
           });
         } else if (coupon.value!.voucherType == 'multi-use') {
@@ -398,6 +408,8 @@ class CartScreenController extends GetxController {
           if (coupon.value!.usageCount + 1 >= (coupon.value!.usageLimit ?? 10)) {
             await _firestore.collection('Voucher').doc(docId).update({
               'isUsed': true,
+              'isActive': false,
+              'usageCount': FieldValue.increment(1),
             });
           }
         } else if (coupon.value!.voucherType == 'value-based') {
@@ -410,6 +422,8 @@ class CartScreenController extends GetxController {
               'remainingDiscountValue': FieldValue.increment(
                   -discountAmount.value),
               'isUsed': true,
+              'isActive': false,
+
             });
           } else {
               print("19");

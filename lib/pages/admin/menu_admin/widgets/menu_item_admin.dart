@@ -37,12 +37,12 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
-            border: Border.all(color: Colors.black.withOpacity(0.12)),
+            // border: Border.all(color: Colors.black.withOpacity(0.12)),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 0.1,
-                blurRadius: 8,
+                spreadRadius: 0.2,
+                blurRadius: 5,
               ),
             ],
           ),
@@ -53,6 +53,7 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: ExpansionTile(
+                backgroundColor: Colors.transparent,
                 maintainState: true,
                 title: Row(
                   children: [

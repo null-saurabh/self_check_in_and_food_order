@@ -25,10 +25,46 @@ class CheckInListController extends GetxController {
     html.window.open('tel:$phoneNumber', '_self');
   }
 
+  void filterCheckInList(String query) {
+    if (query.isEmpty) {
+      // Restore the original grouped check-ins when the query is empty
+      groupedCheckIns.assignAll(originalGroupedCheckIns);
+    } else {
+      final queryLower = query.toLowerCase();
+
+      // Create a new map to hold the filtered results
+      Map<String, List<SelfCheckInModel>> filteredGroupedData = {};
+
+      // Loop through each group (date as key) and filter the corresponding list of check-ins
+      originalGroupedCheckIns.forEach((date, checkIns) {
+        List<SelfCheckInModel> filteredCheckIns = checkIns.where((item) {
+          return item.fullName.toLowerCase().contains(queryLower) ||
+              item.contact.toLowerCase().contains(queryLower) ||
+              (item.address ?? "address").toLowerCase().contains(queryLower) ||
+              (item.email ?? "").toLowerCase().contains(queryLower) ||
+              item.regionState.toLowerCase().contains(queryLower);
+        }).toList();
+
+        // Only add to the filteredGroupedData if there are matching check-ins for this date
+        if (filteredCheckIns.isNotEmpty) {
+          filteredGroupedData[date] = filteredCheckIns;
+        }
+      });
+
+      // Update the observable with the filtered data
+      groupedCheckIns.assignAll(filteredGroupedData);
+    }
+
+    update(); // Update UI to reflect changes
+  }
+
 
   RxList<SelfCheckInModel> checkInList =
       <SelfCheckInModel>[].obs; // Using observable list
   RxMap<String, List<SelfCheckInModel>> groupedCheckIns =
+      <String, List<SelfCheckInModel>>{}.obs;
+
+  RxMap<String, List<SelfCheckInModel>> originalGroupedCheckIns =
       <String, List<SelfCheckInModel>>{}.obs;
 
   Future<void> fetchCheckInList() async {
@@ -40,10 +76,22 @@ class CheckInListController extends GetxController {
       List<SelfCheckInModel> newList = querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-        return SelfCheckInModel.fromMap(
-            data); // Using fromMap factory constructor
+        // Log data to help trace the issue
+        // print("Document ID: ${doc.id}");
+        // print("Raw Data: $data");
+
+        try {
+          return SelfCheckInModel.fromMap(data); // Using fromMap factory constructor
+        } catch (e) {
+          // print("Error parsing document ID: ${doc.id}, Error: $e");
+          throw 'Error in document ${doc.id}: $e'; // Re-throw error with document info
+        }
       }).toList();
-      // print(newList);
+
+      //   return SelfCheckInModel.fromMap(
+      //       data); // Using fromMap factory constructor
+      // }).toList();
+      // // print(newList);
 
       // Updating observable list
       checkInList.assignAll(newList);
@@ -60,13 +108,14 @@ class CheckInListController extends GetxController {
     for (var checkIn in checkInList) {
       // Formatting DateTime to a string date
       String formattedDate =
-      DateTimeUtils.formatDDMMYYYYWithSlashes(checkIn.createdAt!);
+      DateTimeUtils.formatDDMMYYYYWithSlashes(checkIn.createdAt);
       if (!groupedData.containsKey(formattedDate)) {
         groupedData[formattedDate] = [];
       }
       groupedData[formattedDate]!.add(checkIn);
     }
     groupedCheckIns.assignAll(groupedData);
+    originalGroupedCheckIns.assignAll(groupedData);
     update();
   }
 
@@ -292,7 +341,7 @@ class CheckInListController extends GetxController {
                   // Update the note in the database
                   await FirebaseFirestore.instance.collection("Self_Check_In")
                       .doc(docId)
-                      .update({'notes': newNote});
+                      .update({'notes': newNote,'updatedAt':DateTime.now(),'updatedBy':"Admin"});
 
                   // Update local item note
                   item.notes = newNote;

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import 'dart:html' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,15 +16,21 @@ class AdminOrderListController extends GetxController {
   }
 
 
+  RxList<FoodOrderModel> originalOrderList = <FoodOrderModel>[].obs;  // Using observable list
   RxList<FoodOrderModel> orderList = <FoodOrderModel>[].obs;  // Using observable list
 
   TextEditingController refundAmountController = TextEditingController();
+
+  void makePhoneCall(String number) {
+    String phoneNumber = '$number';
+    html.window.open('tel:$phoneNumber', '_self');
+  }
+
 
   Future<void> fetchOrderData() async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("Orders").get();
 
-      // Mapping Firestore data to OrderModel and updating observable list
       List<FoodOrderModel> newList = querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
@@ -32,9 +38,27 @@ class AdminOrderListController extends GetxController {
       }).toList();
 
       orderList.assignAll(newList);
+      originalOrderList.assignAll(newList);
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch orders: $e');
     }
+  }
+
+
+  void filterOrderItems(String query) {
+    if (query.isEmpty) {
+      orderList.value = List.from(originalOrderList); // Restore the original data
+    } else {
+      orderList.value = originalOrderList.where((item) {
+        final queryLower = query.toLowerCase();
+
+        return item.dinerName.toLowerCase().contains(queryLower) ||
+            item.orderId.toLowerCase().contains(queryLower) ||
+            item.contactNumber.toLowerCase().contains(queryLower)
+        ;
+      }).toList();
+    }
+    update();
   }
 
 
@@ -183,7 +207,8 @@ class AdminOrderListController extends GetxController {
   Future<void> initiateRefund({
     required String paymentId,
     required double refundAmount,
-  }) async {
+  })
+  async {
 
     // This would ideally be a server-side API call, but shown here for simplicity
     try {
