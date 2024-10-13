@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:wandercrew/models/voucher_model.dart';
 import 'package:get/get.dart';
 import 'package:wandercrew/pages/admin/vouchers_admin/widgets/add_voucher.dart';
+import 'package:wandercrew/pages/admin/vouchers_admin/widgets/voucher_usage_widget.dart';
 import 'package:wandercrew/widgets/app_elevated_button.dart';
 import '../../../../utils/date_time.dart';
 import '../../../../widgets/widget_support.dart';
@@ -159,11 +160,28 @@ class VoucherItemAdmin extends StatelessWidget {
                           if(!voucherData.isUsed)
                           Row(
                             children: [
+                              if(voucherData.usedOnOrders != null && voucherData.usedOnOrders!.isNotEmpty)
                               AppElevatedButton(
-                                title: "Edit",
+                                title: "History",
                                 titleTextColor: Colors.black,
                                 backgroundColor: Colors.transparent,
                                 showBorder: true,
+                                onPressed: () {
+                                  showDialog(
+                                      context: Get.context!,
+                                      builder: (BuildContext context) {
+                                        return VoucherUsageWidget(usageList: voucherData.usedOnOrders!.reversed.toList(),);
+                                      });
+                                }
+                              ),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              AppElevatedButton(
+                                title: "Edit",
+                                titleTextColor: Colors.white,
+                                // backgroundColor: Colors.transparent,
+                                // showBorder: true,
                                 onPressed: () {
                                   Get.bottomSheet(
                                     AddVoucherAdmin(
@@ -194,7 +212,21 @@ class VoucherItemAdmin extends StatelessWidget {
                                 },
                               ),
                             ],
-                          )
+                          ),
+                          if(voucherData.isUsed && voucherData.usedOnOrders != null && voucherData.usedOnOrders!.isNotEmpty)
+                            AppElevatedButton(
+                                title: "History",
+                                titleTextColor: Colors.black,
+                                backgroundColor: Colors.transparent,
+                                showBorder: true,
+                                onPressed: () {
+                                  showDialog(
+                                      context: Get.context!,
+                                      builder: (BuildContext context) {
+                                        return VoucherUsageWidget(usageList: voucherData.usedOnOrders!.reversed.toList(),);
+                                      });
+                                }
+                            ),
                         ],
                       ),
                     ),

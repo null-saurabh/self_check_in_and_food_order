@@ -65,7 +65,7 @@ class AddVoucherAdminController extends GetxController {
   RxString selectedDiscountType = RxString("fixed-discount");
 
   RxnString selectedCategories = RxnString();
-  RxnString createdAt = RxnString();
+  var createdAt;
 
   void setEditingItem(CouponModel item) {
     editingItem.value = item;
@@ -89,7 +89,7 @@ class AddVoucherAdminController extends GetxController {
           item.remainingDiscountValue.toString();
     if (item.voucherType != "value-based")
       remainingLimitController.text = item.remainingLimit.toString();
-    createdAt.value = item.createdAt;
+    createdAt = item.createdAt ?? DateTime.now();
 
     update();
   }

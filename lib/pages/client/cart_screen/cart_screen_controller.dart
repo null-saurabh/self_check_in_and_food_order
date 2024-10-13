@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:random_string/random_string.dart';
+import 'package:wandercrew/utils/routes.dart';
 
 import '../../../models/cart_model.dart';
 import '../../../models/menu_item_model.dart';
@@ -170,15 +171,15 @@ class CartScreenController extends GetxController {
 
     // Calculate discount based on discountType (percentage or fixed)
     if (currentCoupon.discountType == 'percentage') {
-      print("11");
+      // print("11");
       double discount = itemTotalAmount.value * (currentCoupon.discountValue / 100);
       // Apply max discount if applicable
-      print("12");
-      print(discount);
+      // print("12");
+      // print(discount);
 
       discountAmount.value = discount > currentCoupon.maxDiscount! ? currentCoupon.maxDiscount! : discount;
-      print("13");
-      print(discountAmount.value);
+      // print("13");
+      // print(discountAmount.value);
 
     } else if (currentCoupon.discountType == 'fixed-discount') {
       discountAmount.value =  itemTotalAmount.value < currentCoupon.discountValue ? itemTotalAmount.value :currentCoupon.discountValue ;
@@ -323,6 +324,11 @@ class CartScreenController extends GetxController {
 
   Future<void> onSuccess(response) async {
     try {
+
+      Get.dialog(
+        const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false,
+      );
       // print('aaa');
       // String paymentStatus = response['status']; // From Razorpay response
       // String paymentMethod = response['method']; // From Razorpay response
@@ -369,19 +375,21 @@ class CartScreenController extends GetxController {
         estimatedDeliveryTime: "30 mins", // Dynamically adjust
         paymentStatus: "",
         specialInstructions: instructionController.text,
+        createdAt: DateTime.now(),
+        couponCode: isCouponApplied.value ? coupon.value!.code: null,
+        discount: isCouponApplied.value ? discountAmount.value: null,
       );
 
       // Add the order to Firebase
 
       await DatabaseMethods().addOrder(orderData.toMap()).then((_) {
         clearCart();
-        Get.snackbar("Success", "Order placed successfully!",
-            snackPosition: SnackPosition.BOTTOM);
       });
 
       // Add logic to update the voucher data if a coupon was applied
       if (isCouponApplied.value) {
 
+        // print(1);
         final querySnapshot = await _firestore.collection('Voucher')
             .where('code', isEqualTo: coupon.value!.code.toUpperCase())
             .where('isUsed', isEqualTo: false)
@@ -389,56 +397,97 @@ class CartScreenController extends GetxController {
             .where('isExpired', isEqualTo: false)
             .limit(1) // Limit to 1 document for efficiency
             .get();
+        // print(2);
 
 
         String docId = querySnapshot.docs.first.id;// Use the id from the coupon model
 
+
+// Define the CouponUsage data
+        CouponUsage couponUsage = CouponUsage(
+          orderModel: orderData.toMap(),   // Save the order details
+          orderType: "food",               // Assuming this is a food order
+          appliedOn: DateTime.now(),       // Time of application
+          appliedDiscountAmount: discountAmount.value, // Applied discount
+        );
+
+        // print(3);
+
         // Example of updating voucher usage count and status
         if (coupon.value!.voucherType == 'single-use') {
+          // print(4);
+
           await _firestore.collection('Voucher').doc(docId).update({
             'isUsed': true,
             'isActive': false,
             'usageCount': FieldValue.increment(1),
+            'usedOnOrders': FieldValue.arrayUnion([couponUsage.toMap()]),
           });
-        } else if (coupon.value!.voucherType == 'multi-use') {
+          // print(5);
+
+        }
+        else if (coupon.value!.voucherType == 'multi-use') {
+          try {
+          // print(6);
+          print(docId);
+          print('Coupon usage data: ${couponUsage.toMap()}');
+
           await _firestore.collection('Voucher').doc(docId).update({
             'usageCount': FieldValue.increment(1),
+            'usedOnOrders': FieldValue.arrayUnion([couponUsage.toMap()]),
           });
+          // print(7);
+        } catch (e) {
+      print('Error occurred while updating voucher: $e');
+    }
+
           // Update isUsed if the usage limit is reached
           if (coupon.value!.usageCount + 1 >= (coupon.value!.usageLimit ?? 10)) {
+            // print(8);
+
             await _firestore.collection('Voucher').doc(docId).update({
               'isUsed': true,
               'isActive': false,
-              'usageCount': FieldValue.increment(1),
             });
+            // print(9);
+
           }
-        } else if (coupon.value!.voucherType == 'value-based') {
+          // print(10);
+
+        }
+        else if (coupon.value!.voucherType == 'value-based') {
           // Adjust remaining discount value
 
           if (coupon.value!.remainingDiscountValue! - discountAmount.value <= 0) {
-            print("17");
+            // print("17");
 
             await _firestore.collection('Voucher').doc(docId).update({
               'remainingDiscountValue': FieldValue.increment(
                   -discountAmount.value),
               'isUsed': true,
               'isActive': false,
+              'usedOnOrders': FieldValue.arrayUnion([couponUsage.toMap()]),
 
             });
           } else {
-              print("19");
+              // print("19");
 
               await _firestore.collection('Voucher').doc(docId).update({
                 'remainingDiscountValue': FieldValue.increment(-discountAmount.value),
+                'usedOnOrders': FieldValue.arrayUnion([couponUsage.toMap()]),
+
               });
-              print("20");
+              // print("20");
 
             }
         }
       }
 
-
-
+      Get.back();
+      Get.back();
+      Get.snackbar("Success", "Order placed successfully!",
+          snackPosition: SnackPosition.BOTTOM);
+      // Get.toNamed(Routes.receptionMenu);
 
     } catch (e) {
       // Handle any errors that occur during the order process
@@ -448,7 +497,10 @@ class CartScreenController extends GetxController {
         "Error",
         "Payment Complete!, But Failed to place the order. Contact Staff.",
         snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 5)
       );
+    } finally {
+      Get.back();
     }
   }
 

@@ -206,7 +206,8 @@ class ManageVoucherAdmin extends StatelessWidget {
                                 ),
                                 SizedBox(
                                   width: 4,
-                                ),FilterButton(
+                                ),
+                                FilterButton(
                                   label: "Expired",
                                   isSelected: controller.selectedFilter.value ==
                                       "Expired",

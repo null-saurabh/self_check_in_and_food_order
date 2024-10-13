@@ -43,19 +43,24 @@ class ManageVoucherAdminController extends GetxController {
       return null;
     }
     selectedFilter.value = label;
+    // print(1);
+    // print(label);
 
     if(label == 'None') {
       applyDefaultFilter();
-
     }
     else if (label == 'All') {
       // Show all orders
       voucherList.assignAll(originalVoucherList);
-    } else if (label == "Used"){
+    }
+    else if (label == "Used"){
+      // print(2);
       voucherList.value = originalVoucherList.where((voucher) {
         return voucher.isUsed== true;
       }).toList();
+
     }
+
     else if (label == "Active"){
       voucherList.value = originalVoucherList.where((voucher) {
         return voucher.isActive== true && voucher.isUsed == false && voucher.isExpired == false;
@@ -77,7 +82,7 @@ class ManageVoucherAdminController extends GetxController {
   }
 
   void applyRangeFilters() {
-    voucherList.value = originalVoucherList.where((voucher) {
+    voucherList.value = voucherList.where((voucher) {
       bool matchesVoucherType = true;
       bool matchesDateRange = true;
       bool matchesCategoryType = true;
@@ -124,10 +129,13 @@ class ManageVoucherAdminController extends GetxController {
   void applyDefaultFilter() {
     if (selectedFilter.value == 'None') {
       voucherList.value = originalVoucherList.where((voucher) {
-        return (voucher.isActive== true && voucher.isUsed == false && voucher.isExpired == false) ||
+        return (voucher.isActive == true && voucher.isUsed == false && voucher.isExpired == false) ||
             (voucher.isActive== false && voucher.isUsed == false && voucher.isExpired == false);
       }).toList();
 
+      // print(voucherList.length);
+      //
+      // print(originalVoucherList.length);
       // Ensure orders are sorted by orderDate (latest first)
       update();
     }
@@ -174,6 +182,7 @@ class ManageVoucherAdminController extends GetxController {
       // Updating observable list
       voucherList.assignAll(newList);
       originalVoucherList.assignAll(newList);
+      applyDefaultFilter();
       update();
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch list $e');

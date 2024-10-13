@@ -5,7 +5,7 @@ import 'food_order_model.dart';
 class CouponUsage {
   dynamic orderModel;         // Can be either FoodOrderModel or BookingOrderModel
   String orderType;           // To specify whether it's a "food" or "booking" order
-  DateTime appliedOn;         // Date and time when the coupon was applied
+  dynamic appliedOn;         // Date and time when the coupon was applied
   double appliedDiscountAmount;
 
   CouponUsage({
@@ -16,14 +16,24 @@ class CouponUsage {
   });
 
   // Convert to map for storing in Firebase
+  // Map<String, dynamic> toMap() {
+  //   return {
+  //     'orderModel': orderModel.toMap(),   // Assuming both models have toMap()
+  //     'orderType': orderType,
+  //     'appliedOn': appliedOn,
+  //     'appliedDiscountAmount': appliedDiscountAmount,
+  //   };
+  // }
+
   Map<String, dynamic> toMap() {
     return {
-      'orderModel': orderModel.toMap(),   // Assuming both models have toMap()
+      'orderModel': orderModel,
       'orderType': orderType,
       'appliedOn': appliedOn,
       'appliedDiscountAmount': appliedDiscountAmount,
     };
   }
+
 
   // Factory method to create from Firebase map
   factory CouponUsage.fromMap(Map<String, dynamic> data) {
