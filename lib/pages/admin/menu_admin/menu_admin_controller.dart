@@ -8,6 +8,13 @@ class MenuAdminController extends GetxController {
   RxList<MenuItemModel> allMenuItems = RxList<MenuItemModel>();
   List<MenuItemModel> originalMenuItems = []; // Store original data
 
+  ScrollController scrollController = ScrollController();
+  TextEditingController filterMinItemPrice = TextEditingController();
+  TextEditingController filterMaxItemPrice = TextEditingController();
+  RxnString selectedVegFilter = RxnString();
+  RxnString selectedAvailableFilter = RxnString();
+
+
   var isLoading = true.obs; // Loading state
 
   @override
@@ -35,8 +42,7 @@ class MenuAdminController extends GetxController {
     }
   }
 
-
-  void filterMenuItems(String query) {
+  void searchFilterMenuItems(String query) {
     if (query.isEmpty) {
       allMenuItems.value = List.from(originalMenuItems); // Restore the original data
     } else {
@@ -47,6 +53,52 @@ class MenuAdminController extends GetxController {
     update();
   }
 
+  void clearFilter(){
+
+    filterMaxItemPrice.clear();
+    filterMinItemPrice.clear();
+    selectedVegFilter.value = null;
+    selectedAvailableFilter.value = null;
+
+    allMenuItems.value = List.from(originalMenuItems);
+    update();
+  }
+
+
+  void applyFilters() {
+    allMenuItems.value = originalMenuItems.where((order) {
+      bool matchesOrderValue = true;
+      bool matchesVeg = true;
+      bool matchesAvailable = true;
+
+      // Check if the min order value is provided
+      if (filterMinItemPrice.text.isNotEmpty) {
+        double minValue = double.tryParse(filterMinItemPrice.text) ?? 0.0;
+        matchesOrderValue = order.price >= minValue;
+      }
+
+      // Check if the max order value is provided
+      if (filterMaxItemPrice.text.isNotEmpty) {
+        double maxValue = double.tryParse(filterMaxItemPrice.text) ?? 1000.0;
+        matchesOrderValue = matchesOrderValue && order.price <= maxValue;
+      }
+
+      // Check if the start date is provided
+      if (selectedAvailableFilter.value != null && selectedAvailableFilter.value!.isNotEmpty) {
+        matchesAvailable = order.isAvailable == (selectedAvailableFilter.value == "On");
+      }
+
+      // Check if the end date is provided
+      if (selectedVegFilter.value != null && selectedVegFilter.value!.isNotEmpty) {
+        matchesVeg = order.isVeg == (selectedVegFilter.value == "Veg");
+      }
+
+      return matchesOrderValue && matchesVeg && matchesAvailable;
+    }).toList();
+
+    // Sort the filtered orders by date (latest first)
+    update();
+  }
 
 
   Future<void> editMenuItem(MenuItemModel item) async {
@@ -133,8 +185,6 @@ class MenuAdminController extends GetxController {
       }
     }
   }
-
-
 
   Future<void> toggleAvailability(MenuItemModel item, bool isAvailable) async {
     // Store the previous state to revert if needed

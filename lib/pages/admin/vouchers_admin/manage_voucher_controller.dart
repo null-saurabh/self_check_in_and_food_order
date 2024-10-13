@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:wandercrew/models/voucher_model.dart';
 
 class ManageVoucherAdminController extends GetxController {
@@ -9,8 +10,22 @@ class ManageVoucherAdminController extends GetxController {
   RxList<CouponModel> voucherList = <CouponModel>[].obs;
   RxList<CouponModel> originalVoucherList = <CouponModel>[].obs;
 
+  ScrollController scrollController = ScrollController();
+
+  TextEditingController filterFromDate = TextEditingController();
+  TextEditingController filterToDate = TextEditingController();
+  RxList<String> selectedCategory = <String>[].obs;
+  RxList<String> selectedVoucherType = <String>[].obs;
+  RxList<String> selectedDiscountType = <String>[].obs;
+
+
+  RxInt activeFilterCount = 0.obs;
+
   var isLoading = true.obs; // Loading state
 
+
+  var selectedFilter = 'None'
+      .obs;
 
   @override
   void onInit() {
@@ -18,7 +33,107 @@ class ManageVoucherAdminController extends GetxController {
     fetchVoucherList(); // Fetch data when controller is initialized
   }
 
-  void filterVoucher(String query) {
+
+  void filterOrdersByStatus({required String label, bool? isFilterButton}) {
+    if (selectedFilter.value == label && isFilterButton == null) {
+      selectedFilter.value = "None";
+      applyDefaultFilter();
+      applyRangeFilters();
+      update();
+      return null;
+    }
+    selectedFilter.value = label;
+
+    if(label == 'None') {
+      applyDefaultFilter();
+
+    }
+    else if (label == 'All') {
+      // Show all orders
+      voucherList.assignAll(originalVoucherList);
+    } else if (label == "Used"){
+      voucherList.value = originalVoucherList.where((voucher) {
+        return voucher.isUsed== true;
+      }).toList();
+    }
+    else if (label == "Active"){
+      voucherList.value = originalVoucherList.where((voucher) {
+        return voucher.isActive== true && voucher.isUsed == false && voucher.isExpired == false;
+      }).toList();
+    }
+    else if (label == "Disabled"){
+      voucherList.value = originalVoucherList.where((voucher) {
+        return voucher.isActive== false && voucher.isUsed == false && voucher.isExpired == false;
+      }).toList();
+    }
+    else if (label == "Expired"){
+      voucherList.value = originalVoucherList.where((voucher) {
+        return voucher.isUsed == false && voucher.isExpired == true;
+      }).toList();
+    }
+
+    applyRangeFilters();
+    update();
+  }
+
+  void applyRangeFilters() {
+    voucherList.value = originalVoucherList.where((voucher) {
+      bool matchesVoucherType = true;
+      bool matchesDateRange = true;
+      bool matchesCategoryType = true;
+      bool matchesDiscountType = true;
+
+      // Check if the min order value is provided
+      if (selectedVoucherType.isNotEmpty) {
+        matchesVoucherType = selectedVoucherType.contains(voucher.voucherType);
+      }
+
+      // Check if the max order value is provided
+      if (selectedDiscountType.isNotEmpty) {
+        matchesDiscountType = selectedDiscountType.contains(voucher.discountType);
+      }
+
+      if (selectedCategory.isNotEmpty) {
+        matchesDiscountType = selectedCategory.contains(voucher.applicableCategories.last);
+      }
+
+      // Check if the start date is provided
+      if (filterFromDate.text.isNotEmpty) {
+        DateTime start = DateFormat("dd-MMM-yy").parse(filterFromDate.text);
+        matchesDateRange = voucher.validFrom.isAfter(start) ||
+            voucher.validFrom.isAtSameMomentAs(start) ||
+            (voucher.validUntil.isAfter(start) && voucher.validFrom.isBefore(start));
+      }
+
+      // Check if the end date is provided
+      if (filterToDate.text.isNotEmpty) {
+        DateTime toDate = DateFormat("dd-MMM-yy").parse(filterToDate.text);
+        matchesDateRange = matchesDateRange &&
+            (voucher.validUntil.isBefore(toDate) ||
+                voucher.validUntil.isAtSameMomentAs(toDate));
+      }
+
+      return matchesVoucherType && matchesDateRange && matchesCategoryType && matchesDiscountType;
+    }).toList();
+
+    // Sort the filtered orders by date (latest first)
+    update();
+  }
+
+
+  void applyDefaultFilter() {
+    if (selectedFilter.value == 'None') {
+      voucherList.value = originalVoucherList.where((voucher) {
+        return (voucher.isActive== true && voucher.isUsed == false && voucher.isExpired == false) ||
+            (voucher.isActive== false && voucher.isUsed == false && voucher.isExpired == false);
+      }).toList();
+
+      // Ensure orders are sorted by orderDate (latest first)
+      update();
+    }
+  }
+
+  void searchFilterVoucher(String query) {
     if (query.isEmpty) {
       voucherList.value = List.from(originalVoucherList); // Restore the original data
     } else {
@@ -38,6 +153,9 @@ class ManageVoucherAdminController extends GetxController {
   }
 
 
+
+
+
   Future<void> fetchVoucherList() async {
     try {
       isLoading.value = true; // Start loading
@@ -52,7 +170,6 @@ class ManageVoucherAdminController extends GetxController {
         return CouponModel.fromMap(
             data); // Using fromMap factory constructor
       }).toList();
-      // print(newList);
 
       // Updating observable list
       voucherList.assignAll(newList);
@@ -60,10 +177,8 @@ class ManageVoucherAdminController extends GetxController {
       update();
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch list $e');
-      // print(e);
     }
     finally {
-      // print("Aaaaa");
       isLoading.value = false; // End loading
     }
   }
@@ -198,7 +313,9 @@ class ManageVoucherAdminController extends GetxController {
 
           // Delete the document using the retrieved document ID
           await FirebaseFirestore.instance.collection("Voucher").doc(docId).delete();
+
           voucherList.remove(voucherData);
+          originalVoucherList.remove(voucherData);
           update();
           Get.back();
 

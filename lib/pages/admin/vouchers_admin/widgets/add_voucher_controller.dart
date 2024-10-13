@@ -200,6 +200,14 @@ class AddVoucherAdminController extends GetxController {
               couponController.update();
             }
 
+            // Update locally
+            int index2 = couponController.originalVoucherList
+                .indexWhere((coupon) => coupon.voucherId == couponId);
+            if (index2 != -1) {
+              couponController.originalVoucherList[index2] = newCoupon;
+              couponController.update();
+            }
+
             Get.back(); // Close loading dialog
             Get.back(); // Return to previous page
 

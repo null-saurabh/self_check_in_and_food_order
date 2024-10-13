@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wandercrew/pages/admin/orders_admin/widgets/order_filter_alert.dart';
 import 'package:wandercrew/pages/admin/orders_admin/widgets/single_order.dart';
+import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/filter_button.dart';
 import '../../../widgets/widget_support.dart';
 import 'admin_order_controller.dart';
+
 
 class OrdersListScreen extends StatelessWidget {
   const OrdersListScreen({super.key});
@@ -54,36 +57,93 @@ class OrdersListScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 20, bottom: 12),
                         child: Column(
                           children: [
-                            SizedBox(
-                              height: 40,
-                              child: TextField(
-                                onChanged: (value) =>
-                                    controller.SearchFilterOrderItems(
-                                        value), // Call the search function
-                                decoration: InputDecoration(
-                                  hintText: "Search by name, number, orderId",
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                  prefixIcon:
-                                      Icon(Icons.search, color: Colors.grey),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide:
-                                        BorderSide(color: Color(0xffEDCC23)),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide:
-                                        BorderSide(color: Color(0xffEDCC23)),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide:
-                                        BorderSide(color: Color(0xffEDCC23)),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 40,
+                                    child: TextField(
+                                      onChanged: (value) =>
+                                          controller.SearchFilterOrderItems(
+                                              value), // Call the search function
+                                      decoration: InputDecoration(
+                                        hintText: "Search by name, number, orderId",
+                                        hintStyle: TextStyle(color: Colors.grey),
+                                        prefixIcon:
+                                            Icon(Icons.search, color: Colors.grey),
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                          borderSide:
+                                              BorderSide(color: Color(0xffEDCC23)),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                          borderSide:
+                                              BorderSide(color: Color(0xffEDCC23)),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                          borderSide:
+                                              BorderSide(color: Color(0xffEDCC23)),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                                SizedBox(width: 8,),
+                                Stack(
+                                  children: [
+                                    Obx(() {
+
+                                      // Only show the circle if there are active filters
+                                      if (controller.activeFilterCount.value > 0) {
+                                        return Positioned(
+                                          right: 4,  // Adjust this to position it properly
+                                          top: -2,    // Adjust this to position it properly
+                                          child: Container(
+                                            padding: EdgeInsets.all(6),
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Text(
+                                              controller.activeFilterCount.value.toString(),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        return SizedBox.shrink(); // Return empty widget if no filters are active
+                                      }
+                                    }),
+                                    AppElevatedButton(
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                                      width: 40,
+                                      showBorder: true,
+                                      backgroundColor: Colors.transparent,
+                                      borderColor: Color(0xffEDCC23),
+                                      borderWidth: 1,
+                                      titleTextColor: Colors.black,
+                                      child: Icon(Icons.filter_alt, color: Colors.black, size: 22),
+
+                                      onPressed: (){
+                                        showDialog(
+                                            context: Get.context!,
+                                            builder: (BuildContext context) {
+                                              return OrderFilterAlert();
+                                            }
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                )
+                              ],
                             ),
                             SizedBox(
                               height: 8,
@@ -96,7 +156,8 @@ class OrdersListScreen extends StatelessWidget {
                                       controller.selectedFilter.value == "All",
                                   onTap: () {
                                     controller.filterOrdersByStatus(
-                                        "All", "All");
+                                        label:"All");
+
                                   },
                                 ),
                                 SizedBox(
@@ -108,7 +169,7 @@ class OrdersListScreen extends StatelessWidget {
                                       "Pending",
                                   onTap: () {
                                     controller.filterOrdersByStatus(
-                                        "Pending", "Pending");
+                                        label: "Pending");
                                   },
                                 ),
                                 SizedBox(
@@ -120,7 +181,7 @@ class OrdersListScreen extends StatelessWidget {
                                       "Processing",
                                   onTap: () {
                                     controller.filterOrdersByStatus(
-                                        "Confirmed", "Processing");
+                                        label:"Processing");
                                   },
                                 ),
                                 SizedBox(
@@ -132,7 +193,7 @@ class OrdersListScreen extends StatelessWidget {
                                       'Completed',
                                   onTap: () {
                                     controller.filterOrdersByStatus(
-                                        "Delivered", "Completed");
+                                        label:"Completed");
                                   },
                                 ),
                               ],

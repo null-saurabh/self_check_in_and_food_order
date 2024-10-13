@@ -12,7 +12,13 @@ class SingleOrder extends StatelessWidget {
   final VoidCallback initiateRefund;
   final VoidCallback onCallPressed;
 
-  const SingleOrder({super.key, required this.orderData, required this.markAsConfirm, required this.markAsDelivered, required this.initiateRefund, required this.onCallPressed});
+  const SingleOrder(
+      {super.key,
+      required this.orderData,
+      required this.markAsConfirm,
+      required this.markAsDelivered,
+      required this.initiateRefund,
+      required this.onCallPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +40,8 @@ class SingleOrder extends StatelessWidget {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 12),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16.0, horizontal: 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -51,7 +58,9 @@ class SingleOrder extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 8,),
+                      SizedBox(
+                        height: 8,
+                      ),
                       Text(
                         orderData.dinerName,
                         style: AppWidget.black18Text500Style(),
@@ -66,42 +75,49 @@ class SingleOrder extends StatelessWidget {
                             orderData.contactNumber,
                             style: AppWidget.black16Text500Style(),
                           ),
-                          SizedBox(width: 4,),
+                          SizedBox(
+                            width: 4,
+                          ),
                           GestureDetector(
                             onTap: onCallPressed,
-                            child: Icon(Icons.call,color: Colors.green,size: 20,),
+                            child: Icon(
+                              Icons.call,
+                              color: Colors.green,
+                              size: 20,
+                            ),
                           )
                         ],
                       ),
-                      if(orderData.deliveryAddress.isNotEmpty)
-
-                      Row(
-                        children: [
-                          Text(
-                            'Table/Room: ',
-                            style: AppWidget.black16Text400Style(),
-                          ),
-                          Text(
-                            orderData.deliveryAddress,
-                            style: AppWidget.black16Text500Style(),
-                          ),
-                        ],
+                      if (orderData.deliveryAddress.isNotEmpty)
+                        Row(
+                          children: [
+                            Text(
+                              'Table/Room: ',
+                              style: AppWidget.black16Text400Style(),
+                            ),
+                            Text(
+                              orderData.deliveryAddress,
+                              style: AppWidget.black16Text500Style(),
+                            ),
+                          ],
+                        ),
+                      if (orderData.specialInstructions != null &&
+                          orderData.specialInstructions!.isNotEmpty)
+                        Row(
+                          children: [
+                            Text(
+                              'Instruction: ',
+                              style: AppWidget.black16Text400Style(),
+                            ),
+                            Text(
+                              orderData.specialInstructions!,
+                              style: AppWidget.black16Text500Style(),
+                            ),
+                          ],
+                        ),
+                      SizedBox(
+                        height: 12,
                       ),
-                      if(orderData.specialInstructions != null && orderData.specialInstructions!.isNotEmpty)
-                      Row(
-                        children: [
-                          Text(
-                            'Instruction: ',
-                            style: AppWidget.black16Text400Style(),
-                          ),
-                          Text(
-                            orderData.specialInstructions!,
-                            style: AppWidget.black16Text500Style(),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 12,),
-
                       Text(
                         orderData.items
                             .map((item) =>
@@ -109,66 +125,101 @@ class SingleOrder extends StatelessWidget {
                             .join('\n'),
                         style: AppWidget.black16Text500Style(),
                       ),
-                      SizedBox(height: 12,),
-
+                      SizedBox(
+                        height: 12,
+                      ),
                       IntrinsicHeight(
                         child: Row(
                           children: [
-                            Text("\u{20B9}${orderData.totalAmount.toString()}",style: AppWidget.black16Text500Style(color: Color(0xff2563EB),)),
+                            Text("\u{20B9}${orderData.totalAmount.toString()}",
+                                style: AppWidget.black16Text500Style(
+                                  color: Color(0xff2563EB),
+                                )),
                             VerticalDivider(
-                              color: Colors.black,  // You can change the color as needed
-                              thickness: 1,         // Thickness of the divider
-                              width: 8,            // The space occupied by the divider
+                              color: Colors
+                                  .black, // You can change the color as needed
+                              thickness: 1, // Thickness of the divider
+                              width: 8, // The space occupied by the divider
                             ),
-                            Text(DateTimeUtils.formatDateTime(DateTime.parse(orderData.orderDate),format: 'dd MMM HH:mm a'),style: AppWidget.black16Text400Style(),),
-                            ],
+                            Text(
+                              DateTimeUtils.formatDateTime(
+                                  DateTime.parse(orderData.orderDate),
+                                  format: 'dd MMM HH:mm a'),
+                              style: AppWidget.black16Text400Style(),
+                            ),
+                          ],
                         ),
                       ),
                       Row(
                         children: [
-                          Text(orderData.orderStatusHistory.last.status,style: AppWidget.black16Text500Style(color: orderData.orderStatusHistory.last.status == "Delivered" ? Colors.green : orderData.orderStatusHistory.last.status == "Confirmed" ? Color(0xffFFB700) : Colors.red),),
-                          Text(" (${DateTimeUtils.formatDateTime(orderData.orderStatusHistory.last.updatedTime,format: 'HH:mm a')})",style: AppWidget.black16Text500Style(),),
-
+                          Text(
+                            orderData.orderStatusHistory.last.status,
+                            style: AppWidget.black16Text500Style(
+                                color:
+                                    orderData.orderStatusHistory.last.status ==
+                                            "Delivered"
+                                        ? Colors.green
+                                        : orderData.orderStatusHistory.last
+                                                    .status ==
+                                                "Confirmed"
+                                            ? Color(0xffFFB700)
+                                            : Colors.red),
+                          ),
+                          Text(
+                            " (${DateTimeUtils.formatDateTime(orderData.orderStatusHistory.last.updatedTime, format: 'HH:mm a')})",
+                            style: AppWidget.black16Text500Style(),
+                          ),
                         ],
                       ),
-                      SizedBox(height: 12,),
+                      SizedBox(
+                        height: 12,
+                      ),
                       Row(
                         children: [
-                          if(orderData.orderStatusHistory.last.status != "Delivered") ...[
-                          AppElevatedButton(
-                            backgroundColor: Colors.black,
-                            title: orderData.orderStatusHistory.last.status == "Pending" ? "Accept Order" : orderData.orderStatusHistory.last.status =="Confirmed" ? "Mark as Delivered" : "Error",
-                            titleTextColor: Colors.white,
-                            onPressed: (){
-                              print("confirm 1");
-                              if (orderData.orderStatusHistory.last.status == "Pending") {
-                                print("confirm 2");
-                                markAsConfirm();
-                              } else if(orderData.orderStatusHistory.last.status == "Confirmed") {
-                                print("confirm 3");
-                                markAsDelivered();
-                              }
-                            },
-                          ),
-                          SizedBox(width: 8,),
+                          if (orderData.orderStatusHistory.last.status !=
+                              "Delivered") ...[
+                            AppElevatedButton(
+                              backgroundColor: Colors.black,
+                              title: orderData.orderStatusHistory.last.status ==
+                                      "Pending"
+                                  ? "Accept Order"
+                                  : orderData.orderStatusHistory.last.status ==
+                                          "Confirmed"
+                                      ? "Mark as Delivered"
+                                      : "Error",
+                              titleTextColor: Colors.white,
+                              onPressed: () {
+                                print("confirm 1");
+                                if (orderData.orderStatusHistory.last.status ==
+                                    "Pending") {
+                                  print("confirm 2");
+                                  markAsConfirm();
+                                } else if (orderData
+                                        .orderStatusHistory.last.status ==
+                                    "Confirmed") {
+                                  print("confirm 3");
+                                  markAsDelivered();
+                                }
+                              },
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
                           ],
                           AppElevatedButton(
                             showBorder: true,
                             backgroundColor: Colors.transparent,
                             title: "Refund",
                             titleTextColor: Colors.red,
-                            onPressed: (){
+                            onPressed: () {
                               initiateRefund();
                             },
                           ),
                         ],
                       )
-
                     ],
                   ),
-                )
-
-                ),
+                )),
             Positioned(
               top: 10,
               right: 10,
@@ -178,16 +229,22 @@ class SingleOrder extends StatelessWidget {
                   color: orderData.orderStatusHistory.last.status == "Pending"
                       ? Colors.red
                       : orderData.orderStatusHistory.last.status == "Confirmed"
-                      ? Color(0xffFFB700) // Yellow for preparing
-                      : Colors.transparent,
+                          ? Color(0xffFFB700) // Yellow for preparing
+                          : orderData.orderStatusHistory.last.status ==
+                                  "Delivered"
+                              ? Colors.green
+                              : Colors.orange,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   orderData.orderStatusHistory.last.status == "Pending"
                       ? "Pending"
                       : orderData.orderStatusHistory.last.status == "Confirmed"
-                      ? "Preparing"
-                      : "",
+                          ? "Preparing"
+                          : orderData.orderStatusHistory.last.status ==
+                                  "Delivered"
+                              ? "Completed"
+                              : "Refunded",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -195,10 +252,14 @@ class SingleOrder extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 16,)
+            SizedBox(
+              height: 16,
+            )
           ],
         ),
-        SizedBox(height: 12,)
+        SizedBox(
+          height: 12,
+        )
       ],
     );
   }

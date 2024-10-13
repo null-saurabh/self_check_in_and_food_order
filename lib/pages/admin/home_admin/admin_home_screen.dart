@@ -13,7 +13,6 @@ class AdminHomeScreen extends StatelessWidget {
           backgroundColor: const Color(0xffFDFDED),
           body: Container(
             decoration: BoxDecoration(
-
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
 import '../../../models/self_checking_model.dart';
@@ -14,13 +15,74 @@ import 'dart:html' as html;
 import 'package:pdf/widgets.dart' as pw;
 
 class CheckInListController extends GetxController {
+
+
+
   @override
   void onInit() {
     super.onInit();
     fetchCheckInList(); // Fetch data when controller is initialized
   }
 
+  TextEditingController filterFromDate = TextEditingController();
+  TextEditingController filterToDate = TextEditingController();
+
+  RxInt activeFilterCount = 0.obs;
+
   var isLoading = true.obs; // Loading state
+
+  RxList<SelfCheckInModel> checkInList =
+      <SelfCheckInModel>[].obs; // Using observable list
+  RxMap<String, List<SelfCheckInModel>> groupedCheckIns =
+      <String, List<SelfCheckInModel>>{}.obs;
+
+  RxMap<String, List<SelfCheckInModel>> originalGroupedCheckIns =
+      <String, List<SelfCheckInModel>>{}.obs;
+
+  void applyRangeFilters() {
+    // Create a new filtered map
+    RxMap<String, List<SelfCheckInModel>> filteredCheckIns = <String, List<SelfCheckInModel>>{}.obs;
+
+    // Loop through the original groupedCheckIns map
+    originalGroupedCheckIns.forEach((key, checkInList) {
+      // Apply filters to each list of check-ins
+      List<SelfCheckInModel> filteredList = checkInList.where((checkIn) {
+        bool matchesDateRange = true;
+
+        // Check if the start date is provided
+        if (filterFromDate.text.isNotEmpty) {
+          DateTime start = DateFormat("dd-MMM-yy").parse(filterFromDate.text);
+          matchesDateRange = checkIn.createdAt.isAfter(start);
+        }
+
+        // Check if the end date is provided
+        if (filterToDate.text.isNotEmpty) {
+          DateTime end = DateFormat("dd-MMM-yy").parse(filterToDate.text);
+          matchesDateRange = matchesDateRange && checkIn.createdAt.isBefore(end.add(Duration(days: 1)));
+        }
+
+        return matchesDateRange;
+      }).toList();
+
+      // Only add the key if there are any matching check-ins
+      if (filteredList.isNotEmpty) {
+        filteredCheckIns[key] = filteredList;
+      }
+    });
+
+    // Assign the filtered map to groupedCheckIns
+    groupedCheckIns.value = filteredCheckIns;
+
+    // Call update to refresh UI or dependent components
+    update();
+  }
+
+
+
+
+
+
+
 
 
   void makePhoneCall(String number) {
@@ -28,10 +90,11 @@ class CheckInListController extends GetxController {
     html.window.open('tel:$phoneNumber', '_self');
   }
 
-  void filterCheckInList(String query) {
+  void searchFilterCheckInList(String query) {
     if (query.isEmpty) {
       // Restore the original grouped check-ins when the query is empty
       groupedCheckIns.assignAll(originalGroupedCheckIns);
+      applyRangeFilters();
     } else {
       final queryLower = query.toLowerCase();
 
@@ -56,19 +119,12 @@ class CheckInListController extends GetxController {
 
       // Update the observable with the filtered data
       groupedCheckIns.assignAll(filteredGroupedData);
+      applyRangeFilters();
+
     }
 
     update(); // Update UI to reflect changes
   }
-
-
-  RxList<SelfCheckInModel> checkInList =
-      <SelfCheckInModel>[].obs; // Using observable list
-  RxMap<String, List<SelfCheckInModel>> groupedCheckIns =
-      <String, List<SelfCheckInModel>>{}.obs;
-
-  RxMap<String, List<SelfCheckInModel>> originalGroupedCheckIns =
-      <String, List<SelfCheckInModel>>{}.obs;
 
   Future<void> fetchCheckInList() async {
     try {

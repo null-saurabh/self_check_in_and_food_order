@@ -17,8 +17,13 @@ class ManageUserAdminController extends GetxController {
 
   RxList<AdminUserModel> userDataList = <AdminUserModel>[].obs;
   RxList<AdminUserModel> originalUserDataList = <AdminUserModel>[].obs;
+  ScrollController scrollController = ScrollController();
+
 
   var isLoading = true.obs; // Loading state
+
+  var selectedFilter = 'All'
+      .obs;
 
   @override
   void onInit() {
@@ -26,7 +31,7 @@ class ManageUserAdminController extends GetxController {
     fetchUserDataList(); // Fetch data when controller is initialized
   }
 
-  void filterUsers(String query) {
+  void searchFilterUsers(String query) {
     if (query.isEmpty) {
       userDataList.value = List.from(originalUserDataList); // Restore the original data
     } else {
@@ -41,6 +46,25 @@ class ManageUserAdminController extends GetxController {
     }
     update();
   }
+
+  void filterOrdersByStatus({required String label}) {
+
+    selectedFilter.value = label;
+
+    if (label == 'All') {
+      userDataList.assignAll(originalUserDataList);
+    }
+
+    else {
+      userDataList.value = originalUserDataList.where((userData) {
+        return userData.isOnline == true;
+      }).toList();
+    }
+
+    // Ensure orders are sorted by orderDate (latest first)
+    update();
+  }
+
 
   void makePhoneCall(String number) {
     String phoneNumber = '$number';
