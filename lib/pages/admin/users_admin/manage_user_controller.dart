@@ -17,7 +17,6 @@ class ManageUserAdminController extends GetxController {
 
   RxList<AdminUserModel> userDataList = <AdminUserModel>[].obs;
   RxList<AdminUserModel> originalUserDataList = <AdminUserModel>[].obs;
-  ScrollController scrollController = ScrollController();
 
 
   var isLoading = true.obs; // Loading state

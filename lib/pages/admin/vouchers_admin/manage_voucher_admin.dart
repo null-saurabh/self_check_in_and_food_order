@@ -287,20 +287,16 @@ class ManageVoucherAdmin extends StatelessWidget {
               Obx(() {
                 if (controller.voucherList.isNotEmpty) {
                   return Expanded(
-                    child: Scrollbar(
-                      controller: controller.scrollController,
-                      child: ListView.builder(
-                        padding: const EdgeInsets.only(
-                            left: 16.0, right: 16, top: 8, bottom: 16),
-                        controller: controller.scrollController,
-                        itemCount: controller.voucherList.length,
-                        itemBuilder: (context, index) {
-                          final data = controller.voucherList.elementAt(index);
-                          return VoucherItemAdmin(
-                            voucherData: data,
-                          );
-                        },
-                      ),
+                    child: ListView.builder(
+                      padding: const EdgeInsets.only(
+                          left: 16.0, right: 16, top: 8, bottom: 16),
+                      itemCount: controller.voucherList.length,
+                      itemBuilder: (context, index) {
+                        final data = controller.voucherList.elementAt(index);
+                        return VoucherItemAdmin(
+                          voucherData: data,
+                        );
+                      },
                     ),
                   );
                 } else if (controller.isLoading.value) {

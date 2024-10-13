@@ -148,23 +148,21 @@ class CheckInListAdmin extends StatelessWidget {
               Obx(() {
                 if (controller.checkInList.isNotEmpty) {
                   return Expanded(
-                    child: Padding(
+                    child: ListView.builder(
                       padding: const EdgeInsets.only(
                           left: 16.0, right: 16, top: 8, bottom: 16),
-                      child: ListView.builder(
-                        itemCount: controller.groupedCheckIns.length,
-                        itemBuilder: (context, index) {
-                          // print(controller.groupedCheckIns.length);
-                          final date = controller.groupedCheckIns.keys
-                              .elementAt(index);
-                          final checkInAtDate =
-                          controller.groupedCheckIns[date]!;
-                          return CheckInDateSection(
-                            date: date,
-                            checkInAtDate: checkInAtDate,
-                          );
-                        },
-                      ),
+                      itemCount: controller.groupedCheckIns.length,
+                      itemBuilder: (context, index) {
+                        // print(controller.groupedCheckIns.length);
+                        final date = controller.groupedCheckIns.keys
+                            .elementAt(index);
+                        final checkInAtDate =
+                        controller.groupedCheckIns[date]!;
+                        return CheckInDateSection(
+                          date: date,
+                          checkInAtDate: checkInAtDate,
+                        );
+                      },
                     ),
                   );
                 } else if (controller.isLoading.value) {

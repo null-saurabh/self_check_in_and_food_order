@@ -184,25 +184,20 @@ class ManageUserAdmin extends StatelessWidget {
                                 height: 8,
                               ),
                               Expanded(
-                                child: Scrollbar(
-                                  controller: controller.scrollController,
-                                  // thumbVisibility: true,
-                                  child: ListView.builder(
-                                    padding: const EdgeInsets.only(
-                                        right:16.0),
-                                    // controller: controller2,
-                                    controller: controller.scrollController,
-                                    shrinkWrap: true,
-                                    itemCount: controller.userDataList.length,
-                                    itemBuilder: (context, index) {
-                                      // print(controller.groupedCheckIns.length);
-                                      final data = controller.userDataList
-                                          .elementAt(index);
-                                      return UserDataItemAdmin(
-                                        userData: data,
-                                      );
-                                    },
-                                  ),
+                                child: ListView.builder(
+                                  padding: const EdgeInsets.only(
+                                      right:16.0),
+                                  // controller: controller2,
+                                  shrinkWrap: true,
+                                  itemCount: controller.userDataList.length,
+                                  itemBuilder: (context, index) {
+                                    // print(controller.groupedCheckIns.length);
+                                    final data = controller.userDataList
+                                        .elementAt(index);
+                                    return UserDataItemAdmin(
+                                      userData: data,
+                                    );
+                                  },
                                 ),
                               ),
                             ],

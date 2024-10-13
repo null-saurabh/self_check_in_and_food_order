@@ -182,42 +182,29 @@ class MenuAdminScreen extends StatelessWidget {
                 Obx(() {
                   if (controller.allMenuItems.isNotEmpty) {
                     return Expanded(
-                      child: Container(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 16.0, right: 16, top: 8, bottom: 16),
-
-                          // padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: ListView.builder(
-                                  itemCount: controller.allMenuItems.length,
-                                  itemBuilder: (context, index) {
-                                    return MenuItemWidget(
-                                      menuItem: controller.allMenuItems[index],
-                                      onEdit: () => controller.editMenuItem(
-                                          controller.allMenuItems[index]),
-                                      onDelete: () => controller.deleteMenuItem(
-                                          controller.allMenuItems[index]),
-                                      onToggleAvailability: (isAvailable) =>
-                                          controller.toggleAvailability(
-                                              controller.allMenuItems[index],
-                                              isAvailable),
-                                      onEditPrice: () =>
-                                          controller.editMenuItemPrice(context,
-                                              controller.allMenuItems[index]),
-                                      onEditNote: () =>
-                                          controller.editMenuItemNote(context,
-                                              controller.allMenuItems[index]),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(
+                            left: 16.0, right: 16, top: 8, bottom: 16),
+                        itemCount: controller.allMenuItems.length,
+                        itemBuilder: (context, index) {
+                          return MenuItemWidget(
+                            menuItem: controller.allMenuItems[index],
+                            onEdit: () => controller.editMenuItem(
+                                controller.allMenuItems[index]),
+                            onDelete: () => controller.deleteMenuItem(
+                                controller.allMenuItems[index]),
+                            onToggleAvailability: (isAvailable) =>
+                                controller.toggleAvailability(
+                                    controller.allMenuItems[index],
+                                    isAvailable),
+                            onEditPrice: () =>
+                                controller.editMenuItemPrice(context,
+                                    controller.allMenuItems[index]),
+                            onEditNote: () =>
+                                controller.editMenuItemNote(context,
+                                    controller.allMenuItems[index]),
+                          );
+                        },
                       ),
                     );
                   } else if (controller.isLoading.value) {
