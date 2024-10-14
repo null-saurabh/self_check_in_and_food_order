@@ -5,12 +5,14 @@ class FilterButton extends StatelessWidget {
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
+  final TextStyle? selectedTextStyle;
+  final TextStyle? notSelectedTextStyle;
 
   const FilterButton({
     Key? key,
     required this.label,
     required this.isSelected,
-    required this.onTap,
+    required this.onTap, this.selectedTextStyle, this.notSelectedTextStyle,
   }) : super(key: key);
 
   @override
@@ -28,7 +30,7 @@ class FilterButton extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: isSelected ? AppWidget.black12Text600Style() : AppWidget.black12Text400Style(),
+          style: isSelected ? selectedTextStyle != null ? selectedTextStyle : AppWidget.black12Text600Style() : selectedTextStyle != null ? notSelectedTextStyle :AppWidget.black12Text400Style(),
         ),
       ),
     );

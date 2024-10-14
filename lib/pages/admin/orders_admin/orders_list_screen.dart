@@ -153,7 +153,7 @@ class OrdersListScreen extends StatelessWidget {
                                 FilterButton(
                                   label: "All",
                                   isSelected:
-                                      controller.selectedFilter.value == "All",
+                                  controller.selectedFilter.value == "All",
                                   onTap: () {
                                     controller.filterOrdersByStatus(
                                         label:"All");

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 class ElevatedContainer extends StatelessWidget {
   final Widget child;
-
-  const ElevatedContainer({required this.child});
+  final double? height;
+  const ElevatedContainer({required this.child, this.height});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,

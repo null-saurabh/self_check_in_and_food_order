@@ -94,109 +94,7 @@ class MenuScreenController extends GetxController {
 
 
 
-  // void scrollToCategory(int targetIndex) {
-  //   // Cancel any previous scroll requests
-  //   if (_scrollDebounce != null && _scrollDebounce!.isActive) {
-  //     _scrollDebounce!.cancel();
-  //   }
-  //
-  //   isScrollLocked.value = true;
-  //   calculateSectionOffsets();
-  //
-  //   int retryCount = 0; // Track the number of retries
-  //   const int maxRetries = 25; // Maximum number of retries to avoid endless scrolling
-  //
-  //   // Debounce the scroll action to avoid multiple triggers in a short time
-  //   _scrollDebounce = Timer(const Duration(milliseconds: 300), () {
-  //     // Define a helper function to scroll incrementally
-  //     void scrollIncrementally(int currentIndex) {
-  //       // print("in scroll $currentIndex, $targetIndex");
-  //       // Check retry count to avoid endless scrolls
-  //       if (retryCount > maxRetries) {
-  //         // If exceeded max retries, stop the scrolling and log an error
-  //         isScrollLocked.value = false;
-  //         // print("Max retries reached, stopping scroll.");
-  //         return;
-  //       }
-  //
-  //       // Check bounds for currentIndex
-  //       if (currentIndex >= sectionKeys.length || currentIndex < 0) {
-  //         // We've reached the end or start of the list
-  //         isScrollLocked.value = false;
-  //         return;
-  //       }
-  //
-  //       final context = sectionKeys[currentIndex].currentContext;
-  //
-  //       if (context != null) {
-  //         retryCount = 0; // Reset retries if we find a valid context
-  //         final renderBox = context.findRenderObject() as RenderBox;
-  //         final offset = renderBox.localToGlobal(Offset.zero).dy +
-  //             listViewScrollController.offset - 228;
-  //
-  //         // Scroll to the exact offset of the current section
-  //         listViewScrollController.animateTo(
-  //           offset,
-  //           duration: const Duration(milliseconds: 300),
-  //           curve: Curves.easeInOut,
-  //         ).then((_) {
-  //           // After scrolling, check if we've reached the target index
-  //           if (currentIndex == targetIndex) {
-  //             // If we reach the target, stop scrolling
-  //             isScrollLocked.value = false;
-  //             // print("Reached target index: $targetIndex");
-  //           } else {
-  //             // Check direction and update index
-  //             if (targetIndex > currentIndex) {
-  //               // print("scroll down ${targetIndex} : ${currentIndex}");
-  //               scrollIncrementally(currentIndex + 1); // Scroll down
-  //             } else if (targetIndex < currentIndex) {
-  //               // print("scroll up ${targetIndex} : ${currentIndex}");
-  //               scrollIncrementally(currentIndex - 1); // Scroll up
-  //             }
-  //           }
-  //         });
-  //       } else {
-  //         // If the context is still null, scroll by smaller increments
-  //         retryCount++; // Increment the retry count
-  //
-  //         const double scrollIncrement = 200.0; // Use smaller increments
-  //         double maxScrollExtent = listViewScrollController.position.maxScrollExtent;
-  //         double minScrollExtent = listViewScrollController.position.minScrollExtent;
-  //         double currentScrollPosition = listViewScrollController.offset;
-  //         double targetScrollPosition;
-  //
-  //         // Determine the target scroll position based on direction
-  //         if (targetIndex > currentIndex) {
-  //           // Scrolling down
-  //           print("scroll down (incremental) ${targetIndex} : ${currentIndex}");
-  //           targetScrollPosition = (currentScrollPosition + scrollIncrement) > maxScrollExtent
-  //               ? maxScrollExtent
-  //               : currentScrollPosition + scrollIncrement;
-  //         } else {
-  //           // Scrolling up
-  //           print("scroll up (incremental) ${targetIndex} : ${currentIndex}");
-  //           targetScrollPosition = (currentScrollPosition - scrollIncrement) < minScrollExtent
-  //               ? minScrollExtent
-  //               : currentScrollPosition - scrollIncrement;
-  //         }
-  //
-  //         listViewScrollController.animateTo(
-  //           targetScrollPosition,
-  //           duration: const Duration(milliseconds: 200),
-  //           curve: Curves.easeInOut,
-  //         ).then((_) {
-  //           // Retry after scrolling by a smaller increment
-  //           scrollIncrementally(pickerStartingIndex.value!);
-  //         });
-  //       }
-  //     }
-  //
-  //     print("starting scroll increment: ${pickerStartingIndex.value}");
-  //     // Start from the selected category index
-  //     scrollIncrementally(pickerStartingIndex.value);
-  //   });
-  // }
+
 
 
 
@@ -341,7 +239,6 @@ class MenuScreenController extends GetxController {
 
     // Initialize the section keys based on the number of categories
     sectionKeys = List.generate(filteredMenuByCategory.keys.length, (index) => GlobalKey());
-
     // Add a listener for ListView scroll
     listViewScrollController.addListener(onListViewScroll);
 
@@ -383,9 +280,11 @@ class MenuScreenController extends GetxController {
 
       // Assign the filtered items to the respective category
       filteredMenuByCategory[category] = items;
-      // print("apply");
+      print("apply");
       // print(filteredMenuByCategory[category] );
       sectionKeys = List.generate(filteredMenuByCategory.keys.length, (index) => GlobalKey());
+      print("apply");
+      update();
 
     }
 
@@ -397,6 +296,11 @@ class MenuScreenController extends GetxController {
   }
 
   void toggleVegFilter() {
+    if(isVegSelected.value == true){
+      isVegSelected.value = false;
+      applyFilters(); // Reapply filters
+      return;
+    }
     // Set vegSelected to true and nonVegSelected to false
     isVegSelected.value = true;
     isNonVegSelected.value = false;
@@ -404,6 +308,11 @@ class MenuScreenController extends GetxController {
   }
 
   void toggleNonVegFilter() {
+    if(isNonVegSelected.value == true){
+      isNonVegSelected.value = false;
+      applyFilters(); // Reapply filters
+      return;
+    }
     // Set nonVegSelected to true and vegSelected to false
     isNonVegSelected.value = true;
     isVegSelected.value = false;

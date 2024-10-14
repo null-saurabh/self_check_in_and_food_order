@@ -4,8 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:random_string/random_string.dart';
-import 'package:wandercrew/utils/routes.dart';
-
 import '../../../models/cart_model.dart';
 import '../../../models/menu_item_model.dart';
 import '../../../models/food_order_model.dart';
@@ -17,10 +15,11 @@ import 'package:http/http.dart' as http;
 
 
 class CartScreenController extends GetxController {
+
+
   @override
   void onInit() {
     super.onInit();
-    calculateTipAmount;
     fetchRazorpayKey();
     fetchCountryCodes(); // Fetch countries from API when controller is initialized
 
@@ -52,7 +51,7 @@ class CartScreenController extends GetxController {
   RxDouble itemTotalAmount = 0.0.obs;
   RxDouble discountAmount = 0.0.obs;
   RxDouble taxChargesAmount = 0.0.obs;
-  RxnDouble tipAmount = RxnDouble(); // Calculated tip amount
+  RxDouble tipAmount = RxDouble(20); // Calculated tip amount
   RxDouble grandTotal = 0.0.obs;
 
   var tipPercentage = 5.obs; // Percentage of tip selected, default to 0
@@ -79,19 +78,15 @@ class CartScreenController extends GetxController {
   String razorpayKey = ""; // Variable to hold the Razorpay key
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  void setTipPercentage(int percentage) {
-    tipPercentage.value = percentage;
-    calculateTipAmount(); // Recalculate tip when percentage is changed
-  }
 
-  void calculateTipAmount() {
-    if(isTipSelected.value && itemTotalAmount.value >0 ) {
-      tipAmount.value = (itemTotalAmount.value * tipPercentage.value) / 100;
-    }
-    else{
-      tipAmount.value = null;
-    }
-  }
+  // void calculateTipAmount() {
+  //   if(isTipSelected.value && itemTotalAmount.value >0 ) {
+  //     tipAmount.value = (itemTotalAmount.value * tipPercentage.value) / 100;
+  //   }
+  //   else{
+  //     tipAmount.value = null;
+  //   }
+  // }
 
 
 
@@ -308,7 +303,7 @@ class CartScreenController extends GetxController {
 
 // Calculate the grand total based on the item total, taxes, tips, and promo code discount
   void calculateGrandTotal() {
-    double total = itemTotalAmount.value + taxChargesAmount.value + (tipAmount.value ?? 0);
+    double total = itemTotalAmount.value + taxChargesAmount.value + (tipAmount.value);
 
     // If a promo code is applied, subtract the discount
     if (isCouponApplied.value) {
@@ -485,6 +480,7 @@ class CartScreenController extends GetxController {
 
       Get.back();
       Get.back();
+
       Get.snackbar("Success", "Order placed successfully!",
           snackPosition: SnackPosition.BOTTOM);
       // Get.toNamed(Routes.receptionMenu);
@@ -493,14 +489,14 @@ class CartScreenController extends GetxController {
       // Handle any errors that occur during the order process
       // print(e);
       // print("aaaaaaa");
+      Get.back();
+      Get.back();
       Get.snackbar(
         "Error",
         "Payment Complete!, But Failed to place the order. Contact Staff.",
         snackPosition: SnackPosition.BOTTOM,
         duration: Duration(seconds: 5)
       );
-    } finally {
-      Get.back();
     }
   }
 
@@ -549,14 +545,12 @@ class CartScreenController extends GetxController {
       tempTotal += cartItem.totalPrice;
     });
     itemTotalAmount.value = tempTotal;
-    calculateTipAmount();
   }
 
   // Clear all items from the cart
   void clearCart() {
     cartItems.clear();
     itemTotalAmount.value = 0.0;
-    tipAmount.value = 0;
     grandTotal.value = 0;
     taxChargesAmount.value = 0;
     update();

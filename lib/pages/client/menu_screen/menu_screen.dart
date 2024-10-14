@@ -149,7 +149,7 @@ class MenuScreen extends StatelessWidget {
                     : Positioned(
                         bottom: 0,
                         child: GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             Get.toNamed(Routes.receptionCart);
                           },
                           child: Container(
