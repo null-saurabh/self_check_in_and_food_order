@@ -198,6 +198,10 @@ class CheckInListController extends GetxController {
 
   static Future<void> downloadFileWeb(String imageUrl, String imageName) async {
     try {
+      Get.dialog(
+        const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false,
+      );
       // Fetch the image data from the URL
       final http.Response response = await http.get(Uri.parse(imageUrl));
 
@@ -220,7 +224,10 @@ class CheckInListController extends GetxController {
       } else {
         debugPrint("Failed to download image: ${response.statusCode}");
       }
+      Get.back();
+
     } catch (e) {
+      Get.back();
       debugPrint("Error downloading image: $e");
     }
   }
@@ -229,6 +236,10 @@ class CheckInListController extends GetxController {
   static Future<void> downloadFileAndroid(String imageUrl,
       String fileName) async {
     try {
+      Get.dialog(
+        const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false,
+      );
       // Get directory to save the file
       var directory = await getExternalStorageDirectory();
       String savePath = '${directory!.path}/$fileName';
@@ -236,10 +247,13 @@ class CheckInListController extends GetxController {
       // Download the file using Dio
       Dio dio = Dio();
       await dio.download(imageUrl, savePath);
+      Get.back();
 
       // Notify user that the download is successful
       // print("File downloaded at $savePath");
     } catch (e) {
+      Get.back();
+
       // print("Error downloading file: $e");
     }
   }
@@ -253,6 +267,12 @@ class CheckInListController extends GetxController {
 
 // Function to download the PDF
   Future<void> downloadCheckInAsPdf(SelfCheckInModel checkInItem) async {
+    try {
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
+
     final pdf = pw.Document();
 
     // Fetch images first
@@ -311,6 +331,16 @@ class CheckInListController extends GetxController {
 
     // Generate the PDF as bytes and save it
     await _savePdf(pdf, "${checkInItem.fullName} Check In Details.pdf");
+    Get.back();
+
+    }
+    catch (e){
+
+      Get.back();
+
+      Get.snackbar('Error', 'Failed to download $e');
+
+    }
   }
 
 // Helper function to fetch images from URL

@@ -280,10 +280,10 @@ class MenuScreenController extends GetxController {
 
       // Assign the filtered items to the respective category
       filteredMenuByCategory[category] = items;
-      print("apply");
+      // print("apply");
       // print(filteredMenuByCategory[category] );
       sectionKeys = List.generate(filteredMenuByCategory.keys.length, (index) => GlobalKey());
-      print("apply");
+      // print("apply");
       update();
 
     }

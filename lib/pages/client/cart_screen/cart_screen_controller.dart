@@ -324,15 +324,11 @@ class CartScreenController extends GetxController {
         const Center(child: CircularProgressIndicator()),
         barrierDismissible: false,
       );
-      // print('aaa');
-      // String paymentStatus = response['status']; // From Razorpay response
-      // String paymentMethod = response['method']; // From Razorpay response
+
       String transactionID =
           response['razorpay_payment_id']; // From Razorpay response
-      //
-      // print('aaaa');
-      // print(transactionID);
-      //
+      String orderId = response['razorpay_order_id'];
+      print("printing order: $orderId");
       // Get today's date
       String todayDate = DateTime.now().toIso8601String();
 
@@ -346,11 +342,10 @@ class CartScreenController extends GetxController {
         );
       }).toList();
 
-      String addId = randomAlphaNumeric(10);
 
       // Create order model
       FoodOrderModel orderData = FoodOrderModel(
-        orderId: addId, // Firebase will generate the ID
+        orderId: orderId, // Firebase will generate the ID
         transactionId: transactionID,
         dinerName: dinerName.text, //dinerName.text,
         orderStatusHistory: [
@@ -560,18 +555,21 @@ class CartScreenController extends GetxController {
     if (itemTotalAmount > 0) {
       if (razorpayKey.isNotEmpty) {
         // Check if the key is valid
+
+
         RazorpayService razorpay = RazorpayService();
         razorpay.openCheckout(
+          key: razorpayKey,
           number: contactNumberController.text,
           amount: isTipSelected.value ? (itemTotalAmount.value * 100 ).toInt() : (double.parse((itemTotalAmount.value + itemTotalAmount.value / 20).toStringAsFixed(2)) * 100).toInt(),
-          key: razorpayKey,
           onSuccess: onSuccess,
           onDismiss: onDismiss,
-          onFail: onFail,
+          onFail: onFail, name: dinerName.text,
         );
       } else {
+        fetchRazorpayKey();
         Get.snackbar(
-            "Error", "Razorpay is not available. Please Contact WanderCrew Team.");
+            "Error", "Razorpay error. Try again! If persists, Please contact WanderCrew Team.");
       }
     } else {
       Get.snackbar("Error", "Total amount must be greater than zero.");

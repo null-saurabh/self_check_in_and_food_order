@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wandercrew/pages/admin/orders_admin/widgets/order_filter_alert.dart';
 import 'package:wandercrew/pages/admin/orders_admin/widgets/single_order.dart';
+import 'package:wandercrew/service/razorpay_web.dart';
+import '../../../utils/routes.dart';
 import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/filter_button.dart';
 import '../../../widgets/widget_support.dart';
@@ -33,7 +35,14 @@ class OrdersListScreen extends StatelessWidget {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.arrow_back),
-                            onPressed: () => Get.back(),
+                            onPressed: () {
+                              if (Get.previousRoute.isNotEmpty) {
+                                Get.back(); // Go back if there's a previous route
+                              } else {
+                                Get.offNamed(Routes
+                                    .adminHome); // Navigate to a specific route if there's no back route
+                              }
+                            },
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -196,6 +205,18 @@ class OrdersListScreen extends StatelessWidget {
                                         label:"Completed");
                                   },
                                 ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                FilterButton(
+                                  label: "Refund",
+                                  isSelected: controller.selectedFilter.value ==
+                                      'Refund',
+                                  onTap: () {
+                                    controller.filterOrdersByStatus(
+                                        label:"Refund");
+                                  },
+                                ),
                               ],
                             )
                           ],
@@ -223,8 +244,15 @@ class OrdersListScreen extends StatelessWidget {
                                   },
                                   orderData: orderData,
                                   initiateRefund: () {
-                                    controller.refundAmountController.text =
-                                        orderData.totalAmount.toString();
+                                    if(orderData.refundAmount != null) {
+                                      controller.refundAmountController.text =
+                                          (orderData.totalAmount.toInt() - orderData.refundAmount!).toString();
+                                    }
+                                    else{
+                                      controller.refundAmountController.text =
+                                          orderData.totalAmount.toString();
+                                    }
+
 
                                     showDialog(
                                       context: context,
@@ -247,13 +275,15 @@ class OrdersListScreen extends StatelessWidget {
                                             ),
                                             TextButton(
                                               onPressed: () async {
-                                                controller.initiateRefund(
+
+                                                RazorpayService razorpay = RazorpayService();
+                                                razorpay.handleRefund(
                                                     paymentId:
                                                         orderData.transactionId,
-                                                    refundAmount: double.parse(
+                                                    refundAmount: int.parse(
                                                         controller
                                                             .refundAmountController
-                                                            .text));
+                                                            .text), orderId: orderData.orderId, orderAmount: orderData.totalAmount.toInt(),);
                                               },
                                               child: const Text("Refund"),
                                             ),
@@ -261,7 +291,7 @@ class OrdersListScreen extends StatelessWidget {
                                         );
                                       },
                                     );
-                                  }, //=> controller.initiateRefund(paymentId: orderData.transactionId, refundAmount: orderData.totalAmount,),
+                                  },
                                   markAsConfirm: () => controller.confirmOrder(
                                       orderData, "Admin"),
                                   markAsDelivered: () => controller.orderDelivered(

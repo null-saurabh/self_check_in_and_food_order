@@ -32,6 +32,7 @@ class ExpandableMenuItem extends StatelessWidget {
                   :Column(
                     children: [
                       VegFilterMenu(),
+                      SizedBox(height: 12,),
                       Expanded(
                         child: ListView(
                                         controller: controller.listViewScrollController,

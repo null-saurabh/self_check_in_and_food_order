@@ -42,13 +42,13 @@ class AppPages {
     GetPage(
       name: Routes.adminHome,
       page: () => const AdminHomeScreen(),
-      // middlewares: [AuthMiddleware()],
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: Routes.adminMenu,
       page: () => const MenuAdminScreen(),
-      // middlewares: [AuthMiddleware()],
-    ),
+      middlewares: [AuthMiddleware()],
+    ),    
     GetPage(
       name: Routes.adminAddMenu,
       page: () => const AddFoodItem(),
@@ -115,25 +115,17 @@ class Routes {
 class AuthMiddleware extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
-    // Store the original route the user tried to access
-    // bool isLoggedIn = false;  // Replace this with actual authentication logic
-
-    // final AuthService authService = AuthService();
 
     final AuthService authService = AuthService.to;
-    // print("e");
-    // print( route ?? "");
-    // print(authService.isLoggedIn.value);
-
     if (!authService.isLoggedIn.value) {
-      // print("ee");
 
       return RouteSettings(
-        name: '/admin/login',
+        name: Routes.adminLogin,
         arguments: {
-          'redirect': route,  // Pass the route where the user was trying to go
-        },); // Pass the original route as an argument
+          'redirect': route,
+        },
+      );
     }
-    return null; // Allow access if logged in
+    return null;
   }
 }

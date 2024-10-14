@@ -90,6 +90,8 @@ class FoodOrderModel {
   DateTime? createdAt;                  // Timestamp when the order was created
   DateTime? updatedAt;                  // Timestamp when the order was last updated
   bool isCancelled;
+  String? isRefunded;
+  int? refundAmount;
   FoodOrderModel({
     required this.orderId,
     required this.transactionId,
@@ -111,6 +113,8 @@ class FoodOrderModel {
     this.createdAt,
     this.updatedAt,
     this.isCancelled = false,
+    this.isRefunded,
+    this.refundAmount
   });
 
   // Convert to map for database storage
@@ -134,6 +138,8 @@ class FoodOrderModel {
       'estimatedDeliveryTime': estimatedDeliveryTime,
       'paymentStatus': paymentStatus,
       'isCancelled': isCancelled,
+      'isRefunded': isRefunded,
+      'refundAmount': refundAmount,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
     };
@@ -158,9 +164,11 @@ class FoodOrderModel {
       contactNumber: data['contactNumber'],
       specialInstructions: data['specialInstructions'],
       discount: data['discount'] != null ? (data['discount'] as num).toDouble() : null,
+      refundAmount: data['refundAmount'] != null ? (data['refundAmount'] as num).toInt() : null,
       couponCode: data['couponCode'],
       // deliveryStatus: data['deliveryStatus'],
       estimatedDeliveryTime: data['estimatedDeliveryTime'],
+      isRefunded: data['isRefunded'],
       paymentStatus: data['paymentStatus'],
       isCancelled: data['isCancelled'] != null ? data['isCancelled'] : false,
       createdAt: data['createdAt'] != null ? DateTime.parse(data['createdAt']) : null,

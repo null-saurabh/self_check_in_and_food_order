@@ -267,63 +267,84 @@ class ManageUserAdminController extends GetxController {
       // For Mobile (Android/iOS)
       final pdfBytes = await pdf.save();
       final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/checkin_details.pdf');
+      final file = File('${directory.path}/$fileName');
       await file.writeAsBytes(pdfBytes);
-      await Printing.sharePdf(bytes: pdfBytes, filename: 'checkin_details.pdf');
+      await Printing.sharePdf(bytes: pdfBytes, filename: fileName);
     }
   }
 
 
   Future<void> downloadUserData(AdminUserModel checkInItem) async {
-    final pdf = pw.Document();
+    try {
+      Get.dialog(
+        const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false,
+      );
+      final pdf = pw.Document();
 
-    // Fetch images first
-    final frontImage = await _fetchImage(checkInItem.frontDocumentUrl);
-    var backImage;
-    if(checkInItem.backDocumentUrl != null ) backImage = await _fetchImage(checkInItem.backDocumentUrl!);
-    // Add a page with text and images
-    pdf.addPage(
-      pw.Page(
-        build: (pw.Context context) =>
-            pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.start,
-              children: [
-                pw.Text('Check-In Details',
-                    style: pw.TextStyle(
-                        fontSize: 24, fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(height: 10),
-                _buildInfoRow('id', checkInItem.id),
-                _buildInfoRow('Document Type', checkInItem.documentType),
-                _buildInfoRow('name', checkInItem.name),
-                _buildInfoRow('userId', checkInItem.userId.toString()),
-                _buildInfoRow('password', checkInItem.password),
-                _buildInfoRow('role', checkInItem.role),
-                _buildInfoRow('permission', checkInItem.permission),
-                _buildInfoRow('number', checkInItem.number),
-                _buildInfoRow('address', checkInItem.address),
-                _buildInfoRow('permission', checkInItem.permission),
-                // _buildInfoRow('loginData', checkInItem.loginData),
+      // Fetch images first
+      final frontImage = await _fetchImage(checkInItem.frontDocumentUrl);
+      var backImage;
+      if (checkInItem.backDocumentUrl != null)
+        backImage = await _fetchImage(checkInItem.backDocumentUrl!);
+      // Add a page with text and images
 
-                pw.SizedBox(height: 10),
-                pw.Text('Documents',
-                    style: pw.TextStyle(
-                        fontSize: 18, fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(height: 10),
-                pw.Image(
-                    frontImage, height: 150, width: 150, fit: pw.BoxFit.cover),
-                pw.SizedBox(height: 10),
-                if(checkInItem.backDocumentUrl !=null)
+      pdf.addPage(
+        pw.Page(
+          build: (pw.Context context) =>
+              pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Text('Check-In Details',
+                      style: pw.TextStyle(
+                          fontSize: 24, fontWeight: pw.FontWeight.bold)),
+                  pw.SizedBox(height: 10),
+                  _buildInfoRow('id', checkInItem.id),
+                  _buildInfoRow('Document Type', checkInItem.documentType),
+                  _buildInfoRow('name', checkInItem.name),
+                  _buildInfoRow('userId', checkInItem.userId.toString()),
+                  _buildInfoRow('password', checkInItem.password),
+                  _buildInfoRow('role', checkInItem.role),
+                  _buildInfoRow('permission', checkInItem.permission),
+                  _buildInfoRow('number', checkInItem.number),
+                  _buildInfoRow('address', checkInItem.address),
+                  _buildInfoRow('permission', checkInItem.permission),
+                  // _buildInfoRow('loginData', checkInItem.loginData),
+
+                  pw.SizedBox(height: 10),
+                  pw.Text('Documents',
+                      style: pw.TextStyle(
+                          fontSize: 18, fontWeight: pw.FontWeight.bold)),
+                  pw.SizedBox(height: 10),
                   pw.Image(
-                      backImage, height: 150, width: 150, fit: pw.BoxFit.cover),
-                pw.SizedBox(height: 10),
+                      frontImage, height: 150,
+                      width: 150,
+                      fit: pw.BoxFit.cover),
+                  pw.SizedBox(height: 10),
+                  if(checkInItem.backDocumentUrl != null)
+                    pw.Image(
+                        backImage, height: 150,
+                        width: 150,
+                        fit: pw.BoxFit.cover),
+                  pw.SizedBox(height: 10),
 
-              ],
-            ),
-      ),
-    );
+                ],
+              ),
+        ),
+      );
 
-    // Generate the PDF as bytes and save it
-    await _savePdf(pdf, "${checkInItem.name} User Details.pdf");
+      // Generate the PDF as bytes and save it
+      await _savePdf(pdf, "${checkInItem.name} User Details.pdf");
+      Get.back();
+
+    }
+    catch (e){
+
+      Get.back();
+
+      Get.snackbar('Error', 'Failed to download $e');
+
+    }
   }
 
 }

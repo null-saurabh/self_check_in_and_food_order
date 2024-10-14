@@ -126,7 +126,36 @@ class SingleOrder extends StatelessWidget {
                         style: AppWidget.black16Text500Style(),
                       ),
                       SizedBox(
-                        height: 12,
+                        height: 16,
+                      ),
+                      if(orderData.isRefunded != null)
+                      Row(
+                        children: [
+                          Text(
+                            'Refund: ',
+                            style: AppWidget.black16Text400Style(),
+                          ),
+                          Text(
+                            orderData.isRefunded!,
+                            style: AppWidget.black16Text500Style(color: Colors.red),
+                          ),
+                        ],
+                      ),
+                      if(orderData.refundAmount != null)
+                      Row(
+                        children: [
+                          Text(
+                            'Refund Amount: ',
+                            style: AppWidget.black16Text400Style(),
+                          ),
+                          Text(
+                            orderData.refundAmount!.toString(),
+                            style: AppWidget.black16Text500Style(color: Colors.red),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 16,
                       ),
                       IntrinsicHeight(
                         child: Row(
@@ -189,15 +218,12 @@ class SingleOrder extends StatelessWidget {
                                       : "Error",
                               titleTextColor: Colors.white,
                               onPressed: () {
-                                print("confirm 1");
                                 if (orderData.orderStatusHistory.last.status ==
                                     "Pending") {
-                                  print("confirm 2");
                                   markAsConfirm();
                                 } else if (orderData
                                         .orderStatusHistory.last.status ==
                                     "Confirmed") {
-                                  print("confirm 3");
                                   markAsDelivered();
                                 }
                               },
@@ -206,7 +232,9 @@ class SingleOrder extends StatelessWidget {
                               width: 8,
                             ),
                           ],
-                          AppElevatedButton(
+                          orderData.isRefunded != null && orderData.isRefunded! == 'complete refund'
+                          ? SizedBox.shrink()
+                          :AppElevatedButton(
                             showBorder: true,
                             backgroundColor: Colors.transparent,
                             title: "Refund",
@@ -220,13 +248,17 @@ class SingleOrder extends StatelessWidget {
                     ],
                   ),
                 )),
+            if(orderData.isRefunded != null || orderData.orderStatusHistory.last.status == "Pending"  || orderData.orderStatusHistory.last.status == "Confirmed" || orderData.orderStatusHistory.last.status ==
+            "Delivered")
             Positioned(
               top: 10,
               right: 10,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: orderData.orderStatusHistory.last.status == "Pending"
+                  color: orderData.isRefunded != null
+    ? Colors.orange
+                      :orderData.orderStatusHistory.last.status == "Pending"
                       ? Colors.red
                       : orderData.orderStatusHistory.last.status == "Confirmed"
                           ? Color(0xffFFB700) // Yellow for preparing
@@ -237,14 +269,15 @@ class SingleOrder extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  orderData.orderStatusHistory.last.status == "Pending"
+                  orderData.isRefunded != null
+                  ?"Refunded"
+                  :orderData.orderStatusHistory.last.status == "Pending"
                       ? "Pending"
                       : orderData.orderStatusHistory.last.status == "Confirmed"
                           ? "Preparing"
-                          : orderData.orderStatusHistory.last.status ==
-                                  "Delivered"
+                          : orderData.orderStatusHistory.last.status == "Delivered"
                               ? "Completed"
-                              : "Refunded",
+                              : "error",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

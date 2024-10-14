@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../service/auth_services.dart';
+import '../../../utils/routes.dart';
 
 class AdminLoginController extends GetxController {
   final usernameController = TextEditingController();
@@ -37,7 +38,6 @@ class AdminLoginController extends GetxController {
           print(DateTime.now());
           loginData.add(DateTime.now());
 
-          // Update Firestore with new login data and set isOnline to true
           await FirebaseFirestore.instance
               .collection("AdminAccount")
               .doc(result.id)
@@ -45,10 +45,8 @@ class AdminLoginController extends GetxController {
             'loginData': loginData.map((date) => Timestamp.fromDate(date)).toList(),
           });
 
-          // Proceed with the login flow
           AuthService.to.login();
 
-          // Check for intended route (if any)
           Map<String, dynamic>? args = Get.arguments as Map<String, dynamic>?;
           String? intendedRoute = args != null ? args['redirect'] : null;
 
@@ -56,7 +54,7 @@ class AdminLoginController extends GetxController {
             Get.offAllNamed(intendedRoute);
           }
           else {
-            Get.offAllNamed('/admin/home');
+            Get.offAllNamed(Routes.adminHome);
           }
         } else {
           Get.snackbar(

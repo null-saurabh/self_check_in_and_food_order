@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       title: 'Wander Crew',
       debugShowCheckedModeBanner: false,
       theme:  _buildTheme(),
-      initialRoute: Routes.adminHome, // Use routes from routes.dart
+      initialRoute: Routes.receptionHome, // Use routes from routes.dart
       getPages: AppPages.pages,       // Use pages from app_pages.dart
       unknownRoute: GetPage(
         name: '/not-found',

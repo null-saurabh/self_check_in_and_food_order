@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'dart:html' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +80,12 @@ class AdminOrderListController extends GetxController {
     else if (label == 'All') {
       // Show all orders
       orderList.assignAll(originalOrderList);
-    } else {
+    } else if(label == 'Refund'){
+      orderList.value = originalOrderList.where((order) {
+        return order.isRefunded != null;
+      }).toList();
+    }
+    else {
       var status = label == "Processing" ? "Confirmed" : label == "Completed" ? "Delivered" : label;
       // Filter by specific status (Pending, Completed, Refunded, etc.)
       orderList.value = originalOrderList.where((order) {
@@ -183,7 +186,7 @@ class AdminOrderListController extends GetxController {
         barrierDismissible: false,
       );
 
-      print("confirm 4");
+      // print("confirm 4");
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection("Orders")
@@ -193,16 +196,16 @@ class AdminOrderListController extends GetxController {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        print("confirm 5");
+        // print("confirm 5");
         String docId = querySnapshot.docs.first.id;
         DocumentSnapshot orderSnapshot = await FirebaseFirestore.instance
             .collection("Orders")
             .doc(docId)
             .get();
-        print("confirm 6");
+        // print("confirm 6");
 
         if (orderSnapshot.exists) {
-          print("confirm 7");
+          // print("confirm 7");
 
           // Parse the order data into OrderModel
           FoodOrderModel order = FoodOrderModel.fromMap(
@@ -216,7 +219,7 @@ class AdminOrderListController extends GetxController {
               updatedBy: adminName,
             ),
           );
-          print("confirm 8");
+          // print("confirm 8");
 
           // Update the order status in Firestore
           await FirebaseFirestore.instance
@@ -228,7 +231,7 @@ class AdminOrderListController extends GetxController {
                 .toList(),
             'updatedAt': DateTime.now().toIso8601String(),
           });
-          print("confirm 9");
+          // print("confirm 9");
           fetchOrderData();
           Get.back();
           Get.snackbar('Success', 'Order status updated to Preparing');
@@ -322,61 +325,8 @@ class AdminOrderListController extends GetxController {
     }
   }
 
-  String razorpayKey = ""; // Variable to hold the Razorpay key
 
-  Future<void> fetchRazorpayKey() async {
-    try {
-      DocumentSnapshot snapshot = await FirebaseFirestore.instance
-          .collection("Razorpay")
-          .doc("i1m8ZJztxSYL35B7rboh")
-          .get();
 
-      if (snapshot.exists) {
-        razorpayKey = snapshot.get("testKey");
-      } else {
-        Get.snackbar("Error", "Razorpay key not found");
-      }
-    } catch (e) {
-      Get.snackbar("Error", "Failed to fetch Razorpay key: $e");
-    }
-  }
 
-  Future<void> initiateRefund({
-    required String paymentId,
-    required double refundAmount,
-  })
-  async {
-    // This would ideally be a server-side API call, but shown here for simplicity
-    try {
-      await fetchRazorpayKey();
-      if (razorpayKey.isNotEmpty) {
-        final url = "https://api.razorpay.com/v1/payments/$paymentId/refund";
-        final response = await http.post(
-          Uri.parse(url),
-          headers: {
-            'Authorization':
-                'Basic ${base64Encode(utf8.encode('$razorpayKey:'))}',
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({
-            'amount': refundAmount, // Amount in paise
-          }),
-        );
 
-        if (response.statusCode == 200) {
-          Get.snackbar('Success', 'Refund initiated: ${response.body}');
-          print(response.body);
-          // onSuccess(jsonDecode(response.body));
-        } else {
-          print(response.body);
-          Get.snackbar('Error', 'Failed to initiate refund: ${response.body}');
-          // onFail(jsonDecode(response.body));
-        }
-      }
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to initiate refund: $e');
-      // onFail(e);
-      print(e);
-    }
-  }
 }

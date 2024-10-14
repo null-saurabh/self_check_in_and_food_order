@@ -74,7 +74,12 @@ class MenuScreen extends StatelessWidget {
                         color: Colors.white),
                     child: IconButton(
                         onPressed: () {
-                          Get.toNamed(Routes.receptionHome);
+                          if (Get.previousRoute.isNotEmpty) {
+                            Get.back(); // Go back if there's a previous route
+                          } else {
+                            Get.offNamed(Routes
+                                .receptionHome); // Navigate to a specific route if there's no back route
+                          }
                         },
                         icon: const Icon(Icons.keyboard_backspace_rounded))),
               ),
