@@ -79,19 +79,6 @@ class CartScreenController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 
-  // void calculateTipAmount() {
-  //   if(isTipSelected.value && itemTotalAmount.value >0 ) {
-  //     tipAmount.value = (itemTotalAmount.value * tipPercentage.value) / 100;
-  //   }
-  //   else{
-  //     tipAmount.value = null;
-  //   }
-  // }
-
-
-
-
-
   Future<String?> applyCoupon(BuildContext context,String code) async {
     if (code.isEmpty) {
       return 'Enter Voucher Code';
@@ -288,12 +275,15 @@ class CartScreenController extends GetxController {
   }
     catch (e) {
       context.pop();
-      Get.snackbar(
-        "Error",
-        "Failed to apply coupon: $e",
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+      final snackBar = SnackBar(
+        content: Text("Error: Failed to apply coupon: $e"),
+        backgroundColor: Colors.red,
       );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
     }
     return "Failed to apply voucher";
   }
@@ -482,9 +472,13 @@ class CartScreenController extends GetxController {
 
       context.pop();
       context.pop();
+      final snackBar = SnackBar(
+        content: Text("Success Order placed successfully!."),
+        backgroundColor: Colors.green,
+      );
 
-      Get.snackbar("Success", "Order placed successfully!",
-          snackPosition: SnackPosition.BOTTOM);
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     } catch (e) {
       // Handle any errors that occur during the order process
@@ -492,25 +486,40 @@ class CartScreenController extends GetxController {
       // print("aaaaaaa");
       context.pop();
       context.pop();
-      Get.snackbar(
-        "Error",
-        "Payment Complete!, But Failed to place the order. Contact Staff.",
-        snackPosition: SnackPosition.BOTTOM,
-        duration: Duration(seconds: 5)
+
+      final snackBar = SnackBar(
+        content: Text("Error: Payment Complete!, But Failed to place the order. Contact Staff."),
+        backgroundColor: Colors.red,
       );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
+
     }
   }
 
   // Handle payment failure
-  void onFail(response) {
-    Get.snackbar("Payment Failed", "${response['message']} Please try again.",
-        snackPosition: SnackPosition.BOTTOM);
+  void onFail(BuildContext context,response) {
+    final snackBar = SnackBar(
+      content: Text("Payment Failed: ${response['message']} Please try again."),
+      backgroundColor: Colors.red,
+    );
+
+// Show the snackbar
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
   }
 
-  void onDismiss(response) {
-    Get.snackbar(
-        "Payment Dismissed!", "${response['message']} Please try again.",
-        snackPosition: SnackPosition.BOTTOM);
+  void onDismiss(BuildContext context,response) {
+    final snackBar = SnackBar(
+      content: Text("Payment Dismissed! ${response['message']} Please try again.",),
+      backgroundColor: Colors.red,
+    );
+
+// Show the snackbar
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   // Add item to cart or update quantity
@@ -575,11 +584,24 @@ class CartScreenController extends GetxController {
         );
       } else {
         fetchRazorpayKey();
-        Get.snackbar(
-            "Error", "Razorpay error. Try again! If persists, Please contact WanderCrew Team.");
+        final snackBar = SnackBar(
+          content: Text("Error: Razorpay error. Try again! If persists, Please contact WanderCrew Team."),
+          backgroundColor: Colors.red,
+        );
+
+// Show the snackbar
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
       }
     } else {
-      Get.snackbar("Error", "Total amount must be greater than zero.");
+      final snackBar = SnackBar(
+        content: Text("Error: Total amount must be greater than zero."),
+        backgroundColor: Colors.red,
+      );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -604,10 +626,14 @@ class CartScreenController extends GetxController {
       if (snapshot.exists) {
         razorpayKey = snapshot.get("testKey");
       } else {
-        Get.snackbar("Error", "Razorpay key not found");
+
+        debugPrint("Razorpay key not found");
+
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to fetch Razorpay key: $e");
+      debugPrint("Failed to fetch Razorpay key: $e");
+
+
     }
   }
 
@@ -638,10 +664,11 @@ class CartScreenController extends GetxController {
         update();
 
       } else {
-        Get.snackbar("Error", "Failed to fetch country codes");
+        debugPrint("Error: Failed to fetch country codes");
       }
     } catch (e) {
-      Get.snackbar("Error", "Unable to fetch country codes. Please check your internet connection.");
+      debugPrint("Error: Unable to fetch country codes. Please check your internet connection.");
+
     }
   }
 

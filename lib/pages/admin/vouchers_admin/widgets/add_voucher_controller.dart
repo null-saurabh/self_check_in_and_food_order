@@ -214,14 +214,15 @@ class AddVoucherAdminController extends GetxController {
             context.pop(); // Close loading dialog
             context.pop(); // Return to previous page
 
-            // Show success message
-            Get.snackbar(
-              "Success",
-              "Coupon updated successfully.",
-              snackPosition: SnackPosition.BOTTOM,
+            final snackBar = SnackBar(
+              content: Text("Success: Coupon updated successfully.y."),
               backgroundColor: Colors.green,
-              colorText: Colors.white,
             );
+
+// Show the snackbar
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            // Show success message
+
           // } else {
           //   ""();
           //   Get.snackbar(
@@ -234,13 +235,21 @@ class AddVoucherAdminController extends GetxController {
           // }
         } catch (error) {
           context.pop();
-          Get.snackbar(
-            "Error",
-            "Failed to update coupon: $error",
-            snackPosition: SnackPosition.BOTTOM,
+          final snackBar = SnackBar(
+            content: Text("Failed to update coupon: $error"),
             backgroundColor: Colors.red,
-            colorText: Colors.white,
           );
+
+// Show the snackbar
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+          // Get.snackbar(
+          //   "Error",
+          //   "Failed to update coupon: $error",
+          //   snackPosition: SnackPosition.BOTTOM,
+          //   backgroundColor: Colors.red,
+          //   colorText: Colors.white,
+          // );
         }
       } else {
         // Saving a new coupon
@@ -262,23 +271,39 @@ class AddVoucherAdminController extends GetxController {
         context.pop(); // Close loading dialog
         context.pop(); // Return to previous page
 
-        Get.snackbar(
-          "Success",
-          "Coupon added successfully!",
+        // Get.snackbar(
+        //   "Success",
+        //   "Coupon added successfully!",
+        //   backgroundColor: Colors.orangeAccent,
+        //   colorText: Colors.white,
+        // );
+        final snackBar = SnackBar(
+          content: Text("Coupon added successfully!"),
           backgroundColor: Colors.orangeAccent,
-          colorText: Colors.white,
         );
+
+// Show the snackbar
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
 
         clearFields(); // Reset fields after adding a new coupon
       }
     } catch (e) {
       context.pop();
-      Get.snackbar(
-        "Error",
-        "Failed to save coupon: $e",
+      final snackBar = SnackBar(
+        content: Text("Failed to save coupon: $e"),
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
       );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      // Get.snackbar(
+      //   "Error",
+      //   "Failed to save coupon: $e",
+      //   backgroundColor: Colors.redAccent,
+      //   colorText: Colors.white,
+      // );
     }
   }
 

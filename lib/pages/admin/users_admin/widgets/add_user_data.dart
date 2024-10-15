@@ -21,6 +21,7 @@ class AddNewUserAdmin extends StatelessWidget {
     return GetBuilder<AddNewUserAdminController>(
       init: AddNewUserAdminController(data: data),
       builder: (controller) {
+        print("starting3");
         return Scaffold(
           backgroundColor: const Color(0xffFFFEF9),
           body: Column(
@@ -44,7 +45,7 @@ class AddNewUserAdmin extends StatelessWidget {
                             Text(
                               'Manage',
                               style: AppWidget.black24Text600Style(
-                                  color: Color(0xffE7C64E))
+                                      color: Color(0xffE7C64E))
                                   .copyWith(height: 1),
                             ),
                             Text(
@@ -56,8 +57,9 @@ class AddNewUserAdmin extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8,)
-
+                    SizedBox(
+                      height: 8,
+                    )
                   ]),
                 ),
               ),
@@ -89,9 +91,11 @@ class AddNewUserAdmin extends StatelessWidget {
                                 if (value == null || value.trim().isEmpty) {
                                   return 'Username is required';
                                 }
-                                var userController = Get.find<ManageUserAdminController>();
+                                var userController =
+                                    Get.find<ManageUserAdminController>();
                                 // Check if the username already exists in userDataList
-                                if (userController.userDataList.any((user) => user.userId == value.trim())) {
+                                if (userController.userDataList.any(
+                                    (user) => user.userId == value.trim())) {
                                   return 'Username already taken';
                                 }
                                 return null; // Return null if validation passes
@@ -138,31 +142,31 @@ class AddNewUserAdmin extends StatelessWidget {
 
                           ElevatedContainer(
                             child: AppDropDown(
-                                items: [
-                                  'Admin',
-                                ].map((type) {
-                                  return DropdownMenuItem(
-                                      value: type, child: Text(type));
-                                }).toList(),
-                                value: controller.selectedPermission.value,
-                                onChange: (value) =>
-                                    controller.selectedPermission.value = value,
-                                hintText: "Select Permission",
-                                labelText: "Permission",
-                                showLabel: true,
-                                height: 40,
-                                iconColor: Colors.grey,
-                                showSearch: true,
-                                searchCtrl: TextEditingController(),
-                                searchMatchFn: (item, searchValue) {
-                                  searchValue = searchValue.toLowerCase();
-                                  return item.value
-                                      .toString()
-                                      .toLowerCase()
-                                      .contains(searchValue);
-                                },
-                                onValidate: Validators.requiredField,
-                              ),
+                              items: [
+                                'Admin',
+                              ].map((type) {
+                                return DropdownMenuItem(
+                                    value: type, child: Text(type));
+                              }).toList(),
+                              value: controller.selectedPermission.value,
+                              onChange: (value) =>
+                                  controller.selectedPermission.value = value,
+                              hintText: "Select Permission",
+                              labelText: "Permission",
+                              showLabel: true,
+                              height: 40,
+                              iconColor: Colors.grey,
+                              showSearch: true,
+                              searchCtrl: TextEditingController(),
+                              searchMatchFn: (item, searchValue) {
+                                searchValue = searchValue.toLowerCase();
+                                return item.value
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchValue);
+                              },
+                              onValidate: Validators.requiredField,
+                            ),
                           ),
                           const SizedBox(height: 16),
 
@@ -175,8 +179,7 @@ class AddNewUserAdmin extends StatelessWidget {
                                 'Passport'
                               ].map((type) {
                                 return DropdownMenuItem(
-                                    value: type,
-                                    child: Text(type));
+                                    value: type, child: Text(type));
                               }).toList(),
                               onChange: (value) {
                                 controller.documentType.value = value;
@@ -191,16 +194,17 @@ class AddNewUserAdmin extends StatelessWidget {
                               onValidate: Validators.requiredField,
                             ),
                           ),
-                                        
+
                           // Document Type Dropdown
                           const SizedBox(height: 16),
-                                        
+
                           // Upload Front Document
                           ElevatedContainer(
                             child: Obx(() {
                               return UploadDocumentWidget(
-                                title: "Front Side of Document\n(Showing ID No.)",
-                                onTap: () => controller.pickDocument(true),
+                                title:
+                                    "Front Side of Document\n(Showing ID No.)",
+                                onTap: () => controller.pickDocument(context,true),
                                 fileName: controller.frontDocumentName.value,
                                 isDocumentInvalid:
                                     controller.isFrontDocumentInvalid.value,
@@ -208,22 +212,22 @@ class AddNewUserAdmin extends StatelessWidget {
                             }),
                           ),
                           const SizedBox(height: 16),
-                                        
-                          if (controller.documentType.value != 'Passport') ...[
-                            // Upload Back Document
-                            ElevatedContainer(
-                              child: Obx(() {
-                                return UploadDocumentWidget(
-                                  title: "Back  Side of Document",
-                                  onTap: () => controller.pickDocument(false),
-                                  fileName: controller.backDocumentName.value,
-                                  isDocumentInvalid:
-                                      controller.isBackDocumentInvalid.value,
-                                );
-                              }),
-                            ),
-                            const SizedBox(height: 16),
-                          ],
+
+                          Obx(() {
+                            if (controller.documentType.value != 'Passport')
+                              // Upload Back Document
+                              return ElevatedContainer(
+                                  child: UploadDocumentWidget(
+                                title: "Back  Side of Document",
+                                onTap: () => controller.pickDocument(context,false),
+                                fileName: controller.backDocumentName.value,
+                                isDocumentInvalid:
+                                    controller.isBackDocumentInvalid.value,
+                              ));
+                            else {
+                              return SizedBox.shrink();
+                            }
+                          }),
 
                           const SizedBox(height: 20.0),
 
@@ -260,7 +264,6 @@ class AddNewUserAdmin extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 28.0),
-
                         ],
                       ),
                     ),

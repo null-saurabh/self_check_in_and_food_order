@@ -92,7 +92,8 @@ class ManageUserAdminController extends GetxController {
       userDataList.assignAll(newList);
       update();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch list $e');
+      debugPrint(e.toString());
+
       // print(e);
     }
     finally {
@@ -155,14 +156,17 @@ class ManageUserAdminController extends GetxController {
           update();
           context.pop();
 
+
           // Show success snackbar
-          Get.snackbar(
-            "Success",
-            "Menu item deleted successfully.",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
-          );
+
+
+        final snackBar = SnackBar(
+          content: Text("Success: User deleted successfully."),
+          backgroundColor: Colors.green,
+        );
+
+// Show the snackbar
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
         // } else {
         //   ""();
         //
@@ -178,32 +182,46 @@ class ManageUserAdminController extends GetxController {
       } catch (error) {
         context.pop();
         // Show error snackbar
-        Get.snackbar(
-          "Error",
-          "Failed to delete menu item. Please try again.",
-          snackPosition: SnackPosition.BOTTOM,
+        final snackBar = SnackBar(
+          content: Text("Failed to delete user. Please try again."),
           backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
+
+// Show the snackbar
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
       }
     }
   }
 
-  Future<void> editUserData(AdminUserModel data) async {
+  Future<void> editUserData(BuildContext context,AdminUserModel data) async {
     // Implement edit logic
     // This is a placeholder
-    Get.bottomSheet(
-      AddNewUserAdmin(data: data,isEdit: true,),
-      isScrollControlled: true, // Allows the bottom sheet to expand with keyboard
-      backgroundColor: Color(0xffF4F5FA),
-      shape: RoundedRectangleBorder(
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Allows the bottom sheet to expand with the keyboard
+      backgroundColor: const Color(0xffF4F5FA),
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
+      builder: (context) {
+        return AddNewUserAdmin(data: data,isEdit: true,); // Your widget for the bottom sheet
+      },
     );
+
+    // Get.bottomSheet(
+    //   AddNewUserAdmin(data: data,isEdit: true,),
+    //   isScrollControlled: true, // Allows the bottom sheet to expand with keyboard
+    //   backgroundColor: Color(0xffF4F5FA),
+    //   shape: RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+    //   ),
+    // );
     // print("Edit Menu Item: ${item.name}");
   }
 
-  void toggleUserOnlineStatus(AdminUserModel userData, bool isOnline) async {
+  void toggleUserOnlineStatus(BuildContext context,AdminUserModel userData, bool isOnline) async {
     // Update UI first (optimistic update)
     userData.isOnline = isOnline;
     update();
@@ -231,7 +249,14 @@ class ManageUserAdminController extends GetxController {
       // If there's an error, revert the UI back to the previous state
       userData.isOnline = !isOnline;
       update();
-      Get.snackbar('Error', 'Failed to update online status: $error');
+      final snackBar = SnackBar(
+        content: Text("Failed to update online status: $error"),
+        backgroundColor: Colors.red,
+      );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
     }
   }
 
@@ -355,7 +380,14 @@ class ManageUserAdminController extends GetxController {
 
       context.pop();
 
-      Get.snackbar('Error', 'Failed to download $e');
+      final snackBar = SnackBar(
+        content: Text("Failed to download $e"),
+        backgroundColor: Colors.red,
+      );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
 
     }
   }

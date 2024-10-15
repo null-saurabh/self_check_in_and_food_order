@@ -160,7 +160,8 @@ class CheckInListController extends GetxController {
       groupCheckInsByDate();
       update();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch list $e');
+      debugPrint('Error: Failed to fetch list $e');
+
       // print(e);
     }finally {
       // print("Aaaaa");
@@ -350,8 +351,8 @@ class CheckInListController extends GetxController {
     catch (e){
 
       context.pop();
+      debugPrint('Error: Failed to download $e');
 
-      Get.snackbar('Error', 'Failed to download $e');
 
     }
   }

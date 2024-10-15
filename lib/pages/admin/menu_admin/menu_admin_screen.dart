@@ -30,7 +30,7 @@ class MenuAdminScreen extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Get.previousRoute.isNotEmpty
+                            GoRouter.of(context).canPop()
                                 ? IconButton(
                               icon: const Icon(Icons.arrow_back),
                               onPressed: () {
@@ -100,14 +100,27 @@ class MenuAdminScreen extends StatelessWidget {
                                 titleTextColor: Colors.black,
                                 child: Icon(Icons.add,color: Colors.black,size: 20,),
                                 onPressed: (){
-                                  Get.bottomSheet(
-                                    AddFoodItem(),
-                                    isScrollControlled: true, // Allows the bottom sheet to expand with keyboard
-                                    backgroundColor: Color(0xffF4F5FA),
-                                    shape: RoundedRectangleBorder(
+
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true, // Allows the bottom sheet to expand with the keyboard
+                                    backgroundColor: const Color(0xffF4F5FA),
+                                    shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                                     ),
+                                    builder: (context) {
+                                      return AddFoodItem(); // Your widget for the bottom sheet
+                                    },
                                   );
+
+                                  // Get.bottomSheet(
+                                  //   AddFoodItem(),
+                                  //   isScrollControlled: true, // Allows the bottom sheet to expand with keyboard
+                                  //   backgroundColor: Color(0xffF4F5FA),
+                                  //   shape: RoundedRectangleBorder(
+                                  //     borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                                  //   ),
+                                  // );
                                 },
                               ),
                               SizedBox(width: 4,),
@@ -194,13 +207,13 @@ class MenuAdminScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return MenuItemWidget(
                             menuItem: controller.allMenuItems[index],
-                            onEdit: () => controller.editMenuItem(
+                            onEdit: () => controller.editMenuItem(context,
                                 controller.allMenuItems[index]),
                             onDelete: () => controller.deleteMenuItem(
                                 context,
                                 controller.allMenuItems[index]),
                             onToggleAvailability: (isAvailable) =>
-                                controller.toggleAvailability(
+                                controller.toggleAvailability(context,
                                     controller.allMenuItems[index],
                                     isAvailable),
                             onEditPrice: () =>

@@ -63,7 +63,7 @@ class UserDataItemAdmin extends StatelessWidget {
                         inactiveTrackColor: Colors.grey,
                         inactiveThumbColor: Colors.white,
                         onChanged: (bool value) {
-                          controller.toggleUserOnlineStatus(userData, value);
+                          controller.toggleUserOnlineStatus(context,userData, value);
                           // controller.isVeg.value = value;
                         },
                       ),
@@ -81,7 +81,7 @@ class UserDataItemAdmin extends StatelessWidget {
                       titleTextColor: Colors.white,
                       backgroundColor: Color(0xff007AFF),
                       onPressed: (){
-                        controller.editUserData(userData);
+                        controller.editUserData(context,userData);
                       },
                     ),
                     SizedBox(width: 8,),

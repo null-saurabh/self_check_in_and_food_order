@@ -39,7 +39,14 @@ RxList<FoodOrderModel> trackOrderList =
 
       if (querySnapshot.docs.isEmpty) {
         context.pop();
-        Get.snackbar('No Orders Found', 'No orders found for this phone number');
+        final snackBar = SnackBar(
+          content: Text('No Orders Found: No orders found for this phone number'),
+          backgroundColor: Colors.red,
+        );
+
+// Show the snackbar
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
         return;
       }
 
@@ -58,7 +65,7 @@ RxList<FoodOrderModel> trackOrderList =
       context.pop();
     } catch (e) {
       context.pop();
-      Get.snackbar('Error', 'Failed to fetch orders: $e');
+      debugPrint('Error:" Failed to fetch orders: $e');
     }
   }
 

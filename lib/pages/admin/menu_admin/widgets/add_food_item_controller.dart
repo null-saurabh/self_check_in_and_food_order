@@ -33,7 +33,7 @@ class AddFoodItemController extends GetxController {
   var selectedCategory = Rxn<String>(); // Currently selected category
 
   // TextEditingControllers for required fields
-  var idController = TextEditingController();
+  // var idController = TextEditingController();
   var nameController = TextEditingController();
   var priceController = TextEditingController();
   var descriptionController = TextEditingController();
@@ -68,7 +68,7 @@ class AddFoodItemController extends GetxController {
   void setEditingItem(MenuItemModel item) {
     editingItem.value = item;
     // Populate fields with item data
-    idController.text = item.id;
+    // idController.text = item.id;
     nameController.text = item.name;
     priceController.text = item.price.toString();
     descriptionController.text = item.description ?? '';
@@ -111,7 +111,7 @@ class AddFoodItemController extends GetxController {
       // }
       update();
     } catch (e) {
-      Get.snackbar("Error", "Failed to load categories from Firebase.");
+      debugPrint("Error:  Failed to load categories from Firebase. $e");
     }
   }
 
@@ -183,7 +183,7 @@ class AddFoodItemController extends GetxController {
 
         // Prepare the data using the MenuItemModel class
         MenuItemModel newItem = MenuItemModel(
-          id: isEditing.value ? editingItem.value!.id:"",
+          id: isEditing.value ? editingItem.value!.id :"",
           name: nameController.text,
           price: double.parse(priceController.text),
           category: selectedCategory.value!,
@@ -237,26 +237,40 @@ class AddFoodItemController extends GetxController {
               }
               context.pop();
               context.pop();
-
-              // Show success snackbar
-              Get.snackbar(
-                "Success",
-                "Menu item updated successfully.",
-                snackPosition: SnackPosition.BOTTOM,
+              final snackBar = SnackBar(
+                content: Text("Menu item updated successfully."),
                 backgroundColor: Colors.green,
-                colorText: Colors.white,
               );
+
+// Show the snackbar
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+              // // Show success snackbar
+              // Get.snackbar(
+              //   "Success",
+              //   "Menu item updated successfully.",
+              //   snackPosition: SnackPosition.BOTTOM,
+              //   backgroundColor: Colors.green,
+              //   colorText: Colors.white,
+              // );
           } catch (error) {
             context.pop();
+            final snackBar = SnackBar(
+              content: Text("Failed to update menu item. Please try again."),
+              backgroundColor: Colors.red,
+            );
+
+// Show the snackbar
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
             // Show error snackbar
-            Get.snackbar(
-              "Error",
-              "Failed to update menu item. Please try again.",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.red,
-              colorText: Colors.white,
-            );
+            // Get.snackbar(
+            //   "Error",
+            //   "Failed to update menu item. Please try again.",
+            //   snackPosition: SnackPosition.BOTTOM,
+            //   backgroundColor: Colors.red,
+            //   colorText: Colors.white,
+            // );
           }
 
         }
@@ -271,41 +285,52 @@ class AddFoodItemController extends GetxController {
           await docRef.update({'id': id});
 
 
-          context.pop(); // Close loading dialog
-          context.pop(); // go back from add screen
-          Get.snackbar(
-            "Success",
-            "Food Item has been added Successfully",
-            backgroundColor: Colors.orangeAccent,
-            colorText: Colors.white,
-          );
-
 
 
           MenuAdminController controller = Get.find<MenuAdminController>();
           controller.allMenuItems.add(newItem);
           controller.originalMenuItems.add(newItem);
+
           clearFields();
 
+          context.pop(); // Close loading dialog
+          context.pop(); // go back from add screen
+
+          // Get.snackbar(
+          //   "Success",
+          //   "Food Item has been added Successfully",
+          //   backgroundColor: Colors.orangeAccent,
+          //   colorText: Colors.white,
+          // );
+          final snackBar = SnackBar(
+            content: const Text("Success, Food Item has been added Successfully",),
+            backgroundColor: Colors.orangeAccent,
+          );
+
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       } catch (e) {
         context.pop();
 
-        Get.snackbar(
-          "Error",
-          "Failed to add the item: $e",
+        final snackBar = SnackBar(
+          content: Text("Failed to add the item: $e"),
           backgroundColor: Colors.redAccent,
-          colorText: Colors.white,
         );
+
+// Show the snackbar
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
       } finally {
       }
     } else {
-      Get.snackbar(
-        "Error",
-        "Please fill in all fields",
+      final snackBar = SnackBar(
+        content: Text("Please fill in all fields"),
         backgroundColor: Colors.redAccent.withOpacity(0.9),
-        colorText: Colors.white,
       );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
     }
   }
 
@@ -313,7 +338,6 @@ class AddFoodItemController extends GetxController {
 
   // Clears all input fields after submission
   void clearFields() {
-    idController.clear();
     nameController.clear();
     priceController.clear();
     descriptionController.clear();
@@ -324,6 +348,6 @@ class AddFoodItemController extends GetxController {
     tagsController.clear();
     ingredientsController.clear();
     selectedImage.value = null;
-    selectedCategory.value = null;
+    // selectedCategory.value = null;
   }
 }

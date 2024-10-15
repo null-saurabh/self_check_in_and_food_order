@@ -186,14 +186,15 @@ class ManageVoucherAdminController extends GetxController {
       applyDefaultFilter();
       update();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch list $e');
+      debugPrint('Error: Failed to fetch list $e');
+
     }
     finally {
       isLoading.value = false; // End loading
     }
   }
 
-  void toggleVoucherActiveStatus(CouponModel voucherData, bool isActive) async {
+  void toggleVoucherActiveStatus(BuildContext context,CouponModel voucherData, bool isActive) async {
     // Update UI first (optimistic update)
     voucherData.isActive = isActive;
     update();
@@ -221,7 +222,14 @@ class ManageVoucherAdminController extends GetxController {
       // If there's an error, revert the UI back to the previous state
       voucherData.isActive = !isActive;
       update();
-      Get.snackbar('Error', 'Failed to update online status: $error');
+      final snackBar = SnackBar(
+        content: Text('Error: Failed to update online status: $error'),
+        backgroundColor: Colors.red,
+      );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
     }
   }
 
@@ -261,23 +269,24 @@ class ManageVoucherAdminController extends GetxController {
 
       fetchVoucherList();
       context.pop();
-      Get.snackbar(
-        "Success",
-        "Vouchers updated successfully.",
-        snackPosition: SnackPosition.BOTTOM,
+      final snackBar = SnackBar(
+        content: Text("Success: Vouchers updated successfully."),
         backgroundColor: Colors.green,
-        colorText: Colors.white,
       );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
     } catch (e) {
       context.pop();
-      Get.snackbar(
-        "Error",
-        "Failed to update voucher.",
-        snackPosition: SnackPosition.BOTTOM,
+      final snackBar = SnackBar(
+        content: Text("Error: Failed to update voucher."),
         backgroundColor: Colors.red,
-        colorText: Colors.white,
       );
-      print('Error expiring coupons: $e');
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
     }
   }
 
@@ -334,14 +343,15 @@ class ManageVoucherAdminController extends GetxController {
           update();
           context.pop();
 
-          // Show success snackbar
-          Get.snackbar(
-            "Success",
-            "Menu item deleted successfully.",
-            snackPosition: SnackPosition.BOTTOM,
+          final snackBar = SnackBar(
+            content: Text("Success: Vouchers deleted successfully."),
             backgroundColor: Colors.green,
-            colorText: Colors.white,
           );
+
+// Show the snackbar
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          // Show success snackbar
+
         // } else {
         //   ""();
         //
@@ -357,13 +367,16 @@ class ManageVoucherAdminController extends GetxController {
       } catch (error) {
         context.pop();
         // Show error snackbar
-        Get.snackbar(
-          "Error",
-          "Failed to delete menu item. Please try again.",
-          snackPosition: SnackPosition.BOTTOM,
+
+        final snackBar = SnackBar(
+          content: Text('Error: Failed to delete voucher. Please try again'),
           backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
+
+// Show the snackbar
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
       }
     }
   }

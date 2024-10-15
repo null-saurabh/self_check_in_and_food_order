@@ -35,8 +35,7 @@ class MenuAdminController extends GetxController {
       allMenuItems.value = List.from(originalMenuItems); // Update displayed list
       update();
     } catch (e) {
-      Get.snackbar("Error", "Failed to fetch data");
-      print("Error fetching menu data: $e");
+      debugPrint(e.toString());
     }finally {
       // print("Aaaaa");
       isLoading.value = false; // End loading
@@ -102,17 +101,31 @@ class MenuAdminController extends GetxController {
   }
 
 
-  Future<void> editMenuItem(MenuItemModel item) async {
+  Future<void> editMenuItem(BuildContext context,MenuItemModel item) async {
     // Implement edit logic
     // This is a placeholder
-    Get.bottomSheet(
-      AddFoodItem(item: item,isEdit: true,),
-      isScrollControlled: true, // Allows the bottom sheet to expand with keyboard
-      backgroundColor: Color(0xffF4F5FA),
-      shape: RoundedRectangleBorder(
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Allows the bottom sheet to expand with the keyboard
+      backgroundColor: const Color(0xffF4F5FA),
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
+      builder: (context) {
+        return AddFoodItem(item: item,isEdit: true,); // Your widget for the bottom sheet
+      },
     );
+
+
+    // Get.bottomSheet(
+    //   AddFoodItem(item: item,isEdit: true,),
+    //   isScrollControlled: true, // Allows the bottom sheet to expand with keyboard
+    //   backgroundColor: Color(0xffF4F5FA),
+    //   shape: RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+    //   ),
+    // );
     // print("Edit Menu Item: ${item.name}");
   }
 
@@ -157,13 +170,22 @@ class MenuAdminController extends GetxController {
           update();
 
           // Show success snackbar
-          Get.snackbar(
-            "Success",
-            "Menu item deleted successfully.",
-            snackPosition: SnackPosition.BOTTOM,
+          // Get.snackbar(
+          //   "Success",
+          //   "Menu item deleted successfully.",
+          //   snackPosition: SnackPosition.BOTTOM,
+          //   backgroundColor: Colors.green,
+          //   colorText: Colors.white,
+          // );
+
+          final snackBar = SnackBar(
+            content: Text("Menu item deleted successfully."),
             backgroundColor: Colors.green,
-            colorText: Colors.white,
           );
+
+// Show the snackbar
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
 
         // else {
         //   // No matching document found
@@ -177,18 +199,27 @@ class MenuAdminController extends GetxController {
         // }
       } catch (error) {
         // Show error snackbar
-        Get.snackbar(
-          "Error",
-          "Failed to delete menu item. Please try again.",
-          snackPosition: SnackPosition.BOTTOM,
+        // Get.snackbar(
+        //   "Error",
+        //   "Failed to delete menu item. Please try again.",
+        //   snackPosition: SnackPosition.BOTTOM,
+        //   backgroundColor: Colors.red,
+        //   colorText: Colors.white,
+        // );
+
+        final snackBar = SnackBar(
+          content: Text("Failed to delete menu item. Please try again."),
           backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
+
+// Show the snackbar
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
       }
     }
   }
 
-  Future<void> toggleAvailability(MenuItemModel item, bool isAvailable) async {
+  Future<void> toggleAvailability(BuildContext context,MenuItemModel item, bool isAvailable) async {
     // Store the previous state to revert if needed
     bool previousState = item.isAvailable;
 
@@ -213,13 +244,22 @@ class MenuAdminController extends GetxController {
             .update({'isAvailable': isAvailable});
 
         // Optionally, show a success snackbar
-        Get.snackbar(
-          "Success",
-          "Availability updated successfully.",
-          snackPosition: SnackPosition.BOTTOM,
+
+        final snackBar = SnackBar(
+          content: Text("Availability updated successfully."),
           backgroundColor: Colors.green,
-          colorText: Colors.white,
         );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      // Get.snackbar(
+        //   "Success",
+        //   "Availability updated successfully.",
+        //   snackPosition: SnackPosition.BOTTOM,
+        //   backgroundColor: Colors.green,
+        //   colorText: Colors.white,
+        // );
       // }
       // else {
       //   // If the document is not found, revert to the previous state
@@ -239,14 +279,22 @@ class MenuAdminController extends GetxController {
       item.isAvailable = previousState;
       update();
 
-      // Show an error snackbar
-      Get.snackbar(
-        "Error",
-        "Failed to update availability. Please try again.",
-        snackPosition: SnackPosition.BOTTOM,
+      final snackBar = SnackBar(
+        content: Text("Failed to update availability. Please try again."),
         backgroundColor: Colors.red,
-        colorText: Colors.white,
       );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      // Show an error snackbar
+      // Get.snackbar(
+      //   "Error",
+      //   "Failed to update availability. Please try again.",
+      //   snackPosition: SnackPosition.BOTTOM,
+      //   backgroundColor: Colors.red,
+      //   colorText: Colors.white,
+      // );
     }
   }
 

@@ -146,7 +146,7 @@ class VoucherItemAdmin extends StatelessWidget {
                                   inactiveTrackColor: Colors.grey,
                                   inactiveThumbColor: Colors.white,
                                   onChanged: (bool value) {
-                                    controller.toggleVoucherActiveStatus(
+                                    controller.toggleVoucherActiveStatus(context,
                                         voucherData, value);
                                     // controller.isVeg.value = value;
                                   },
@@ -183,19 +183,36 @@ class VoucherItemAdmin extends StatelessWidget {
                                 // backgroundColor: Colors.transparent,
                                 // showBorder: true,
                                 onPressed: () {
-                                  Get.bottomSheet(
-                                    AddVoucherAdmin(
-                                      data: voucherData,
-                                      isEdit: true,
+
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true, // Allows the bottom sheet to expand with the keyboard
+                                    backgroundColor: const Color(0xffF4F5FA),
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                                     ),
-                                    isScrollControlled:
-                                        true, // Allows the bottom sheet to expand with keyboard
-                                    backgroundColor: Color(0xffF4F5FA),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(16)),
-                                    ),
+                                    builder: (context) {
+                                      return AddVoucherAdmin(
+                                        data: voucherData,
+                                        isEdit: true,
+                                      ); // Your widget for the bottom sheet
+                                    },
                                   );
+
+
+                                  // Get.bottomSheet(
+                                  //   AddVoucherAdmin(
+                                  //     data: voucherData,
+                                  //     isEdit: true,
+                                  //   ),
+                                  //   isScrollControlled:
+                                  //       true, // Allows the bottom sheet to expand with keyboard
+                                  //   backgroundColor: Color(0xffF4F5FA),
+                                  //   shape: RoundedRectangleBorder(
+                                  //     borderRadius: BorderRadius.vertical(
+                                  //         top: Radius.circular(16)),
+                                  //   ),
+                                  // );
                                   // controller.editUserData(userData);
                                 },
                               ),

@@ -36,7 +36,9 @@ class ReceptionController extends GetxController {
       print(adminUsers.length);
       update();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch admin users: $e');
+      debugPrint("Failed to fetch admin users: $e");
+
+
     }
   }
 

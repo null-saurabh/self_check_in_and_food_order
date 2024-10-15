@@ -101,12 +101,14 @@ class CheckInController extends GetxController {
       } else {
         // print("self country:");
         // print(response.body);
+        debugPrint("Error Failed to fetch country list");
 
-        Get.snackbar("Error", "Failed to fetch country list");
+        // Get.snackbar("Error", "Failed to fetch country list");
       }
     } catch (e) {
-      Get.snackbar("Error",
-          "Unable to fetch countries. Please check your internet connection.");
+      debugPrint(e.toString());
+      // Get.snackbar("Error",
+      //     "Unable to fetch countries. Please check your internet connection.");
 
       // print("eeee");
       // print(e);
@@ -149,7 +151,8 @@ class CheckInController extends GetxController {
 
       // update();
     } catch (e) {
-      Get.snackbar("Error", "Failed to pick image");
+      debugPrint("Error: Failed to pick image");
+      // Get.snackbar("Error", "Failed to pick image");
     }
   }
 
@@ -219,6 +222,7 @@ class CheckInController extends GetxController {
   // var selectedCountryCode = RxnString();
 
   // Fetch country codes (with flags) from API
+
   Future<void> fetchCountryCodes() async {
     try {
       // print("fetching country codes 1");
@@ -256,13 +260,16 @@ class CheckInController extends GetxController {
         // print(countryCodes.length);
         update();
       } else {
-        Get.snackbar("Error", "Failed to fetch country codes");
+        debugPrint("Error: Failed to fetch country codes");
+
       }
     } catch (e) {
-      Get.snackbar("Error",
-          "Unable to fetch country codes. Please check your internet connection.");
-    }
-  }
+      debugPrint(
+          "Error: Unable to fetch country codes. Please check your internet connection.");
+    } }
+
+
+
 
   // Fetch state list based on selected country
   Future<void> fetchStates(String countryCode) async {
@@ -274,11 +281,12 @@ class CheckInController extends GetxController {
         states.value = data.map((state) => state['name'].toString()).toList();
         states.sort(); // Sort states alphabetically
       } else {
-        Get.snackbar("Error", "Failed to fetch states");
+        debugPrint("Error: Failed to fetch states");
+
       }
     } catch (e) {
-      Get.snackbar("Error",
-          "Unable to fetch states. Please check your internet connection.");
+    debugPrint("Error: Unable to fetch states. Please check your internet connection.");
+
     }
   }
 
@@ -296,7 +304,7 @@ class CheckInController extends GetxController {
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   // Upload a document (Front/Back) and return the URL
-  Future<String?> uploadDocument(var document, String fileName) async {
+  Future<String?> uploadDocument(BuildContext context,var document, String fileName) async {
     try {
       Reference ref = storage.ref().child("documents").child(fileName);
 
@@ -320,14 +328,21 @@ class CheckInController extends GetxController {
     } catch (e) {
       // print("a");
       // print(e);
-      Get.snackbar("Error", "Failed to upload document: $e",
-          backgroundColor: Colors.redAccent, colorText: Colors.white);
+      final snackBar = SnackBar(
+        content: Text('Failed to fetch admin users: $e'),
+        backgroundColor: Colors.red,
+      );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+    }
+
       return null;
     }
-  }
 
   // Upload signature and return the URL
-  Future<String?> uploadSignature() async {
+  Future<String?> uploadSignature(BuildContext context,) async {
     if (signatureController.isEmpty) return null;
     try {
       var signatureBytes = await signatureController.toPngBytes();
@@ -338,12 +353,19 @@ class CheckInController extends GetxController {
         return downloadUrl;
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to upload signature: $e",
-          backgroundColor: Colors.redAccent, colorText: Colors.white);
+      final snackBar = SnackBar(
+        content: Text('Failed to upload signature: $e'),
+        backgroundColor: Colors.red,
+      );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      return null;
     }
     return null;
-  }
 
+  }
   // Function to submit data to Firebase
   Future<void> submitData(BuildContext context) async {
 
@@ -360,17 +382,17 @@ class CheckInController extends GetxController {
       String? signatureUrl;
 
       if (frontDocument.value != null) {
-        frontDocumentUrl = await uploadDocument(
+        frontDocumentUrl = await uploadDocument(context,
             frontDocument.value!, "front_${fullName.value}");
       }
       // print("1");
       if (backDocument.value != null) {
         backDocumentUrl =
-            await uploadDocument(backDocument.value!, "back_${fullName.value}");
+            await uploadDocument(context,backDocument.value!, "back_${fullName.value}");
       }
       // print("2");
 
-      signatureUrl = await uploadSignature();
+      signatureUrl = await uploadSignature(context,);
       // print("3");
 
       if (frontDocumentUrl != null && signatureUrl != null) {
@@ -420,27 +442,36 @@ class CheckInController extends GetxController {
           context.pop();
           // print("55");
 
-          Get.snackbar(
-            "Success",
-            "Self check-in completed successfully!",
-            backgroundColor: Colors.orangeAccent,
-            colorText: Colors.white,
+          final snackBar = SnackBar(
+            content: Text(  "Success: Self check-in completed successfully!",),
+            backgroundColor: Colors.green,
           );
+
+// Show the snackbar
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
           // print("6");
           clearFields();
 
         }
       } else {
-        Get.snackbar(
-            "Error", "Failed to upload documents/signature. Please try again.");
+        final snackBar = SnackBar(
+          content: Text("Error: Failed to upload documents/signature. Please try again."),
+          backgroundColor: Colors.red,
+        );
+
+// Show the snackbar
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Failed to complete self check-in: $e",
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+      final snackBar = SnackBar(
+        content: Text("Error: Failed to complete self check-in: $e"),
+        backgroundColor: Colors.red,
       );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
     } finally {
       // print("AAAA");
       // ""();

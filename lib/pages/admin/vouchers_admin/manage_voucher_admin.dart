@@ -33,7 +33,7 @@ class ManageVoucherAdmin extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Get.previousRoute.isNotEmpty
+                        GoRouter.of(context).canPop()
                             ?IconButton(
                           icon: const Icon(Icons.arrow_back),
                           onPressed: () {
@@ -243,16 +243,30 @@ class ManageVoucherAdmin extends StatelessWidget {
                       ),
                       AppElevatedButton(
                         onPressed: () {
-                          Get.bottomSheet(
-                            AddVoucherAdmin(),
-                            isScrollControlled:
-                                true, // Allows the bottom sheet to expand with keyboard
-                            backgroundColor: Color(0xffF4F5FA),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(16)),
+
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true, // Allows the bottom sheet to expand with the keyboard
+                            backgroundColor: const Color(0xffF4F5FA),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                             ),
+                            builder: (context) {
+                              return AddVoucherAdmin(); // Your widget for the bottom sheet
+                            },
                           );
+
+
+                          // Get.bottomSheet(
+                          //   AddVoucherAdmin(),
+                          //   isScrollControlled:
+                          //       true, // Allows the bottom sheet to expand with keyboard
+                          //   backgroundColor: Color(0xffF4F5FA),
+                          //   shape: RoundedRectangleBorder(
+                          //     borderRadius: BorderRadius.vertical(
+                          //         top: Radius.circular(16)),
+                          //   ),
+                          // );
                         },
                         contentPadding: EdgeInsets.all(12),
                         child: Row(

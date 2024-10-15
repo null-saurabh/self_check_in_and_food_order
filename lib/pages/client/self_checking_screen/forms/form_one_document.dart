@@ -65,6 +65,7 @@ class CheckInFormOneDocument extends StatelessWidget {
                   },
                   value: selfCheckingController.documentType.value,
                   labelText: "Document Type",
+                  hintText: 'Select Document Type',
                   showLabel: true,
                   height: 40,
                   iconColor: Colors.grey,
@@ -87,20 +88,32 @@ class CheckInFormOneDocument extends StatelessWidget {
                 }),
                 const SizedBox(height: 16),
 
-                if(selfCheckingController.documentType.value != 'Passport') ... [
                 // Upload Back Document
                 Obx(() {
-                  return UploadDocumentWidget(
-                    title: "Back Side of Document",
-                    onTap: () => selfCheckingController.pickDocument(false),
-                    fileName: selfCheckingController.backDocumentName.value,
-                    isDocumentInvalid:
-                        selfCheckingController.isBackDocumentInvalid.value,
-                  );
-                }),
-                const SizedBox(height: 16),
 
-                ],
+                  if(selfCheckingController.documentType.value != 'Passport')
+
+                  return Column(
+                    children: [
+                      UploadDocumentWidget(
+                        title: "Back Side of Document",
+                        onTap: () => selfCheckingController.pickDocument(false),
+                        fileName: selfCheckingController.backDocumentName.value,
+                        isDocumentInvalid:
+                            selfCheckingController.isBackDocumentInvalid.value,
+                      ),
+                      const SizedBox(height: 16),
+
+                    ],
+
+
+                  );
+                else{
+                  return SizedBox.shrink();
+                  }
+
+                }),
+
                 // Terms and Conditions Checkbox
                 Obx(() {
                   return Column(

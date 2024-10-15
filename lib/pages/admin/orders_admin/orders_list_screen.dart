@@ -9,7 +9,6 @@ import '../../../widgets/filter_button.dart';
 import '../../../widgets/widget_support.dart';
 import 'admin_order_controller.dart';
 
-
 class OrdersListScreen extends StatelessWidget {
   const OrdersListScreen({super.key});
 
@@ -33,14 +32,15 @@ class OrdersListScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Get.previousRoute.isNotEmpty
-                              ?IconButton(
-                            icon: const Icon(Icons.arrow_back),
-                            onPressed: () {
-                                context.pop(); // Go back if there's a previous route
-
-                            },
-                          ):SizedBox.shrink(),
+                          GoRouter.of(context).canPop()
+                              ? IconButton(
+                                  icon: const Icon(Icons.arrow_back),
+                                  onPressed: () {
+                                    context
+                                        .pop(); // Go back if there's a previous route
+                                  },
+                                )
+                              : SizedBox.shrink(),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
@@ -73,41 +73,50 @@ class OrdersListScreen extends StatelessWidget {
                                           controller.SearchFilterOrderItems(
                                               value), // Call the search function
                                       decoration: InputDecoration(
-                                        hintText: "Search by name, number, orderId",
-                                        hintStyle: TextStyle(color: Colors.grey),
-                                        prefixIcon:
-                                            Icon(Icons.search, color: Colors.grey),
+                                        hintText:
+                                            "Search by name, number, orderId",
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey),
+                                        prefixIcon: Icon(Icons.search,
+                                            color: Colors.grey),
                                         filled: true,
                                         fillColor: Colors.white,
                                         border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(12),
-                                          borderSide:
-                                              BorderSide(color: Color(0xffEDCC23)),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          borderSide: BorderSide(
+                                              color: Color(0xffEDCC23)),
                                         ),
                                         enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(12),
-                                          borderSide:
-                                              BorderSide(color: Color(0xffEDCC23)),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          borderSide: BorderSide(
+                                              color: Color(0xffEDCC23)),
                                         ),
                                         focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(12),
-                                          borderSide:
-                                              BorderSide(color: Color(0xffEDCC23)),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          borderSide: BorderSide(
+                                              color: Color(0xffEDCC23)),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 8,),
+                                SizedBox(
+                                  width: 8,
+                                ),
                                 Stack(
                                   children: [
                                     Obx(() {
-
                                       // Only show the circle if there are active filters
-                                      if (controller.activeFilterCount.value > 0) {
+                                      if (controller.activeFilterCount.value >
+                                          0) {
                                         return Positioned(
-                                          right: 4,  // Adjust this to position it properly
-                                          top: -2,    // Adjust this to position it properly
+                                          right:
+                                              4, // Adjust this to position it properly
+                                          top:
+                                              -2, // Adjust this to position it properly
                                           child: Container(
                                             padding: EdgeInsets.all(6),
                                             decoration: BoxDecoration(
@@ -115,7 +124,8 @@ class OrdersListScreen extends StatelessWidget {
                                               shape: BoxShape.circle,
                                             ),
                                             child: Text(
-                                              controller.activeFilterCount.value.toString(),
+                                              controller.activeFilterCount.value
+                                                  .toString(),
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 10,
@@ -125,26 +135,27 @@ class OrdersListScreen extends StatelessWidget {
                                           ),
                                         );
                                       } else {
-                                        return SizedBox.shrink(); // Return empty widget if no filters are active
+                                        return SizedBox
+                                            .shrink(); // Return empty widget if no filters are active
                                       }
                                     }),
                                     AppElevatedButton(
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 4),
                                       width: 40,
                                       showBorder: true,
                                       backgroundColor: Colors.transparent,
                                       borderColor: Color(0xffEDCC23),
                                       borderWidth: 1,
                                       titleTextColor: Colors.black,
-                                      child: Icon(Icons.filter_alt, color: Colors.black, size: 22),
-
-                                      onPressed: (){
+                                      child: Icon(Icons.filter_alt,
+                                          color: Colors.black, size: 22),
+                                      onPressed: () {
                                         showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
                                               return OrderFilterAlert();
-                                            }
-                                        );
+                                            });
                                       },
                                     ),
                                   ],
@@ -154,17 +165,18 @@ class OrdersListScreen extends StatelessWidget {
                             SizedBox(
                               height: 8,
                             ),
-                            SingleChildScrollView(scrollDirection: Axis.horizontal,
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
                               child: Row(
                                 children: [
                                   FilterButton(
                                     label: "All",
                                     isSelected:
-                                    controller.selectedFilter.value == "All",
+                                        controller.selectedFilter.value ==
+                                            "All",
                                     onTap: () {
                                       controller.filterOrdersByStatus(
-                                          label:"All");
-
+                                          label: "All");
                                     },
                                   ),
                                   SizedBox(
@@ -172,8 +184,9 @@ class OrdersListScreen extends StatelessWidget {
                                   ),
                                   FilterButton(
                                     label: "Pending",
-                                    isSelected: controller.selectedFilter.value ==
-                                        "Pending",
+                                    isSelected:
+                                        controller.selectedFilter.value ==
+                                            "Pending",
                                     onTap: () {
                                       controller.filterOrdersByStatus(
                                           label: "Pending");
@@ -184,11 +197,12 @@ class OrdersListScreen extends StatelessWidget {
                                   ),
                                   FilterButton(
                                     label: "Processing",
-                                    isSelected: controller.selectedFilter.value ==
-                                        "Processing",
+                                    isSelected:
+                                        controller.selectedFilter.value ==
+                                            "Processing",
                                     onTap: () {
                                       controller.filterOrdersByStatus(
-                                          label:"Processing");
+                                          label: "Processing");
                                     },
                                   ),
                                   SizedBox(
@@ -196,11 +210,12 @@ class OrdersListScreen extends StatelessWidget {
                                   ),
                                   FilterButton(
                                     label: "Completed",
-                                    isSelected: controller.selectedFilter.value ==
-                                        'Completed',
+                                    isSelected:
+                                        controller.selectedFilter.value ==
+                                            'Completed',
                                     onTap: () {
                                       controller.filterOrdersByStatus(
-                                          label:"Completed");
+                                          label: "Completed");
                                     },
                                   ),
                                   SizedBox(
@@ -208,11 +223,12 @@ class OrdersListScreen extends StatelessWidget {
                                   ),
                                   FilterButton(
                                     label: "Refund",
-                                    isSelected: controller.selectedFilter.value ==
-                                        'Refund',
+                                    isSelected:
+                                        controller.selectedFilter.value ==
+                                            'Refund',
                                     onTap: () {
                                       controller.filterOrdersByStatus(
-                                          label:"Refund");
+                                          label: "Refund");
                                     },
                                   ),
                                 ],
@@ -242,23 +258,21 @@ class OrdersListScreen extends StatelessWidget {
                                         .makePhoneCall(orderData.contactNumber);
                                   },
                                   markAsConfirm: () => controller.confirmOrder(
-                                      context,
-                                      orderData, "Admin"),
-                                  markAsDelivered: () => controller.orderDelivered(
-                                      context,
-                                      orderData,
-                                      "Admin"),
+                                      context, orderData, "Admin"),
+                                  markAsDelivered: () =>
+                                      controller.orderDelivered(
+                                          context, orderData, "Admin"),
                                   orderData: orderData,
                                   initiateRefund: () {
-                                    if(orderData.refundAmount != null) {
+                                    if (orderData.refundAmount != null) {
                                       controller.refundAmountController.text =
-                                          (orderData.totalAmount.toInt() - orderData.refundAmount!).toString();
-                                    }
-                                    else{
+                                          (orderData.totalAmount.toInt() -
+                                                  orderData.refundAmount!)
+                                              .toString();
+                                    } else {
                                       controller.refundAmountController.text =
                                           orderData.totalAmount.toString();
                                     }
-
 
                                     showDialog(
                                       context: context,
@@ -281,16 +295,21 @@ class OrdersListScreen extends StatelessWidget {
                                             ),
                                             TextButton(
                                               onPressed: () async {
-
-                                                RazorpayService razorpay = RazorpayService();
+                                                RazorpayService razorpay =
+                                                    RazorpayService();
                                                 razorpay.handleRefund(
                                                   context: context,
-                                                    paymentId:
-                                                        orderData.transactionId,
-                                                    refundAmount: int.parse(
-                                                        controller
-                                                            .refundAmountController
-                                                            .text), orderId: orderData.orderId, orderAmount: orderData.totalAmount.toInt(),);
+                                                  paymentId:
+                                                      orderData.transactionId,
+                                                  refundAmount: int.parse(
+                                                      controller
+                                                          .refundAmountController
+                                                          .text),
+                                                  orderId: orderData.orderId,
+                                                  orderAmount: orderData
+                                                      .totalAmount
+                                                      .toInt(),
+                                                );
                                               },
                                               child: const Text("Refund"),
                                             ),
@@ -299,7 +318,7 @@ class OrdersListScreen extends StatelessWidget {
                                       },
                                     );
                                   },
-                                   //controller.confirmOrder(orderData,"Admin");},
+                                  //controller.confirmOrder(orderData,"Admin");},
                                 );
                               },
                             ).toList(),
@@ -314,21 +333,28 @@ class OrdersListScreen extends StatelessWidget {
                 } else {
                   switch (controller.selectedFilter.value) {
                     case 'Completed':
-                      return Expanded(child: Center(child: Text('No completed orders found.')));
+                      return Expanded(
+                          child: Center(
+                              child: Text('No completed orders found.')));
                     case 'Pending':
-                      return Expanded(child: Center(child: Text('No pending orders found.')));
+                      return Expanded(
+                          child:
+                              Center(child: Text('No pending orders found.')));
                     case 'Processing':
-                      return Expanded(child: Center(child: Text('No processing orders found.')));
+                      return Expanded(
+                          child: Center(
+                              child: Text('No processing orders found.')));
                     case 'Refunded':
-                      return Expanded(child: Center(child: Text('No refunded orders found.')));
+                      return Expanded(
+                          child:
+                              Center(child: Text('No refunded orders found.')));
                     case 'All':
-                      return Expanded(child: Center(child: Text('No orders found.')));
+                      return Expanded(
+                          child: Center(child: Text('No orders found.')));
                     default:
                       // If no filter is selected (default), show a message for pending and processing orders
                       return Expanded(
-                        child: Center(
-                            child:
-                                Text('No pending found.')),
+                        child: Center(child: Text('No pending found.')),
                       );
                   }
                 }

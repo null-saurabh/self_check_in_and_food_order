@@ -8,8 +8,6 @@ import 'package:wandercrew/pages/admin/login_admin/admin_login.dart';
 import 'package:wandercrew/pages/admin/menu_admin/menu_admin_screen.dart';
 import 'package:wandercrew/pages/admin/orders_admin/orders_list_screen.dart';
 import 'package:wandercrew/pages/admin/vouchers_admin/manage_voucher_admin.dart';
-import 'package:wandercrew/pages/admin/vouchers_admin/widgets/add_voucher.dart';
-import 'package:wandercrew/pages/client/cart_screen/cart_screen.dart';
 import 'package:wandercrew/pages/client/menu_screen/menu_screen.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/reception_home_screen.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_screen.dart';
@@ -46,11 +44,6 @@ final GoRouter router = GoRouter(
       path: Routes.receptionTrackOrder,
       name: 'ReceptionTrackOrder',
       builder: (context, state) => const TrackOrderScreen(),
-    ),
-    GoRoute(
-      path: Routes.receptionCart,
-      name: 'ReceptionCart',
-      builder: (context, state) => const CartScreen(),
     ),
     GoRoute(
       path: Routes.adminLogin,
@@ -99,12 +92,7 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const ManageVoucherAdmin(),
       redirect: (context, state) => _authGuard(state),
     ),
-    GoRoute(
-      path: Routes.adminAddVoucher,
-      name: 'AdminAddVoucher',
-      builder: (context, state) => const AddVoucherAdmin(),
-      redirect: (context, state) => _authGuard(state),
-    ),
+
     GoRoute(
       path: '/',
       name: 'WanderCrew',
@@ -119,10 +107,10 @@ final GoRouter router = GoRouter(
 
 // Middleware auth check
 String? _authGuard(GoRouterState state) {
-  final AuthService authService = AuthService.to;
-  if (!authService.isLoggedIn.value) {
-    return Routes.adminLogin; // Redirect to login if not authenticated
-  }
+  // final AuthService authService = AuthService.to;
+  // if (!authService.isLoggedIn.value) {
+  //   return Routes.adminLogin; // Redirect to login if not authenticated
+  // }
   return null; // Allow access if authenticated
 }
 
@@ -135,7 +123,6 @@ class Routes {
   static const String receptionHome = '/reception';
   static const String receptionMenu = '/reception/menu';
   static const String receptionCheckIn = '/reception/checkIn';
-  static const String receptionCart = '/reception/menu/cart';
   static const String receptionTrackOrder = '/reception/track-order';
 
   static const String adminLogin = '/admin/login';
@@ -146,7 +133,6 @@ class Routes {
   static const String adminCheckInList = '/admin/check-in-list';
   static const String adminManageUsers = '/admin/manage-user';
   static const String adminManageVoucher = '/admin/manage-voucher';
-  static const String adminAddVoucher = '/admin/manage-voucher/add';
 
   static const String notFound = '/not-found';
 }

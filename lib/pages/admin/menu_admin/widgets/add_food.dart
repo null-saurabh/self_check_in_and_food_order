@@ -77,16 +77,16 @@ class AddFoodItem extends StatelessWidget {
                               onValidate: Validators.requiredField,
                             ),
                           ),
-                          const SizedBox(height: 16.0),
-                          ElevatedContainer(
-                            child: EditText(
-                              labelText: "Item ID*",
-                              hint: "Enter Item ID",
-                              controller: controller.idController,
-                              onValidate: Validators.validateInt,
-                              inputType: TextInputType.number,
-                            ),
-                          ),
+                          // const SizedBox(height: 16.0),
+                          // ElevatedContainer(
+                          //   child: EditText(
+                          //     labelText: "Item ID*",
+                          //     hint: "Enter Item ID",
+                          //     controller: controller.idController,
+                          //     onValidate: Validators.validateInt,
+                          //     inputType: TextInputType.number,
+                          //   ),
+                          // ),
                           const SizedBox(height: 16.0),
                           ElevatedContainer(
                             child: Obx(() {

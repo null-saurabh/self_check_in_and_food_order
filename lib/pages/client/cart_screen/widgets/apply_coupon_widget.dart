@@ -43,7 +43,6 @@ class ApplyCouponWidget extends StatelessWidget {
               // Handle the validation message
               controller.voucherValidationMessage.value = result;
               controller.cartFormKey.currentState!.validate();
-              Get.snackbar("Error", result, backgroundColor: Colors.redAccent, colorText: Colors.white);
             } else {
               // If no error, clear the promo code field
               promoCode.clear();

@@ -57,7 +57,8 @@ class AdminOrderListController extends GetxController {
       applyRangeFilters();
       update();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch orders: $e');
+      debugPrint('Failed to fetch orders: $e');
+
     } finally {
       // print("Aaaaa");
       isLoading.value = false; // End loading
@@ -242,20 +243,34 @@ class AdminOrderListController extends GetxController {
           // print("confirm 9");
           fetchOrderData();
           context.pop();
-          Get.snackbar('Success', 'Order status updated to Preparing');
-        } else {
-          Get.snackbar(
-            'Error',
-            'Order not found',
-            snackPosition: SnackPosition.BOTTOM,
+          final snackBar = SnackBar(
+            content: Text("Success', 'Order status updated to Preparing"),
             backgroundColor: Colors.red,
-            colorText: Colors.white,
           );
+
+// Show the snackbar
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        } else {
+          final snackBar = SnackBar(
+            content: Text('Order not found'),
+            backgroundColor: Colors.red,
+          );
+
+// Show the snackbar
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
         }
 
       // Get the current order data
     } catch (e) {
-      Get.snackbar('Error', 'Failed to update order status: $e');
+      final snackBar = SnackBar(
+        content: Text("Error: Failed to update order status: $e"),
+        backgroundColor: Colors.red,
+      );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -286,6 +301,7 @@ class AdminOrderListController extends GetxController {
             .get();
         if (orderSnapshot.exists) {
           // Parse the order data into OrderModel
+
           FoodOrderModel order = FoodOrderModel.fromMap(
               orderSnapshot.data() as Map<String, dynamic>);
 
@@ -312,19 +328,35 @@ class AdminOrderListController extends GetxController {
 
           fetchOrderData();
           context.pop();
-          Get.snackbar('Success', 'Order marked as Delivered');
-        } else {
-          Get.snackbar(
-            'Error',
-            'Order not found',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
+          final snackBar = SnackBar(
+            content: Text('Order marked as Delivered'),
+            backgroundColor: Colors.green,
           );
+
+// Show the snackbar
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        } else {
+
+          final snackBar = SnackBar(
+            content: Text('Order not found'),
+            backgroundColor: Colors.red,
+          );
+
+// Show the snackbar
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
         }
 
     } catch (e) {
-      Get.snackbar('Error', 'Failed to update order status: $e');
+      final snackBar = SnackBar(
+        content: Text('Failed to update order status: $e'),
+        backgroundColor: Colors.red,
+      );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
     }
   }
 

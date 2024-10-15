@@ -141,25 +141,31 @@ class RazorpayService {
 
 
       context.pop();
-      Get.snackbar(
-        "Success",
-        "Refund processed successfully",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
+          final snackBar = SnackBar(
+            content: Text("Success: Refund processed successfully"),
+            backgroundColor: Colors.green,
+          );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
 
     }
 
     else {
       context.pop();
-      Get.snackbar(
-        "Error",
-        "Refund failed: ${response.body}",
-        snackPosition: SnackPosition.BOTTOM,
+
+
+
+      final snackBar = SnackBar(
+        content: Text("Refund failed: ${response.body}"),
         backgroundColor: Colors.red,
-        colorText: Colors.white,
       );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
 
 
     }

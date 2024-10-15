@@ -60,33 +60,61 @@ class AdminLoginController extends GetxController {
 
           }
         } else {
-          Get.snackbar(
-            "Error",
-            "Invalid Password",
-            snackPosition: SnackPosition.BOTTOM,
+          // Get.snackbar(
+          //   "Error",
+          //   "Invalid Password",
+          //   snackPosition: SnackPosition.BOTTOM,
+          //   backgroundColor: Colors.orangeAccent,
+          //   colorText: Colors.white,
+          // );
+
+          final snackBar = SnackBar(
+            content: const Text("Invalid Password"),
             backgroundColor: Colors.orangeAccent,
-            colorText: Colors.white,
           );
+
+// Show the snackbar
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
         }
       }
 
       else {
-        Get.snackbar(
-          "Error",
-          "Invalid username",
-          snackPosition: SnackPosition.BOTTOM,
+        // Get.snackbar(
+        //   "Error",
+        //   "Invalid username",
+        //   snackPosition: SnackPosition.BOTTOM,
+        //   backgroundColor: Colors.orangeAccent,
+        //   colorText: Colors.white,
+        // );
+
+        final snackBar = SnackBar(
+          content: const Text("Invalid username"),
           backgroundColor: Colors.orangeAccent,
-          colorText: Colors.white,
         );
+
+// Show the snackbar
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Failed to log in. Try again later.",
-        snackPosition: SnackPosition.BOTTOM,
+      // Get.snackbar(
+      //   "Error",
+      //   "Failed to log in. Try again later.",
+      //   snackPosition: SnackPosition.BOTTOM,
+      //   backgroundColor: Colors.redAccent,
+      //   colorText: Colors.white,
+      // );
+
+      final snackBar = SnackBar(
+        content: const Text("Failed to log in. Try again later."),
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
       );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
     } finally {
       isLoading.value = false;
     }

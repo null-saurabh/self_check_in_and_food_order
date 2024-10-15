@@ -42,7 +42,7 @@ class CheckInScreen extends StatelessWidget {
                     assetPath: 'assets/textures/check_in_texture_4.png',
                   ),
 
-              if (Get.previousRoute.isNotEmpty || checkInController.currentPage.value > 0)
+              if (GoRouter.of(context).canPop() || checkInController.currentPage.value > 0)
               Positioned(
                     top: 32,
                     left: 16,

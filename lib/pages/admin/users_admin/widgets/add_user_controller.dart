@@ -77,7 +77,7 @@ class AddNewUserAdminController extends GetxController{
   }
 
 
-  Future<void> pickDocument(bool isFront) async {
+  Future<void> pickDocument(BuildContext context,bool isFront) async {
     try {
       if (kIsWeb){
         final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -116,11 +116,19 @@ class AddNewUserAdminController extends GetxController{
       // update();
     }
     catch (e) {
-      Get.snackbar("Error", "Failed to pick image");
+      final snackBar = SnackBar(
+        content: Text('Success Failed to pick image'),
+        backgroundColor: Colors.red,
+      );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
     }
   }
 
-  Future<String?> uploadDocument(var document, String fileName) async {
+  Future<String?> uploadDocument(BuildContext context,var document, String fileName) async {
     try {
       Reference ref = storage.ref().child("documents").child(fileName);
 
@@ -144,7 +152,14 @@ class AddNewUserAdminController extends GetxController{
     } catch (e) {
       // print("a");
       // print(e);
-      Get.snackbar("Error", "Failed to upload document: $e", backgroundColor: Colors.redAccent, colorText: Colors.white);
+      final snackBar = SnackBar(
+        content: Text('Error: Failed to upload document: $e'),
+        backgroundColor: Colors.red,
+      );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
       return null;
     }
   }
@@ -163,11 +178,11 @@ class AddNewUserAdminController extends GetxController{
 
 
       if (frontDocument.value != null) {
-        frontDocumentUrl.value = await uploadDocument(frontDocument.value!, "front_user_${nameController.value}");
+        frontDocumentUrl.value = await uploadDocument(context,frontDocument.value!, "front_user_${nameController.value}");
       }
       // print("1");
       if (backDocument.value != null) {
-        backDocumentUrl.value = await uploadDocument(backDocument.value!, "back_user_${nameController.value}");
+        backDocumentUrl.value = await uploadDocument(context,backDocument.value!, "back_user_${nameController.value}");
       }
 
       // String  = randomAlphaNumeric(10);
@@ -224,13 +239,15 @@ class AddNewUserAdminController extends GetxController{
                 context.pop();
 
                 // Show success snackbar
-                Get.snackbar(
-                  "Success",
-                  "Menu item updated successfully.",
-                  snackPosition: SnackPosition.BOTTOM,
+                final snackBar = SnackBar(
+                  content: Text("Success Menu item updated successfully."),
                   backgroundColor: Colors.green,
-                  colorText: Colors.white,
                 );
+
+// Show the snackbar
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
 
               // }
               // else {
@@ -249,13 +266,15 @@ class AddNewUserAdminController extends GetxController{
               context.pop();
 
               // Show error snackbar
-              Get.snackbar(
-                "Error",
-                "Failed to update menu item. Please try again.",
-                snackPosition: SnackPosition.BOTTOM,
+
+              final snackBar = SnackBar(
+                content: Text("Error: Failed to update user. Please try again."),
                 backgroundColor: Colors.red,
-                colorText: Colors.white,
               );
+
+// Show the snackbar
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
             }
 
           }
@@ -279,28 +298,40 @@ class AddNewUserAdminController extends GetxController{
 
             // print("55");
 
-            Get.snackbar(
-              "Success",
-              "User Added Successfully successfully!",
-              backgroundColor: Colors.orangeAccent,
-              colorText: Colors.white,
+            final snackBar = SnackBar(
+              content: Text('User Added Successfully successfully!'),
+              backgroundColor: Colors.green,
             );
+
+// Show the snackbar
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
             // print("6");
             clearFields();
           } }
          }else {
         context.pop();
-        Get.snackbar("Error", "Failed to upload documents. Please try again.");
+        final snackBar = SnackBar(
+          content: Text("Error: Failed to upload documents. Please try again."),
+          backgroundColor: Colors.red,
+        );
+
+// Show the snackbar
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
       }
     } catch (e) {
       context.pop();
 
-      Get.snackbar(
-        "Error",
-        "Failed to add user: $e",
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+      final snackBar = SnackBar(
+        content: Text("Error: Failed to add user: $e",),
+        backgroundColor: Colors.red,
       );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
     } finally {
       // print("AAAA");
       //Close loading dialog

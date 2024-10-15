@@ -32,7 +32,7 @@ class TrackOrderScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Get.previousRoute.isNotEmpty
+                          GoRouter.of(context).canPop()
                          ? IconButton(
                             icon: const Icon(Icons.arrow_back),
                             onPressed: () {
