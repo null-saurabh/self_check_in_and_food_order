@@ -423,18 +423,18 @@ class CheckInListController extends GetxController {
 
                 String newNote = noteController.text;
 
-                // Query to get the correct document by custom 'id' field
-                QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-                    .collection("Self_Check_In")
-                    .where("productId", isEqualTo: item.id)
-                    .get();
-
-                if (querySnapshot.docs.isNotEmpty) {
-                  String docId = querySnapshot.docs.first.id;
+                // // Query to get the correct document by custom 'id' field
+                // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+                //     .collection("Self_Check_In")
+                //     .where("productId", isEqualTo: item.id)
+                //     .get();
+                //
+                // if (querySnapshot.docs.isNotEmpty) {
+                //   String  = querySnapshot.docs.first.id;
 
                   // Update the note in the database
                   await FirebaseFirestore.instance.collection("Self_Check_In")
-                      .doc(docId)
+                      .doc(item.id)
                       .update({'notes': newNote,'updatedAt':DateTime.now(),'updatedBy':"Admin"});
 
                   // Update local item note
@@ -444,18 +444,18 @@ class CheckInListController extends GetxController {
                   // Close the dialog
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
-                } else {
-                  // Show error snackbar if no matching document is found
-                  Get.snackbar(
-                    "Error",
-                    "User Data not found.",
-                    snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: Colors.red,
-                    colorText: Colors.white,
-                  );
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                }
+                // } else {
+                //   // Show error snackbar if no matching document is found
+                //   Get.snackbar(
+                //     "Error",
+                //     "User Data not found.",
+                //     snackPosition: SnackPosition.BOTTOM,
+                //     backgroundColor: Colors.red,
+                //     colorText: Colors.white,
+                //   );
+                //   Navigator.of(context).pop();
+                //   Navigator.of(context).pop();
+                // }
               },
               child: const Text("Save"),
             ),
@@ -474,17 +474,17 @@ class CheckInListController extends GetxController {
 
 
     // Query to get the correct document by custom 'id' field
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection("Self_Check_In")
-        .where("productId", isEqualTo: item.id)
-        .get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      String docId = querySnapshot.docs.first.id;
+    // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+    //     .collection("Self_Check_In")
+    //     .where("productId", isEqualTo: item.id)
+    //     .get();
+    //
+    // if (querySnapshot.docs.isNotEmpty) {
+    //   String  = querySnapshot.docs.first.id;
 
       // Update the note in the database
       await FirebaseFirestore.instance.collection("Self_Check_In")
-          .doc(docId)
+          .doc(item.id)
           .update({'notes': null});
 
       // Update local item note
@@ -492,18 +492,18 @@ class CheckInListController extends GetxController {
       update();
 
       Get.back();
-    } else {
-      // Show error snackbar if no matching document is found
-      Get.snackbar(
-        "Error",
-        "User Data not found.",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      Get.back();
-
-    }
+    // } else {
+    //   // Show error snackbar if no matching document is found
+    //   Get.snackbar(
+    //     "Error",
+    //     "User Data not found.",
+    //     snackPosition: SnackPosition.BOTTOM,
+    //     backgroundColor: Colors.red,
+    //     colorText: Colors.white,
+    //   );
+    //   Get.back();
+    //
+    // }
   }
 
 }

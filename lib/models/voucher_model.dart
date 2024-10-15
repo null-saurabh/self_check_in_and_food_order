@@ -15,15 +15,6 @@ class CouponUsage {
     required this.appliedDiscountAmount,
   });
 
-  // Convert to map for storing in Firebase
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     'orderModel': orderModel.toMap(),   // Assuming both models have toMap()
-  //     'orderType': orderType,
-  //     'appliedOn': appliedOn,
-  //     'appliedDiscountAmount': appliedDiscountAmount,
-  //   };
-  // }
 
   Map<String, dynamic> toMap() {
     return {

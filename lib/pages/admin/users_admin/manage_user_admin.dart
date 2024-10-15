@@ -5,7 +5,6 @@ import 'package:wandercrew/pages/admin/users_admin/widgets/add_user_data.dart';
 import 'package:wandercrew/pages/admin/users_admin/widgets/user_data_item.dart';
 import 'package:wandercrew/widgets/app_elevated_button.dart';
 
-import '../../../utils/routes.dart';
 import '../../../widgets/filter_button.dart';
 import '../../../widgets/widget_support.dart';
 
@@ -30,17 +29,19 @@ class ManageUserAdmin extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back),
-                          onPressed: () {
-                            if (Get.previousRoute.isNotEmpty) {
-                              Get.back(); // Go back if there's a previous route
-                            } else {
-                              Get.offNamed(Routes
-                                  .adminHome); // Navigate to a specific route if there's no back route
-                            }
-                          },
-                        ),
+                        Get.previousRoute.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.arrow_back),
+                                onPressed: () {
+                                  // if (Get.previousRoute.isNotEmpty) {
+                                  Get.back(); // Go back if there's a previous route
+                                  // } else {
+                                  //   Get.offNamed(Routes
+                                  //       .adminHome); // Navigate to a specific route if there's no back route
+                                  // }
+                                },
+                              )
+                            : SizedBox.shrink(),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
@@ -69,30 +70,32 @@ class ManageUserAdmin extends StatelessWidget {
                                 child: SizedBox(
                                   height: 40,
                                   child: TextField(
-                                    onChanged: (value) => controller.searchFilterUsers(
-                                        value), // Call the search function
+                                    onChanged: (value) =>
+                                        controller.searchFilterUsers(
+                                            value), // Call the search function
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.zero,
-                                      hintText: "Search by name, number, username",
+                                      hintText:
+                                          "Search by name, number, username",
                                       hintStyle: TextStyle(color: Colors.grey),
-                                      prefixIcon:
-                                          Icon(Icons.search, color: Colors.grey),
+                                      prefixIcon: Icon(Icons.search,
+                                          color: Colors.grey),
                                       filled: true,
                                       fillColor: Colors.white,
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
-                                        borderSide:
-                                            BorderSide(color: Color(0xffEDCC23)),
+                                        borderSide: BorderSide(
+                                            color: Color(0xffEDCC23)),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
-                                        borderSide:
-                                            BorderSide(color: Color(0xffEDCC23)),
+                                        borderSide: BorderSide(
+                                            color: Color(0xffEDCC23)),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
-                                        borderSide:
-                                            BorderSide(color: Color(0xffEDCC23)),
+                                        borderSide: BorderSide(
+                                            color: Color(0xffEDCC23)),
                                       ),
                                     ),
                                   ),
@@ -131,11 +134,9 @@ class ManageUserAdmin extends StatelessWidget {
                               FilterButton(
                                 label: "All",
                                 isSelected:
-                                controller.selectedFilter.value == "All",
+                                    controller.selectedFilter.value == "All",
                                 onTap: () {
-                                  controller.filterOrdersByStatus(
-                                      label:"All");
-
+                                  controller.filterOrdersByStatus(label: "All");
                                 },
                               ),
                               SizedBox(
@@ -143,8 +144,8 @@ class ManageUserAdmin extends StatelessWidget {
                               ),
                               FilterButton(
                                 label: "Online",
-                                isSelected: controller.selectedFilter.value ==
-                                    "Online",
+                                isSelected:
+                                    controller.selectedFilter.value == "Online",
                                 onTap: () {
                                   controller.filterOrdersByStatus(
                                       label: "Online");
@@ -180,7 +181,11 @@ class ManageUserAdmin extends StatelessWidget {
                           ],
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 16.0,bottom: 16.0,left: 16.0,),
+                          padding: const EdgeInsets.only(
+                            top: 16.0,
+                            bottom: 16.0,
+                            left: 16.0,
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -193,8 +198,7 @@ class ManageUserAdmin extends StatelessWidget {
                               ),
                               Expanded(
                                 child: ListView.builder(
-                                  padding: const EdgeInsets.only(
-                                      right:16.0),
+                                  padding: const EdgeInsets.only(right: 16.0),
                                   // controller: controller2,
                                   shrinkWrap: true,
                                   itemCount: controller.userDataList.length,

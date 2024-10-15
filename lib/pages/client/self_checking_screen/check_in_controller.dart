@@ -1,28 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:random_string/random_string.dart';
 import 'package:signature/signature.dart';
 import '../../../models/self_checking_model.dart';
-import '../../../service/database.dart';
-
-
 
 class CheckInController extends GetxController {
-
-
   @override
   void onInit() {
     super.onInit();
     fetchCountries();
     fetchCountryCodes(); // Fetch countries from API when controller is initialized
   }
-
 
   final GlobalKey<FormState> formKeyPage1 = GlobalKey<FormState>();
   final GlobalKey<FormState> formKeyPage2 = GlobalKey<FormState>();
@@ -38,15 +32,13 @@ class CheckInController extends GetxController {
     }
     update();
   }
+
   void previousPage() {
     if (currentPage.value > 0) {
       currentPage.value--;
       update();
-
     }
   }
-
-
 
   // Page 1
 
@@ -72,7 +64,8 @@ class CheckInController extends GetxController {
     try {
       // print("fetching country 1");
 
-      final response = await http.get(Uri.parse('https://secure.geonames.org/countryInfoJSON?username=wandercrew'));
+      final response = await http.get(Uri.parse(
+          'https://secure.geonames.org/countryInfoJSON?username=wandercrew'));
       // print("fetching country 2");
       if (response.statusCode == 200) {
         // print("fetching country 3");
@@ -88,9 +81,10 @@ class CheckInController extends GetxController {
         }).toList();
         // print("fetching country 5");
 
-        countries.sort((a, b) => (a['name'] ?? '').compareTo(b['name'] ?? ''));// Sort countries alphabetically
+        countries.sort((a, b) => (a['name'] ?? '')
+            .compareTo(b['name'] ?? '')); // Sort countries alphabetically
         selectedCountry.value = countries.firstWhere(
-              (country) => country['name'] == 'India',
+          (country) => country['name'] == 'India',
           orElse: () => countries.first,
         );
         // print("fetching country 6");
@@ -101,7 +95,6 @@ class CheckInController extends GetxController {
 
         update();
         // print("fetching country 7");
-
       } else {
         // print("self country:");
         // print(response.body);
@@ -109,7 +102,8 @@ class CheckInController extends GetxController {
         Get.snackbar("Error", "Failed to fetch country list");
       }
     } catch (e) {
-      Get.snackbar("Error", "Unable to fetch countries. Please check your internet connection.");
+      Get.snackbar("Error",
+          "Unable to fetch countries. Please check your internet connection.");
 
       // print("eeee");
       // print(e);
@@ -119,49 +113,44 @@ class CheckInController extends GetxController {
   // Pick document from gallery (Front or Back)
   Future<void> pickDocument(bool isFront) async {
     try {
-      if (kIsWeb){
-        final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (kIsWeb) {
+        final XFile? pickedFile =
+            await _picker.pickImage(source: ImageSource.gallery);
         if (pickedFile != null) {
           if (isFront) {
             frontDocumentName.value =
                 pickedFile.name; // Assign the file name to display
             final imageBytes = await pickedFile.readAsBytes();
-            frontDocument.value =
-                imageBytes;
-          }
-          else {
+            frontDocument.value = imageBytes;
+          } else {
             final imageBytes = await pickedFile.readAsBytes();
 
-            backDocument.value = imageBytes;   // Assign the file name to display
+            backDocument.value = imageBytes; // Assign the file name to display
             backDocumentName.value = pickedFile.name;
           }
         }
-      }
-      else {
-        final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      } else {
+        final XFile? pickedFile =
+            await _picker.pickImage(source: ImageSource.gallery);
         if (pickedFile != null) {
           if (isFront) {
-            frontDocument.value =
-                File(pickedFile.path);
-            frontDocumentName.value =
-                pickedFile.name;
-          }
-          else {
-            backDocument.value = File(pickedFile.path);   // Assign the file name to display
+            frontDocument.value = File(pickedFile.path);
+            frontDocumentName.value = pickedFile.name;
+          } else {
+            backDocument.value =
+                File(pickedFile.path); // Assign the file name to display
             backDocumentName.value = pickedFile.name;
           }
         }
       }
 
-        // update();
-      }
-     catch (e) {
+      // update();
+    } catch (e) {
       Get.snackbar("Error", "Failed to pick image");
     }
   }
 
   bool validateFormPage1() {
-
     final isValid = formKeyPage1.currentState?.validate() ?? false;
 
     // Manually validate the front document and back document
@@ -172,9 +161,8 @@ class CheckInController extends GetxController {
     }
 
     if (backDocument.value == null) {
-      if (documentType == "Passport"){
+      if (documentType == "Passport") {
         isBackDocumentInvalid.value = false;
-
       } else {
         isBackDocumentInvalid.value = true;
       }
@@ -191,10 +179,10 @@ class CheckInController extends GetxController {
     update();
 
     // Return whether the entire form is valid
-    return isValid && !isFrontDocumentInvalid.value && !isBackDocumentInvalid.value;
+    return isValid &&
+        !isFrontDocumentInvalid.value &&
+        !isBackDocumentInvalid.value;
   }
-
-
 
   // Page 2
   TextEditingController fullName = TextEditingController();
@@ -224,82 +212,79 @@ class CheckInController extends GetxController {
   //   // Add more countries here...
   // ].obs;
   var selectedCountry = Rx<Map<String, String>?>(null);
-  RxString selectedCountryCode = '+91'.obs;  // Default to India
+  RxString selectedCountryCode = '+91'.obs; // Default to India
   // var selectedCountryCode = RxnString();
-
 
   // Fetch country codes (with flags) from API
   Future<void> fetchCountryCodes() async {
     try {
       // print("fetching country codes 1");
-      final response = await http.get(Uri.parse('https://restcountries.com/v3.1/all'));
+      final response =
+          await http.get(Uri.parse('https://restcountries.com/v3.1/all'));
       if (response.statusCode == 200) {
         // print("fetching country codes 2");
 
         final List<dynamic> data = jsonDecode(response.body);
         // print("fetching country codes 3");
 
-        countryCodes.value = data.map((country) {
-          final root = country['idd']?['root']?.toString() ?? '';
-          final suffix = (country['idd']?['suffixes'] is List && country['idd']?['suffixes']?.isNotEmpty == true)
-              ? country['idd']['suffixes'][0].toString()
-              : '';
-          // print("fetching country codes 4");
-          return {
-            'name': country['name']['common']?.toString() ?? '',
-            'code': (root + suffix).isNotEmpty ? root + suffix : '',  // Ensure root+suffix is combined correctly
-            'flag': country['flags']?['png']?.toString() ?? '',  // Safely access the flag URL
-          };
-        }).where((code) => code['code'] != null && code['code']!.isNotEmpty).toList().cast<Map<String, String>>();  // Filter invalid entries and cast correctly
+        countryCodes.value = data
+            .map((country) {
+              final root = country['idd']?['root']?.toString() ?? '';
+              final suffix = (country['idd']?['suffixes'] is List &&
+                      country['idd']?['suffixes']?.isNotEmpty == true)
+                  ? country['idd']['suffixes'][0].toString()
+                  : '';
+              // print("fetching country codes 4");
+              return {
+                'name': country['name']['common']?.toString() ?? '',
+                'code': (root + suffix).isNotEmpty
+                    ? root + suffix
+                    : '', // Ensure root+suffix is combined correctly
+                'flag': country['flags']?['png']?.toString() ??
+                    '', // Safely access the flag URL
+              };
+            })
+            .where((code) => code['code'] != null && code['code']!.isNotEmpty)
+            .toList()
+            .cast<
+                Map<String,
+                    String>>(); // Filter invalid entries and cast correctly
         // print("fetching country codes 5");
         // print(countryCodes.length);
         update();
-
       } else {
         Get.snackbar("Error", "Failed to fetch country codes");
       }
     } catch (e) {
-      Get.snackbar("Error", "Unable to fetch country codes. Please check your internet connection.");
+      Get.snackbar("Error",
+          "Unable to fetch country codes. Please check your internet connection.");
     }
   }
-
 
   // Fetch state list based on selected country
   Future<void> fetchStates(String countryCode) async {
     try {
-      final response = await http.get(Uri.parse('https://secure.geonames.org/childrenJSON?geonameId=$countryCode&username=wandercrew'));
+      final response = await http.get(Uri.parse(
+          'https://secure.geonames.org/childrenJSON?geonameId=$countryCode&username=wandercrew'));
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body)['geonames'];
         states.value = data.map((state) => state['name'].toString()).toList();
-        states.sort();  // Sort states alphabetically
+        states.sort(); // Sort states alphabetically
       } else {
         Get.snackbar("Error", "Failed to fetch states");
       }
     } catch (e) {
-      Get.snackbar("Error", "Unable to fetch states. Please check your internet connection.");
+      Get.snackbar("Error",
+          "Unable to fetch states. Please check your internet connection.");
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   // Page 3
   TextEditingController arrivingFromController = TextEditingController();
   TextEditingController goingToController = TextEditingController();
-  final SignatureController signatureController = SignatureController(penStrokeWidth: 5, penColor: Colors.black);
+  final SignatureController signatureController =
+      SignatureController(penStrokeWidth: 5, penColor: Colors.black);
   var propertyTermsAccepted = false.obs;
-
 
   bool isSignatureEmpty() {
     return signatureController.isEmpty;
@@ -332,7 +317,8 @@ class CheckInController extends GetxController {
     } catch (e) {
       // print("a");
       // print(e);
-      Get.snackbar("Error", "Failed to upload document: $e", backgroundColor: Colors.redAccent, colorText: Colors.white);
+      Get.snackbar("Error", "Failed to upload document: $e",
+          backgroundColor: Colors.redAccent, colorText: Colors.white);
       return null;
     }
   }
@@ -349,97 +335,111 @@ class CheckInController extends GetxController {
         return downloadUrl;
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to upload signature: $e", backgroundColor: Colors.redAccent, colorText: Colors.white);
+      Get.snackbar("Error", "Failed to upload signature: $e",
+          backgroundColor: Colors.redAccent, colorText: Colors.white);
     }
     return null;
   }
 
-
-
   // Function to submit data to Firebase
   Future<void> submitData() async {
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
+    try {
+      String? frontDocumentUrl;
+      String? backDocumentUrl;
+      String? signatureUrl;
 
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
-      );
-      try {
-        String? frontDocumentUrl;
-        String? backDocumentUrl;
-        String? signatureUrl;
-
-        if (frontDocument.value != null) {
-          frontDocumentUrl = await uploadDocument(frontDocument.value!, "front_${fullName.value}");
-        }
-        // print("1");
+      if (frontDocument.value != null) {
+        frontDocumentUrl = await uploadDocument(
+            frontDocument.value!, "front_${fullName.value}");
+      }
+      // print("1");
       if (backDocument.value != null) {
-          backDocumentUrl = await uploadDocument(backDocument.value!, "back_${fullName.value}");
-        }
-        // print("2");
+        backDocumentUrl =
+            await uploadDocument(backDocument.value!, "back_${fullName.value}");
+      }
+      // print("2");
 
-        signatureUrl = await uploadSignature();
-        // print("3");
+      signatureUrl = await uploadSignature();
+      // print("3");
 
-        String addId = randomAlphaNumeric(10);
-        if (frontDocumentUrl != null  && signatureUrl != null) {
-          if (documentType.value == "Passport" ? true : backDocumentUrl != null) {
+      if (frontDocumentUrl != null && signatureUrl != null) {
+        if (documentType.value == "Passport" ? true : backDocumentUrl != null) {
           // Handle optional fields: email, address, city, arrivingFrom, goingTo
           SelfCheckInModel selfCheckInData = SelfCheckInModel(
-            id: addId,
+            id: "",
             documentIssueCountry: documentIssueCountry.value ?? "",
             documentType: documentType.value ?? "",
             frontDocumentUrl: frontDocumentUrl,
             backDocumentUrl: backDocumentUrl,
             fullName: fullName.text,
-            email: email.text.isNotEmpty ? email.text : null,  // Handle email
+            email: email.text.isNotEmpty ? email.text : null,
+            // Handle email
             contact: selectedCountryCode.value + contact.text,
             age: age.text,
-            address: address.text.isNotEmpty ? address.text : null,  // Handle address
-            city: city.text.isNotEmpty ? city.text : null,  // Handle city
+            address: address.text.isNotEmpty ? address.text : null,
+            // Handle address
+            city: city.text.isNotEmpty ? city.text : null,
+            // Handle city
             gender: gender.value!,
             country: country.value,
             regionState: regionState.value,
-            arrivingFrom: arrivingFromController.text.isNotEmpty ? arrivingFromController.text : null,  // Handle arrivingFrom
-            goingTo: goingToController.text.isNotEmpty ? goingToController.text : null,  // Handle goingTo
+            arrivingFrom: arrivingFromController.text.isNotEmpty
+                ? arrivingFromController.text
+                : null,
+            // Handle arrivingFrom
+            goingTo: goingToController.text.isNotEmpty
+                ? goingToController.text
+                : null,
+            // Handle goingTo
             signatureUrl: signatureUrl,
             createdAt: DateTime.now(),
           );
 
           // print("4");
-          await DatabaseMethods().addSelfCheckInData(selfCheckInData.toMap()).then((_) {
-            // print("5");
-            Get.back();
-            // print("55");
 
-            Get.snackbar(
-              "Success",
-              "Self check-in completed successfully!",
-              backgroundColor: Colors.orangeAccent,
-              colorText: Colors.white,
-            );
-            // print("6");
-            clearFields();
-          });
-        } }else {
-          Get.snackbar("Error", "Failed to upload documents/signature. Please try again.");
+          DocumentReference docRef = await FirebaseFirestore.instance
+              .collection('Self_Check_In')
+              .add(selfCheckInData.toMap());
+
+          String id = docRef.id; // Retrieve the autogenerated ID
+
+          // Optionally, update the document with the newly assigned ID
+          await docRef.update({'id': id});
+
+          Get.back();
+          // print("55");
+
+          Get.snackbar(
+            "Success",
+            "Self check-in completed successfully!",
+            backgroundColor: Colors.orangeAccent,
+            colorText: Colors.white,
+          );
+          // print("6");
+          clearFields();
         }
-      } catch (e) {
+      } else {
         Get.snackbar(
-          "Error",
-          "Failed to complete self check-in: $e",
-          backgroundColor: Colors.redAccent,
-          colorText: Colors.white,
-        );
-      } finally {
-        // print("AAAA");
-        // Get.back();
-        Get.toNamed("/reception");
-        //Close loading dialog
+            "Error", "Failed to upload documents/signature. Please try again.");
       }
-
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Failed to complete self check-in: $e",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    } finally {
+      // print("AAAA");
+      // Get.back();
+      Get.toNamed("/reception");
+      //Close loading dialog
+    }
   }
-
-
 
   // Clear form fields after submission
   void clearFields() {
@@ -459,5 +459,4 @@ class CheckInController extends GetxController {
     goingToController.clear();
     currentPage.value = 0;
   }
-
 }

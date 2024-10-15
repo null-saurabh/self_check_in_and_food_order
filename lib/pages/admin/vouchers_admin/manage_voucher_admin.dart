@@ -5,7 +5,6 @@ import 'package:wandercrew/pages/admin/vouchers_admin/widgets/voucher_filter_ale
 import 'package:wandercrew/pages/admin/vouchers_admin/widgets/voucher_item.dart';
 import 'package:wandercrew/widgets/app_elevated_button.dart';
 
-import '../../../utils/routes.dart';
 import '../../../widgets/elevated_container.dart';
 import '../../../widgets/filter_button.dart';
 import '../../../widgets/widget_support.dart';
@@ -33,17 +32,18 @@ class ManageVoucherAdmin extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IconButton(
+                        Get.previousRoute.isNotEmpty
+                            ?IconButton(
                           icon: const Icon(Icons.arrow_back),
                           onPressed: () {
-                            if (Get.previousRoute.isNotEmpty) {
+                            // if (Get.previousRoute.isNotEmpty) {
                               Get.back(); // Go back if there's a previous route
-                            } else {
-                              Get.offNamed(Routes
-                                  .adminHome); // Navigate to a specific route if there's no back route
-                            }
+                            // } else {
+                            //   Get.offNamed(Routes
+                            //       .adminHome); // Navigate to a specific route if there's no back route
+                            // }
                           },
-                        ),
+                        ):SizedBox.shrink(),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [

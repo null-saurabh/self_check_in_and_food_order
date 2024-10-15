@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wandercrew/pages/admin/orders_admin/widgets/order_filter_alert.dart';
-import 'package:wandercrew/pages/admin/orders_admin/widgets/single_order.dart';
 import 'package:wandercrew/pages/client/track_order_screen/track_order_controller.dart';
 import 'package:wandercrew/pages/client/track_order_screen/widgets/track_item_widget.dart';
-import 'package:wandercrew/service/razorpay_web.dart';
 import 'package:wandercrew/widgets/edit_text.dart';
 import 'package:wandercrew/widgets/elevated_container.dart';
-import '../../../utils/routes.dart';
 import '../../../widgets/app_elevated_button.dart';
-import '../../../widgets/filter_button.dart';
 import '../../../widgets/widget_support.dart';
 
 
@@ -36,17 +31,18 @@ class TrackOrderScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          IconButton(
+                          Get.previousRoute.isNotEmpty
+                         ? IconButton(
                             icon: const Icon(Icons.arrow_back),
                             onPressed: () {
-                              if (Get.previousRoute.isNotEmpty) {
+                              // if (Get.previousRoute.isNotEmpty) {
                                 Get.back(); // Go back if there's a previous route
-                              } else {
-                                Get.offNamed(Routes
-                                    .adminHome); // Navigate to a specific route if there's no back route
-                              }
+                              // } else {
+                              //   Get.offNamed(Routes
+                              //       .receptionHome); // Navigate to a specific route if there's no back route
+                              // }
                             },
-                          ),
+                          ):SizedBox.shrink(),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [

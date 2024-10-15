@@ -33,6 +33,7 @@ class AdminOrderListController extends GetxController {
 
 
   Future<void> fetchOrderData() async {
+
     try {
       isLoading.value = true; // Start loading
       QuerySnapshot querySnapshot =
@@ -188,19 +189,20 @@ class AdminOrderListController extends GetxController {
 
       // print("confirm 4");
 
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection("Orders")
-          .where("orderId",
-              isEqualTo: item
-                  .orderId) // Assuming 'id' is the custom field name in Firestore
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        // print("confirm 5");
-        String docId = querySnapshot.docs.first.id;
+      // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      //     .collection("Orders")
+      //     .where("orderId",
+      //         isEqualTo: item
+      //             .orderId) // Assuming 'id' is the custom field name in Firestore
+      //     .get();
+      //
+      // if (querySnapshot.docs.isNotEmpty) {
+      //   // print("confirm 5");
+      //   String  = querySnapshot.docs.first.id;
         DocumentSnapshot orderSnapshot = await FirebaseFirestore.instance
             .collection("Orders")
-            .doc(docId)
+            .doc(item
+            .orderId)
             .get();
         // print("confirm 6");
 
@@ -224,7 +226,8 @@ class AdminOrderListController extends GetxController {
           // Update the order status in Firestore
           await FirebaseFirestore.instance
               .collection("Orders")
-              .doc(docId)
+              .doc(item
+              .orderId)
               .update({
             'orderStatusHistory': order.orderStatusHistory
                 .map((status) => status.toMap())
@@ -244,15 +247,6 @@ class AdminOrderListController extends GetxController {
             colorText: Colors.white,
           );
         }
-      } else {
-        Get.snackbar(
-          'Error',
-          'Order not found',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
 
       // Get the current order data
     } catch (e) {
@@ -268,18 +262,19 @@ class AdminOrderListController extends GetxController {
         barrierDismissible: false,
       );
 
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection("Orders")
-          .where("orderId",
-              isEqualTo: item
-                  .orderId) // Assuming 'id' is the custom field name in Firestore
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        String docId = querySnapshot.docs.first.id;
+      // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      //     .collection("Orders")
+      //     .where("orderId",
+      //         isEqualTo: item
+      //             .orderId) // Assuming 'id' is the custom field name in Firestore
+      //     .get();
+      //
+      // if (querySnapshot.docs.isNotEmpty) {
+      //   String  = querySnapshot.docs.first.id;
         DocumentSnapshot orderSnapshot = await FirebaseFirestore.instance
             .collection("Orders")
-            .doc(docId)
+            .doc(item
+            .orderId)
             .get();
         if (orderSnapshot.exists) {
           // Parse the order data into OrderModel
@@ -298,13 +293,15 @@ class AdminOrderListController extends GetxController {
           // Update the order status in Firestore
           await FirebaseFirestore.instance
               .collection("Orders")
-              .doc(docId)
+              .doc(item
+              .orderId)
               .update({
             'orderStatusHistory': order.orderStatusHistory
                 .map((status) => status.toMap())
                 .toList(),
             'updatedAt': DateTime.now().toIso8601String(),
           });
+
           fetchOrderData();
           Get.back();
           Get.snackbar('Success', 'Order marked as Delivered');
@@ -317,9 +314,7 @@ class AdminOrderListController extends GetxController {
             colorText: Colors.white,
           );
         }
-      } else {
-        Get.snackbar('Error', 'Order not found');
-      }
+
     } catch (e) {
       Get.snackbar('Error', 'Failed to update order status: $e');
     }

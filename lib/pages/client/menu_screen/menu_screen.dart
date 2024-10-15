@@ -65,6 +65,7 @@ class MenuScreen extends StatelessWidget {
                 assetPath: 'assets/textures/menu_texture_2.png',
               ),
 
+              if (Get.previousRoute.isNotEmpty)
               Positioned(
                 top: 32,
                 left: 16,
@@ -74,12 +75,13 @@ class MenuScreen extends StatelessWidget {
                         color: Colors.white),
                     child: IconButton(
                         onPressed: () {
-                          if (Get.previousRoute.isNotEmpty) {
+                          // if (Get.previousRoute.isNotEmpty) {
                             Get.back(); // Go back if there's a previous route
-                          } else {
-                            Get.offNamed(Routes
-                                .receptionHome); // Navigate to a specific route if there's no back route
-                          }
+                          // }
+                          // else {
+                          //   Get.offNamed(Routes
+                          //       .receptionHome); // Navigate to a specific route if there's no back route
+                          // }
                         },
                         icon: const Icon(Icons.keyboard_backspace_rounded))),
               ),

@@ -61,7 +61,6 @@ class CheckInFormOneDocument extends StatelessWidget {
                   }).toList(),
                   onChange: (value) {
                     selfCheckingController.documentType.value = value;
-                    selfCheckingController.update();
 
                   },
                   value: selfCheckingController.documentType.value,

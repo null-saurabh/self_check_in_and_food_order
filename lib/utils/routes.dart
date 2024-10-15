@@ -13,6 +13,7 @@ import 'package:wandercrew/pages/client/menu_screen/menu_screen.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/reception_home_screen.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_screen.dart';
 import 'package:wandercrew/pages/client/track_order_screen/track_order_screen.dart';
+import 'package:wandercrew/pages/test_screen.dart';
 import 'package:wandercrew/service/auth_services.dart';
 
 import '../pages/admin/users_admin/manage_user_admin.dart';
@@ -86,6 +87,12 @@ class AppPages {
     ),
 
     GetPage(
+      name: Routes.wanderCrew,
+      page: () => const TestScreen(),
+      // middlewares: [AuthMiddleware()],
+    ),
+
+    GetPage(
       name: Routes.notFound,
       page: () => const Scaffold(
         body: Center(
@@ -97,6 +104,9 @@ class AppPages {
 }
 
 class Routes {
+  static const String wanderCrew = '/';
+
+
   static const String receptionHome = '/reception';
   static const String receptionMenu = '/reception/menu';
   static const String receptionCheckIn = '/reception/checkIn';

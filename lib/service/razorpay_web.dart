@@ -97,37 +97,36 @@ class RazorpayService {
 
     if (response.statusCode == 200) {
 
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection("Orders")
-          .where("orderId",
-          isEqualTo: orderId) // Assuming 'id' is the custom field name in Firestore
-          .get();
+      // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      //     .collection("Orders")
+      //     .where("orderId",
+      //     isEqualTo: orderId) // Assuming 'id' is the custom field name in Firestore
+      //     .get();
+      //
+      // if (querySnapshot.docs.isNotEmpty) {
 
-      if (querySnapshot.docs.isNotEmpty) {
-
-        String docId = querySnapshot.docs.first.id;
-        DocumentSnapshot orderSnapshot = await FirebaseFirestore.instance
-            .collection("Orders")
-            .doc(docId)
-            .get();
-
-
-        if (orderSnapshot.exists) {
-
-          String docId = querySnapshot.docs.first.id;
+        // String  = querySnapshot.docs.first.id;
+        // DocumentSnapshot orderSnapshot = await FirebaseFirestore.instance
+        //     .collection("Orders")
+        //     .doc(orderId)
+        //     .get();
+        //
+        //
+        // if (orderSnapshot.exists) {
+        //
+        //   String  = querySnapshot.docs.first.id;
 
 
           await FirebaseFirestore.instance
               .collection("Orders")
-              .doc(docId)
+              .doc(orderId)
               .update({
             'isRefunded': refundAmount < orderAmount ? 'partial refund' : 'complete refund',
             'refundAmount': refundAmount,
           });
            var controller = Get.find<AdminOrderListController>();
-           controller.fetchOrderData();
-        }
-      }
+          controller.fetchOrderData();
+
 
 
       Get.back();

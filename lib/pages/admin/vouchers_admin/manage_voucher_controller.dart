@@ -199,23 +199,23 @@ class ManageVoucherAdminController extends GetxController {
 
     try {
       // Query the correct document by userId
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection("Voucher")
-          .where("voucherId", isEqualTo: voucherData.voucherId)
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        String docId = querySnapshot.docs.first.id;
+      // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      //     .collection("Voucher")
+      //     .where("voucherId", isEqualTo: voucherData.voucherId)
+      //     .get();
+      //
+      // if (querySnapshot.docs.isNotEmpty) {
+      //   String  = querySnapshot.docs.first.id;
 
         // Update the online status in the correct document
         await FirebaseFirestore.instance
             .collection("Voucher")
-            .doc(docId)
+            .doc(voucherData.voucherId)
             .update({'isActive': isActive});
-      } else {
-        voucherData.isActive = !isActive;
-        throw Exception("User not found");
-      }
+      // } else {
+      //   voucherData.isActive = !isActive;
+      //   throw Exception("User not found");
+      // }
     } catch (error) {
       // If there's an error, revert the UI back to the previous state
       voucherData.isActive = !isActive;
@@ -311,17 +311,17 @@ class ManageVoucherAdminController extends GetxController {
 
       try {
         // Query the document with matching custom 'id' field
-        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-            .collection("Voucher")
-            .where("voucherId", isEqualTo: voucherData.voucherId) // Assuming 'id' is the custom field name in Firestore
-            .get();
-
-        if (querySnapshot.docs.isNotEmpty) {
-          // Get the document ID
-          String docId = querySnapshot.docs.first.id;
+        // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        //     .collection("Voucher")
+        //     .where("voucherId", isEqualTo: voucherData.voucherId) // Assuming 'id' is the custom field name in Firestore
+        //     .get();
+        //
+        // if (querySnapshot.docs.isNotEmpty) {
+        //   // Get the document ID
+        //   String  = querySnapshot.docs.first.id;
 
           // Delete the document using the retrieved document ID
-          await FirebaseFirestore.instance.collection("Voucher").doc(docId).delete();
+          await FirebaseFirestore.instance.collection("Voucher").doc(voucherData.voucherId).delete();
 
           voucherList.remove(voucherData);
           originalVoucherList.remove(voucherData);
@@ -336,18 +336,18 @@ class ManageVoucherAdminController extends GetxController {
             backgroundColor: Colors.green,
             colorText: Colors.white,
           );
-        } else {
-          Get.back();
-
-          // No matching document found
-          Get.snackbar(
-            "Error",
-            "Menu item not found.",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-          );
-        }
+        // } else {
+        //   Get.back();
+        //
+        //   // No matching document found
+        //   Get.snackbar(
+        //     "Error",
+        //     "Menu item not found.",
+        //     snackPosition: SnackPosition.BOTTOM,
+        //     backgroundColor: Colors.red,
+        //     colorText: Colors.white,
+        //   );
+        // }
       } catch (error) {
         Get.back();
         // Show error snackbar

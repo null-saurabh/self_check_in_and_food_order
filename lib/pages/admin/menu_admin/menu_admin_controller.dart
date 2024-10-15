@@ -35,6 +35,7 @@ class MenuAdminController extends GetxController {
       allMenuItems.value = List.from(originalMenuItems); // Update displayed list
       update();
     } catch (e) {
+      Get.snackbar("Error", "Failed to fetch data");
       print("Error fetching menu data: $e");
     }finally {
       // print("Aaaaa");
@@ -140,17 +141,17 @@ class MenuAdminController extends GetxController {
     if (confirmed == true) {
       try {
         // Query the document with matching custom 'id' field
-        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-            .collection("Menu")
-            .where("productId", isEqualTo: item.id) // Assuming 'id' is the custom field name in Firestore
-            .get();
+        // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        //     .collection("Menu")
+        //     .where("productId", isEqualTo: item.id) // Assuming 'id' is the custom field name in Firestore
+        //     .get();
 
-        if (querySnapshot.docs.isNotEmpty) {
+        // if (querySnapshot.docs.isNotEmpty) {
           // Get the document ID
-          String docId = querySnapshot.docs.first.id;
+          // String docId = querySnapshot.docs.first.id;
 
           // Delete the document using the retrieved document ID
-          await FirebaseFirestore.instance.collection("Menu").doc(docId).delete();
+          await FirebaseFirestore.instance.collection("Menu").doc(item.id).delete();
           originalMenuItems.remove(item);
           allMenuItems.remove(item);
           update();
@@ -163,16 +164,17 @@ class MenuAdminController extends GetxController {
             backgroundColor: Colors.green,
             colorText: Colors.white,
           );
-        } else {
-          // No matching document found
-          Get.snackbar(
-            "Error",
-            "Menu item not found.",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-          );
-        }
+
+        // else {
+        //   // No matching document found
+        //   Get.snackbar(
+        //     "Error",
+        //     "Menu item not found.",
+        //     snackPosition: SnackPosition.BOTTOM,
+        //     backgroundColor: Colors.red,
+        //     colorText: Colors.white,
+        //   );
+        // }
       } catch (error) {
         // Show error snackbar
         Get.snackbar(
@@ -196,18 +198,18 @@ class MenuAdminController extends GetxController {
 
     try {
       // Query to get the correct document by custom 'productId' field
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection("Menu")
-          .where("productId", isEqualTo: item.id) // Assuming 'id' is the custom field
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        String docId = querySnapshot.docs.first.id;
+      // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      //     .collection("Menu")
+      //     .where("productId", isEqualTo: item.id) // Assuming 'id' is the custom field
+      //     .get();
+      //
+      // if (querySnapshot.docs.isNotEmpty) {
+      //   String docId = querySnapshot.docs.first.id;
 
         // Update the document in Firestore
         await FirebaseFirestore.instance
             .collection("Menu")
-            .doc(docId)
+            .doc(item.id)
             .update({'isAvailable': isAvailable});
 
         // Optionally, show a success snackbar
@@ -218,19 +220,20 @@ class MenuAdminController extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
-      } else {
-        // If the document is not found, revert to the previous state
-        item.isAvailable = previousState;
-        update();
-
-        Get.snackbar(
-          "Error",
-          "Menu item not found.",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
+      // }
+      // else {
+      //   // If the document is not found, revert to the previous state
+      //   item.isAvailable = previousState;
+      //   update();
+      //
+      //   Get.snackbar(
+      //     "Error",
+      //     "Menu item not found.",
+      //     snackPosition: SnackPosition.BOTTOM,
+      //     backgroundColor: Colors.red,
+      //     colorText: Colors.white,
+      //   );
+      // }
     } catch (e) {
       // Handle any errors by reverting to the previous state
       item.isAvailable = previousState;
@@ -273,16 +276,16 @@ class MenuAdminController extends GetxController {
                 double newPrice = double.parse(priceController.text);
 
                 // Query to get the correct document by custom 'id' field
-                QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-                    .collection("Menu")
-                    .where("productId", isEqualTo: item.id) // Assuming 'id' is the custom field
-                    .get();
-
-                if (querySnapshot.docs.isNotEmpty) {
-                  String docId = querySnapshot.docs.first.id;
+                // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+                //     .collection("Menu")
+                //     .where("productId", isEqualTo: item.id) // Assuming 'id' is the custom field
+                //     .get();
+                //
+                // if (querySnapshot.docs.isNotEmpty) {
+                //   String  = querySnapshot.docs.first.id;
 
                   // Update the price in the database
-                  await FirebaseFirestore.instance.collection("Menu").doc(docId).update({'price': newPrice});
+                  await FirebaseFirestore.instance.collection("Menu").doc(item.id).update({'price': newPrice});
 
                   // Update local item price
                   item.price = newPrice;
@@ -290,16 +293,16 @@ class MenuAdminController extends GetxController {
 
                   // Close the dialog
                   Navigator.of(context).pop();
-                } else {
-                  // Show error snackbar if no matching document is found
-                  Get.snackbar(
-                    "Error",
-                    "Menu item not found.",
-                    snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: Colors.red,
-                    colorText: Colors.white,
-                  );
-                }
+                // } else {
+                //   // Show error snackbar if no matching document is found
+                //   Get.snackbar(
+                //     "Error",
+                //     "Menu item not found.",
+                //     snackPosition: SnackPosition.BOTTOM,
+                //     backgroundColor: Colors.red,
+                //     colorText: Colors.white,
+                //   );
+                // }
               },
               child: const Text("Save"),
             ),
@@ -334,16 +337,16 @@ class MenuAdminController extends GetxController {
                 String newNote = noteController.text;
 
                 // Query to get the correct document by custom 'id' field
-                QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-                    .collection("Menu")
-                    .where("productId", isEqualTo: item.id)
-                    .get();
-
-                if (querySnapshot.docs.isNotEmpty) {
-                  String docId = querySnapshot.docs.first.id;
+                // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+                //     .collection("Menu")
+                //     .where("productId", isEqualTo: item.id)
+                //     .get();
+                //
+                // if (querySnapshot.docs.isNotEmpty) {
+                //   String  = querySnapshot.docs.first.id;
 
                   // Update the note in the database
-                  await FirebaseFirestore.instance.collection("Menu").doc(docId).update({'notes': newNote});
+                  await FirebaseFirestore.instance.collection("Menu").doc(item.id).update({'notes': newNote});
 
                   // Update local item note
                   item.notes = newNote;
@@ -351,16 +354,17 @@ class MenuAdminController extends GetxController {
 
                   // Close the dialog
                   Navigator.of(context).pop();
-                } else {
-                  // Show error snackbar if no matching document is found
-                  Get.snackbar(
-                    "Error",
-                    "Menu item not found.",
-                    snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: Colors.red,
-                    colorText: Colors.white,
-                  );
-                }
+
+                // } else {
+                //   // Show error snackbar if no matching document is found
+                //   Get.snackbar(
+                //     "Error",
+                //     "Menu item not found.",
+                //     snackPosition: SnackPosition.BOTTOM,
+                //     backgroundColor: Colors.red,
+                //     colorText: Colors.white,
+                //   );
+                // }
               },
               child: const Text("Save"),
             ),

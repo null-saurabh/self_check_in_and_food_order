@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:wandercrew/pages/admin/menu_admin/widgets/add_food.dart';
 import 'package:wandercrew/pages/admin/menu_admin/widgets/filter_menu_list_admin.dart';
 import 'package:wandercrew/pages/admin/menu_admin/widgets/menu_item_admin.dart';
-import '../../../utils/routes.dart';
 import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/widget_support.dart';
 import 'menu_admin_controller.dart';
@@ -30,19 +29,18 @@ class MenuAdminScreen extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            IconButton(
+                            Get.previousRoute.isNotEmpty
+                                ? IconButton(
                               icon: const Icon(Icons.arrow_back),
                               onPressed: () {
-                                if (Get.previousRoute.isNotEmpty) {
-                                  print("yes");
+                                // if (Get.previousRoute.isNotEmpty) {
                                   Get.back(); // Go back if there's a previous route
-                                } else {
-                                  print("yes no");
-                                  Get.offNamed(Routes
-                                      .adminHome); // Navigate to a specific route if there's no back route
-                                }
+                                // } else {
+                                //   Get.offNamed(Routes
+                                //       .adminHome); // Navigate to a specific route if there's no back route
+                                // }
                               },
-                            ),
+                            ):SizedBox.shrink(),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [

@@ -42,6 +42,7 @@ class CheckInScreen extends StatelessWidget {
                     assetPath: 'assets/textures/check_in_texture_4.png',
                   ),
 
+              if (Get.previousRoute.isNotEmpty || checkInController.currentPage.value > 0)
               Positioned(
                     top: 32,
                     left: 16,
@@ -54,12 +55,12 @@ class CheckInScreen extends StatelessWidget {
                               if (checkInController.currentPage.value > 0) {
                                 checkInController.previousPage();
                               } else {
-                                if (Get.previousRoute.isNotEmpty) {
+                                // if (Get.previousRoute.isNotEmpty) {
                                   Get.back(); // Go back if there's a previous route
-                                } else {
-                                  Get.offNamed(Routes
-                                      .receptionHome); // Navigate to a specific route if there's no back route
-                                }
+                                // } else {
+                                //   Get.offNamed(Routes
+                                //       .receptionHome); // Navigate to a specific route if there's no back route
+                                // }
                               }
                             },
                             icon: const Icon(Icons.keyboard_backspace_rounded))),

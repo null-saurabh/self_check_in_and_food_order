@@ -34,13 +34,9 @@ class DatabaseMethods {
         .add(userInfoMap);
   }
 
-  Future<void> addSelfCheckInData(Map<String, dynamic> checkInData) async {
-    await FirebaseFirestore.instance
-        .collection('Self_Check_In')
-        .add(checkInData);
-  }
 
-  Future<void> addNewUser(Map<String, dynamic> newUserData) async {
+
+  Future addNewUser(Map<String, dynamic> newUserData) async {
     await FirebaseFirestore.instance
         .collection('AdminAccount')
         .add(newUserData);

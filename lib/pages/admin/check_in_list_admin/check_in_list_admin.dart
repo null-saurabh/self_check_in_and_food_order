@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:wandercrew/pages/admin/check_in_list_admin/widgets/check_in_date_section.dart';
 import 'package:wandercrew/pages/admin/check_in_list_admin/widgets/filter_check_in_list.dart';
 import 'package:wandercrew/widgets/widget_support.dart';
-import '../../../utils/routes.dart';
 import '../../../widgets/app_elevated_button.dart';
 import 'check_in_list_controller.dart';
 
@@ -29,17 +28,18 @@ class CheckInListAdmin extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          IconButton(
+                          Get.previousRoute.isNotEmpty
+                              ?IconButton(
                             icon: const Icon(Icons.arrow_back),
                             onPressed: () {
-                              if (Get.previousRoute.isNotEmpty) {
+                              // if (Get.previousRoute.isNotEmpty) {
                                 Get.back(); // Go back if there's a previous route
-                              } else {
-                                Get.offNamed(Routes
-                                    .adminHome); // Navigate to a specific route if there's no back route
-                              }
+                              // } else {
+                              //   Get.offNamed(Routes
+                              //       .adminHome); // Navigate to a specific route if there's no back route
+                              // }
                             },
-                          ),
+                          ):SizedBox.shrink(),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
