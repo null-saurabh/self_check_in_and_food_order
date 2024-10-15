@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_controller.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/widgets/form_container.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/widgets/gradient_texture.dart';
-import '../../../utils/routes.dart';
 import '../../../widgets/widget_support.dart';
 
 class CheckInScreen extends StatelessWidget {
@@ -55,12 +55,8 @@ class CheckInScreen extends StatelessWidget {
                               if (checkInController.currentPage.value > 0) {
                                 checkInController.previousPage();
                               } else {
-                                // if (Get.previousRoute.isNotEmpty) {
-                                  Get.back(); // Go back if there's a previous route
-                                // } else {
-                                //   Get.offNamed(Routes
-                                //       .receptionHome); // Navigate to a specific route if there's no back route
-                                // }
+                                  context.pop(); // Go back if there's a previous route
+
                               }
                             },
                             icon: const Icon(Icons.keyboard_backspace_rounded))),

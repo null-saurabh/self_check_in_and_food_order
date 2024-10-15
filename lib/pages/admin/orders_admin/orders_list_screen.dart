@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/admin/orders_admin/widgets/order_filter_alert.dart';
 import 'package:wandercrew/pages/admin/orders_admin/widgets/single_order.dart';
 import 'package:wandercrew/service/razorpay_web.dart';
@@ -36,12 +37,8 @@ class OrdersListScreen extends StatelessWidget {
                               ?IconButton(
                             icon: const Icon(Icons.arrow_back),
                             onPressed: () {
-                              // if (Get.previousRoute.isNotEmpty) {
-                                Get.back(); // Go back if there's a previous route
-                              // } else {
-                              //   Get.offNamed(Routes
-                              //       .adminHome); // Navigate to a specific route if there's no back route
-                              // }
+                                context.pop(); // Go back if there's a previous route
+
                             },
                           ):SizedBox.shrink(),
                           Column(
@@ -143,7 +140,7 @@ class OrdersListScreen extends StatelessWidget {
 
                                       onPressed: (){
                                         showDialog(
-                                            context: Get.context!,
+                                            context: context,
                                             builder: (BuildContext context) {
                                               return OrderFilterAlert();
                                             }
@@ -245,8 +242,10 @@ class OrdersListScreen extends StatelessWidget {
                                         .makePhoneCall(orderData.contactNumber);
                                   },
                                   markAsConfirm: () => controller.confirmOrder(
+                                      context,
                                       orderData, "Admin"),
                                   markAsDelivered: () => controller.orderDelivered(
+                                      context,
                                       orderData,
                                       "Admin"),
                                   orderData: orderData,
@@ -285,6 +284,7 @@ class OrdersListScreen extends StatelessWidget {
 
                                                 RazorpayService razorpay = RazorpayService();
                                                 razorpay.handleRefund(
+                                                  context: context,
                                                     paymentId:
                                                         orderData.transactionId,
                                                     refundAmount: int.parse(

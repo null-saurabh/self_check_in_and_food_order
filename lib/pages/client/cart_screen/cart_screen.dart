@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/client/cart_screen/widgets/bill_summary_widget.dart';
 import 'package:wandercrew/pages/client/cart_screen/widgets/diner_info_widget.dart';
 import 'package:wandercrew/pages/client/cart_screen/widgets/donation_widget.dart';
@@ -75,10 +76,9 @@ class CartScreen extends StatelessWidget {
                   child: IconButton(
                       onPressed: () {
                         if (Get.previousRoute.isNotEmpty) {
-                          Get.back(); // Go back if there's a previous route
+                          context.pop(); // Go back if there's a previous route
                         } else {
-                          Get.offNamed(Routes
-                              .receptionMenu); // Navigate to a specific route if there's no back route
+                          context.go(Routes.receptionHome);
                         }
 
                       },
@@ -114,10 +114,10 @@ class CartScreen extends StatelessWidget {
                                         backgroundColor: Color(0xffFFDE1A),
                                         onPressed: () {
                                           if (Get.previousRoute.isNotEmpty) {
-                                            Get.back(); // Go back if there's a previous route
+                                            context.pop(); // Go back if there's a previous route
                                           } else {
-                                            Get.offNamed(Routes
-                                                .receptionMenu); // Navigate to a specific route if there's no back route
+                                            context.go(Routes.receptionHome);
+
                                           }
                                         },
                                         title: "Menu",
@@ -177,7 +177,7 @@ class CartScreen extends StatelessWidget {
                             onPressed: () async {
                               if (controller.cartDinnerInfoFormKey.currentState!
                                   .validate()) {
-                                await controller.initiatePayment();
+                                await controller.initiatePayment(context);
                               }
                             }),
                         const SizedBox(height: 24),

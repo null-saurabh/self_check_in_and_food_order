@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/widgets/text_view.dart';
 import 'package:wandercrew/widgets/theme_color.dart';
 
@@ -59,7 +60,7 @@ class AppElevatedButton extends StatelessWidget {
         onPressed: onPressed != null
             ? () {
                 if (Get.isSnackbarOpen) {
-                  Get.back();
+                  context.pop();
                 }
                 onPressed?.call();
               }

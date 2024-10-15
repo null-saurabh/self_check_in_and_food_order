@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/utils/routes.dart';
 import 'package:wandercrew/widgets/widget_support.dart';
 import '../../client/reception_home_screen/widgets/home_screen_menu_widget.dart';
@@ -67,17 +67,10 @@ class AdminHomeScreen extends StatelessWidget {
                             label: "Ordered Food",
                             onTap: () {
                               // Add action for order food
-                              Get.toNamed(Routes.adminOrderList);
+                              context.go(Routes.adminOrderList);
+
                             },
-                            // iconWidth: 152,
-                            // iconHeight: 152,
-                            // isCheckIn: true,
-                            // icon: "assets/icons/check_in.png",
-                            // label: "Check In List",
-                            // onTap: () {
-                            //   // Add action for check-in
-                            //   Get.toNamed('/admin/check-in-list');
-                            // },
+
                           ),
                           const SizedBox(
                             width: 12,
@@ -92,15 +85,11 @@ class AdminHomeScreen extends StatelessWidget {
 
                             onTap: () {
                               // Add action for order food
-                              Get.toNamed(Routes.adminMenu);
+                              context.go(Routes.adminMenu);
+
                             },
                             isRoomService: true,
 
-                            // label: "Order List",
-                            // icon: "assets/icons/check_in.png",
-                            // onTap: () {
-                            //   Get.toNamed("/admin/order-list");
-                            // },
                           ),
                         ],
                       ),
@@ -124,7 +113,8 @@ class AdminHomeScreen extends StatelessWidget {
                         label: "Manage User",
                         onTap: () {
                           // Add action for order food
-                          Get.toNamed(Routes.adminManageUsers);
+                          context.go(Routes.adminManageUsers);
+
                         },
                       ),
                       const SizedBox(  width: 12,
@@ -140,8 +130,8 @@ class AdminHomeScreen extends StatelessWidget {
                         label: "Check In List",
                         onTap: () {
                           // Add action for room service
-                          // Get.toNamed(page);
-                            Get.toNamed(Routes.adminCheckInList);
+                            context.go(Routes.adminCheckInList);
+
 
                         },
                       )
@@ -160,10 +150,9 @@ class AdminHomeScreen extends StatelessWidget {
                         icon: "assets/icons/feedback.png",
                         label: "Vouchers",
                         onTap: () {
-                          Get.toNamed(Routes.adminManageVoucher);
+                          context.go(Routes.adminManageVoucher);
 
-                          // Add action for room service
-                          // Get.toNamed(page);
+
                         },
                       )
 

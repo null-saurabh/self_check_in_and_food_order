@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/widgets/app_elevated_button.dart';
 import 'package:wandercrew/widgets/elevated_container.dart';
 import 'package:wandercrew/widgets/widget_support.dart';
@@ -44,9 +45,9 @@ class ReceptionController extends GetxController {
     html.window.open('tel:$phoneNumber', '_self');
   }
 
-  void showAdminContacts() {
+  void showAdminContacts(BuildContext context) {
     showDialog(
-      context: Get.context!,
+      context: context,
       builder: (BuildContext context) {
         return Dialog(
           shape: RoundedRectangleBorder(
@@ -149,7 +150,7 @@ class ReceptionController extends GetxController {
                 SizedBox(
                   height: 8,
                 ),
-                Center(child: AppElevatedButton(onPressed: (){Get.back();},title: "Close", ))
+                Center(child: AppElevatedButton(onPressed: (){context.pop();},title: "Close", ))
                 ,SizedBox(
                   height: 12,
                 ),],

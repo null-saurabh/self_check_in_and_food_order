@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../models/user_model.dart';
@@ -149,11 +150,14 @@ class AddNewUserAdminController extends GetxController{
   }
 
   // Function to submit data to Firebase
-  Future<void> submitData() async {
+  Future<void> submitData(BuildContext context) async {
 
-    Get.dialog(
-      const Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevents the user from dismissing the dialog
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
+      },
     );
     try {
 
@@ -216,8 +220,8 @@ class AddNewUserAdminController extends GetxController{
                   // }
                   controller.update();
                 }
-                Get.back();
-                Get.back();
+                context.pop();
+                context.pop();
 
                 // Show success snackbar
                 Get.snackbar(
@@ -230,7 +234,7 @@ class AddNewUserAdminController extends GetxController{
 
               // }
               // else {
-              //   Get.back();
+              //   ""();
               //
               //   // No matching document found
               //   Get.snackbar(
@@ -242,7 +246,7 @@ class AddNewUserAdminController extends GetxController{
               //   );
               // }
             } catch (error) {
-              Get.back();
+              context.pop();
 
               // Show error snackbar
               Get.snackbar(
@@ -270,8 +274,8 @@ class AddNewUserAdminController extends GetxController{
 
 
             update();
-            Get.back();
-            Get.back();
+            context.pop();
+            context.pop();
 
             // print("55");
 
@@ -285,11 +289,11 @@ class AddNewUserAdminController extends GetxController{
             clearFields();
           } }
          }else {
-        Get.back();
+        context.pop();
         Get.snackbar("Error", "Failed to upload documents. Please try again.");
       }
     } catch (e) {
-      Get.back();
+      context.pop();
 
       Get.snackbar(
         "Error",
@@ -299,7 +303,6 @@ class AddNewUserAdminController extends GetxController{
       );
     } finally {
       // print("AAAA");
-      // Get.toNamed("/reception");
       //Close loading dialog
     }
 

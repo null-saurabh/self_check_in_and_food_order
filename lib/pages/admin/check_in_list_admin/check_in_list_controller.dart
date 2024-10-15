@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
@@ -185,23 +186,28 @@ class CheckInListController extends GetxController {
 
   // Function to download an image (works for both Android and Web)
   void downloadFile(
-      {required String imageUrl, required String fileName}) async {
+      {required BuildContext context,required String imageUrl, required String fileName}) async {
     if (kIsWeb) {
       // For Web
-      downloadFileWeb(imageUrl, fileName);
+      downloadFileWeb(context,imageUrl, fileName);
     } else {
       // For Android
-      await downloadFileAndroid(imageUrl, fileName);
+      await downloadFileAndroid(context,imageUrl, fileName);
     }
   }
 
 
-  static Future<void> downloadFileWeb(String imageUrl, String imageName) async {
+  static Future<void> downloadFileWeb(BuildContext context,String imageUrl, String imageName) async {
     try {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
+
+      showDialog(
+        context: context,
+        barrierDismissible: false, // Prevents the user from dismissing the dialog
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator());
+        },
       );
+
       // Fetch the image data from the URL
       final http.Response response = await http.get(Uri.parse(imageUrl));
 
@@ -224,21 +230,25 @@ class CheckInListController extends GetxController {
       } else {
         debugPrint("Failed to download image: ${response.statusCode}");
       }
-      Get.back();
+      context.pop();
 
     } catch (e) {
-      Get.back();
+      context.pop();
       debugPrint("Error downloading image: $e");
     }
   }
 
   // Function for Android download
-  static Future<void> downloadFileAndroid(String imageUrl,
+  static Future<void> downloadFileAndroid(BuildContext context,String imageUrl,
       String fileName) async {
     try {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
+
+      showDialog(
+        context: context,
+        barrierDismissible: false, // Prevents the user from dismissing the dialog
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator());
+        },
       );
       // Get directory to save the file
       var directory = await getExternalStorageDirectory();
@@ -247,12 +257,12 @@ class CheckInListController extends GetxController {
       // Download the file using Dio
       Dio dio = Dio();
       await dio.download(imageUrl, savePath);
-      Get.back();
+      context.pop();
 
       // Notify user that the download is successful
       // print("File downloaded at $savePath");
     } catch (e) {
-      Get.back();
+      context.pop();
 
       // print("Error downloading file: $e");
     }
@@ -266,12 +276,15 @@ class CheckInListController extends GetxController {
 
 
 // Function to download the PDF
-  Future<void> downloadCheckInAsPdf(SelfCheckInModel checkInItem) async {
+  Future<void> downloadCheckInAsPdf(BuildContext context,SelfCheckInModel checkInItem) async {
     try {
-    Get.dialog(
-      const Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
-    );
+      showDialog(
+        context: context,
+        barrierDismissible: false, // Prevents the user from dismissing the dialog
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator());
+        },
+      );
 
     final pdf = pw.Document();
 
@@ -331,12 +344,12 @@ class CheckInListController extends GetxController {
 
     // Generate the PDF as bytes and save it
     await _savePdf(pdf, "${checkInItem.fullName} Check In Details.pdf");
-    Get.back();
+    context.pop();
 
     }
     catch (e){
 
-      Get.back();
+      context.pop();
 
       Get.snackbar('Error', 'Failed to download $e');
 
@@ -389,7 +402,7 @@ class CheckInListController extends GetxController {
   }
 
 
-  Future<void> addNote(SelfCheckInModel item) async {
+  Future<void> addNote(BuildContext context,SelfCheckInModel item) async {
     TextEditingController noteController = TextEditingController(
         text: item.notes ?? "");
 
@@ -398,7 +411,7 @@ class CheckInListController extends GetxController {
     }
     // Show a confirmation dialog
     showDialog(
-      context: Get.context!,
+      context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Edit Note"),
@@ -416,9 +429,12 @@ class CheckInListController extends GetxController {
             ),
             TextButton(
               onPressed: () async {
-                Get.dialog(
-                  const Center(child: CircularProgressIndicator()),
-                  barrierDismissible: false,
+                showDialog(
+                  context: context,
+                  barrierDismissible: false, // Prevents the user from dismissing the dialog
+                  builder: (BuildContext context) {
+                    return const Center(child: CircularProgressIndicator());
+                  },
                 );
 
                 String newNote = noteController.text;
@@ -466,10 +482,13 @@ class CheckInListController extends GetxController {
   }
 
 
-  Future<void> deleteNote(SelfCheckInModel item) async {
-    Get.dialog(
-      const Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
+  Future<void> deleteNote(BuildContext context,SelfCheckInModel item) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevents the user from dismissing the dialog
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
+      },
     );
 
 
@@ -491,7 +510,7 @@ class CheckInListController extends GetxController {
       item.notes = null;
       update();
 
-      Get.back();
+      context.pop();
     // } else {
     //   // Show error snackbar if no matching document is found
     //   Get.snackbar(
@@ -501,7 +520,7 @@ class CheckInListController extends GetxController {
     //     backgroundColor: Colors.red,
     //     colorText: Colors.white,
     //   );
-    //   Get.back();
+    //   ""();
     //
     // }
   }

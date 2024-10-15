@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/admin/users_admin/manage_user_controller.dart';
 import 'package:wandercrew/pages/admin/users_admin/widgets/add_user_data.dart';
 import 'package:wandercrew/pages/admin/users_admin/widgets/user_data_item.dart';
@@ -33,12 +34,8 @@ class ManageUserAdmin extends StatelessWidget {
                             ? IconButton(
                                 icon: const Icon(Icons.arrow_back),
                                 onPressed: () {
-                                  // if (Get.previousRoute.isNotEmpty) {
-                                  Get.back(); // Go back if there's a previous route
-                                  // } else {
-                                  //   Get.offNamed(Routes
-                                  //       .adminHome); // Navigate to a specific route if there's no back route
-                                  // }
+                                  context.pop(); // Go back if there's a previous route
+
                                 },
                               )
                             : SizedBox.shrink(),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../widgets/app_date_picker.dart';
 import '../../../../widgets/app_elevated_button.dart';
-import '../../../../widgets/edit_text.dart';
 import '../../../../widgets/elevated_container.dart';
 import '../../../../widgets/widget_support.dart';
 import '../check_in_list_controller.dart';
@@ -78,7 +78,7 @@ class FilterCheckInList extends StatelessWidget {
                                   controller.filterFromDate.clear();
                                   controller.activeFilterCount.value = 0;
                                   controller.update();
-                                  Get.back();
+                                  context.pop();
                                 },
                                 title: "Clear",
                                 titleTextColor: Colors.black,
@@ -94,7 +94,7 @@ class FilterCheckInList extends StatelessWidget {
                                   if (controller.filterFromDate.text.isNotEmpty) controller.activeFilterCount.value++;
                                   if (controller.filterToDate.text.isNotEmpty) controller.activeFilterCount++;
                                   controller.update();
-                                  Get.back();
+                                  context.pop();
 
                                 },
                                 title: "Apply",

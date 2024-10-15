@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/widgets/app_elevated_button.dart';
 import 'package:wandercrew/widgets/widget_support.dart';
-
 import '../../../../models/menu_item_model.dart';
 import '../../../../widgets/app_dropdown.dart';
 import '../../../../widgets/edit_text.dart';
@@ -35,7 +35,7 @@ class AddFoodItem extends StatelessWidget {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.arrow_back),
-                          onPressed: () => Get.back(),
+                          onPressed: () => context.pop(),
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -265,7 +265,7 @@ class AddFoodItem extends StatelessWidget {
                             children: [
                               AppElevatedButton(
                                 onPressed: () {
-                                  Get.back(); // Cancel action
+                                  context.pop(); // Cancel action
                                 },
                                 showBorder: true,
                                 backgroundColor: Colors.transparent,
@@ -278,7 +278,7 @@ class AddFoodItem extends StatelessWidget {
                                 width: 16,
                               ),
                               AppElevatedButton(
-                                onPressed: controller.uploadItem,
+                                onPressed: (){controller.uploadItem(context);},
                                 backgroundColor: Colors.black,
                                 child: Text(
                                   isEdit ? "Save" : "Add",

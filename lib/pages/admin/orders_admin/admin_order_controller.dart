@@ -2,6 +2,7 @@ import 'dart:html' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wandercrew/models/food_order_model.dart';
 
@@ -180,11 +181,15 @@ class AdminOrderListController extends GetxController {
     html.window.open('tel:$phoneNumber', '_self');
   }
 
-  Future<void> confirmOrder(FoodOrderModel item, String adminName) async {
+  Future<void> confirmOrder(BuildContext context,FoodOrderModel item, String adminName) async {
     try {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
+
+      showDialog(
+        context: context,
+        barrierDismissible: false, // Prevents the user from dismissing the dialog
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator());
+        },
       );
 
       // print("confirm 4");
@@ -236,7 +241,7 @@ class AdminOrderListController extends GetxController {
           });
           // print("confirm 9");
           fetchOrderData();
-          Get.back();
+          context.pop();
           Get.snackbar('Success', 'Order status updated to Preparing');
         } else {
           Get.snackbar(
@@ -255,11 +260,14 @@ class AdminOrderListController extends GetxController {
   }
 
   // Function to mark the order as Delivered
-  Future<void> orderDelivered(FoodOrderModel item, String adminName) async {
+  Future<void> orderDelivered(BuildContext context,FoodOrderModel item, String adminName) async {
     try {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
+      showDialog(
+        context: context,
+        barrierDismissible: false, // Prevents the user from dismissing the dialog
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator());
+        },
       );
 
       // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -303,7 +311,7 @@ class AdminOrderListController extends GetxController {
           });
 
           fetchOrderData();
-          Get.back();
+          context.pop();
           Get.snackbar('Success', 'Order marked as Delivered');
         } else {
           Get.snackbar(

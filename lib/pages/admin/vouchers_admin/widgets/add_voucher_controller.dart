@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../../models/voucher_model.dart';
 import '../manage_voucher_controller.dart';
@@ -101,10 +102,14 @@ class AddVoucherAdminController extends GetxController {
         .join();
   }
 
-  Future<void> submitCouponData() async {
-    Get.dialog(
-      const Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
+  Future<void> submitCouponData(BuildContext context) async {
+
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevents the user from dismissing the dialog
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
+      },
     );
 
     try {
@@ -206,8 +211,8 @@ class AddVoucherAdminController extends GetxController {
               couponController.update();
             }
 
-            Get.back(); // Close loading dialog
-            Get.back(); // Return to previous page
+            context.pop(); // Close loading dialog
+            context.pop(); // Return to previous page
 
             // Show success message
             Get.snackbar(
@@ -218,7 +223,7 @@ class AddVoucherAdminController extends GetxController {
               colorText: Colors.white,
             );
           // } else {
-          //   Get.back();
+          //   ""();
           //   Get.snackbar(
           //     "Error",
           //     "Coupon not found.",
@@ -228,7 +233,7 @@ class AddVoucherAdminController extends GetxController {
           //   );
           // }
         } catch (error) {
-          Get.back();
+          context.pop();
           Get.snackbar(
             "Error",
             "Failed to update coupon: $error",
@@ -254,8 +259,8 @@ class AddVoucherAdminController extends GetxController {
 
         couponController.voucherList.add(newCoupon);
         couponController.update();
-        Get.back(); // Close loading dialog
-        Get.back(); // Return to previous page
+        context.pop(); // Close loading dialog
+        context.pop(); // Return to previous page
 
         Get.snackbar(
           "Success",
@@ -267,7 +272,7 @@ class AddVoucherAdminController extends GetxController {
         clearFields(); // Reset fields after adding a new coupon
       }
     } catch (e) {
-      Get.back();
+      context.pop();
       Get.snackbar(
         "Error",
         "Failed to save coupon: $e",

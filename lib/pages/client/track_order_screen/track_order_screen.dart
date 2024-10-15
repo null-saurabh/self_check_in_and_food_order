@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/client/track_order_screen/track_order_controller.dart';
 import 'package:wandercrew/pages/client/track_order_screen/widgets/track_item_widget.dart';
 import 'package:wandercrew/widgets/edit_text.dart';
@@ -35,12 +36,8 @@ class TrackOrderScreen extends StatelessWidget {
                          ? IconButton(
                             icon: const Icon(Icons.arrow_back),
                             onPressed: () {
-                              // if (Get.previousRoute.isNotEmpty) {
-                                Get.back(); // Go back if there's a previous route
-                              // } else {
-                              //   Get.offNamed(Routes
-                              //       .receptionHome); // Navigate to a specific route if there's no back route
-                              // }
+                                context.pop(); // Go back if there's a previous route
+
                             },
                           ):SizedBox.shrink(),
                           Column(
@@ -85,7 +82,7 @@ class TrackOrderScreen extends StatelessWidget {
                           child: AppElevatedButton(
                             borderRadius: 12,
                             onPressed: (){
-                              controller.trackOrder();
+                              controller.trackOrder(context);
                             },
                             title: "Track",
                             titleTextColor: Colors.white,

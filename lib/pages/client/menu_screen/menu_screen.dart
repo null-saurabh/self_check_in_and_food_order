@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/client/menu_screen/widgets/expandable_menu_item.dart';
 import 'package:wandercrew/pages/client/menu_screen/widgets/menu_button.dart';
 import 'package:wandercrew/utils/routes.dart';
@@ -75,13 +76,7 @@ class MenuScreen extends StatelessWidget {
                         color: Colors.white),
                     child: IconButton(
                         onPressed: () {
-                          // if (Get.previousRoute.isNotEmpty) {
-                            Get.back(); // Go back if there's a previous route
-                          // }
-                          // else {
-                          //   Get.offNamed(Routes
-                          //       .receptionHome); // Navigate to a specific route if there's no back route
-                          // }
+                            context.pop(); // Go back if there's a previous route
                         },
                         icon: const Icon(Icons.keyboard_backspace_rounded))),
               ),
@@ -157,7 +152,8 @@ class MenuScreen extends StatelessWidget {
                         bottom: 0,
                         child: GestureDetector(
                           onTap: () {
-                            Get.toNamed(Routes.receptionCart);
+                            context.go(Routes.receptionCart);
+
                           },
                           child: Container(
                             height: 32,

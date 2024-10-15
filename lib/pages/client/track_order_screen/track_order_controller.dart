@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../models/food_order_model.dart';
 
@@ -15,7 +15,7 @@ RxList<FoodOrderModel> trackOrderList =
     <FoodOrderModel>[].obs;
 
 
-  Future<void> trackOrder() async {
+  Future<void> trackOrder(BuildContext context,) async {
     // Validate form fields
     if (!formKey.currentState!.validate()) {
       return; // If form is invalid, do not proceed
@@ -24,9 +24,12 @@ RxList<FoodOrderModel> trackOrderList =
     String phoneNumber = trackNumberController.text.trim();
 
     try {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
+      showDialog(
+        context: context,
+        barrierDismissible: false, // Prevents the user from dismissing the dialog
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator());
+        },
       );
       // Fetch orders matching the entered phone number
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -35,7 +38,7 @@ RxList<FoodOrderModel> trackOrderList =
           .get();
 
       if (querySnapshot.docs.isEmpty) {
-        Get.back();
+        context.pop();
         Get.snackbar('No Orders Found', 'No orders found for this phone number');
         return;
       }
@@ -52,9 +55,9 @@ RxList<FoodOrderModel> trackOrderList =
       trackOrderList.assignAll(newList);
 
       update(); // Notify the UI to update
-      Get.back();
+      context.pop();
     } catch (e) {
-      Get.back();
+      context.pop();
       Get.snackbar('Error', 'Failed to fetch orders: $e');
     }
   }

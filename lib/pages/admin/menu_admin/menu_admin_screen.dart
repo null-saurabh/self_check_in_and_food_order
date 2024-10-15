@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/admin/menu_admin/widgets/add_food.dart';
 import 'package:wandercrew/pages/admin/menu_admin/widgets/filter_menu_list_admin.dart';
 import 'package:wandercrew/pages/admin/menu_admin/widgets/menu_item_admin.dart';
@@ -33,12 +34,8 @@ class MenuAdminScreen extends StatelessWidget {
                                 ? IconButton(
                               icon: const Icon(Icons.arrow_back),
                               onPressed: () {
-                                // if (Get.previousRoute.isNotEmpty) {
-                                  Get.back(); // Go back if there's a previous route
-                                // } else {
-                                //   Get.offNamed(Routes
-                                //       .adminHome); // Navigate to a specific route if there's no back route
-                                // }
+                                  context.pop(); // Go back if there's a previous route
+
                               },
                             ):SizedBox.shrink(),
                             Column(
@@ -167,7 +164,7 @@ class MenuAdminScreen extends StatelessWidget {
 
                                       onPressed: (){
                                       showDialog(
-                                          context: Get.context!,
+                                          context: context,
                                           builder: (BuildContext context) {
                                             return FilterMenuListAdmin();
                                           }
@@ -200,6 +197,7 @@ class MenuAdminScreen extends StatelessWidget {
                             onEdit: () => controller.editMenuItem(
                                 controller.allMenuItems[index]),
                             onDelete: () => controller.deleteMenuItem(
+                                context,
                                 controller.allMenuItems[index]),
                             onToggleAvailability: (isAvailable) =>
                                 controller.toggleAvailability(

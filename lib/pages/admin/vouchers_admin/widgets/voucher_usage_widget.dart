@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../models/voucher_model.dart';
 import '../../../../utils/date_time.dart';
 import '../../../../widgets/elevated_container.dart';
@@ -37,7 +37,7 @@ class VoucherUsageWidget extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
-                      Get.back();
+                      context.pop();
                     },
                     icon: Icon(Icons.close),
                   )

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../service/auth_services.dart';
 import '../../../utils/routes.dart';
@@ -14,7 +15,7 @@ class AdminLoginController extends GetxController {
   RxBool isLoading = false.obs;
 
   // Login function
-  Future<void> loginAdmin() async {
+  Future<void> loginAdmin(BuildContext context) async {
     if (!formKey.currentState!.validate()) return;
 
     isLoading.value = true;
@@ -51,10 +52,12 @@ class AdminLoginController extends GetxController {
           String? intendedRoute = args != null ? args['redirect'] : null;
 
           if (intendedRoute != null && intendedRoute.isNotEmpty) {
-            Get.offAllNamed(intendedRoute);
+            context.replace(intendedRoute);
+
           }
           else {
-            Get.offAllNamed(Routes.adminHome);
+            context.replace(Routes.adminHome);
+
           }
         } else {
           Get.snackbar(

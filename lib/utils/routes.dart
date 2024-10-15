@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/admin/check_in_list_admin/check_in_list_admin.dart';
 import 'package:wandercrew/pages/admin/home_admin/admin_home_screen.dart';
 import 'package:wandercrew/pages/admin/menu_admin/widgets/add_food.dart';
@@ -18,90 +19,114 @@ import 'package:wandercrew/service/auth_services.dart';
 
 import '../pages/admin/users_admin/manage_user_admin.dart';
 
-class AppPages {
-  static final List<GetPage> pages = [
-    GetPage(
-      name: Routes.receptionHome,
-      page: () => const ReceptionHomeScreen(),
-    ),
-    GetPage(
-      name: Routes.receptionMenu,
-      page: () => const MenuScreen(),
-    ),
-    GetPage(
-      name: Routes.receptionCheckIn,
-      page: () => const CheckInScreen(),
-    ),
-    GetPage(
-      name: Routes.receptionTrackOrder,
-      page: () => const TrackOrderScreen(),
-    ),
-    GetPage(
-      name: Routes.receptionCart,
-      page: () => const CartScreen(),
-    ),
 
-    GetPage(
-      name: Routes.adminLogin,
-      page: () => const AdminLogin(),
-    ),
-    GetPage(
-      name: Routes.adminHome,
-      page: () => const AdminHomeScreen(),
-      middlewares: [AuthMiddleware()],
-    ),
-    GetPage(
-      name: Routes.adminMenu,
-      page: () => const MenuAdminScreen(),
-      middlewares: [AuthMiddleware()],
-    ),    
-    GetPage(
-      name: Routes.adminAddMenu,
-      page: () => const AddFoodItem(),
-      // middlewares: [AuthMiddleware()],
-    ),
-    GetPage(
-      name: Routes.adminOrderList,
-      page: () => const OrdersListScreen(),
-      // middlewares: [AuthMiddleware()],
-    ),
-    GetPage(
-      name: Routes.adminCheckInList,
-      page: () => const CheckInListAdmin(),
-      // middlewares: [AuthMiddleware()],
-    ),
-    GetPage(
-      name: Routes.adminManageUsers,
-      page: () => const ManageUserAdmin(),
-      // middlewares: [AuthMiddleware()],
-    ),
-    GetPage(
-      name: Routes.adminManageVoucher,
-      page: () => const ManageVoucherAdmin(),
-      // middlewares: [AuthMiddleware()],
-    ),
-    GetPage(
-      name: Routes.adminAddVoucher,
-      page: () => const AddVoucherAdmin(),
-      // middlewares: [AuthMiddleware()],
-    ),
 
-    GetPage(
-      name: Routes.wanderCrew,
-      page: () => const TestScreen(),
-      // middlewares: [AuthMiddleware()],
-    ),
 
-    GetPage(
-      name: Routes.notFound,
-      page: () => const Scaffold(
-        body: Center(
-          child: Text('Page not found'),
-        ),
-      ),
+
+
+final GoRouter router = GoRouter(
+  initialLocation: Routes.receptionHome,
+  routes: [
+    GoRoute(
+      path: Routes.receptionHome,
+      name: 'ReceptionHome',
+      builder: (context, state) => const ReceptionHomeScreen(),
     ),
-  ];
+    GoRoute(
+      path: Routes.receptionMenu,
+      name: 'ReceptionMenu',
+      builder: (context, state) => const MenuScreen(),
+    ),
+    GoRoute(
+      path: Routes.receptionCheckIn,
+      name: 'ReceptionCheckIn',
+      builder: (context, state) => const CheckInScreen(),
+    ),
+    GoRoute(
+      path: Routes.receptionTrackOrder,
+      name: 'ReceptionTrackOrder',
+      builder: (context, state) => const TrackOrderScreen(),
+    ),
+    GoRoute(
+      path: Routes.receptionCart,
+      name: 'ReceptionCart',
+      builder: (context, state) => const CartScreen(),
+    ),
+    GoRoute(
+      path: Routes.adminLogin,
+      name: 'AdminLogin',
+      builder: (context, state) => const AdminLogin(),
+    ),
+    GoRoute(
+      path: Routes.adminHome,
+      name: 'AdminHome',
+      builder: (context, state) => const AdminHomeScreen(),
+      redirect: (context, state) => _authGuard(state),
+    ),
+    GoRoute(
+      path: Routes.adminMenu,
+      name: 'AdminMenu',
+      builder: (context, state) => const MenuAdminScreen(),
+      redirect: (context, state) => _authGuard(state),
+    ),
+    GoRoute(
+      path: Routes.adminAddMenu,
+      name: 'AdminAddMenu',
+      builder: (context, state) => const AddFoodItem(),
+      redirect: (context, state) => _authGuard(state),
+    ),
+    GoRoute(
+      path: Routes.adminOrderList,
+      name: 'AdminOrderList',
+      builder: (context, state) => const OrdersListScreen(),
+      redirect: (context, state) => _authGuard(state),
+    ),
+    GoRoute(
+      path: Routes.adminCheckInList,
+      name: 'AdminCheckInList',
+      builder: (context, state) => const CheckInListAdmin(),
+      redirect: (context, state) => _authGuard(state),
+    ),
+    GoRoute(
+      path: Routes.adminManageUsers,
+      name: 'AdminManageUsers',
+      builder: (context, state) => const ManageUserAdmin(),
+      redirect: (context, state) => _authGuard(state),
+    ),
+    GoRoute(
+      path: Routes.adminManageVoucher,
+      name: 'AdminManageVoucher',
+      builder: (context, state) => const ManageVoucherAdmin(),
+      redirect: (context, state) => _authGuard(state),
+    ),
+    GoRoute(
+      path: Routes.adminAddVoucher,
+      name: 'AdminAddVoucher',
+      builder: (context, state) => const AddVoucherAdmin(),
+      redirect: (context, state) => _authGuard(state),
+    ),
+    GoRoute(
+      path: '/',
+      name: 'WanderCrew',
+      builder: (context, state) => const TestScreen(),
+    ),
+  ],
+  errorBuilder: (context, state) => const Scaffold(
+    body: Center(child: Text('Page not found')),
+  ),
+);
+
+
+// Middleware auth check
+String? _authGuard(GoRouterState state) {
+  final AuthService authService = AuthService.to;
+  if (!authService.isLoggedIn.value) {
+    return Routes.adminLogin; // Redirect to login if not authenticated
+  }
+  return null; // Allow access if authenticated
 }
+
+
 
 class Routes {
   static const String wanderCrew = '/';
@@ -125,7 +150,6 @@ class Routes {
 
   static const String notFound = '/not-found';
 }
-
 
 
 class AuthMiddleware extends GetMiddleware {

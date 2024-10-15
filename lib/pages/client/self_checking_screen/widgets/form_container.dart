@@ -118,7 +118,7 @@ class CheckInFormContainer extends StatelessWidget {
                       } else {
                         if (checkInController.formKeyPage3.currentState!
                             .validate()) {
-                          checkInController.submitData();
+                          checkInController.submitData(context);
                         } else {
                           checkInController.receptionistText.value =
                               "Sign Please.";

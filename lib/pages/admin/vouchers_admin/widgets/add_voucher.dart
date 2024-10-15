@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/admin/vouchers_admin/manage_voucher_controller.dart';
 
 import '../../../../models/voucher_model.dart';
@@ -37,7 +38,7 @@ class AddVoucherAdmin extends StatelessWidget {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.arrow_back),
-                          onPressed: () => Get.back(),
+                          onPressed: () => context.pop(),
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -401,7 +402,7 @@ class AddVoucherAdmin extends StatelessWidget {
                             children: [
                               AppElevatedButton(
                                 onPressed: () {
-                                  Get.back(); // Cancel action
+                                  context.pop(); // Cancel action
                                 },
                                 showBorder: true,
                                 backgroundColor: Colors.transparent,
@@ -417,7 +418,7 @@ class AddVoucherAdmin extends StatelessWidget {
                                 onPressed: () {
                                   if (controller.formKey.currentState!
                                       .validate()) {
-                                    controller.submitCouponData();
+                                    controller.submitCouponData(context);
                                   }
                                 },
                                 backgroundColor: Colors.black,

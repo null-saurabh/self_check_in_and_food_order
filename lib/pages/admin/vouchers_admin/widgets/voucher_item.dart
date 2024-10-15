@@ -168,7 +168,7 @@ class VoucherItemAdmin extends StatelessWidget {
                                 showBorder: true,
                                 onPressed: () {
                                   showDialog(
-                                      context: Get.context!,
+                                      context: context,
                                       builder: (BuildContext context) {
                                         return VoucherUsageWidget(usageList: voucherData.usedOnOrders!.reversed.toList(),);
                                       });
@@ -196,7 +196,6 @@ class VoucherItemAdmin extends StatelessWidget {
                                           top: Radius.circular(16)),
                                     ),
                                   );
-                                  // Get.toNamed(Routes.adminAddVoucher);
                                   // controller.editUserData(userData);
                                 },
                               ),
@@ -208,7 +207,7 @@ class VoucherItemAdmin extends StatelessWidget {
                                 titleTextColor: Colors.white,
                                 backgroundColor: Colors.red,
                                 onPressed: () {
-                                  controller.deleteVoucher(voucherData);
+                                  controller.deleteVoucher(context,voucherData);
                                 },
                               ),
                             ],
@@ -221,7 +220,7 @@ class VoucherItemAdmin extends StatelessWidget {
                                 showBorder: true,
                                 onPressed: () {
                                   showDialog(
-                                      context: Get.context!,
+                                      context: context,
                                       builder: (BuildContext context) {
                                         return VoucherUsageWidget(usageList: voucherData.usedOnOrders!.reversed.toList(),);
                                       });

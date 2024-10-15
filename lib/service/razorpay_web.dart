@@ -3,6 +3,7 @@ import 'dart:js' as js;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:wandercrew/pages/admin/orders_admin/admin_order_controller.dart';
 
@@ -11,6 +12,7 @@ class RazorpayService {
 
 
   void openCheckout({
+    required BuildContext context,
     required String key,
     required int amount,
     required String number,
@@ -20,10 +22,14 @@ class RazorpayService {
     required Function onDismiss})
   async {
 
-    Get.dialog(
-      const Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevents the user from dismissing the dialog
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
+      },
     );
+
 
     final url = 'https://us-central1-wander-crew.cloudfunctions.net/createOrder';
     final response = await http.post(
@@ -37,7 +43,7 @@ class RazorpayService {
       }),
     );
 
-    Get.back();
+    context.pop();
 
     if (response.statusCode == 200) {
       final orderData = jsonDecode(response.body);
@@ -80,12 +86,17 @@ class RazorpayService {
 
 
 
-  Future<void> handleRefund({required String paymentId, required int refundAmount,required int orderAmount, required String orderId,}) async {
+  Future<void> handleRefund({required BuildContext context,required String paymentId, required int refundAmount,required int orderAmount, required String orderId,}) async {
 
-    Get.back();
-    Get.dialog(
-      const Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
+    context.pop();
+
+
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevents the user from dismissing the dialog
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
+      },
     );
 
     final url = 'https://us-central1-wander-crew.cloudfunctions.net/handlePayment';
@@ -129,7 +140,7 @@ class RazorpayService {
 
 
 
-      Get.back();
+      context.pop();
       Get.snackbar(
         "Success",
         "Refund processed successfully",
@@ -141,7 +152,7 @@ class RazorpayService {
     }
 
     else {
-      Get.back();
+      context.pop();
       Get.snackbar(
         "Error",
         "Refund failed: ${response.body}",

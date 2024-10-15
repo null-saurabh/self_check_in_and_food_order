@@ -8,7 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:signature/signature.dart';
+import 'package:wandercrew/utils/routes.dart';
 import '../../../models/self_checking_model.dart';
+import 'package:go_router/go_router.dart';
+
 
 class CheckInController extends GetxController {
   @override
@@ -342,10 +345,14 @@ class CheckInController extends GetxController {
   }
 
   // Function to submit data to Firebase
-  Future<void> submitData() async {
-    Get.dialog(
-      const Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
+  Future<void> submitData(BuildContext context) async {
+
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevents the user from dismissing the dialog
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
+      },
     );
     try {
       String? frontDocumentUrl;
@@ -410,7 +417,7 @@ class CheckInController extends GetxController {
           // Optionally, update the document with the newly assigned ID
           await docRef.update({'id': id});
 
-          Get.back();
+          context.pop();
           // print("55");
 
           Get.snackbar(
@@ -421,6 +428,7 @@ class CheckInController extends GetxController {
           );
           // print("6");
           clearFields();
+
         }
       } else {
         Get.snackbar(
@@ -435,8 +443,9 @@ class CheckInController extends GetxController {
       );
     } finally {
       // print("AAAA");
-      // Get.back();
-      Get.toNamed("/reception");
+      // ""();
+      context.go(Routes.receptionHome);
+
       //Close loading dialog
     }
   }

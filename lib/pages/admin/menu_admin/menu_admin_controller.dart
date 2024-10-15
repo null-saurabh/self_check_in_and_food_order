@@ -116,10 +116,10 @@ class MenuAdminController extends GetxController {
     // print("Edit Menu Item: ${item.name}");
   }
 
-  Future<void> deleteMenuItem(MenuItemModel item) async {
+  Future<void> deleteMenuItem(BuildContext context,MenuItemModel item) async {
     // Show a confirmation dialog
     bool? confirmed = await showDialog(
-      context: Get.context!,
+      context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Confirm Delete"),

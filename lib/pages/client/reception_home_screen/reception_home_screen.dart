@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/reception_controller.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/widgets/home_screen_menu_widget.dart';
 import 'package:wandercrew/utils/routes.dart';
@@ -78,7 +79,8 @@ class ReceptionHomeScreen extends StatelessWidget {
                               label: "Check In",
                               onTap: () {
                                 // Add action for check-in
-                                Get.toNamed(Routes.receptionCheckIn);
+                                context.go(Routes.receptionCheckIn);
+
                               },
                             ),
                             const SizedBox(
@@ -94,7 +96,9 @@ class ReceptionHomeScreen extends StatelessWidget {
                               ),
                               label: "Room Service",
                               onTap: () {
-                                controller.showAdminContacts();
+                                // context.go(Routes.receptionTrackOrder);
+
+                                controller.showAdminContacts(context);
                               },
                             )
                           ],
@@ -111,7 +115,8 @@ class ReceptionHomeScreen extends StatelessWidget {
                               label: "Order Food",
                               onTap: () {
                                 // Add action for order food
-                                Get.toNamed(Routes.receptionMenu);
+                                context.go(Routes.receptionMenu);
+
                               },
                             ),
                             const SizedBox(
@@ -125,7 +130,7 @@ class ReceptionHomeScreen extends StatelessWidget {
                               icon: "assets/icons/track_order.png",
                               label: "Track Order",
                               onTap: () {
-                                Get.toNamed(Routes.receptionTrackOrder);
+                                context.go(Routes.receptionTrackOrder);
 
                               },
                             ),

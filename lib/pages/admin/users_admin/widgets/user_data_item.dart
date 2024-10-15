@@ -37,7 +37,7 @@ class UserDataItemAdmin extends StatelessWidget {
                     _buildInfoRow(label: 'Name',value:userData.name ),
                     GestureDetector(
                       onTap: () {
-                        controller.downloadUserData(userData);
+                        controller.downloadUserData(context,userData);
                       },
                       child: const Icon(
                         Icons.download,
@@ -90,7 +90,7 @@ class UserDataItemAdmin extends StatelessWidget {
                       titleTextColor: Colors.white,
                       backgroundColor: Colors.black,
                       onPressed: (){
-                        controller.deleteUser(userData);
+                        controller.deleteUser(context,userData);
                       },
                     ),
                     SizedBox(width: 8),

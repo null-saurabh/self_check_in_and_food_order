@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../widgets/app_date_picker.dart';
 import '../../../../widgets/app_elevated_button.dart';
@@ -105,7 +106,7 @@ class OrderFilterAlert extends StatelessWidget {
                                           controller.filterOrdersByStatus(label: controller.selectedFilter.value, isFilterButton: true);
                                           controller.activeFilterCount.value = 0;
                                           controller.update();
-                                          Get.back();
+                                          context.pop();
                                         },
                                         title: "Clear",
                                         titleTextColor: Colors.black,
@@ -125,7 +126,7 @@ class OrderFilterAlert extends StatelessWidget {
                                           if (controller.filterMinOrderValue.text.isNotEmpty) controller.activeFilterCount.value++;
                                           if (controller.filterMaxOrderValue.text.isNotEmpty) controller.activeFilterCount.value++;
                                           controller.update();
-                                          Get.back();
+                                          context.pop();
 
                                         },
                                         title: "Apply",

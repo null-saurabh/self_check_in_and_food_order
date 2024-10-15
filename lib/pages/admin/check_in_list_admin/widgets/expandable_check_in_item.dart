@@ -55,7 +55,7 @@ class ExpandableCheckInItem extends StatelessWidget {
                         ),
                         GestureDetector(
                                 onTap: () {
-                                  controller.downloadCheckInAsPdf(checkInItem);
+                                  controller.downloadCheckInAsPdf(context,checkInItem);
                                 },
                                 child: const Icon(
                                   Icons.download,
@@ -125,14 +125,14 @@ class ExpandableCheckInItem extends StatelessWidget {
                         SizedBox(width: 4,),
                         GestureDetector(
                           onTap: (){
-                            controller.addNote(checkInItem);
+                            controller.addNote(context,checkInItem);
                           },
                           child: Icon(Icons.edit,size: 20,),
                         ),
                         SizedBox(width: 4,),
                         GestureDetector(
                           onTap: (){
-                            controller.deleteNote(checkInItem);
+                            controller.deleteNote(context,checkInItem);
                           },
                           child: Icon(Icons.delete,color: Colors.red,size: 20,),
                         ),
@@ -147,7 +147,7 @@ class ExpandableCheckInItem extends StatelessWidget {
                         AppElevatedButton(
                           contentPadding: EdgeInsets.all(8),
                           onPressed: (){
-                            controller.addNote(checkInItem);
+                            controller.addNote(context,checkInItem);
                           },
                           backgroundColor: Colors.transparent,
                           showBorder: true,
@@ -182,6 +182,7 @@ class ExpandableCheckInItem extends StatelessWidget {
                   _buildDocumentSection(
                       'Front Document', checkInItem.frontDocumentUrl, () {
                     controller.downloadFile(
+                      context: context,
                         imageUrl: checkInItem.frontDocumentUrl,
                         fileName:
                             '${checkInItem.fullName}_${checkInItem.documentType}_front.jpg');
@@ -190,12 +191,15 @@ class ExpandableCheckInItem extends StatelessWidget {
                   _buildDocumentSection(
                       'Back Document', checkInItem.backDocumentUrl!, () {
                     controller.downloadFile(
+                        context: context,
+
                         imageUrl: checkInItem.backDocumentUrl!,
                         fileName:
                             '${checkInItem.fullName}_${checkInItem.documentType}_back.jpg');
                   }),
                   _buildSignatureSection(checkInItem.signatureUrl, () {
                     controller.downloadFile(
+                        context: context,
                         imageUrl: checkInItem.signatureUrl,
                         fileName: '${checkInItem.fullName}_signature.jpg');
                   }),

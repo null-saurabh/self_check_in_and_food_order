@@ -24,26 +24,18 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp.router(
       title: 'Wander Crew',
       debugShowCheckedModeBanner: false,
-      theme:  _buildTheme(),
-      initialRoute: Routes.wanderCrew, // Use routes from routes.dart
-      getPages: AppPages.pages,       // Use pages from app_pages.dart
-      unknownRoute: GetPage(
-        name: '/not-found',
-        page: () => const Scaffold(
-          body: Center(
-            child: Text('Page not found'),
-          ),
-        ),
-      ),
-
-      // home: const BottomNav(),
+      theme: _buildTheme(),
+      routerConfig: router,
     );
   }
+
+
 
   ThemeData _buildTheme() {
     var baseTheme = ThemeData(

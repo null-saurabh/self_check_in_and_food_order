@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
 import 'package:wandercrew/pages/admin/users_admin/widgets/add_user_data.dart';
@@ -99,12 +100,12 @@ class ManageUserAdminController extends GetxController {
     }
   }
 
-  Future<void> deleteUser(AdminUserModel userData) async {
+  Future<void> deleteUser(BuildContext context,AdminUserModel userData) async {
 
 
     // Show a confirmation dialog
     bool? confirmed = await showDialog(
-      context: Get.context!,
+      context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Confirm Delete"),
@@ -127,10 +128,16 @@ class ManageUserAdminController extends GetxController {
 
 
       try {
-        Get.dialog(
-          const Center(child: CircularProgressIndicator()),
-          barrierDismissible: false,
+
+        showDialog(
+          context: context,
+          barrierDismissible: false, // Prevents the user from dismissing the dialog
+          builder: (BuildContext context) {
+            return const Center(child: CircularProgressIndicator());
+          },
         );
+
+
         // // Query the document with matching custom 'id' field
         // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         //     .collection("AdminAccount")
@@ -146,7 +153,7 @@ class ManageUserAdminController extends GetxController {
           originalUserDataList.remove(userData);
 
           update();
-          Get.back();
+          context.pop();
 
           // Show success snackbar
           Get.snackbar(
@@ -157,7 +164,7 @@ class ManageUserAdminController extends GetxController {
             colorText: Colors.white,
           );
         // } else {
-        //   Get.back();
+        //   ""();
         //
         //   // No matching document found
         //   Get.snackbar(
@@ -169,7 +176,7 @@ class ManageUserAdminController extends GetxController {
         //   );
         // }
       } catch (error) {
-        Get.back();
+        context.pop();
         // Show error snackbar
         Get.snackbar(
           "Error",
@@ -275,11 +282,16 @@ class ManageUserAdminController extends GetxController {
   }
 
 
-  Future<void> downloadUserData(AdminUserModel checkInItem) async {
+  Future<void> downloadUserData(BuildContext context,AdminUserModel checkInItem) async {
     try {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
+
+
+      showDialog(
+        context: context,
+        barrierDismissible: false, // Prevents the user from dismissing the dialog
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator());
+        },
       );
       final pdf = pw.Document();
 
@@ -336,12 +348,12 @@ class ManageUserAdminController extends GetxController {
 
       // Generate the PDF as bytes and save it
       await _savePdf(pdf, "${checkInItem.name} User Details.pdf");
-      Get.back();
+      context.pop();
 
     }
     catch (e){
 
-      Get.back();
+      context.pop();
 
       Get.snackbar('Error', 'Failed to download $e');
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../widgets/app_elevated_button.dart';
 import '../../../../widgets/edit_text.dart';
 import '../../../../widgets/elevated_container.dart';
@@ -190,7 +191,7 @@ class FilterMenuListAdmin extends StatelessWidget {
                                   AppElevatedButton(
                                     onPressed: (){
                                       controller.clearFilter();
-                                      Get.back();
+                                      context.pop();
                                     },
                                     title: "Clear",
                                     titleTextColor: Colors.black,
@@ -202,7 +203,7 @@ class FilterMenuListAdmin extends StatelessWidget {
                                     onPressed: (){
                                       controller.applyFilters();
                                       // controller.filterOrdersByStatus(label: controller.selectedFilter.value,isFilterButton: true);
-                                      Get.back();
+                                      context.pop();
 
                                     },
                                     title: "Apply",

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:random_string/random_string.dart';
+import 'package:go_router/go_router.dart';
 import '../../../models/cart_model.dart';
 import '../../../models/menu_item_model.dart';
 import '../../../models/food_order_model.dart';
@@ -92,14 +92,17 @@ class CartScreenController extends GetxController {
 
 
 
-  Future<String?> applyCoupon(String code) async {
+  Future<String?> applyCoupon(BuildContext context,String code) async {
     if (code.isEmpty) {
       return 'Enter Voucher Code';
     }
 
-    Get.dialog(
-      const Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevents the user from dismissing the dialog
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
+      },
     );
 
     try {
@@ -118,7 +121,7 @@ class CartScreenController extends GetxController {
 
     if (querySnapshot.docs.isEmpty) {
       // print("3");
-      Get.back();
+      context.pop();
       return 'Invalid coupon code';
     }
     // print("4");
@@ -129,7 +132,7 @@ class CartScreenController extends GetxController {
 
       if (!couponDoc.exists) {
         // print("6");
-        Get.back();
+        context.pop();
         return 'Invalid coupon code';
       }
     // print("7");
@@ -142,7 +145,7 @@ class CartScreenController extends GetxController {
 
     // Validate minimum order value
     if (currentCoupon.minOrderValue != null && itemTotalAmount.value < currentCoupon.minOrderValue!) {
-      Get.back();
+      context.pop();
       return 'Minimum order value for this coupon is ₹${currentCoupon.minOrderValue}';
     }
     // print("10");
@@ -158,7 +161,7 @@ class CartScreenController extends GetxController {
 
     // Validate applicable categories
     if (!currentCoupon.applicableCategories.contains("Food Voucher")) {
-      Get.back();
+      context.pop();
       // If the coupon is a food voucher, it's applicable to all items
       return 'coupon not applicable';
     }
@@ -189,7 +192,7 @@ class CartScreenController extends GetxController {
           'isUsed': true,
           'isActive': false,
         });
-        Get.back();
+        context.pop();
         return 'This coupon has been used already';
 
       }
@@ -212,7 +215,7 @@ class CartScreenController extends GetxController {
           'isActive': false,
 
         });
-        Get.back();
+        context.pop();
 
         return 'This coupon has reached its usage limit';
       }
@@ -239,7 +242,7 @@ class CartScreenController extends GetxController {
 
         });
         // print("14");
-        Get.back();
+        context.pop();
 
         return 'This coupon has no remaining value';
       }
@@ -280,11 +283,11 @@ class CartScreenController extends GetxController {
 
     isCouponApplied.value = true;
     isPromoWidgetVisible.value = false;
-    Get.back();
+    context.pop();
     return null;
   }
     catch (e) {
-      Get.back();
+      context.pop();
       Get.snackbar(
         "Error",
         "Failed to apply coupon: $e",
@@ -317,14 +320,18 @@ class CartScreenController extends GetxController {
 
 
 
-  Future<void> onSuccess(response) async {
+  Future<void> onSuccess(BuildContext context,response) async {
     try {
 
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
-      );
 
+
+      showDialog(
+        context: context,
+        barrierDismissible: false, // Prevents the user from dismissing the dialog
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator());
+        },
+      );
       String transactionID =
           response['razorpay_payment_id']; // From Razorpay response
       String orderId = response['razorpay_order_id'];
@@ -473,19 +480,18 @@ class CartScreenController extends GetxController {
         }
       }
 
-      Get.back();
-      Get.back();
+      context.pop();
+      context.pop();
 
       Get.snackbar("Success", "Order placed successfully!",
           snackPosition: SnackPosition.BOTTOM);
-      // Get.toNamed(Routes.receptionMenu);
 
     } catch (e) {
       // Handle any errors that occur during the order process
       // print(e);
       // print("aaaaaaa");
-      Get.back();
-      Get.back();
+      context.pop();
+      context.pop();
       Get.snackbar(
         "Error",
         "Payment Complete!, But Failed to place the order. Contact Staff.",
@@ -551,7 +557,7 @@ class CartScreenController extends GetxController {
     update();
   }
 
-  Future<void> initiatePayment() async {
+  Future<void> initiatePayment(BuildContext context) async {
     if (itemTotalAmount > 0) {
       if (razorpayKey.isNotEmpty) {
         // Check if the key is valid
@@ -559,6 +565,7 @@ class CartScreenController extends GetxController {
 
         RazorpayService razorpay = RazorpayService();
         razorpay.openCheckout(
+          context: context,
           key: razorpayKey,
           number: contactNumberController.text,
           amount: isTipSelected.value ? (itemTotalAmount.value * 100 ).toInt() : (double.parse((itemTotalAmount.value + itemTotalAmount.value / 20).toStringAsFixed(2)) * 100).toInt(),

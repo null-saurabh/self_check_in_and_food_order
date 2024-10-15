@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wandercrew/models/voucher_model.dart';
 
@@ -224,14 +225,16 @@ class ManageVoucherAdminController extends GetxController {
     }
   }
 
-  Future<void> refreshAndExpireCoupons() async {
+  Future<void> refreshAndExpireCoupons(BuildContext context) async {
 
     final now = DateTime.now();
     final firestore = FirebaseFirestore.instance;
-
-    Get.dialog(
-      const Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevents the user from dismissing the dialog
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
+      },
     );
 
     try {
@@ -257,7 +260,7 @@ class ManageVoucherAdminController extends GetxController {
       }
 
       fetchVoucherList();
-      Get.back();
+      context.pop();
       Get.snackbar(
         "Success",
         "Vouchers updated successfully.",
@@ -266,7 +269,7 @@ class ManageVoucherAdminController extends GetxController {
         colorText: Colors.white,
       );
     } catch (e) {
-      Get.back();
+      context.pop();
       Get.snackbar(
         "Error",
         "Failed to update voucher.",
@@ -279,12 +282,12 @@ class ManageVoucherAdminController extends GetxController {
   }
 
 
-  Future<void> deleteVoucher(CouponModel voucherData) async {
+  Future<void> deleteVoucher(BuildContext context,CouponModel voucherData) async {
 
 
     // Show a confirmation dialog
     bool? confirmed = await showDialog(
-      context: Get.context!,
+      context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Confirm Delete"),
@@ -304,9 +307,12 @@ class ManageVoucherAdminController extends GetxController {
     );
 
     if (confirmed == true) {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
+      showDialog(
+        context: context,
+        barrierDismissible: false, // Prevents the user from dismissing the dialog
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator());
+        },
       );
 
       try {
@@ -326,7 +332,7 @@ class ManageVoucherAdminController extends GetxController {
           voucherList.remove(voucherData);
           originalVoucherList.remove(voucherData);
           update();
-          Get.back();
+          context.pop();
 
           // Show success snackbar
           Get.snackbar(
@@ -337,7 +343,7 @@ class ManageVoucherAdminController extends GetxController {
             colorText: Colors.white,
           );
         // } else {
-        //   Get.back();
+        //   ""();
         //
         //   // No matching document found
         //   Get.snackbar(
@@ -349,7 +355,7 @@ class ManageVoucherAdminController extends GetxController {
         //   );
         // }
       } catch (error) {
-        Get.back();
+        context.pop();
         // Show error snackbar
         Get.snackbar(
           "Error",

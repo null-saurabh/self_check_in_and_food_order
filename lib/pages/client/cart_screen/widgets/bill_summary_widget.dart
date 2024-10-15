@@ -42,9 +42,8 @@ class CartBillSummaryWidget extends StatelessWidget {
                       label: "Tax And Other Charges",
                       amount: controller.taxChargesAmount.value,
                     ),
-                    if (controller.tipAmount.value != null)
                       CartRowItemWidget(
-                          label: "Tip", amount: controller.tipAmount.value!),
+                          label: "Tip", amount: controller.tipAmount.value),
                     if (controller.isCouponApplied.value)
                       CartRowItemWidget(
                         label: 'Coupon (${controller.coupon.value!.code})',
@@ -79,7 +78,7 @@ class CartBillSummaryWidget extends StatelessWidget {
                         child: ApplyCouponWidget(
                             promoCode: controller.promoCodeController,
                             onPressed: (code) async {
-                              final result = await controller.applyCoupon(code);
+                              final result = await controller.applyCoupon(context,code);
                               if (result != null) {
                                 return result;
                               }

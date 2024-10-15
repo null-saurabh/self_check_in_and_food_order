@@ -108,7 +108,7 @@ class AdminLogin extends StatelessWidget {
                             onTap: controller.isLoading.value
                                 ? null
                                 : () {
-                              controller.loginAdmin();
+                              controller.loginAdmin(context);
                             },
                             child: Container(
                               height: 48,

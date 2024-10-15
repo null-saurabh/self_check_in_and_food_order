@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:random_string/random_string.dart';
 import 'package:wandercrew/pages/admin/menu_admin/menu_admin_controller.dart';
@@ -133,7 +134,7 @@ class AddFoodItemController extends GetxController {
   }
 
   // Uploads the food item to Firebase, mapping it using the MenuItemModel class
-  Future<void> uploadItem() async {
+  Future<void> uploadItem(BuildContext context) async {
 
     if (formKey.currentState!
         .validate()) {
@@ -143,9 +144,14 @@ class AddFoodItemController extends GetxController {
     //     nameController.text.isNotEmpty &&
     //     priceController.text.isNotEmpty &&
     //     selectedCategory.value != null) {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
+
+
+      showDialog(
+        context: context,
+        barrierDismissible: false, // Prevents the user from dismissing the dialog
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator());
+        },
       );
 
       try {
@@ -229,8 +235,8 @@ class AddFoodItemController extends GetxController {
                 }
                 controller.update();
               }
-              Get.back();
-              Get.back();
+              context.pop();
+              context.pop();
 
               // Show success snackbar
               Get.snackbar(
@@ -241,7 +247,7 @@ class AddFoodItemController extends GetxController {
                 colorText: Colors.white,
               );
           } catch (error) {
-            Get.back();
+            context.pop();
 
             // Show error snackbar
             Get.snackbar(
@@ -265,8 +271,8 @@ class AddFoodItemController extends GetxController {
           await docRef.update({'id': id});
 
 
-          Get.back(); // Close loading dialog
-          Get.back(); // go back from add screen
+          context.pop(); // Close loading dialog
+          context.pop(); // go back from add screen
           Get.snackbar(
             "Success",
             "Food Item has been added Successfully",
@@ -283,7 +289,7 @@ class AddFoodItemController extends GetxController {
 
         }
       } catch (e) {
-        Get.back();
+        context.pop();
 
         Get.snackbar(
           "Error",
