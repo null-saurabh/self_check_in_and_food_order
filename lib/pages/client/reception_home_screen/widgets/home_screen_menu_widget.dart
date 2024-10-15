@@ -14,6 +14,7 @@ class ReceptionHomeGridItem extends StatelessWidget {
   final bool? isRoomService;
   final bool? isCheckIn;
   final bool? isFeedbackList;
+  final bool? isTrackOrder;
   final double? widthRatio;
   const ReceptionHomeGridItem({
     super.key,
@@ -28,7 +29,7 @@ class ReceptionHomeGridItem extends StatelessWidget {
     this.isCheckIn,
     this.width,
     this.isFeedbackList,
-    this.widthRatio,
+    this.widthRatio, this.isTrackOrder,
   });
 
   @override
@@ -69,6 +70,8 @@ class ReceptionHomeGridItem extends StatelessWidget {
                 : MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              if(isCheckIn != null)
+                SizedBox(height: 4,),
               if (icon != null) ...[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -94,9 +97,9 @@ class ReceptionHomeGridItem extends StatelessWidget {
               ],
               if (isRoomService == null &&
                   isCheckIn == null &&
-                  isFeedbackList == null)
+                  isFeedbackList == null && isTrackOrder == null)
                 const SizedBox(height: 18),
-              if (isFeedbackList == null)
+              if (isFeedbackList == null && isTrackOrder == null)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   // crossAxisAlignment: CrossAxisAlignment.end,

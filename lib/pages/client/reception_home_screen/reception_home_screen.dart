@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/reception_controller.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/widgets/home_screen_menu_widget.dart';
+import 'package:wandercrew/utils/routes.dart';
 
 import '../../../widgets/widget_support.dart';
 
@@ -77,7 +78,7 @@ class ReceptionHomeScreen extends StatelessWidget {
                               label: "Check In",
                               onTap: () {
                                 // Add action for check-in
-                                Get.toNamed('/reception/checkIn');
+                                Get.toNamed(Routes.receptionCheckIn);
                               },
                             ),
                             const SizedBox(
@@ -110,7 +111,7 @@ class ReceptionHomeScreen extends StatelessWidget {
                               label: "Order Food",
                               onTap: () {
                                 // Add action for order food
-                                Get.toNamed('/reception/menu');
+                                Get.toNamed(Routes.receptionMenu);
                               },
                             ),
                             const SizedBox(
@@ -118,11 +119,15 @@ class ReceptionHomeScreen extends StatelessWidget {
                             ),
                             ReceptionHomeGridItem(
                               height: 133,
-                              iconHeight: 55,
-                              iconWidth: 55,
-                              icon: "assets/icons/feedback.png",
+                              iconHeight: 108,
+                              iconWidth: 94,
+                              isTrackOrder: true  ,
+                              icon: "assets/icons/track_order.png",
                               label: "Track Order",
-                              onTap: () {},
+                              onTap: () {
+                                Get.toNamed(Routes.receptionTrackOrder);
+
+                              },
                             ),
                           ],
                         ),

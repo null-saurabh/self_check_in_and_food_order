@@ -124,12 +124,13 @@ class ManageUserAdminController extends GetxController {
     );
 
     if (confirmed == true) {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
-      );
+
 
       try {
+        Get.dialog(
+          const Center(child: CircularProgressIndicator()),
+          barrierDismissible: false,
+        );
         // Query the document with matching custom 'id' field
         QuerySnapshot querySnapshot = await FirebaseFirestore.instance
             .collection("AdminAccount")

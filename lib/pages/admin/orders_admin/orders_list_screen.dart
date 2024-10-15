@@ -157,67 +157,69 @@ class OrdersListScreen extends StatelessWidget {
                             SizedBox(
                               height: 8,
                             ),
-                            Row(
-                              children: [
-                                FilterButton(
-                                  label: "All",
-                                  isSelected:
-                                  controller.selectedFilter.value == "All",
-                                  onTap: () {
-                                    controller.filterOrdersByStatus(
-                                        label:"All");
+                            SingleChildScrollView(scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  FilterButton(
+                                    label: "All",
+                                    isSelected:
+                                    controller.selectedFilter.value == "All",
+                                    onTap: () {
+                                      controller.filterOrdersByStatus(
+                                          label:"All");
 
-                                  },
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                FilterButton(
-                                  label: "Pending",
-                                  isSelected: controller.selectedFilter.value ==
-                                      "Pending",
-                                  onTap: () {
-                                    controller.filterOrdersByStatus(
-                                        label: "Pending");
-                                  },
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                FilterButton(
-                                  label: "Processing",
-                                  isSelected: controller.selectedFilter.value ==
-                                      "Processing",
-                                  onTap: () {
-                                    controller.filterOrdersByStatus(
-                                        label:"Processing");
-                                  },
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                FilterButton(
-                                  label: "Completed",
-                                  isSelected: controller.selectedFilter.value ==
-                                      'Completed',
-                                  onTap: () {
-                                    controller.filterOrdersByStatus(
-                                        label:"Completed");
-                                  },
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                FilterButton(
-                                  label: "Refund",
-                                  isSelected: controller.selectedFilter.value ==
-                                      'Refund',
-                                  onTap: () {
-                                    controller.filterOrdersByStatus(
-                                        label:"Refund");
-                                  },
-                                ),
-                              ],
+                                    },
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  FilterButton(
+                                    label: "Pending",
+                                    isSelected: controller.selectedFilter.value ==
+                                        "Pending",
+                                    onTap: () {
+                                      controller.filterOrdersByStatus(
+                                          label: "Pending");
+                                    },
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  FilterButton(
+                                    label: "Processing",
+                                    isSelected: controller.selectedFilter.value ==
+                                        "Processing",
+                                    onTap: () {
+                                      controller.filterOrdersByStatus(
+                                          label:"Processing");
+                                    },
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  FilterButton(
+                                    label: "Completed",
+                                    isSelected: controller.selectedFilter.value ==
+                                        'Completed',
+                                    onTap: () {
+                                      controller.filterOrdersByStatus(
+                                          label:"Completed");
+                                    },
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  FilterButton(
+                                    label: "Refund",
+                                    isSelected: controller.selectedFilter.value ==
+                                        'Refund',
+                                    onTap: () {
+                                      controller.filterOrdersByStatus(
+                                          label:"Refund");
+                                    },
+                                  ),
+                                ],
+                              ),
                             )
                           ],
                         ),

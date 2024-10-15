@@ -154,9 +154,42 @@ class SingleOrder extends StatelessWidget {
                           ),
                         ],
                       ),
+                      if(orderData.isRefunded != null)
                       SizedBox(
                         height: 16,
                       ),
+
+                      if(orderData.couponCode != null)
+                      Row(
+                        children: [
+                          Text(
+                            'Voucher: ',
+                            style: AppWidget.black16Text400Style(),
+                          ),
+                          Text(
+                            orderData.couponCode!,
+                            style: AppWidget.black16Text500Style(color: Colors.red),
+                          ),
+                        ],
+                      ),
+                      if(orderData.discount != null)
+                      Row(
+                        children: [
+                          Text(
+                            'Discount Amount: ',
+                            style: AppWidget.black16Text400Style(),
+                          ),
+                          Text(
+                            orderData.discount!.toStringAsFixed(0),
+                            style: AppWidget.black16Text500Style(color: Colors.red),
+                          ),
+                        ],
+                      ),
+                      if(orderData.couponCode != null || orderData.discount != null)
+                      SizedBox(
+                        height: 16,
+                      ),
+
                       IntrinsicHeight(
                         child: Row(
                           children: [
@@ -164,12 +197,15 @@ class SingleOrder extends StatelessWidget {
                                 style: AppWidget.black16Text500Style(
                                   color: Color(0xff2563EB),
                                 )),
+                            SizedBox(width: 4,),
                             VerticalDivider(
                               color: Colors
                                   .black, // You can change the color as needed
                               thickness: 1, // Thickness of the divider
                               width: 8, // The space occupied by the divider
                             ),
+                            SizedBox(width: 4,),
+
                             Text(
                               DateTimeUtils.formatDateTime(
                                   DateTime.parse(orderData.orderDate),

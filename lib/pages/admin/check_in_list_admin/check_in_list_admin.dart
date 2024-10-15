@@ -162,12 +162,12 @@ class CheckInListAdmin extends StatelessWidget {
                       itemCount: controller.groupedCheckIns.length,
                       itemBuilder: (context, index) {
                         // print(controller.groupedCheckIns.length);
-                        final date = controller.groupedCheckIns.keys
+                        final data = controller.groupedCheckIns.keys
                             .elementAt(index);
                         final checkInAtDate =
-                        controller.groupedCheckIns[date]!;
+                        controller.groupedCheckIns[data]!;
                         return CheckInDateSection(
-                          date: date,
+                          date: data,
                           checkInAtDate: checkInAtDate,
                         );
                       },

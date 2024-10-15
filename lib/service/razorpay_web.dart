@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:wandercrew/pages/admin/orders_admin/admin_order_controller.dart';
 
 
 class RazorpayService {
@@ -123,8 +124,8 @@ class RazorpayService {
             'isRefunded': refundAmount < orderAmount ? 'partial refund' : 'complete refund',
             'refundAmount': refundAmount,
           });
-
-
+           var controller = Get.find<AdminOrderListController>();
+           controller.fetchOrderData();
         }
       }
 

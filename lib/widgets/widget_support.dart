@@ -121,9 +121,9 @@ class AppWidget{
     );
   }
 
-  static TextStyle black16Text400Style() {
+  static TextStyle black16Text400Style({Color? color}) {
     return GoogleFonts.poppins(
-      color: Colors.black,
+      color: color ?? Colors.black,
       fontSize: 16.0,
       fontWeight: FontWeight.w400,
     );

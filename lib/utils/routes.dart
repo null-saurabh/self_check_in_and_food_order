@@ -12,6 +12,7 @@ import 'package:wandercrew/pages/client/cart_screen/cart_screen.dart';
 import 'package:wandercrew/pages/client/menu_screen/menu_screen.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/reception_home_screen.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_screen.dart';
+import 'package:wandercrew/pages/client/track_order_screen/track_order_screen.dart';
 import 'package:wandercrew/service/auth_services.dart';
 
 import '../pages/admin/users_admin/manage_user_admin.dart';
@@ -29,6 +30,10 @@ class AppPages {
     GetPage(
       name: Routes.receptionCheckIn,
       page: () => const CheckInScreen(),
+    ),
+    GetPage(
+      name: Routes.receptionTrackOrder,
+      page: () => const TrackOrderScreen(),
     ),
     GetPage(
       name: Routes.receptionCart,
@@ -96,6 +101,7 @@ class Routes {
   static const String receptionMenu = '/reception/menu';
   static const String receptionCheckIn = '/reception/checkIn';
   static const String receptionCart = '/reception/menu/cart';
+  static const String receptionTrackOrder = '/reception/track-order';
 
   static const String adminLogin = '/admin/login';
   static const String adminHome = '/admin';
