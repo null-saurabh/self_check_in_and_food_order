@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../service/auth_services.dart';
 import '../../../utils/routes.dart';
+import 'dart:html' as html;
 
 class AdminLoginController extends GetxController {
   final usernameController = TextEditingController();
@@ -48,15 +49,20 @@ class AdminLoginController extends GetxController {
 
           AuthService.to.login();
 
-          Map<String, dynamic>? args = Get.arguments as Map<String, dynamic>?;
-          String? intendedRoute = args != null ? args['redirect'] : null;
+          // final Map<String, dynamic>? args = GoRouter.of(context).extra as Map<String, dynamic>?;
+          // String? intendedRoute = args != null ? args['redirect'] : null;
 
-          if (intendedRoute != null && intendedRoute.isNotEmpty) {
-            context.replace(intendedRoute);
+          String? intendedRoute = Uri.decodeComponent(GoRouterState.of(context).uri.queryParameters['redirect'] ?? '');
+          if (intendedRoute != "" && intendedRoute.isNotEmpty) {
+            // context.replace(intendedRo;
+            navigateToScreen(context,intendedRoute);
+
 
           }
           else {
-            context.replace(Routes.adminHome);
+            navigateToScreen(context,Routes.adminHome);
+
+            // context.replace(Routes.adminHome);
 
           }
         } else {
@@ -72,13 +78,6 @@ class AdminLoginController extends GetxController {
       }
 
       else {
-        // Get.snackbar(
-        //   "Error",
-        //   "Invalid username",
-        //   snackPosition: SnackPosition.BOTTOM,
-        //   backgroundColor: Colors.orangeAccent,
-        //   colorText: Colors.white,
-        // );
 
         final snackBar = SnackBar(
           content: const Text("Invalid username"),
@@ -91,13 +90,7 @@ class AdminLoginController extends GetxController {
 
       }
     } catch (e) {
-      // Get.snackbar(
-      //   "Error",
-      //   "Failed to log in. Try again later.",
-      //   snackPosition: SnackPosition.BOTTOM,
-      //   backgroundColor: Colors.redAccent,
-      //   colorText: Colors.white,
-      // );
+
 
       final snackBar = SnackBar(
         content: const Text("Failed to log in. Try again later."),
@@ -112,6 +105,13 @@ class AdminLoginController extends GetxController {
     }
   }
 
+  void navigateToScreen(BuildContext context, String route) {
+
+    html.window.history.replaceState({}, '', '/admin');
+    // html.window.history.replaceState({}, '', Routes.receptionHome);
+    context.go(route);
+
+  }
 
   @override
   void onClose() {

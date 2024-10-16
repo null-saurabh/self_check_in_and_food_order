@@ -114,6 +114,8 @@ final GoRouter router = GoRouter(
 String? _authGuard(GoRouterState state) {
   final AuthService authService = AuthService.to;
   if (!authService.isLoggedIn.value) {
+    final redirectUri = Uri.encodeComponent(state.uri.toString());
+    return '${Routes.adminLogin}?redirect=$redirectUri';
     return Routes.adminLogin; // Redirect to login if not authenticated
   }
   return null; // Allow access if authenticated
@@ -143,21 +145,3 @@ class Routes {
   static const String notFound = '/not-found';
 }
 
-
-class AuthMiddleware extends GetMiddleware {
-  @override
-  RouteSettings? redirect(String? route) {
-
-    final AuthService authService = AuthService.to;
-    if (!authService.isLoggedIn.value) {
-
-      return RouteSettings(
-        name: Routes.adminLogin,
-        arguments: {
-          'redirect': route,
-        },
-      );
-    }
-    return null;
-  }
-}
