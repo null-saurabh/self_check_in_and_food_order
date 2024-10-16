@@ -70,6 +70,7 @@ class OrderStatusUpdate {
 
 class FoodOrderModel {
 
+  String id;                       // Unique ID for each order
   String orderId;                       // Unique ID for each order
   String transactionId;                 // from razorpay
   String dinerName;// Reference to the user placing the order
@@ -93,6 +94,7 @@ class FoodOrderModel {
   String? isRefunded;
   int? refundAmount;
   FoodOrderModel({
+    required this.id,
     required this.orderId,
     required this.transactionId,
     required this.dinerName,
@@ -120,6 +122,7 @@ class FoodOrderModel {
   // Convert to map for database storage
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'orderId': orderId,
       'transactionId': transactionId,
       'dinerName': dinerName,
@@ -149,6 +152,7 @@ class FoodOrderModel {
   factory FoodOrderModel.fromMap(Map<String, dynamic> data) {
     return FoodOrderModel(
       orderId: data['orderId'],
+      id: data['id'],
       transactionId: data['transactionId'],
       dinerName: data['dinerName'],
       orderStatusHistory: List<OrderStatusUpdate>.from(

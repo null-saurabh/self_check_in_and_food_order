@@ -62,6 +62,7 @@ class OrdersListScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 20, bottom: 12),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
@@ -168,6 +169,9 @@ class OrdersListScreen extends StatelessWidget {
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                // mainAxisAlignment: MainAxisAlignment.start,
+                                // crossAxis/Alignment: CrossAxisAlignment.start,
                                 children: [
                                   FilterButton(
                                     label: "All",
@@ -276,7 +280,7 @@ class OrdersListScreen extends StatelessWidget {
 
                                     showDialog(
                                       context: context,
-                                      builder: (context) {
+                                      builder: (context2) {
                                         return AlertDialog(
                                           title: const Text("Edit Price"),
                                           content: TextField(
@@ -295,6 +299,8 @@ class OrdersListScreen extends StatelessWidget {
                                             ),
                                             TextButton(
                                               onPressed: () async {
+                                                Navigator.of(context).pop();
+
                                                 RazorpayService razorpay =
                                                     RazorpayService();
                                                 razorpay.handleRefund(
@@ -304,8 +310,8 @@ class OrdersListScreen extends StatelessWidget {
                                                   refundAmount: int.parse(
                                                       controller
                                                           .refundAmountController
-                                                          .text),
-                                                  orderId: orderData.orderId,
+                                                          .text) ,
+                                                  orderId: orderData.id,
                                                   orderAmount: orderData
                                                       .totalAmount
                                                       .toInt(),

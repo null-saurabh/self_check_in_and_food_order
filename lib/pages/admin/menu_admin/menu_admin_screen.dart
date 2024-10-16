@@ -205,6 +205,7 @@ class MenuAdminScreen extends StatelessWidget {
                             left: 16.0, right: 16, top: 8, bottom: 16),
                         itemCount: controller.allMenuItems.length,
                         itemBuilder: (context, index) {
+                          print("${controller.allMenuItems[index].name} : ${controller.allMenuItems[index].id}");
                           return MenuItemWidget(
                             menuItem: controller.allMenuItems[index],
                             onEdit: () => controller.editMenuItem(context,

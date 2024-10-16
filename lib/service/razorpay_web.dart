@@ -12,7 +12,7 @@ class RazorpayService {
 
 
   void openCheckout({
-    required BuildContext context,
+    required BuildContext buildContext,
     required String key,
     required int amount,
     required String number,
@@ -23,7 +23,7 @@ class RazorpayService {
   async {
 
     showDialog(
-      context: context,
+      context: buildContext,
       barrierDismissible: false, // Prevents the user from dismissing the dialog
       builder: (BuildContext context) {
         return const Center(child: CircularProgressIndicator());
@@ -43,7 +43,7 @@ class RazorpayService {
       }),
     );
 
-    context.pop();
+    buildContext.pop();
 
     if (response.statusCode == 200) {
       final orderData = jsonDecode(response.body);
@@ -62,7 +62,7 @@ class RazorpayService {
         'color': '#F37254'
       },
         'handler': js.allowInterop((response) {
-        handlePaymentSuccess(response,onSuccess);
+        handlePaymentSuccess(buildContext,response,onSuccess);
     }),
         'modal': {
           'ondismiss': js.allowInterop(() {
@@ -75,10 +75,18 @@ class RazorpayService {
 
     rzp.callMethod('open');
 
-    js.context['Razorpay'].callMethod('on', ['payment.failed', js.allowInterop((response) {
-      handlePaymentFailure(response, onFail);
-    })]);
+      // Optionally handle the payment failure using the handler itself
+      rzp.callMethod('on', ['payment.failed', js.allowInterop((response) {
+        handlePaymentFailure(response, onFail);
+      })]);
 
+    // js.context['Razorpay'].callMethod('on', ['payment.failed', js.allowInterop((response) {
+    //   handlePaymentFailure(response, onFail);
+    // })]);
+    //
+    //   js.context['Razorpay'].callMethod('on', ['payment.failed', js.allowInterop((response) {
+    //     handlePaymentFailure(response, onFail);
+    //   })]);
   }
 
   }
@@ -88,8 +96,7 @@ class RazorpayService {
 
   Future<void> handleRefund({required BuildContext context,required String paymentId, required int refundAmount,required int orderAmount, required String orderId,}) async {
 
-    context.pop();
-
+    // context.pop();
 
     showDialog(
       context: context,
@@ -103,30 +110,10 @@ class RazorpayService {
     final response = await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'paymentId': paymentId, 'amount': refundAmount}),
+      body: jsonEncode({'paymentId': paymentId, 'amount': refundAmount * 100}),
     );
 
     if (response.statusCode == 200) {
-
-      // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-      //     .collection("Orders")
-      //     .where("orderId",
-      //     isEqualTo: orderId) // Assuming 'id' is the custom field name in Firestore
-      //     .get();
-      //
-      // if (querySnapshot.docs.isNotEmpty) {
-
-        // String  = querySnapshot.docs.first.id;
-        // DocumentSnapshot orderSnapshot = await FirebaseFirestore.instance
-        //     .collection("Orders")
-        //     .doc(orderId)
-        //     .get();
-        //
-        //
-        // if (orderSnapshot.exists) {
-        //
-        //   String  = querySnapshot.docs.first.id;
-
 
           await FirebaseFirestore.instance
               .collection("Orders")
@@ -140,32 +127,28 @@ class RazorpayService {
 
 
 
-      context.pop();
-          final snackBar = SnackBar(
-            content: Text("Success: Refund processed successfully"),
-            backgroundColor: Colors.green,
-          );
+      final snackBar = SnackBar(
+        content: const Text("Success: Refund processed successfully"),
+        backgroundColor: Colors.green,
+      );
 
 // Show the snackbar
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
+      context.pop();
 
 
     }
 
     else {
       context.pop();
-
-
-
-      final snackBar = SnackBar(
-        content: Text("Refund failed: ${response.body}"),
-        backgroundColor: Colors.red,
-      );
-
-// Show the snackbar
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+      // Get.snackbar(
+      //   "Error",
+      //   "Refund failed: ${response.body}",
+      //   snackPosition: SnackPosition.BOTTOM,
+      //   backgroundColor: Colors.red,
+      //   colorText: Colors.white,
+      // );
 
 
     }
@@ -174,8 +157,8 @@ class RazorpayService {
 
 }
 
-  void handlePaymentSuccess(response, Function onSuccess) {
-    onSuccess(response);
+  void handlePaymentSuccess(BuildContext context,response, Function onSuccess) {
+    onSuccess(context,response);
   }
 
   void handlePaymentDismiss(Function onDismiss) {

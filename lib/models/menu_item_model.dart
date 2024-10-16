@@ -54,7 +54,7 @@ class MenuItemModel {
   // Mapping data from Firebase
   factory MenuItemModel.fromMap(Map<String, dynamic> data) {
     return MenuItemModel(
-      id: data['productId'],
+      id: data['id'],
       name: data['name'],
       price: data['price'].toDouble(),
       category: data['category'],

@@ -33,7 +33,7 @@ class ReceptionController extends GetxController {
             data); // Using fromMap factory constructor
       }).toList();
       adminUsers.assignAll(newList);
-      print(adminUsers.length);
+      // print(adminUsers.length);
       update();
     } catch (e) {
       debugPrint("Failed to fetch admin users: $e");

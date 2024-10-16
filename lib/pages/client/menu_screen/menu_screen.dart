@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/client/cart_screen/cart_screen.dart';
 import 'package:wandercrew/pages/client/menu_screen/widgets/expandable_menu_item.dart';
 import 'package:wandercrew/pages/client/menu_screen/widgets/menu_button.dart';
+import '../../../utils/routes.dart';
 import '../../../widgets/widget_support.dart';
 import '../cart_screen/cart_screen_controller.dart';
 import '../self_checking_screen/widgets/gradient_texture.dart';
@@ -152,17 +153,20 @@ class MenuScreen extends StatelessWidget {
                         bottom: 0,
                         child: GestureDetector(
                           onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true, // Allows the bottom sheet to expand with the keyboard
-                              backgroundColor: const Color(0xffF4F5FA),
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                              ),
-                              builder: (context) {
-                                return CartScreen(); // Your widget for the bottom sheet
-                              },
-                            );
+
+                            context.go(Routes.receptionMenuCart);
+
+                            // showModalBottomSheet(
+                            //   context: context,
+                            //   isScrollControlled: true, // Allows the bottom sheet to expand with the keyboard
+                            //   backgroundColor: const Color(0xffF4F5FA),
+                            //   shape: const RoundedRectangleBorder(
+                            //     borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                            //   ),
+                            //   builder: (context) {
+                            //     return CartScreen(); // Your widget for the bottom sheet
+                            //   },
+                            // );
                             // context.pushNamed('ReceptionCart');
 
                           },

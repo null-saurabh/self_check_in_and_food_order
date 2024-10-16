@@ -36,7 +36,7 @@ class CheckInFormThreeSignature extends StatelessWidget {
                 ),
 
 
-                Text("Upload Signature*",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
+                Text("Signature*",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
                 SizedBox(height: 8,),
                 FormField<String>(validator: (value) {
                   if (selfCheckingController.signatureController.isEmpty) {
@@ -57,7 +57,7 @@ class CheckInFormThreeSignature extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Signature(
-                            dynamicPressureSupported: true,
+                            // dynamicPressureSupported: true,
                             controller: selfCheckingController.signatureController,
                             backgroundColor: Colors.white,
                           ),

@@ -118,15 +118,6 @@ class MenuAdminController extends GetxController {
     );
 
 
-    // Get.bottomSheet(
-    //   AddFoodItem(item: item,isEdit: true,),
-    //   isScrollControlled: true, // Allows the bottom sheet to expand with keyboard
-    //   backgroundColor: Color(0xffF4F5FA),
-    //   shape: RoundedRectangleBorder(
-    //     borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-    //   ),
-    // );
-    // print("Edit Menu Item: ${item.name}");
   }
 
   Future<void> deleteMenuItem(BuildContext context,MenuItemModel item) async {
@@ -228,15 +219,10 @@ class MenuAdminController extends GetxController {
     update();
 
     try {
-      // Query to get the correct document by custom 'productId' field
-      // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-      //     .collection("Menu")
-      //     .where("productId", isEqualTo: item.id) // Assuming 'id' is the custom field
-      //     .get();
-      //
-      // if (querySnapshot.docs.isNotEmpty) {
-      //   String docId = querySnapshot.docs.first.id;
 
+
+      print(item.name);
+      print("id:${item.id}");
         // Update the document in Firestore
         await FirebaseFirestore.instance
             .collection("Menu")
@@ -253,34 +239,14 @@ class MenuAdminController extends GetxController {
 // Show the snackbar
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-      // Get.snackbar(
-        //   "Success",
-        //   "Availability updated successfully.",
-        //   snackPosition: SnackPosition.BOTTOM,
-        //   backgroundColor: Colors.green,
-        //   colorText: Colors.white,
-        // );
-      // }
-      // else {
-      //   // If the document is not found, revert to the previous state
-      //   item.isAvailable = previousState;
-      //   update();
-      //
-      //   Get.snackbar(
-      //     "Error",
-      //     "Menu item not found.",
-      //     snackPosition: SnackPosition.BOTTOM,
-      //     backgroundColor: Colors.red,
-      //     colorText: Colors.white,
-      //   );
-      // }
+
     } catch (e) {
       // Handle any errors by reverting to the previous state
       item.isAvailable = previousState;
       update();
 
       final snackBar = SnackBar(
-        content: Text("Failed to update availability. Please try again."),
+        content: Text("Failed to update availability. Please try again.$e"),
         backgroundColor: Colors.red,
       );
 
@@ -323,14 +289,6 @@ class MenuAdminController extends GetxController {
               onPressed: () async {
                 double newPrice = double.parse(priceController.text);
 
-                // Query to get the correct document by custom 'id' field
-                // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-                //     .collection("Menu")
-                //     .where("productId", isEqualTo: item.id) // Assuming 'id' is the custom field
-                //     .get();
-                //
-                // if (querySnapshot.docs.isNotEmpty) {
-                //   String  = querySnapshot.docs.first.id;
 
                   // Update the price in the database
                   await FirebaseFirestore.instance.collection("Menu").doc(item.id).update({'price': newPrice});

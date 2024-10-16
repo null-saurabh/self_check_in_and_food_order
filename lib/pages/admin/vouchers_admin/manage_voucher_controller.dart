@@ -149,7 +149,7 @@ class ManageVoucherAdminController extends GetxController {
       voucherList.value = originalVoucherList.where((item) {
         final queryLower = query.toLowerCase();
 
-        print("$queryLower : ${item.discountValue}");
+        // print("$queryLower : ${item.discountValue}");
         return item.code.toLowerCase().contains(queryLower) ||
             item.discountValue.toString() == queryLower ||
             item.usageCount.toString()  == queryLower ||

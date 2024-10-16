@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/client/cart_screen/widgets/bill_summary_widget.dart';
 import 'package:wandercrew/pages/client/cart_screen/widgets/diner_info_widget.dart';
 import 'package:wandercrew/pages/client/cart_screen/widgets/donation_widget.dart';
 import 'package:wandercrew/widgets/app_elevated_button.dart';
 import '../../../models/cart_model.dart';
 import '../../../models/menu_item_model.dart';
-import '../../../utils/routes.dart';
 import '../../../widgets/widget_support.dart';
 import '../menu_screen/widgets/single_product.dart';
 import '../self_checking_screen/widgets/gradient_texture.dart';
@@ -75,7 +73,7 @@ class CartScreen extends StatelessWidget {
                       clipBehavior: Clip.none,
                       children: [
                         // White container with form and button
-                
+
                         Column(
                           children: [
                             Container(
@@ -96,13 +94,7 @@ class CartScreen extends StatelessWidget {
                                           AppElevatedButton(
                                             backgroundColor: Color(0xffFFDE1A),
                                             onPressed: () {
-                                              // if (GoRouter.of(context).canPop()) {
-                                              //   context.pop(); // Go back if there's a previous route
-                                              // } else {
-                                              context
-                                                  .replace(Routes.receptionMenu);
-                
-                                              // }
+                                             controller.navigateToMenu(context);
                                             },
                                             title: "Menu",
                                             titleTextColor: Colors.black,
@@ -127,12 +119,12 @@ class CartScreen extends StatelessWidget {
                                             String menuItemId = controller
                                                 .cartItems.keys
                                                 .elementAt(index);
-                
+
                                             CartItemModel cartItem =
                                                 controller.cartItems[menuItemId]!;
                                             MenuItemModel menuItem =
                                                 cartItem.menuItem;
-                
+
                                             return SingleProduct(
                                               menuItem: menuItem,
                                               isCart: true,
@@ -169,7 +161,7 @@ class CartScreen extends StatelessWidget {
                             // ExpandableMenuItem(),
                           ],
                         ),
-                
+
                         // Girl's image positioned at the top left of the container
                         Positioned(
                           top: -124,
@@ -181,7 +173,7 @@ class CartScreen extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         ),
-                
+
                         // Speech bubble container next to the girl image
                         Positioned(
                           top: -76,
@@ -226,7 +218,8 @@ class CartScreen extends StatelessWidget {
                       child: IconButton(
                           onPressed: () {
                             // print("pressed");
-                            context.pop(); // Go back if there's a previous route
+                            // context.pop(); // Go back if there's a previous route
+                            controller.navigateToMenu(context);
 
                           },
                           icon: const Icon(Icons.keyboard_backspace_rounded))),

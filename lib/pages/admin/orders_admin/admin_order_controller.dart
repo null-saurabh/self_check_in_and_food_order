@@ -203,17 +203,20 @@ class AdminOrderListController extends GetxController {
       //     .get();
       //
       // if (querySnapshot.docs.isNotEmpty) {
-      //   // print("confirm 5");
-      //   String  = querySnapshot.docs.first.id;
+      //   print("confirm 5");
+      //   String docId = querySnapshot.docs.first.id;
+      //   print(docId);
+      // }
+
+      print(item.orderId);
         DocumentSnapshot orderSnapshot = await FirebaseFirestore.instance
             .collection("Orders")
-            .doc(item
-            .orderId)
+            .doc(item.id)
             .get();
-        // print("confirm 6");
+        print("confirm 6");
 
         if (orderSnapshot.exists) {
-          // print("confirm 7");
+          print("confirm 7");
 
           // Parse the order data into OrderModel
           FoodOrderModel order = FoodOrderModel.fromMap(
@@ -233,7 +236,7 @@ class AdminOrderListController extends GetxController {
           await FirebaseFirestore.instance
               .collection("Orders")
               .doc(item
-              .orderId)
+              .id)
               .update({
             'orderStatusHistory': order.orderStatusHistory
                 .map((status) => status.toMap())
@@ -245,13 +248,19 @@ class AdminOrderListController extends GetxController {
           context.pop();
           final snackBar = SnackBar(
             content: Text("Success', 'Order status updated to Preparing"),
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.green,
           );
 
 // Show the snackbar
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-        } else {
+        }
+
+        else {
+          print("confirm 8");
+
+          context.pop();
+
           final snackBar = SnackBar(
             content: Text('Order not found'),
             backgroundColor: Colors.red,
@@ -264,6 +273,8 @@ class AdminOrderListController extends GetxController {
 
       // Get the current order data
     } catch (e) {
+      context.pop();
+
       final snackBar = SnackBar(
         content: Text("Error: Failed to update order status: $e"),
         backgroundColor: Colors.red,
@@ -297,7 +308,7 @@ class AdminOrderListController extends GetxController {
         DocumentSnapshot orderSnapshot = await FirebaseFirestore.instance
             .collection("Orders")
             .doc(item
-            .orderId)
+            .id)
             .get();
         if (orderSnapshot.exists) {
           // Parse the order data into OrderModel
@@ -318,7 +329,7 @@ class AdminOrderListController extends GetxController {
           await FirebaseFirestore.instance
               .collection("Orders")
               .doc(item
-              .orderId)
+              .id)
               .update({
             'orderStatusHistory': order.orderStatusHistory
                 .map((status) => status.toMap())

@@ -55,7 +55,7 @@ class SelfCheckInModel {
   // Factory constructor for mapping Firestore data to SelfCheckInModel
   factory SelfCheckInModel.fromMap(Map<String, dynamic> data) {
     return SelfCheckInModel(
-      id: data['productId'],
+      id: data['id'],
       documentType: data['documentType'],
       documentIssueCountry: data['documentIssueCountry'],
       frontDocumentUrl: data['frontDocumentUrl'],

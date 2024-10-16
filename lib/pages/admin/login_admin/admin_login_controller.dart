@@ -36,7 +36,7 @@ class AdminLoginController extends GetxController {
           List<DateTime> loginData = List<DateTime>.from(
               result['loginData'].map((timestamp) => (timestamp as Timestamp).toDate()));
 
-          print(DateTime.now());
+          // print(DateTime.now());
           loginData.add(DateTime.now());
 
           await FirebaseFirestore.instance
@@ -60,20 +60,12 @@ class AdminLoginController extends GetxController {
 
           }
         } else {
-          // Get.snackbar(
-          //   "Error",
-          //   "Invalid Password",
-          //   snackPosition: SnackPosition.BOTTOM,
-          //   backgroundColor: Colors.orangeAccent,
-          //   colorText: Colors.white,
-          // );
 
           final snackBar = SnackBar(
             content: const Text("Invalid Password"),
             backgroundColor: Colors.orangeAccent,
           );
 
-// Show the snackbar
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
         }

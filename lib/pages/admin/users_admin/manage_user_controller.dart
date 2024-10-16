@@ -138,47 +138,41 @@ class ManageUserAdminController extends GetxController {
           },
         );
 
+        // Check if the document exists before attempting to delete
+        DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+            .collection("AdminAccount")
+            .doc(userData.id)
+            .get();
 
-        // // Query the document with matching custom 'id' field
-        // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        //     .collection("AdminAccount")
-        //     .where("id", isEqualTo: userData.id) // Assuming 'id' is the custom field name in Firestore
-        //     .get();
-        //
-        // if (querySnapshot.docs.isNotEmpty) {
-        //   // Get the document ID
-        //   String  = querySnapshot.docs.first.id;
-
-          // Delete the document using the retrieved document ID
+        if (docSnapshot.exists) {
+          // Delete the document if it exists
           await FirebaseFirestore.instance.collection("AdminAccount").doc(userData.id).delete();
           originalUserDataList.remove(userData);
 
           update();
           context.pop();
 
+          final snackBar = SnackBar(
+            content: Text("Success: User deleted successfully."),
+            backgroundColor: Colors.green,
+          );
 
-          // Show success snackbar
+          // Show the success snackbar
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        } else {
+          // Document does not exist, show error snackbar
+          context.pop();
+
+          final snackBar = SnackBar(
+            content: Text("Error: User not found, deletion failed."),
+            backgroundColor: Colors.red,
+          );
+
+          // Show the error snackbar
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
 
 
-        final snackBar = SnackBar(
-          content: Text("Success: User deleted successfully."),
-          backgroundColor: Colors.green,
-        );
-
-// Show the snackbar
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        // } else {
-        //   ""();
-        //
-        //   // No matching document found
-        //   Get.snackbar(
-        //     "Error",
-        //     "Menu item not found.",
-        //     snackPosition: SnackPosition.BOTTOM,
-        //     backgroundColor: Colors.red,
-        //     colorText: Colors.white,
-        //   );
-        // }
       } catch (error) {
         context.pop();
         // Show error snackbar

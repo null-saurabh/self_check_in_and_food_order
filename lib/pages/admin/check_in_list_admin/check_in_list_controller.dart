@@ -430,6 +430,8 @@ class CheckInListController extends GetxController {
             ),
             TextButton(
               onPressed: () async {
+
+
                 showDialog(
                   context: context,
                   barrierDismissible: false, // Prevents the user from dismissing the dialog
@@ -438,21 +440,14 @@ class CheckInListController extends GetxController {
                   },
                 );
 
+
                 String newNote = noteController.text;
-
-                // // Query to get the correct document by custom 'id' field
-                // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-                //     .collection("Self_Check_In")
-                //     .where("productId", isEqualTo: item.id)
-                //     .get();
-                //
-                // if (querySnapshot.docs.isNotEmpty) {
-                //   String  = querySnapshot.docs.first.id;
-
+                print("editin");
                   // Update the note in the database
                   await FirebaseFirestore.instance.collection("Self_Check_In")
                       .doc(item.id)
                       .update({'notes': newNote,'updatedAt':DateTime.now(),'updatedBy':"Admin"});
+                print("editin  4");
 
                   // Update local item note
                   item.notes = newNote;
@@ -461,18 +456,7 @@ class CheckInListController extends GetxController {
                   // Close the dialog
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
-                // } else {
-                //   // Show error snackbar if no matching document is found
-                //   Get.snackbar(
-                //     "Error",
-                //     "User Data not found.",
-                //     snackPosition: SnackPosition.BOTTOM,
-                //     backgroundColor: Colors.red,
-                //     colorText: Colors.white,
-                //   );
-                //   Navigator.of(context).pop();
-                //   Navigator.of(context).pop();
-                // }
+
               },
               child: const Text("Save"),
             ),
