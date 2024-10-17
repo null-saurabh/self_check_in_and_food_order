@@ -142,7 +142,7 @@ class CartScreen extends StatelessWidget {
                             ),
                             const CartTipWidget(),
                             const SizedBox(height: 16.0),
-                            const CartCustomerInfoWidget(),
+                             CartCustomerInfoWidget(controller: controller,),
                             const SizedBox(height: 16.0),
                             AppElevatedButton(
                                 width: 120,
@@ -156,9 +156,9 @@ class CartScreen extends StatelessWidget {
                                       .validate()) {
                                     await controller.initiatePayment(context);
                                   }
-                                }),
+                                }
+                                ),
                             const SizedBox(height: 24),
-                            // ExpandableMenuItem(),
                           ],
                         ),
 

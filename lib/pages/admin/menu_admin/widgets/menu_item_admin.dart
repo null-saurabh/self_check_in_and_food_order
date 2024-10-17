@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:wandercrew/widgets/widget_support.dart';
 import '../../../../models/menu_item_model.dart';
 
@@ -169,7 +168,9 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
         _buildRow("Preparation Time", widget.menuItem.preparationTime?.toString() ?? "N/A"),
         _buildRow("Availability Time", ""),
         _buildRow("Offer Price", widget.menuItem.discountPrice != null ? "₹${widget.menuItem.discountPrice}" : "N/A"),
-        _buildRow("Stock Count", widget.menuItem.stockCount?.toString() ?? "N/A"),
+        widget.menuItem.stockCount != null
+            ?_buildRow("No. of Orders", "${widget.menuItem.noOfOrders.toString()} (${widget.menuItem.stockCount})")
+        :_buildRow("No. of Orders", "${widget.menuItem.noOfOrders.toString()}"),
         _buildRow("Item Image", widget.menuItem.image ?? "N/A"),
         _buildRow("Item Tag", widget.menuItem.tags?.join(", ") ?? "N/A"),
       ]

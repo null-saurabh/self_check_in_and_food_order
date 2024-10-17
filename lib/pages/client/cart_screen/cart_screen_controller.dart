@@ -8,7 +8,6 @@ import '../../../models/cart_model.dart';
 import '../../../models/menu_item_model.dart';
 import '../../../models/food_order_model.dart';
 import '../../../models/voucher_model.dart';
-import '../../../service/database.dart';
 import '../../../service/razorpay_web.dart';
 import 'package:http/http.dart' as http;
 import 'dart:html' as html;
@@ -311,11 +310,8 @@ class CartScreenController extends GetxController {
   }
 
 
-
-
   Future<void> onSuccess(BuildContext context,response) async {
 
-    print("om sss");
     try {
 
 
@@ -330,8 +326,6 @@ class CartScreenController extends GetxController {
       String transactionID =
           response['razorpay_payment_id']; // From Razorpay response
       String orderId = response['razorpay_order_id'];
-      // print("printing order: $orderId");
-      // Get today's date
       String todayDate = DateTime.now().toIso8601String();
 
       // Create a list of OrderedItemModels from cart items
@@ -358,7 +352,7 @@ class CartScreenController extends GetxController {
               updatedBy: "System")
         ],
         items: orderedItems,
-        totalAmount: itemTotalAmount.value, //totalAmount.value,
+        totalAmount: grandTotal.value, //totalAmount.value,
         paymentMethod: "", // Or other payment methods
         orderDate: todayDate,
         deliveryAddress:
@@ -374,7 +368,6 @@ class CartScreenController extends GetxController {
       );
 
       // Add the order to Firebase
-
       DocumentReference docRef = await FirebaseFirestore.instance
             .collection("Orders")
             .add(orderData.toMap());
@@ -383,104 +376,33 @@ class CartScreenController extends GetxController {
       await docRef.update({'id': id});
         clearCart();
 
-      // Add logic to update the voucher data if a coupon was applied
+      // Updating Voucher (if applied)
       if (isCouponApplied.value) {
-
-        // print(1);
-        final querySnapshot = await _firestore.collection('Voucher')
-            .where('code', isEqualTo: coupon.value!.code.toUpperCase())
-            .where('isUsed', isEqualTo: false)
-            .where('isActive', isEqualTo: true)
-            .where('isExpired', isEqualTo: false)
-            .limit(1) // Limit to 1 document for efficiency
-            .get();
-        // print(2);
-
-
-        String docId = querySnapshot.docs.first.id;// Use the id from the coupon model
-
-
-// Define the CouponUsage data
-        CouponUsage couponUsage = CouponUsage(
-          orderModel: orderData.toMap(),   // Save the order details
-          orderType: "food",               // Assuming this is a food order
-          appliedOn: DateTime.now(),       // Time of application
-          appliedDiscountAmount: discountAmount.value, // Applied discount
-        );
-
-        // print(3);
-
-        // Example of updating voucher usage count and status
-        if (coupon.value!.voucherType == 'single-use') {
-          // print(4);
-
-          await _firestore.collection('Voucher').doc(docId).update({
-            'isUsed': true,
-            'isActive': false,
-            'usageCount': FieldValue.increment(1),
-            'usedOnOrders': FieldValue.arrayUnion([couponUsage.toMap()]),
-          });
-          // print(5);
-
-        }
-        else if (coupon.value!.voucherType == 'multi-use') {
-          try {
-          // print(6);
-          // print(docId);
-          // print('Coupon usage data: ${couponUsage.toMap()}');
-
-          await _firestore.collection('Voucher').doc(docId).update({
-            'usageCount': FieldValue.increment(1),
-            'usedOnOrders': FieldValue.arrayUnion([couponUsage.toMap()]),
-          });
-          // print(7);
-        } catch (e) {
-      // print('Error occurred while updating voucher: $e');
-    }
-
-          // Update isUsed if the usage limit is reached
-          if (coupon.value!.usageCount + 1 >= (coupon.value!.usageLimit ?? 10)) {
-            // print(8);
-
-            await _firestore.collection('Voucher').doc(docId).update({
-              'isUsed': true,
-              'isActive': false,
-            });
-            // print(9);
-
-          }
-          // print(10);
-
-        }
-        else if (coupon.value!.voucherType == 'value-based') {
-          // Adjust remaining discount value
-
-          if (coupon.value!.remainingDiscountValue! - discountAmount.value <= 0) {
-            // print("17");
-
-            await _firestore.collection('Voucher').doc(docId).update({
-              'remainingDiscountValue': FieldValue.increment(
-                  -discountAmount.value),
-              'isUsed': true,
-              'isActive': false,
-              'usedOnOrders': FieldValue.arrayUnion([couponUsage.toMap()]),
-
-            });
-          } else {
-              // print("19");
-
-              await _firestore.collection('Voucher').doc(docId).update({
-                'remainingDiscountValue': FieldValue.increment(-discountAmount.value),
-                'usedOnOrders': FieldValue.arrayUnion([couponUsage.toMap()]),
-
-              });
-              // print("20");
-
-            }
-        }
+        await _updateVoucherUsage(orderData);
       }
-      //
-      // context.pop();
+
+
+      // Update the number of orders for each menu item
+      for (var orderedItem in orderedItems) {
+        DocumentReference menuItemDocRef = FirebaseFirestore.instance
+            .collection('Menu')
+            .doc(orderedItem.menuItemId);
+
+        await FirebaseFirestore.instance.runTransaction((transaction) async {
+          DocumentSnapshot snapshot = await transaction.get(menuItemDocRef);
+
+          if (!snapshot.exists) {
+            throw Exception("Menu item does not exist!");
+          }
+
+          int currentOrderCount = snapshot['orderCount'] ?? 0;
+
+          transaction.update(menuItemDocRef, {
+            'orderCount': currentOrderCount + orderedItem.quantity,
+          });
+        });
+      }
+
       context.pop();
       navigateToMenu(context);
 
@@ -489,13 +411,10 @@ class CartScreenController extends GetxController {
         backgroundColor: Colors.green,
       );
 
-// Show the snackbar
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     } catch (e) {
-      // Handle any errors that occur during the order process
-      // print(e);
-      // print("aaaaaaa");
+
       context.pop();
       context.pop();
 
@@ -504,11 +423,94 @@ class CartScreenController extends GetxController {
         backgroundColor: Colors.red,
       );
 
-// Show the snackbar
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
 
 
+    }
+  }
+
+  // Separate function to handle voucher updates (optional)
+
+  Future<void> _updateVoucherUsage(FoodOrderModel orderData) async {
+    try {
+      final querySnapshot = await _firestore.collection('Voucher')
+          .where('code', isEqualTo: coupon.value!.code.toUpperCase())
+          .where('isUsed', isEqualTo: false)
+          .where('isActive', isEqualTo: true)
+          .where('isExpired', isEqualTo: false)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        throw Exception('Voucher not found or no longer valid');
+      }
+
+      String docId = querySnapshot.docs.first.id;
+
+      CouponUsage couponUsage = CouponUsage(
+        orderModel: orderData.toMap(),
+        orderType: "food",
+        appliedOn: DateTime.now(),
+        appliedDiscountAmount: discountAmount.value,
+      );
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(_firestore.collection('Voucher').doc(docId));
+
+        if (!snapshot.exists) {
+          throw Exception("Voucher does not exist!");
+        }
+
+        int currentUsageCount = snapshot['usageCount'] ?? 0;
+        double remainingDiscountValue = snapshot['remainingDiscountValue'] ?? 0;
+
+        // Single-use voucher logic
+        if (coupon.value!.voucherType == 'single-use') {
+          transaction.update(_firestore.collection('Voucher').doc(docId), {
+            'isUsed': true,
+            'isActive': false,
+            'usageCount': FieldValue.increment(1),
+            'usedOnOrders': FieldValue.arrayUnion([couponUsage.toMap()]),
+          });
+        }
+
+        // Multi-use voucher logic
+        else if (coupon.value!.voucherType == 'multi-use') {
+          transaction.update(_firestore.collection('Voucher').doc(docId), {
+            'usageCount': FieldValue.increment(1),
+            'usedOnOrders': FieldValue.arrayUnion([couponUsage.toMap()]),
+          });
+
+          // Deactivate if the usage limit is reached
+          if (currentUsageCount + 1 >= (coupon.value!.usageLimit ?? 10)) {
+            transaction.update(_firestore.collection('Voucher').doc(docId), {
+              'isUsed': true,
+              'isActive': false,
+            });
+          }
+        }
+
+        // Value-based voucher logic
+        else if (coupon.value!.voucherType == 'value-based') {
+          if (remainingDiscountValue - discountAmount.value <= 0) {
+            transaction.update(_firestore.collection('Voucher').doc(docId), {
+              'remainingDiscountValue': FieldValue.increment(-discountAmount.value),
+              'isUsed': true,
+              'isActive': false,
+              'usedOnOrders': FieldValue.arrayUnion([couponUsage.toMap()]),
+            });
+          } else {
+            transaction.update(_firestore.collection('Voucher').doc(docId), {
+              'remainingDiscountValue': FieldValue.increment(-discountAmount.value),
+              'usedOnOrders': FieldValue.arrayUnion([couponUsage.toMap()]),
+            });
+          }
+        }
+      });
+    } catch (e) {
+      print('Error updating voucher usage: $e');
+      throw Exception('Failed to update voucher usage');
     }
   }
 
@@ -554,16 +556,50 @@ class CartScreenController extends GetxController {
   }
 
   // Add item to cart or update quantity
-  void addItem(MenuItemModel menuItem, int quantity) {
-    if (cartItems.containsKey(menuItem.id)) {
-      cartItems[menuItem.id]!.quantity += quantity;
+  void addItem(MenuItemModel menuItem, int quantity, BuildContext context) {
+
+    if (menuItem.stockCount != null) {
+      if (cartItems.containsKey(menuItem.id)) {
+        final currentQuantity = cartItems[menuItem.id]!.quantity;
+        if (currentQuantity + quantity > menuItem.stockCount!) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Cannot add more than available stock (${menuItem
+                  .stockCount}).'),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return;
+        }
+        cartItems[menuItem.id]!.quantity += quantity;
+      } else {
+        if (quantity > menuItem.stockCount!) {
+          // Show Snackbar if initial quantity exceeds stock
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  'Cannot add more than available stock (${menuItem.stockCount}).'),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return;
+        }
+        cartItems[menuItem.id] =
+            CartItemModel(menuItem: menuItem, quantity: quantity);
+      }
     } else {
-      cartItems[menuItem.id] =
-          CartItemModel(menuItem: menuItem, quantity: quantity);
+      // If stock is not defined, proceed with adding the item
+      if (cartItems.containsKey(menuItem.id)) {
+        cartItems[menuItem.id]!.quantity += quantity;
+      } else {
+        cartItems[menuItem.id] =
+            CartItemModel(menuItem: menuItem, quantity: quantity);
+      }
     }
-    calculateTotalAmount();
-    update();
-  }
+      calculateTotalAmount();
+      update();
+    }
+
 
 
   // Decrease item quantity
@@ -608,7 +644,7 @@ class CartScreenController extends GetxController {
           buildContext: context,
           key: razorpayKey,
           number: contactNumberController.text,
-          amount: isTipSelected.value ? (itemTotalAmount.value * 100 ).toInt() : (double.parse((itemTotalAmount.value + itemTotalAmount.value / 20).toStringAsFixed(2)) * 100).toInt(),
+          amount:grandTotal.value.toInt() * 100,
           onSuccess: onSuccess,
           onDismiss: onDismiss,
           onFail: onFail, name: dinerName.text,

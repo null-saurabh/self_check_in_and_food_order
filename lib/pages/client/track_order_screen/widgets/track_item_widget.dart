@@ -13,7 +13,9 @@ class TrackItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Column(
       children: [
-        ElevatedContainer(child: Column(
+        ElevatedContainer(
+            child:
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("Order Summary", style: AppWidget.black20Text600Style()),
@@ -68,6 +70,19 @@ class TrackItemWidget extends StatelessWidget {
                     style: AppWidget.black16Text400Style()),
               ],
             ),],
+            if(orderData.discount != null) ...[
+              SizedBox(height: 8,),
+              Row(
+                children: [
+                  Text(
+                    'Discount:  ',
+                    style: AppWidget.black16Text600Style(),
+                  ),
+                  Text("- \u{20B9}${orderData.discount.toString()}",
+                      style: AppWidget.black16Text400Style()),
+                ],
+              ),
+            ],
             SizedBox(
               height: 4,
             ),
@@ -83,7 +98,7 @@ class TrackItemWidget extends StatelessWidget {
             ),
           ],
         )),
-        SizedBox(height: 12,),
+        SizedBox(height: 8,),
         ElevatedContainer(child: Column(
           children: [
 
@@ -94,9 +109,11 @@ class TrackItemWidget extends StatelessWidget {
                   style: AppWidget.black16Text600Style(),
                 ),
                 Text(
-                  orderData.orderStatusHistory.last.status,
+                  orderData.isRefunded != null ? "Refunded" : orderData.orderStatusHistory.last.status ,
                   style: AppWidget.black16Text400Style(
-                      color: orderData.orderStatusHistory.last.status ==
+                      color: orderData.isRefunded != null
+                  ? Colors.orange
+                      :orderData.orderStatusHistory.last.status ==
                       "Delivered"
                       ? Colors.green
                       : orderData.orderStatusHistory.last
@@ -106,6 +123,19 @@ class TrackItemWidget extends StatelessWidget {
                       : Colors.red),
                 ),
 
+              ],
+            ),
+            if(orderData.refundAmount != null)
+            Row(
+              children: [
+                Text(
+                  'Refund Amount:  ',
+                  style: AppWidget.black16Text600Style(),
+                ),
+                Text(
+                  orderData.refundAmount.toString(),
+                  style: AppWidget.black16Text400Style(),
+                ),
               ],
             ),
             if(orderData.updatedAt != null || orderData.createdAt != null)
@@ -123,6 +153,7 @@ class TrackItemWidget extends StatelessWidget {
             ),
           ],
         )),
+        SizedBox(height: 20,),
       ],
     );
   }

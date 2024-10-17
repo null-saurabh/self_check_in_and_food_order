@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wandercrew/pages/client/cart_screen/cart_screen.dart';
 import 'package:wandercrew/pages/client/menu_screen/widgets/expandable_menu_item.dart';
 import 'package:wandercrew/pages/client/menu_screen/widgets/menu_button.dart';
 import '../../../utils/routes.dart';
@@ -155,19 +154,6 @@ class MenuScreen extends StatelessWidget {
                           onTap: () {
 
                             context.go(Routes.receptionMenuCart);
-
-                            // showModalBottomSheet(
-                            //   context: context,
-                            //   isScrollControlled: true, // Allows the bottom sheet to expand with the keyboard
-                            //   backgroundColor: const Color(0xffF4F5FA),
-                            //   shape: const RoundedRectangleBorder(
-                            //     borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                            //   ),
-                            //   builder: (context) {
-                            //     return CartScreen(); // Your widget for the bottom sheet
-                            //   },
-                            // );
-                            // context.pushNamed('ReceptionCart');
 
                           },
                           child: Container(

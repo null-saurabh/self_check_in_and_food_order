@@ -336,7 +336,8 @@ class OrdersListScreen extends StatelessWidget {
                 } else if (controller.isLoading.value) {
                   return Expanded(
                       child: const Center(child: CircularProgressIndicator()));
-                } else {
+                }
+                else {
                   switch (controller.selectedFilter.value) {
                     case 'Completed':
                       return Expanded(

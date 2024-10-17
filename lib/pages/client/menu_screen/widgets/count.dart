@@ -62,7 +62,7 @@ class Count extends StatelessWidget {
                             Expanded(
                               child: InkWell(
                                 onTap: () {
-                                  cartScreenController.addItem(menuItem, 1);
+                                  cartScreenController.addItem(menuItem, 1,context);
                                 },
                                 child: const Icon(
                                   Icons.add,
@@ -76,7 +76,7 @@ class Count extends StatelessWidget {
                       : Center(
                           child: InkWell(
                             onTap: () {
-                              cartScreenController.addItem(menuItem, 1);
+                              cartScreenController.addItem(menuItem, 1,context);
                             },
                             child: SizedBox(
                               height: double.infinity,

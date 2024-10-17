@@ -30,6 +30,7 @@ class MenuScreenController extends GetxController {
 
   RxBool isScrollLocked = false.obs;
 
+  var isLoading = true.obs; // Loading state
 
 
   void onListViewScroll() {
@@ -77,7 +78,123 @@ class MenuScreenController extends GetxController {
 
   Map<int, double> sectionOffsets = {};
   Timer? _scrollDebounce;
-// This function will be called every time a new section's offset is calculated
+
+
+  @override
+  void onInit() {
+    fetchMenuData();
+    super.onInit();
+
+    // Initialize the section keys based on the number of categories
+    sectionKeys = List.generate(filteredMenuByCategory.keys.length, (index) => GlobalKey());
+    // Add a listener for ListView scroll
+    listViewScrollController.addListener(onListViewScroll);
+
+  }
+
+  fetchMenuData() async {
+    try {
+      isLoading.value = true; // Start loading
+    QuerySnapshot value = await FirebaseFirestore.instance.collection("Menu").get();
+    allMenuItems.value = value.docs.map((element) => MenuItemModel.fromMap(element.data() as Map<String, dynamic>)).toList();
+
+    categorizeMenuItems(allMenuItems);
+    applyFilters(); // Apply filters initially
+    initializeExpandedCategories(); // Initialize expanded categories
+
+    update();
+    } catch (e) {
+      debugPrint('Failed to fetch menu: $e');
+
+    }
+    finally {
+      isLoading.value = false; // End loading
+    }
+  }
+
+  void categorizeMenuItems(List<MenuItemModel> allMenuItems) {
+    // print("aaa");
+
+    for (var item in allMenuItems) {
+      if (!categorizedMenuItems.containsKey(item.category)) {
+        categorizedMenuItems[item.category] = [];
+      }
+      categorizedMenuItems[item.category]!.add(item);
+    }
+  }
+
+  void applyFilters() {
+    filteredMenuByCategory.clear();
+
+    for (var category in categorizedMenuItems.keys) {
+      List<MenuItemModel> items = categorizedMenuItems[category] ?? [];
+
+      if (isVegSelected.value && !isNonVegSelected.value) {
+        items = items.where((item) => item.isVeg).toList();
+      } else if (!isVegSelected.value && isNonVegSelected.value) {
+        items = items.where((item) => !item.isVeg).toList();
+      }
+
+      // Assign the filtered items to the respective category
+      filteredMenuByCategory[category] = items;
+      // print("apply");
+      // print(filteredMenuByCategory[category] );
+      sectionKeys = List.generate(filteredMenuByCategory.keys.length, (index) => GlobalKey());
+      // print("apply");
+      update();
+
+    }
+
+  }
+
+  // Retrieve the filtered items for display in the UI
+  Map<String, List<MenuItemModel>> getFilteredMenuByCategory() {
+    return filteredMenuByCategory;
+  }
+
+  void toggleVegFilter() {
+    if(isVegSelected.value == true){
+      isVegSelected.value = false;
+      applyFilters(); // Reapply filters
+      return;
+    }
+    // Set vegSelected to true and nonVegSelected to false
+    isVegSelected.value = true;
+    isNonVegSelected.value = false;
+    applyFilters(); // Reapply filters
+  }
+
+  void toggleNonVegFilter() {
+    if(isNonVegSelected.value == true){
+      isNonVegSelected.value = false;
+      applyFilters(); // Reapply filters
+      return;
+    }
+    // Set nonVegSelected to true and vegSelected to false
+    isNonVegSelected.value = true;
+    isVegSelected.value = false;
+    applyFilters(); // Reapply filters
+  }
+
+  void clearFilters() {
+    // Reset both filters to show all items
+    isVegSelected.value = false;
+    isNonVegSelected.value = false;
+    applyFilters(); // Reapply filters
+  }
+
+  // Initialize expanded categories based on the number of categories
+  void initializeExpandedCategories() {
+    expandedCategories.value = List.filled(filteredMenuByCategory.length, true); // True means expanded by default
+  }
+
+  void toggleCategoryExpansion(int index) {
+    expandedCategories[index] = !expandedCategories[index];
+    update();
+  }
+
+
+  // This function will be called every time a new section's offset is calculated
   void calculateSectionOffsets() {
     for (int i = 0; i < sectionKeys.length; i++) {
       final key = sectionKeys[i];
@@ -91,22 +208,6 @@ class MenuScreenController extends GetxController {
       }
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   void scrollToCategory(int targetIndex,double approxScrollIncrement) {
     // Cancel any previous scroll requests
@@ -220,121 +321,11 @@ class MenuScreenController extends GetxController {
     });
   }
 
-
-
-
-
-
-
-
   void selectCategory(int index) {
     selectedCategoryIndex.value = index;
     update();
   }
 
-  @override
-  void onInit() {
-    fetchMenuData();
-    super.onInit();
-
-    // Initialize the section keys based on the number of categories
-    sectionKeys = List.generate(filteredMenuByCategory.keys.length, (index) => GlobalKey());
-    // Add a listener for ListView scroll
-    listViewScrollController.addListener(onListViewScroll);
-
-  }
-
-  fetchMenuData() async {
-    QuerySnapshot value = await FirebaseFirestore.instance.collection("Menu").get();
-    allMenuItems.value = value.docs.map((element) => MenuItemModel.fromMap(element.data() as Map<String, dynamic>)).toList();
-
-    categorizeMenuItems(allMenuItems);
-    applyFilters(); // Apply filters initially
-    initializeExpandedCategories(); // Initialize expanded categories
-
-    update();
-  }
-
-  void categorizeMenuItems(List<MenuItemModel> allMenuItems) {
-    // print("aaa");
-
-    for (var item in allMenuItems) {
-      if (!categorizedMenuItems.containsKey(item.category)) {
-        categorizedMenuItems[item.category] = [];
-      }
-      categorizedMenuItems[item.category]!.add(item);
-    }
-  }
-
-  void applyFilters() {
-    filteredMenuByCategory.clear();
-
-    for (var category in categorizedMenuItems.keys) {
-      List<MenuItemModel> items = categorizedMenuItems[category] ?? [];
-
-      if (isVegSelected.value && !isNonVegSelected.value) {
-        items = items.where((item) => item.isVeg).toList();
-      } else if (!isVegSelected.value && isNonVegSelected.value) {
-        items = items.where((item) => !item.isVeg).toList();
-      }
-
-      // Assign the filtered items to the respective category
-      filteredMenuByCategory[category] = items;
-      // print("apply");
-      // print(filteredMenuByCategory[category] );
-      sectionKeys = List.generate(filteredMenuByCategory.keys.length, (index) => GlobalKey());
-      // print("apply");
-      update();
-
-    }
-
-  }
-
-  // Retrieve the filtered items for display in the UI
-  Map<String, List<MenuItemModel>> getFilteredMenuByCategory() {
-    return filteredMenuByCategory;
-  }
-
-  void toggleVegFilter() {
-    if(isVegSelected.value == true){
-      isVegSelected.value = false;
-      applyFilters(); // Reapply filters
-      return;
-    }
-    // Set vegSelected to true and nonVegSelected to false
-    isVegSelected.value = true;
-    isNonVegSelected.value = false;
-    applyFilters(); // Reapply filters
-  }
-
-  void toggleNonVegFilter() {
-    if(isNonVegSelected.value == true){
-      isNonVegSelected.value = false;
-      applyFilters(); // Reapply filters
-      return;
-    }
-    // Set nonVegSelected to true and vegSelected to false
-    isNonVegSelected.value = true;
-    isVegSelected.value = false;
-    applyFilters(); // Reapply filters
-  }
-
-  void clearFilters() {
-    // Reset both filters to show all items
-    isVegSelected.value = false;
-    isNonVegSelected.value = false;
-    applyFilters(); // Reapply filters
-  }
-
-  // Initialize expanded categories based on the number of categories
-  void initializeExpandedCategories() {
-    expandedCategories.value = List.filled(filteredMenuByCategory.length, true); // True means expanded by default
-  }
-
-  void toggleCategoryExpansion(int index) {
-    expandedCategories[index] = !expandedCategories[index];
-    update();
-  }
   @override
   void dispose() {
     listViewScrollController.dispose();

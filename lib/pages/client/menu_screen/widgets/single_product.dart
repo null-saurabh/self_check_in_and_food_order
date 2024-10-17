@@ -31,22 +31,7 @@ class SingleProduct extends StatelessWidget {
             // mainAxisAlignment: MainAxisAlignment.center,
             // crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // menuItem.image == null
-              //     ? const SizedBox()
-              //     : Image.network(
-              //         menuItem.image!, // Ensure URL is properly encoded
-              //         fit: BoxFit.cover,
-              //         width: 65,
-              //         height: 65,
-              //         loadingBuilder: (context, child, loadingProgress) {
-              //           if (loadingProgress == null) return child;
-              //           return const Center(
-              //               child: CircularProgressIndicator());
-              //         },
-              //       ),
-              // const SizedBox(
-              //   width: 20.0,
-              // ),
+            
               Container(
                 width: 10,
                 decoration: const BoxDecoration(
@@ -67,7 +52,7 @@ class SingleProduct extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                
+
                           Text(
                             menuItem.name,
                             style: AppWidget.black16Text500Style(),
@@ -86,10 +71,10 @@ class SingleProduct extends StatelessWidget {
                             height: 16,
                             width: 16,
                           ),
-                
-                
-                
-                
+
+
+
+
                         ],
                       ),
                       const SizedBox(
@@ -106,27 +91,29 @@ class SingleProduct extends StatelessWidget {
                       // const SizedBox(
                       //   height: 4.0,
                       // ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                '\u{20B9}',
-                                style: AppWidget.black16Text500Style(),
-                              ),Text(
-                                ' ${menuItem.price}',
-                                style: AppWidget.black16Text300Style(),
-                              ),
-                            ],
-                          ),
-                          // Spacer(),
-                          Count(
-                            isCart: isCart,
-                            menuItem: menuItem,
-                          ),
-                        ],
+                      Expanded(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  '\u{20B9}',
+                                  style: AppWidget.black16Text500Style(),
+                                ),Text(
+                                  ' ${menuItem.price}',
+                                  style: AppWidget.black16Text300Style(),
+                                ),
+                              ],
+                            ),
+                            // Spacer(),
+                            Count(
+                              isCart: isCart,
+                              menuItem: menuItem,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

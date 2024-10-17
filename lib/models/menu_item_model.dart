@@ -15,7 +15,7 @@ class MenuItemModel {
   String? updatedBy;       // The user/admin who last updated the item
   dynamic createdAt;  // Change to dynamic to allow FieldValue
   dynamic updatedAt;  // Change to dynamic to allow FieldValue  // Timestamp when the item was last updated
-  int? noOfOrders;         // Total number of orders for this item
+  int noOfOrders;         // Total number of orders for this item
   String? notes;           // Additional notes for the item
   double? discountPrice;   // Discounted price, if applicable
   List<String>? tags;      // Tags for search optimization (e.g., spicy, gluten-free)
@@ -39,7 +39,7 @@ class MenuItemModel {
     this.updatedBy,
     this.createdAt,
     this.updatedAt,
-    this.noOfOrders,
+    required this.noOfOrders,
     this.notes,
     this.discountPrice,
     this.tags,

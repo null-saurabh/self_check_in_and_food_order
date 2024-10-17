@@ -193,7 +193,7 @@ class AddFoodItemController extends GetxController {
           description: descriptionController.text.isNotEmpty
               ? descriptionController.text
               : null,
-          noOfOrders: 0,
+          noOfOrders: isEditing.value ? editingItem.value!.noOfOrders : 0,
           discountPrice: discountPriceController.text.isNotEmpty
               ? double.tryParse(discountPriceController.text)
               : null,
