@@ -288,6 +288,7 @@ class AddFoodItemController extends GetxController {
 
 
           MenuAdminController controller = Get.find<MenuAdminController>();
+          newItem.id = id;
           controller.allMenuItems.add(newItem);
           controller.originalMenuItems.add(newItem);
 

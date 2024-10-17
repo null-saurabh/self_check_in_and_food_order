@@ -15,6 +15,11 @@ import 'package:http/http.dart' as http;
 import 'dart:html' as html;
 import 'package:pdf/widgets.dart' as pw;
 
+import '../../../widgets/app_elevated_button.dart';
+import '../../../widgets/edit_text.dart';
+import '../../../widgets/elevated_container.dart';
+import '../../../widgets/widget_support.dart';
+
 class CheckInListController extends GetxController {
 
 
@@ -414,53 +419,95 @@ class CheckInListController extends GetxController {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Edit Note"),
-          content: TextField(
-            controller: noteController,
-            keyboardType: TextInputType.text,
-            decoration: const InputDecoration(labelText: "Note"),
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius:
+            BorderRadius.circular(12.0), // Customize the radius here
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Cancel"),
+          backgroundColor: Color(0xffFFFEF9),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding:
+                  const EdgeInsets.only(top: 20, right: 20.0, left: 20),
+                  child: Text(
+                    "Modify",
+                    style: AppWidget.black20Text600Style(),
+                  ),
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 16, right: 20.0, left: 20),
+                  child: ElevatedContainer(
+                    child: EditText(
+                      labelFontWeight: FontWeight.w600,
+                      labelText: "Note",
+                      hint: "Enter Note",
+                      controller:noteController,
+                      inputType: TextInputType.number,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppElevatedButton(
+                      onPressed: (){
+                        context.pop();
+                      },
+                      title: "Back",
+                      titleTextColor: Colors.black,
+                      backgroundColor: Colors.transparent,
+                      showBorder: true,
+                    ),
+                    SizedBox(width: 12,),
+                    AppElevatedButton(
+                      onPressed: () async {
+
+
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false, // Prevents the user from dismissing the dialog
+                          builder: (BuildContext context) {
+                            return const Center(child: CircularProgressIndicator());
+                          },
+                        );
+
+
+                        String newNote = noteController.text;
+                        print("editin");
+                        // Update the note in the database
+                        await FirebaseFirestore.instance.collection("Self_Check_In")
+                            .doc(item.id)
+                            .update({'notes': newNote,'updatedAt':DateTime.now(),'updatedBy':"Admin"});
+                        print("editin  4");
+
+                        // Update local item note
+                        item.notes = newNote;
+                        update();
+
+                        // Close the dialog
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+
+                      },
+
+                      title: "Apply",
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+
+              ],
             ),
-            TextButton(
-              onPressed: () async {
-
-
-                showDialog(
-                  context: context,
-                  barrierDismissible: false, // Prevents the user from dismissing the dialog
-                  builder: (BuildContext context) {
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                );
-
-
-                String newNote = noteController.text;
-                print("editin");
-                  // Update the note in the database
-                  await FirebaseFirestore.instance.collection("Self_Check_In")
-                      .doc(item.id)
-                      .update({'notes': newNote,'updatedAt':DateTime.now(),'updatedBy':"Admin"});
-                print("editin  4");
-
-                  // Update local item note
-                  item.notes = newNote;
-                  update();
-
-                  // Close the dialog
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-
-              },
-              child: const Text("Save"),
-            ),
-          ],
+          ),
         );
       },
     );
@@ -496,18 +543,7 @@ class CheckInListController extends GetxController {
       update();
 
       context.pop();
-    // } else {
-    //   // Show error snackbar if no matching document is found
-    //   Get.snackbar(
-    //     "Error",
-    //     "User Data not found.",
-    //     snackPosition: SnackPosition.BOTTOM,
-    //     backgroundColor: Colors.red,
-    //     colorText: Colors.white,
-    //   );
-    //   ""();
-    //
-    // }
+
   }
 
 }

@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wandercrew/models/voucher_model.dart';
 
+import '../../../widgets/dialog_widget.dart';
+
 class ManageVoucherAdminController extends GetxController {
 
 
@@ -294,28 +296,21 @@ class ManageVoucherAdminController extends GetxController {
   Future<void> deleteVoucher(BuildContext context,CouponModel voucherData) async {
 
 
-    // Show a confirmation dialog
-    bool? confirmed = await showDialog(
+
+    var result  = await showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Confirm Delete"),
-          content: const Text("Are you sure you want to delete this menu item?"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text("No"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: const Text("Yes"),
-            ),
-          ],
-        );
+      isScrollControlled: true, // Allows the bottom sheet to expand with the keyboard
+      backgroundColor: const Color(0xffF4F5FA),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        // print("delete 2");
+        return DialogWidget(); // Your widget for the bottom sheet
       },
     );
 
-    if (confirmed == true) {
+    if (result == true) {
       showDialog(
         context: context,
         barrierDismissible: false, // Prevents the user from dismissing the dialog

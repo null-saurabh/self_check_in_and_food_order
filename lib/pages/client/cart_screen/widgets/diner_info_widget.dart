@@ -22,8 +22,6 @@ class CartCustomerInfoWidget extends StatelessWidget {
               child: Form(
                 key: controller.cartDinnerInfoFormKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     EditText(
                       hint: "Enter Your Name",

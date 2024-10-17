@@ -210,14 +210,7 @@ class AddNewUserAdminController extends GetxController{
           if(isEditing.value){
             try {
 
-              // Query the document with matching custom 'id' field
-              // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-              //     .collection("AdminAccount")
-              //     .where("id", isEqualTo: editingItem.value!.id) // Assuming 'id' is the custom field name in Firestore
-              //     .get();
-              // if (querySnapshot.docs.isNotEmpty) {
-              //   // Get the document ID
-              //   String docId = querySnapshot.docs.first.id;
+
 
                 await DatabaseMethods().updateUserData( editingItem.value!.id,newUserData.toMap());
 
@@ -229,12 +222,14 @@ class AddNewUserAdminController extends GetxController{
                 if (index != -1) {
                   controller.userDataList[index] = newUserData; // Update the item in allMenuItems
                   // Optionally update in originalMenuItems if needed
-                  // int originalIndex = controller.originalMenuItems.indexWhere((item) => item.id == editingItem.value!.id);
-                  // if (originalIndex != -1) {
-                  //   controller.originalMenuItems[originalIndex] = newItem; // Update in originalMenuItems if needed
-                  // }
+                  int originalIndex = controller.originalUserDataList.indexWhere((item) => item.id == editingItem.value!.id);
+                  if (originalIndex != -1) {
+                    controller.originalUserDataList[originalIndex] = newUserData; // Update in originalMenuItems if needed
+                  }
                   controller.update();
                 }
+
+
                 context.pop();
                 context.pop();
 
@@ -248,20 +243,6 @@ class AddNewUserAdminController extends GetxController{
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
 
-
-              // }
-              // else {
-              //   ""();
-              //
-              //   // No matching document found
-              //   Get.snackbar(
-              //     "Error",
-              //     "Menu item not found.",
-              //     snackPosition: SnackPosition.BOTTOM,
-              //     backgroundColor: Colors.red,
-              //     colorText: Colors.white,
-              //   );
-              // }
             } catch (error) {
               context.pop();
 
@@ -291,7 +272,11 @@ class AddNewUserAdminController extends GetxController{
             // Optionally, update the document with the newly assigned ID
             await docRef.update({'id': id});
 
-
+            ManageUserAdminController controller = Get.find<ManageUserAdminController>();
+            // Find the index of the item to update
+            newUserData.id = id;
+              controller.userDataList.add(newUserData); // Update the item in allMenuItems
+            controller.originalUserDataList.add(newUserData); // Update the item in allMenuItems
             update();
             context.pop();
             context.pop();
@@ -303,11 +288,9 @@ class AddNewUserAdminController extends GetxController{
               backgroundColor: Colors.green,
             );
 
-// Show the snackbar
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
 
-            // print("6");
             clearFields();
           } }
          }else {
@@ -317,7 +300,6 @@ class AddNewUserAdminController extends GetxController{
           backgroundColor: Colors.red,
         );
 
-// Show the snackbar
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
       }

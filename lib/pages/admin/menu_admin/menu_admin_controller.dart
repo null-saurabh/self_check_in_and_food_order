@@ -1,8 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/admin/menu_admin/widgets/add_food.dart';
 import '../../../models/menu_item_model.dart';
+import '../../../widgets/app_elevated_button.dart';
+import '../../../widgets/dialog_widget.dart';
+import '../../../widgets/edit_text.dart';
+import '../../../widgets/elevated_container.dart';
+import '../../../widgets/widget_support.dart';
 
 class MenuAdminController extends GetxController {
   RxList<MenuItemModel> allMenuItems = RxList<MenuItemModel>();
@@ -122,37 +128,33 @@ class MenuAdminController extends GetxController {
 
   Future<void> deleteMenuItem(BuildContext context,MenuItemModel item) async {
     // Show a confirmation dialog
-    bool? confirmed = await showDialog(
+
+
+var result  = await showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Confirm Delete"),
-          content: const Text("Are you sure you want to delete this menu item?"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text("No"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: const Text("Yes"),
-            ),
-          ],
-        );
+      isScrollControlled: true, // Allows the bottom sheet to expand with the keyboard
+      backgroundColor: const Color(0xffF4F5FA),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        // print("delete 2");
+        return DialogWidget(); // Your widget for the bottom sheet
       },
     );
 
-    if (confirmed == true) {
-      try {
-        // Query the document with matching custom 'id' field
-        // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        //     .collection("Menu")
-        //     .where("productId", isEqualTo: item.id) // Assuming 'id' is the custom field name in Firestore
-        //     .get();
 
-        // if (querySnapshot.docs.isNotEmpty) {
-          // Get the document ID
-          // String docId = querySnapshot.docs.first.id;
+
+    if (result != null && result) {
+      try {
+
+        showDialog(
+          context: context,
+          barrierDismissible: false, // Prevents the user from dismissing the dialog
+          builder: (BuildContext context) {
+            return const Center(child: CircularProgressIndicator());
+          },
+        );
 
           // Delete the document using the retrieved document ID
           await FirebaseFirestore.instance.collection("Menu").doc(item.id).delete();
@@ -160,50 +162,26 @@ class MenuAdminController extends GetxController {
           allMenuItems.remove(item);
           update();
 
-          // Show success snackbar
-          // Get.snackbar(
-          //   "Success",
-          //   "Menu item deleted successfully.",
-          //   snackPosition: SnackPosition.BOTTOM,
-          //   backgroundColor: Colors.green,
-          //   colorText: Colors.white,
-          // );
+        context.pop();
+
 
           final snackBar = SnackBar(
             content: Text("Menu item deleted successfully."),
             backgroundColor: Colors.green,
           );
 
-// Show the snackbar
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
 
-        // else {
-        //   // No matching document found
-        //   Get.snackbar(
-        //     "Error",
-        //     "Menu item not found.",
-        //     snackPosition: SnackPosition.BOTTOM,
-        //     backgroundColor: Colors.red,
-        //     colorText: Colors.white,
-        //   );
-        // }
       } catch (error) {
-        // Show error snackbar
-        // Get.snackbar(
-        //   "Error",
-        //   "Failed to delete menu item. Please try again.",
-        //   snackPosition: SnackPosition.BOTTOM,
-        //   backgroundColor: Colors.red,
-        //   colorText: Colors.white,
-        // );
+
+        context.pop();
 
         final snackBar = SnackBar(
           content: Text("Failed to delete menu item. Please try again."),
           backgroundColor: Colors.red,
         );
 
-// Show the snackbar
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
       }
@@ -221,8 +199,7 @@ class MenuAdminController extends GetxController {
     try {
 
 
-      print(item.name);
-      print("id:${item.id}");
+
         // Update the document in Firestore
         await FirebaseFirestore.instance
             .collection("Menu")
@@ -236,7 +213,6 @@ class MenuAdminController extends GetxController {
           backgroundColor: Colors.green,
         );
 
-// Show the snackbar
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
 
@@ -253,14 +229,6 @@ class MenuAdminController extends GetxController {
 // Show the snackbar
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-      // Show an error snackbar
-      // Get.snackbar(
-      //   "Error",
-      //   "Failed to update availability. Please try again.",
-      //   snackPosition: SnackPosition.BOTTOM,
-      //   backgroundColor: Colors.red,
-      //   colorText: Colors.white,
-      // );
     }
   }
 
@@ -271,48 +239,80 @@ class MenuAdminController extends GetxController {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text("Edit Price"),
-          content: TextField(
-            controller: priceController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(labelText: "Price"),
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius:
+            BorderRadius.circular(12.0), // Customize the radius here
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Cancel"),
+          backgroundColor: Color(0xffFFFEF9),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding:
+                  const EdgeInsets.only(top: 20, right: 20.0, left: 20),
+                  child: Text(
+                    "Modify",
+                    style: AppWidget.black20Text600Style(),
+                  ),
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 16, right: 20.0, left: 20),
+                  child: ElevatedContainer(
+                    child: EditText(
+                      labelFontWeight: FontWeight.w600,
+                      labelText: "Price",
+                      hint: "Enter Price",
+                      controller:priceController,
+                      inputType: TextInputType.number,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppElevatedButton(
+                      onPressed: (){
+                        context.pop();
+                      },
+                      title: "Back",
+                      titleTextColor: Colors.black,
+                      backgroundColor: Colors.transparent,
+                      showBorder: true,
+                    ),
+                    SizedBox(width: 12,),
+                    AppElevatedButton(
+                      onPressed: () async {
+                        double newPrice = double.parse(priceController.text);
+
+
+                        // Update the price in the database
+                        await FirebaseFirestore.instance.collection("Menu").doc(item.id).update({'price': newPrice});
+
+                        // Update local item price
+                        item.price = newPrice;
+                        update();
+
+                        // Close the dialog
+                        Navigator.of(context).pop();
+                      },
+
+                      title: "Apply",
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+
+              ],
             ),
-            TextButton(
-              onPressed: () async {
-                double newPrice = double.parse(priceController.text);
-
-
-                  // Update the price in the database
-                  await FirebaseFirestore.instance.collection("Menu").doc(item.id).update({'price': newPrice});
-
-                  // Update local item price
-                  item.price = newPrice;
-                  update();
-
-                  // Close the dialog
-                  Navigator.of(context).pop();
-                // } else {
-                //   // Show error snackbar if no matching document is found
-                //   Get.snackbar(
-                //     "Error",
-                //     "Menu item not found.",
-                //     snackPosition: SnackPosition.BOTTOM,
-                //     backgroundColor: Colors.red,
-                //     colorText: Colors.white,
-                //   );
-                // }
-              },
-              child: const Text("Save"),
-            ),
-          ],
+          ),
         );
       },
     );
@@ -324,58 +324,84 @@ class MenuAdminController extends GetxController {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text("Edit Note"),
-          content: TextField(
-            controller: noteController,
-            keyboardType: TextInputType.text,
-            decoration: const InputDecoration(labelText: "Note"),
+
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius:
+            BorderRadius.circular(12.0), // Customize the radius here
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Cancel"),
+          backgroundColor: Color(0xffFFFEF9),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding:
+                  const EdgeInsets.only(top: 20, right: 20.0, left: 20),
+                  child: Text(
+                    "Modify",
+                    style: AppWidget.black20Text600Style(),
+                  ),
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 16, right: 20.0, left: 20),
+                  child: ElevatedContainer(
+                    child: EditText(
+                      labelFontWeight: FontWeight.w600,
+                      labelText: "Note",
+                      hint: "Enter Note",
+                      controller:noteController,
+                      inputType: TextInputType.number,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppElevatedButton(
+                      onPressed: (){
+                        context.pop();
+                      },
+                      title: "Back",
+                      titleTextColor: Colors.black,
+                      backgroundColor: Colors.transparent,
+                      showBorder: true,
+                    ),
+                    SizedBox(width: 12,),
+                    AppElevatedButton(
+                      onPressed: () async {
+                        String newNote = noteController.text;
+
+                        // Update the note in the database
+                        await FirebaseFirestore.instance.collection("Menu").doc(item.id).update({'notes': newNote});
+
+                        // Update local item note
+                        item.notes = newNote;
+                        update();
+
+                        // Close the dialog
+                        Navigator.of(context).pop();
+
+
+                      },
+
+                      title: "Apply",
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+
+              ],
             ),
-            TextButton(
-              onPressed: () async {
-                String newNote = noteController.text;
-
-                // Query to get the correct document by custom 'id' field
-                // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-                //     .collection("Menu")
-                //     .where("productId", isEqualTo: item.id)
-                //     .get();
-                //
-                // if (querySnapshot.docs.isNotEmpty) {
-                //   String  = querySnapshot.docs.first.id;
-
-                  // Update the note in the database
-                  await FirebaseFirestore.instance.collection("Menu").doc(item.id).update({'notes': newNote});
-
-                  // Update local item note
-                  item.notes = newNote;
-                  update();
-
-                  // Close the dialog
-                  Navigator.of(context).pop();
-
-                // } else {
-                //   // Show error snackbar if no matching document is found
-                //   Get.snackbar(
-                //     "Error",
-                //     "Menu item not found.",
-                //     snackPosition: SnackPosition.BOTTOM,
-                //     backgroundColor: Colors.red,
-                //     colorText: Colors.white,
-                //   );
-                // }
-              },
-              child: const Text("Save"),
-            ),
-          ],
+          ),
         );
+
       },
     );
   }

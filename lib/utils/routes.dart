@@ -112,12 +112,11 @@ final GoRouter router = GoRouter(
 
 // Middleware auth check
 String? _authGuard(GoRouterState state) {
-  final AuthService authService = AuthService.to;
-  if (!authService.isLoggedIn.value) {
-    final redirectUri = Uri.encodeComponent(state.uri.toString());
-    return '${Routes.adminLogin}?redirect=$redirectUri';
-    return Routes.adminLogin; // Redirect to login if not authenticated
-  }
+  // final AuthService authService = AuthService.to;
+  // if (!authService.isLoggedIn.value) {
+  //   final redirectUri = Uri.encodeComponent(state.uri.toString());
+  //   return '${Routes.adminLogin}?redirect=$redirectUri';
+  // }
   return null; // Allow access if authenticated
 }
 

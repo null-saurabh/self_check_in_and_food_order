@@ -140,7 +140,7 @@ class AddNewUserAdmin extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
 
-                          ElevatedContainer(
+                         Obx(() { return ElevatedContainer(
                             child: AppDropDown(
                               items: [
                                 'Admin',
@@ -167,7 +167,7 @@ class AddNewUserAdmin extends StatelessWidget {
                               },
                               onValidate: Validators.requiredField,
                             ),
-                          ),
+                          );}),
                           const SizedBox(height: 16),
 
                           ElevatedContainer(

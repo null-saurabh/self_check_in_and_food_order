@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wandercrew/widgets/widget_support.dart';
 import '../../../../models/menu_item_model.dart';
 
@@ -82,10 +83,11 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
                 children: isExpanded
                     ? [
                   _buildRowWithEdit("Price", "₹${widget.menuItem.price}", widget.onEditPrice),
-                  if(widget.menuItem.stockCount != null)_buildRow("Stock Count", "${widget.menuItem.stockCount.toString()}"),
-                  _buildRow("Preference", widget.menuItem.isVeg ? "Veg" : "Non-Veg"),
-                  _buildRow("Category", widget.menuItem.category),
-                  _buildRow("Description", widget.menuItem.description ?? ""),
+                  if(widget.menuItem.stockCount != null)
+                    _buildRow("Stock Count", "${widget.menuItem.stockCount.toString()}",false),
+                  _buildRow("Preference", widget.menuItem.isVeg ? "Veg" : "Non-Veg",false),
+                  _buildRow("Category", widget.menuItem.category,false),
+                  _buildRow("Description", widget.menuItem.description ?? "",false),
                   _buildRowWithEdit("Note", widget.menuItem.notes ?? "No Notes", widget.onEditNote, textColor: Colors.red),
                   _buildSwitchRow("Availability", widget.menuItem.isAvailable),
                   _buildOthersSection(),
@@ -100,7 +102,7 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
     );
   }
 
-  Widget _buildRow(String title, String value) {
+  Widget _buildRow(String title, String value,bool copyFunction) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
@@ -112,6 +114,32 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
             child: Text(value,style: AppWidget.black16Text400Style(),overflow: TextOverflow.visible, // Allow text to wrap
                 softWrap: true,),
           ),
+          if(copyFunction)
+          GestureDetector(
+            onTap: () {
+              Clipboard.setData(ClipboardData(text: value));
+
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  width: 100,
+                  backgroundColor: Colors.black.withOpacity(0.8),
+                  content: Text("Copied!"),
+                  duration: Duration(seconds: 2),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+              );
+
+            },
+            child: const Icon(
+              Icons.copy,
+              color: Colors.grey,
+            ),
+          ),
+
+
+
         ],
       ),
     );
@@ -163,12 +191,12 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
       },
       children: isOtherExpanded
           ? [
-        _buildRow("Preparation Time", widget.menuItem.preparationTime?.toString() ?? "N/A"),
-        _buildRow("Availability Time", ""),
+        _buildRow("Preparation Time", widget.menuItem.preparationTime?.toString() ?? "N/A",false),
+        _buildRow("Availability Time", "",false),
         // _buildRow("Offer Price", widget.menuItem.discountPrice != null ? "₹${widget.menuItem.discountPrice}" : "N/A"),
-        _buildRow("No. of Orders", "${widget.menuItem.noOfOrders.toString()}"),
-        _buildRow("Item Image", widget.menuItem.image ?? "N/A"),
-        _buildRow("Item Tag", widget.menuItem.tags?.join(", ") ?? "N/A"),
+        _buildRow("No. of Orders", "${widget.menuItem.noOfOrders.toString()}",false),
+        _buildRow("Item Image", widget.menuItem.image ?? "N/A",true),
+        _buildRow("Item Tag", widget.menuItem.tags?.join(", ") ?? "N/A",false),
       ]
           : [],
     );

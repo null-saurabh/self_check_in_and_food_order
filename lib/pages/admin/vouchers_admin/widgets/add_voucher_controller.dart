@@ -245,7 +245,9 @@ class AddVoucherAdminController extends GetxController {
         ManageVoucherAdminController couponController =
             Get.find<ManageVoucherAdminController>();
 
+        newCoupon.voucherId = id;
         couponController.voucherList.add(newCoupon);
+        couponController.originalVoucherList.add(newCoupon);
         couponController.update();
         context.pop(); // Close loading dialog
         context.pop(); // Return to previous page

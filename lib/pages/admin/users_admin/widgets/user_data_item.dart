@@ -90,6 +90,8 @@ class UserDataItemAdmin extends StatelessWidget {
                       titleTextColor: Colors.white,
                       backgroundColor: Colors.black,
                       onPressed: (){
+                        print("presseing ${userData.id}");
+
                         controller.deleteUser(context,userData);
                       },
                     ),
@@ -106,9 +108,10 @@ class UserDataItemAdmin extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
+                                  SizedBox(height: 12,),// If loginData is not null, show the login dates
                                   Text("Login History",style: AppWidget.black16Text600Style()),
                                   Divider(color: Colors.grey), // Divider below heading
-                                  // If loginData is not null, show the login dates
+                                  SizedBox(height: 12,),// If loginData is not null, show the login dates
                                   if (userData.loginData.isNotEmpty)
                                     ...userData.loginData
                                         .reversed

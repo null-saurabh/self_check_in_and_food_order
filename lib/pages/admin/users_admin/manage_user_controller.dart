@@ -13,6 +13,8 @@ import '../../../models/user_model.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:http/http.dart' as http;
 
+import '../../../widgets/dialog_widget.dart';
+
 class ManageUserAdminController extends GetxController {
 
 
@@ -102,31 +104,24 @@ class ManageUserAdminController extends GetxController {
   }
 
   Future<void> deleteUser(BuildContext context,AdminUserModel userData) async {
+    print("1111w");
 
-
-    // Show a confirmation dialog
-    bool? confirmed = await showDialog(
+    var result  = await showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Confirm Delete"),
-          content: const Text("Are you sure you want to delete this menu item?"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text("No"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: const Text("Yes"),
-            ),
-          ],
-        );
+      isScrollControlled: true, // Allows the bottom sheet to expand with the keyboard
+      backgroundColor: const Color(0xffF4F5FA),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        // print("delete 2");
+        return DialogWidget(); // Your widget for the bottom sheet
       },
     );
 
-    if (confirmed == true) {
 
+    if (result == true) {
+      print("1111");
 
       try {
 
@@ -138,6 +133,8 @@ class ManageUserAdminController extends GetxController {
           },
         );
 
+        print("id: ${userData.id}");
+
         // Check if the document exists before attempting to delete
         DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
             .collection("AdminAccount")
@@ -148,6 +145,7 @@ class ManageUserAdminController extends GetxController {
           // Delete the document if it exists
           await FirebaseFirestore.instance.collection("AdminAccount").doc(userData.id).delete();
           originalUserDataList.remove(userData);
+          userDataList.remove(userData);
 
           update();
           context.pop();
@@ -176,8 +174,9 @@ class ManageUserAdminController extends GetxController {
       } catch (error) {
         context.pop();
         // Show error snackbar
+        print('error $error');
         final snackBar = SnackBar(
-          content: Text("Failed to delete user. Please try again."),
+          content: Text("Failed to delete user. Please try again. $error"),
           backgroundColor: Colors.red,
         );
 
