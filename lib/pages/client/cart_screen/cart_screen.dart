@@ -20,6 +20,7 @@ class CartScreen extends StatelessWidget {
       init: CartScreenController(),
       builder: (controller) {
         return Scaffold(
+          resizeToAvoidBottomInset: true,
           backgroundColor: const Color(0xffF4F5FA),
           body: Stack(
               children: [
@@ -158,7 +159,7 @@ class CartScreen extends StatelessWidget {
                                   }
                                 }
                                 ),
-                            const SizedBox(height: 24),
+                            // const SizedBox(height: 8),
                           ],
                         ),
 

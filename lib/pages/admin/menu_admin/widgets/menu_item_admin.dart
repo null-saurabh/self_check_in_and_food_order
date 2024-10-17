@@ -56,13 +56,11 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
                 maintainState: true,
                 title: Row(
                   children: [
-                    Expanded(
-                      flex: 8,
-                      child: Text(
-                        widget.menuItem.name,
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
+                    Text(
+                      widget.menuItem.name,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
+                    Text(" (!)",style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold,color: Colors.red),),
                     Spacer(),
                     GestureDetector(
                       onTap: widget.onEdit,
@@ -83,9 +81,9 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
                 },
                 children: isExpanded
                     ? [
-                  _buildRow("Item Code", widget.menuItem.id),
-                  _buildRow("Veg/Non-Veg", widget.menuItem.isVeg ? "Veg" : "Non-Veg"),
                   _buildRowWithEdit("Price", "₹${widget.menuItem.price}", widget.onEditPrice),
+                  if(widget.menuItem.stockCount != null)_buildRow("Stock Count", "${widget.menuItem.stockCount.toString()}"),
+                  _buildRow("Preference", widget.menuItem.isVeg ? "Veg" : "Non-Veg"),
                   _buildRow("Category", widget.menuItem.category),
                   _buildRow("Description", widget.menuItem.description ?? ""),
                   _buildRowWithEdit("Note", widget.menuItem.notes ?? "No Notes", widget.onEditNote, textColor: Colors.red),
@@ -167,10 +165,8 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
           ? [
         _buildRow("Preparation Time", widget.menuItem.preparationTime?.toString() ?? "N/A"),
         _buildRow("Availability Time", ""),
-        _buildRow("Offer Price", widget.menuItem.discountPrice != null ? "₹${widget.menuItem.discountPrice}" : "N/A"),
-        widget.menuItem.stockCount != null
-            ?_buildRow("No. of Orders", "${widget.menuItem.noOfOrders.toString()} (${widget.menuItem.stockCount})")
-        :_buildRow("No. of Orders", "${widget.menuItem.noOfOrders.toString()}"),
+        // _buildRow("Offer Price", widget.menuItem.discountPrice != null ? "₹${widget.menuItem.discountPrice}" : "N/A"),
+        _buildRow("No. of Orders", "${widget.menuItem.noOfOrders.toString()}"),
         _buildRow("Item Image", widget.menuItem.image ?? "N/A"),
         _buildRow("Item Tag", widget.menuItem.tags?.join(", ") ?? "N/A"),
       ]

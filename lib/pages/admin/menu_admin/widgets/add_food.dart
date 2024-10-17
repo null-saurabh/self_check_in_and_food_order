@@ -228,12 +228,12 @@ class AddFoodItem extends StatelessWidget {
                                   );
                                 }),
                                 const SizedBox(height: 16),
-                                EditText(
-                                  labelText: "Offer Price",
-                                  hint: "Enter Offer Price",
-                                  controller: controller.discountPriceController,
-                                  inputType: TextInputType.number,
-                                ),
+                                // EditText(
+                                //   labelText: "Offer Price",
+                                //   hint: "Enter Offer Price",
+                                //   controller: controller.discountPriceController,
+                                //   inputType: TextInputType.number,
+                                // ),
                                 EditText(
                                   labelText: "Stock Count",
                                   hint: "Enter Stock Count",

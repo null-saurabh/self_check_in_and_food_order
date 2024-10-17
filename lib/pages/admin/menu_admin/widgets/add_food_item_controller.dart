@@ -39,7 +39,7 @@ class AddFoodItemController extends GetxController {
   var descriptionController = TextEditingController();
 
   // TextEditingControllers for optional fields
-  var discountPriceController = TextEditingController();
+  // var discountPriceController = TextEditingController();
   var stockCountController = TextEditingController();
   var notesController = TextEditingController();
   var preparationTimeController = TextEditingController();
@@ -79,7 +79,7 @@ class AddFoodItemController extends GetxController {
     selectedCategory.value = item.category;
     isAvailable.value = item.isAvailable;
     isVeg.value = item.isVeg;
-    discountPriceController.text = item.discountPrice?.toString() ?? "";
+    // discountPriceController.text = item.discountPrice?.toString() ?? "";
     stockCountController.text = item.stockCount?.toString() ?? "";
     notesController.text = item.notes ?? "";
     isFeatured.value = item.isFeatured ?? false;
@@ -194,9 +194,9 @@ class AddFoodItemController extends GetxController {
               ? descriptionController.text
               : null,
           noOfOrders: isEditing.value ? editingItem.value!.noOfOrders : 0,
-          discountPrice: discountPriceController.text.isNotEmpty
-              ? double.tryParse(discountPriceController.text)
-              : null,
+          // discountPrice: discountPriceController.text.isNotEmpty
+          //     ? double.tryParse(discountPriceController.text)
+          //     : null,
           stockCount: stockCountController.text.isNotEmpty
               ? int.tryParse(stockCountController.text)
               : null,
@@ -341,7 +341,7 @@ class AddFoodItemController extends GetxController {
     nameController.clear();
     priceController.clear();
     descriptionController.clear();
-    discountPriceController.clear();
+    // discountPriceController.clear();
     stockCountController.clear();
     notesController.clear();
     preparationTimeController.clear();

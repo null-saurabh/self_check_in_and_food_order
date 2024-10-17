@@ -323,6 +323,7 @@ class CartScreenController extends GetxController {
           return const Center(child: CircularProgressIndicator());
         },
       );
+
       String transactionID =
           response['razorpay_payment_id']; // From Razorpay response
       String orderId = response['razorpay_order_id'];
@@ -388,6 +389,7 @@ class CartScreenController extends GetxController {
             .collection('Menu')
             .doc(orderedItem.menuItemId);
 
+        try {
         await FirebaseFirestore.instance.runTransaction((transaction) async {
           DocumentSnapshot snapshot = await transaction.get(menuItemDocRef);
 
@@ -395,12 +397,28 @@ class CartScreenController extends GetxController {
             throw Exception("Menu item does not exist!");
           }
 
-          int currentOrderCount = snapshot['orderCount'] ?? 0;
+          // Get current values for `noOfOrders` and `stockCount`
+          int currentOrderCount = snapshot['noOfOrders'] ?? 0;
+          int currentStockCount = snapshot['stockCount'] ?? 0; // Default to 0 if stockCount doesn't exist
+
+          // Calculate the new order count after this transaction
+          int updatedOrderCount = currentOrderCount + orderedItem.quantity;
+          int updatedStockCount = currentStockCount - orderedItem.quantity;
 
           transaction.update(menuItemDocRef, {
-            'orderCount': currentOrderCount + orderedItem.quantity,
+            'noOfOrders': updatedOrderCount,
+            'stockCount': updatedStockCount,
+            'isAvailable': updatedStockCount > 0, // Set false if orders reach/exceed stock
           });
+          //
+          // transaction.update(menuItemDocRef, {
+          //   'noOfOrders': currentOrderCount + orderedItem.quantity,
+          // });
         });
+      } catch (e) {
+      print('Error updating menu item: $e');
+      throw Exception('Failed to update menu item');
+    }
       }
 
       context.pop();
@@ -416,10 +434,11 @@ class CartScreenController extends GetxController {
     } catch (e) {
 
       context.pop();
-      context.pop();
+      // context.pop();
+      print(e);
 
       final snackBar = SnackBar(
-        content: Text("Error: Payment Complete!, But Failed to place the order. Contact Staff."),
+        content: Text("Error: Payment Complete!, But Failed to place the order. Contact Staff.$e"),
         backgroundColor: Colors.red,
       );
 
@@ -516,26 +535,11 @@ class CartScreenController extends GetxController {
 
 
   void navigateToMenu(BuildContext context) {
-    // Close any dialogs
-    // context.pop();
-
-
-    // Clear browser history
-    // html.window.history.replaceState({}, '', '');
-    // html.window.history.replaceState({}, '', '');
-    // html.window.history.pushState({}, '', Routes.receptionHome);
 
     // Replace the current route with the new route
     html.window.history.replaceState({}, '', '/reception');
     // html.window.history.replaceState({}, '', Routes.receptionHome);
     context.go(Routes.receptionMenu);
-    // context.pop();
-    // context.pop();
-
-
-    // Clear browser history
-      // html.window.history.replaceState({}, '', Routes.receptionHome);
-    // context.go(Routes.receptionHome);
   }
 
 
