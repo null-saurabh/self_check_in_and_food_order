@@ -12,7 +12,7 @@ class AdminHomeScreen extends StatelessWidget {
     return Scaffold(
           backgroundColor: const Color(0xffFDFDED),
           body: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -143,7 +143,7 @@ class AdminHomeScreen extends StatelessWidget {
                       ReceptionHomeGridItem(
                         width: 354,
                         height: 84,
-                        widthRatio: 0.90,
+                        widthRatio: 0.84,
                         isFeedbackList: true,
                         iconHeight: 55,
                         iconWidth: 55,

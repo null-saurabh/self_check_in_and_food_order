@@ -23,6 +23,7 @@ class AddNewUserAdmin extends StatelessWidget {
       builder: (controller) {
         // print("starting3");
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: const Color(0xffFFFEF9),
           body: Column(
             children: [
@@ -45,7 +46,7 @@ class AddNewUserAdmin extends StatelessWidget {
                             Text(
                               'Manage',
                               style: AppWidget.black24Text600Style(
-                                      color: Color(0xffE7C64E))
+                                      color: const Color(0xffE7C64E))
                                   .copyWith(height: 1),
                             ),
                             Text(
@@ -57,7 +58,7 @@ class AddNewUserAdmin extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 8,
                     )
                   ]),
@@ -214,7 +215,7 @@ class AddNewUserAdmin extends StatelessWidget {
                           const SizedBox(height: 16),
 
                           Obx(() {
-                            if (controller.documentType.value != 'Passport')
+                            if (controller.documentType.value != 'Passport') {
                               // Upload Back Document
                               return ElevatedContainer(
                                   child: UploadDocumentWidget(
@@ -224,8 +225,8 @@ class AddNewUserAdmin extends StatelessWidget {
                                 isDocumentInvalid:
                                     controller.isBackDocumentInvalid.value,
                               ));
-                            else {
-                              return SizedBox.shrink();
+                            } else {
+                              return const SizedBox.shrink();
                             }
                           }),
 
@@ -246,7 +247,7 @@ class AddNewUserAdmin extends StatelessWidget {
                                   style: TextStyle(color: Colors.black),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 16,
                               ),
                               AppElevatedButton(
@@ -258,7 +259,7 @@ class AddNewUserAdmin extends StatelessWidget {
                                 backgroundColor: Colors.black,
                                 child: Text(
                                   isEdit ? "Save" : "Add",
-                                  style: TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                               ),
                             ],

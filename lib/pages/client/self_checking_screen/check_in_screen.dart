@@ -15,6 +15,7 @@ class CheckInScreen extends StatelessWidget {
         init: CheckInController(),
         builder: (checkInController) {
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             backgroundColor: const Color(0xffF4F5FA),
             body: SingleChildScrollView(
               child: Stack(

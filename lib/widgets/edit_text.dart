@@ -100,11 +100,6 @@ class EditText extends StatelessWidget {
     this.enable = true,
     this.suffixWidget,
   });
-  // {
-    // if (prefix != null) {
-      // contentPadding ??= const EdgeInsets.only(top: 10, left: 10, right: 10);
-    // }
-  // }
 
   RxnString showError = RxnString();
 

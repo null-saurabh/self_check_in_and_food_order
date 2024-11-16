@@ -47,6 +47,15 @@ class AddFoodItemController extends GetxController {
       TextEditingController(); // For storing comma-separated tags
   var ingredientsController = TextEditingController();
 
+  FocusNode nameFocusNode = FocusNode();
+  FocusNode priceFocusNode = FocusNode();
+  FocusNode descriptionFocusNode = FocusNode();
+  FocusNode stockCountFocusNode = FocusNode();
+  FocusNode notesFocusNode = FocusNode();
+  FocusNode preparationTimeFocusNode = FocusNode();
+  FocusNode tagsFocusNode = FocusNode();
+  FocusNode ingredientsFocusNode = FocusNode();
+
   // Boolean fields
   var isAvailable = true.obs;
   var isVeg = true.obs;

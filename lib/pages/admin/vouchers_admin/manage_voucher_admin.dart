@@ -40,14 +40,14 @@ class ManageVoucherAdmin extends StatelessWidget {
                               context.pop(); // Go back if there's a previous route
 
                           },
-                        ):SizedBox.shrink(),
+                        ):const SizedBox.shrink(),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
                               'Food',
                               style: AppWidget.black24Text600Style(
-                                      color: Color(0xffE7C64E))
+                                      color: const Color(0xffE7C64E))
                                   .copyWith(height: 1),
                             ),
                             Text(
@@ -75,31 +75,31 @@ class ManageVoucherAdmin extends StatelessWidget {
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.zero,
                                       hintText: "Search by Code, Discount, ....",
-                                      hintStyle: TextStyle(color: Colors.grey),
+                                      hintStyle: const TextStyle(color: Colors.grey),
                                       prefixIcon:
-                                          Icon(Icons.search, color: Colors.grey),
+                                          const Icon(Icons.search, color: Colors.grey),
                                       filled: true,
                                       fillColor: Colors.white,
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                         borderSide:
-                                            BorderSide(color: Color(0xffEDCC23)),
+                                            const BorderSide(color: Color(0xffEDCC23)),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                         borderSide:
-                                            BorderSide(color: Color(0xffEDCC23)),
+                                            const BorderSide(color: Color(0xffEDCC23)),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                         borderSide:
-                                            BorderSide(color: Color(0xffEDCC23)),
+                                            const BorderSide(color: Color(0xffEDCC23)),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 8,
                               ),
                               Stack(
@@ -113,15 +113,15 @@ class ManageVoucherAdmin extends StatelessWidget {
                                         top:
                                             -2, // Adjust this to position it properly
                                         child: Container(
-                                          padding: EdgeInsets.all(6),
-                                          decoration: BoxDecoration(
+                                          padding: const EdgeInsets.all(6),
+                                          decoration: const BoxDecoration(
                                             color: Colors.red,
                                             shape: BoxShape.circle,
                                           ),
                                           child: Text(
                                             controller.activeFilterCount.value
                                                 .toString(),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 10,
                                               fontWeight: FontWeight.bold,
@@ -130,26 +130,26 @@ class ManageVoucherAdmin extends StatelessWidget {
                                         ),
                                       );
                                     } else {
-                                      return SizedBox
+                                      return const SizedBox
                                           .shrink(); // Return empty widget if no filters are active
                                     }
                                   }),
                                   AppElevatedButton(
                                     contentPadding:
-                                        EdgeInsets.symmetric(horizontal: 4),
+                                        const EdgeInsets.symmetric(horizontal: 4),
                                     width: 40,
                                     showBorder: true,
                                     backgroundColor: Colors.transparent,
-                                    borderColor: Color(0xffEDCC23),
+                                    borderColor: const Color(0xffEDCC23),
                                     borderWidth: 1,
                                     titleTextColor: Colors.black,
-                                    child: Icon(Icons.filter_alt,
+                                    child: const Icon(Icons.filter_alt,
                                         color: Colors.black, size: 22),
                                     onPressed: () {
                                       showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
-                                            return VoucherFilterAlert();
+                                            return const VoucherFilterAlert();
                                           });
                                     },
                                   ),
@@ -157,7 +157,7 @@ class ManageVoucherAdmin extends StatelessWidget {
                               )
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           ),
                           SingleChildScrollView(
@@ -173,7 +173,7 @@ class ManageVoucherAdmin extends StatelessWidget {
                                         label:"All");
                                   },
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 4,
                                 ),
                                 FilterButton(
@@ -185,7 +185,7 @@ class ManageVoucherAdmin extends StatelessWidget {
                                         label: "Active");
                                   },
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 4,
                                 ),FilterButton(
                                   label: "Disabled",
@@ -197,7 +197,7 @@ class ManageVoucherAdmin extends StatelessWidget {
                                   },
                                 ),
 
-                                SizedBox(
+                                const SizedBox(
                                   width: 4,
                                 ),
                                 FilterButton(
@@ -209,7 +209,7 @@ class ManageVoucherAdmin extends StatelessWidget {
                                         label:"Used");
                                   },
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 4,
                                 ),
                                 FilterButton(
@@ -252,7 +252,7 @@ class ManageVoucherAdmin extends StatelessWidget {
                               borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                             ),
                             builder: (context) {
-                              return AddVoucherAdmin(); // Your widget for the bottom sheet
+                              return const AddVoucherAdmin(); // Your widget for the bottom sheet
                             },
                           );
 
@@ -268,8 +268,8 @@ class ManageVoucherAdmin extends StatelessWidget {
                           //   ),
                           // );
                         },
-                        contentPadding: EdgeInsets.all(12),
-                        child: Row(
+                        contentPadding: const EdgeInsets.all(12),
+                        child: const Row(
                           children: [
                             Text(
                               "Add",
@@ -299,7 +299,7 @@ class ManageVoucherAdmin extends StatelessWidget {
                         const EdgeInsets.only(right: 16.0, top: 4, bottom: 4),
                     child: GestureDetector(
                       onTap: (){controller.refreshAndExpireCoupons(context);},
-                      child: Icon(Icons.refresh),
+                      child: const Icon(Icons.refresh),
                     ),
                   )
                 ],
@@ -320,11 +320,11 @@ class ManageVoucherAdmin extends StatelessWidget {
                     ),
                   );
                 } else if (controller.isLoading.value) {
-                  return Expanded(
-                      child: const Center(child: CircularProgressIndicator()));
+                  return const Expanded(
+                      child: Center(child: CircularProgressIndicator()));
                 } else {
-                  return Expanded(
-                      child: const Center(child: Text("No orders found.")));
+                  return const Expanded(
+                      child: Center(child: Text("No orders found.")));
                 }
               }),
             ],

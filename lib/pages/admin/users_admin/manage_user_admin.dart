@@ -6,6 +6,7 @@ import 'package:wandercrew/pages/admin/users_admin/widgets/add_user_data.dart';
 import 'package:wandercrew/pages/admin/users_admin/widgets/user_data_item.dart';
 import 'package:wandercrew/widgets/app_elevated_button.dart';
 
+import '../../../service/auth_services.dart';
 import '../../../widgets/filter_button.dart';
 import '../../../widgets/widget_support.dart';
 
@@ -107,7 +108,7 @@ class ManageUserAdmin extends StatelessWidget {
                                 borderColor: Color(0xffEDCC23),
                                 borderWidth: 1,
                                 titleTextColor: Colors.black,
-                                title: "Add User",
+                                title: "Add",
                                 onPressed: () {
 
 
@@ -134,6 +135,24 @@ class ManageUserAdmin extends StatelessWidget {
                                   //         top: Radius.circular(16)),
                                   //   ),
                                   // );
+                                },
+
+
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              AppElevatedButton(
+                                showBorder: true,
+                                backgroundColor: Colors.transparent,
+                                borderColor: const Color(0xffEDCC23),
+                                borderWidth: 1,
+                                // titleTextColor: Colors.black,
+                                child: const Icon(Icons.logout,color: Colors.black,size: 20,),
+                                onPressed: () {
+
+                                  AuthService.to.logout(context);
+
                                 },
 
 

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_controller.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/widgets/upload_document_widget.dart';
+import 'package:wandercrew/utils/routes.dart';
 
 import '../../../../widgets/app_dropdown.dart';
 import '../../../../widgets/widget_support.dart';
@@ -21,10 +23,6 @@ class CheckInFormOneDocument extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Country Dropdown with dynamic list
-                // Obx(() {
-                // }),
-
                 AppDropDown(
                   items: selfCheckingController.countries.map((country) {
                     return DropdownMenuItem(
@@ -91,9 +89,8 @@ class CheckInFormOneDocument extends StatelessWidget {
                 // Upload Back Document
                 Obx(() {
 
-                  if(selfCheckingController.documentType.value != 'Passport')
-
-                  return Column(
+                  if(selfCheckingController.documentType.value != 'Passport') {
+                    return Column(
                     children: [
                       UploadDocumentWidget(
                         title: "Back Side of Document",
@@ -108,8 +105,8 @@ class CheckInFormOneDocument extends StatelessWidget {
 
 
                   );
-                else{
-                  return SizedBox.shrink();
+                  } else{
+                  return const SizedBox.shrink();
                   }
 
                 }),
@@ -119,8 +116,20 @@ class CheckInFormOneDocument extends StatelessWidget {
                   return Column(
                     children: [
                       CheckboxListTile(
-                          title:
-                              const Text("I agree to the terms & conditions"),
+                          title: GestureDetector(
+                            onTap: () {
+                              // Navigate to Terms and Conditions page when the text is tapped
+                              context.go(Routes.termAndCondition);
+
+                            },
+                            child: const Text(
+                              "I agree to the terms & conditions",
+                              style: TextStyle(
+                                decoration: TextDecoration.underline, // Optional: underline to indicate it's clickable
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
                           value: selfCheckingController.termsAccepted.value,
                           onChanged: (value) {
                             selfCheckingController.termsAccepted.value = value!;

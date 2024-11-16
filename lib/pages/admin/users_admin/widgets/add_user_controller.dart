@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -116,7 +117,7 @@ class AddNewUserAdminController extends GetxController{
       // update();
     }
     catch (e) {
-      final snackBar = SnackBar(
+      const snackBar = SnackBar(
         content: Text('Success Failed to pick image'),
         backgroundColor: Colors.red,
       );
@@ -189,9 +190,44 @@ class AddNewUserAdminController extends GetxController{
 
       if (isEditing.value ? true:frontDocumentUrl.value != null) {
         if (documentType.value == "Passport" ? true : backDocumentUrl.value != null) {
+
+
+          String userId;
+          if (!isEditing.value) {
+            try {
+              // Register the user with Firebase Authentication
+              UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                email: userNameController.text, // Use email for registration
+                password: passwordController.text, // Password for registration
+              );
+              User? user = userCredential.user;
+              if (user != null) {
+                userId = user.uid; // Firebase UID will be used as the Firestore ID
+              } else {
+                throw Exception("User registration failed");
+              }
+            } catch (error) {
+              // Handle registration error
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Error: Failed to register user. Please try again."),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              return;
+            }
+          } else {
+            // If editing, use the existing user's ID
+            userId = editingItem.value!.id;
+          }
+
+
+
+
           // Handle optional fields: email, address, city, arrivingFrom, goingTo
           AdminUserModel newUserData = AdminUserModel(
-            id: isEditing.value ? editingItem.value!.id :"",
+            id: userId,
             documentType: documentType.value ?? "",
             frontDocumentUrl: frontDocumentUrl.value ?? "",
             backDocumentUrl: backDocumentUrl.value,
@@ -212,17 +248,17 @@ class AddNewUserAdminController extends GetxController{
 
 
 
-                await DatabaseMethods().updateUserData( editingItem.value!.id,newUserData.toMap());
+                await DatabaseMethods().updateUserData(userId,newUserData.toMap());
 
 
                 // Update the item in the lists
                 ManageUserAdminController controller = Get.find<ManageUserAdminController>();
                 // Find the index of the item to update
-                int index = controller.userDataList.indexWhere((item) => item.id == editingItem.value!.id);
+                int index = controller.userDataList.indexWhere((item) => item.id == userId);
                 if (index != -1) {
                   controller.userDataList[index] = newUserData; // Update the item in allMenuItems
                   // Optionally update in originalMenuItems if needed
-                  int originalIndex = controller.originalUserDataList.indexWhere((item) => item.id == editingItem.value!.id);
+                  int originalIndex = controller.originalUserDataList.indexWhere((item) => item.id == userId);
                   if (originalIndex != -1) {
                     controller.originalUserDataList[originalIndex] = newUserData; // Update in originalMenuItems if needed
                   }
@@ -234,8 +270,8 @@ class AddNewUserAdminController extends GetxController{
                 context.pop();
 
                 // Show success snackbar
-                final snackBar = SnackBar(
-                  content: Text("Success Menu item updated successfully."),
+                const snackBar = SnackBar(
+                  content: Text("Success User updated successfully."),
                   backgroundColor: Colors.green,
                 );
 
@@ -248,7 +284,7 @@ class AddNewUserAdminController extends GetxController{
 
               // Show error snackbar
 
-              final snackBar = SnackBar(
+              const snackBar = SnackBar(
                 content: Text("Error: Failed to update user. Please try again."),
                 backgroundColor: Colors.red,
               );
@@ -261,20 +297,12 @@ class AddNewUserAdminController extends GetxController{
           }
           else {
 
+            await FirebaseFirestore.instance.collection('AdminAccount').doc(userId).set(newUserData.toMap());
 
-            DocumentReference docRef = await await FirebaseFirestore.instance
-                .collection('AdminAccount')
-                .add(newUserData.toMap());
-
-
-            String id = docRef.id; // Retrieve the autogenerated ID
-
-            // Optionally, update the document with the newly assigned ID
-            await docRef.update({'id': id});
 
             ManageUserAdminController controller = Get.find<ManageUserAdminController>();
             // Find the index of the item to update
-            newUserData.id = id;
+
               controller.userDataList.add(newUserData); // Update the item in allMenuItems
             controller.originalUserDataList.add(newUserData); // Update the item in allMenuItems
             update();
@@ -283,7 +311,7 @@ class AddNewUserAdminController extends GetxController{
 
             // print("55");
 
-            final snackBar = SnackBar(
+            const snackBar = SnackBar(
               content: Text('User Added Successfully successfully!'),
               backgroundColor: Colors.green,
             );
@@ -295,7 +323,7 @@ class AddNewUserAdminController extends GetxController{
           } }
          }else {
         context.pop();
-        final snackBar = SnackBar(
+        const snackBar = SnackBar(
           content: Text("Error: Failed to upload documents. Please try again."),
           backgroundColor: Colors.red,
         );

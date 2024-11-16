@@ -165,7 +165,7 @@ var result  = await showModalBottomSheet(
         context.pop();
 
 
-          final snackBar = SnackBar(
+          final snackBar = const SnackBar(
             content: Text("Menu item deleted successfully."),
             backgroundColor: Colors.green,
           );
@@ -177,7 +177,7 @@ var result  = await showModalBottomSheet(
 
         context.pop();
 
-        final snackBar = SnackBar(
+        final snackBar = const SnackBar(
           content: Text("Failed to delete menu item. Please try again."),
           backgroundColor: Colors.red,
         );
@@ -208,7 +208,7 @@ var result  = await showModalBottomSheet(
 
         // Optionally, show a success snackbar
 
-        final snackBar = SnackBar(
+        final snackBar = const SnackBar(
           content: Text("Availability updated successfully."),
           backgroundColor: Colors.green,
         );
@@ -244,74 +244,72 @@ var result  = await showModalBottomSheet(
             borderRadius:
             BorderRadius.circular(12.0), // Customize the radius here
           ),
-          backgroundColor: Color(0xffFFFEF9),
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding:
-                  const EdgeInsets.only(top: 20, right: 20.0, left: 20),
-                  child: Text(
-                    "Modify",
-                    style: AppWidget.black20Text600Style(),
+          backgroundColor: const Color(0xffFFFEF9),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding:
+                const EdgeInsets.only(top: 20, right: 20.0, left: 20),
+                child: Text(
+                  "Modify",
+                  style: AppWidget.black20Text600Style(),
+                ),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    bottom: 16, right: 20.0, left: 20),
+                child: ElevatedContainer(
+                  child: EditText(
+                    labelFontWeight: FontWeight.w600,
+                    labelText: "Price",
+                    hint: "Enter Price",
+                    controller:priceController,
+                    inputType: TextInputType.number,
                   ),
                 ),
-                SizedBox(
-                  height: 12,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 16, right: 20.0, left: 20),
-                  child: ElevatedContainer(
-                    child: EditText(
-                      labelFontWeight: FontWeight.w600,
-                      labelText: "Price",
-                      hint: "Enter Price",
-                      controller:priceController,
-                      inputType: TextInputType.number,
-                    ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AppElevatedButton(
+                    onPressed: (){
+                      context.pop();
+                    },
+                    title: "Back",
+                    titleTextColor: Colors.black,
+                    backgroundColor: Colors.transparent,
+                    showBorder: true,
                   ),
-                ),
-                SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AppElevatedButton(
-                      onPressed: (){
-                        context.pop();
-                      },
-                      title: "Back",
-                      titleTextColor: Colors.black,
-                      backgroundColor: Colors.transparent,
-                      showBorder: true,
-                    ),
-                    SizedBox(width: 12,),
-                    AppElevatedButton(
-                      onPressed: () async {
-                        double newPrice = double.parse(priceController.text);
+                  const SizedBox(width: 12,),
+                  AppElevatedButton(
+                    onPressed: () async {
+                      double newPrice = double.parse(priceController.text);
 
 
-                        // Update the price in the database
-                        await FirebaseFirestore.instance.collection("Menu").doc(item.id).update({'price': newPrice});
+                      // Update the price in the database
+                      await FirebaseFirestore.instance.collection("Menu").doc(item.id).update({'price': newPrice});
 
-                        // Update local item price
-                        item.price = newPrice;
-                        update();
+                      // Update local item price
+                      item.price = newPrice;
+                      update();
 
-                        // Close the dialog
-                        Navigator.of(context).pop();
-                      },
+                      // Close the dialog
+                      Navigator.of(context).pop();
+                    },
 
-                      title: "Apply",
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
+                    title: "Apply",
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
 
-              ],
-            ),
+            ],
           ),
         );
       },
@@ -330,7 +328,7 @@ var result  = await showModalBottomSheet(
             borderRadius:
             BorderRadius.circular(12.0), // Customize the radius here
           ),
-          backgroundColor: Color(0xffFFFEF9),
+          backgroundColor: const Color(0xffFFFEF9),
           child: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -344,7 +342,7 @@ var result  = await showModalBottomSheet(
                     style: AppWidget.black20Text600Style(),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 12,
                 ),
                 Padding(
@@ -356,11 +354,10 @@ var result  = await showModalBottomSheet(
                       labelText: "Note",
                       hint: "Enter Note",
                       controller:noteController,
-                      inputType: TextInputType.number,
                     ),
                   ),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -373,7 +370,7 @@ var result  = await showModalBottomSheet(
                       backgroundColor: Colors.transparent,
                       showBorder: true,
                     ),
-                    SizedBox(width: 12,),
+                    const SizedBox(width: 12,),
                     AppElevatedButton(
                       onPressed: () async {
                         String newNote = noteController.text;
@@ -395,7 +392,7 @@ var result  = await showModalBottomSheet(
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
               ],
             ),

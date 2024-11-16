@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,8 +8,11 @@ import 'package:wandercrew/widgets/app_elevated_button.dart';
 import 'package:wandercrew/widgets/elevated_container.dart';
 import 'package:wandercrew/widgets/widget_support.dart';
 import 'dart:html' as html;
+import 'package:http/http.dart' as http;
+
 
 import '../../../models/user_model.dart';
+import '../self_checking_screen/check_in_controller.dart';
 
 class ReceptionController extends GetxController {
   var adminUsers = <AdminUserModel>[].obs; // Observable list of admin users
@@ -15,9 +20,26 @@ class ReceptionController extends GetxController {
 
   @override
   void onInit() {
+    // fetchCountryCodes(); // Fetch countries from API when controller is initialized
+    fetchCountriesFromCheckInController();
     fetchAdminUsers();
     super.onInit();
   }
+
+
+  void fetchCountriesFromCheckInController() {
+    // Find the CheckInController instance and call fetchCountryCodes
+    CheckInController checkInController = Get.put(CheckInController());
+    checkInController.fetchCountries();
+
+  }
+
+
+
+  Future<void> refreshPage() async{
+    html.window.location.reload(); // This will reload the entire page
+  }
+
 
   // Fetch admin users from Firestore
   void fetchAdminUsers() async {
@@ -53,10 +75,10 @@ class ReceptionController extends GetxController {
       builder: (BuildContext context) {
         return Dialog(
           shape: RoundedRectangleBorder(
-            borderRadius:
+              borderRadius:
                 BorderRadius.circular(12.0), // Customize the radius here
           ),
-          backgroundColor: Color(0xffFFFEF9),
+          backgroundColor: const Color(0xffFFFEF9),
           child: Container(
             constraints: BoxConstraints(
                 maxHeight: MediaQuery.of(context).size.height * 0.68),
@@ -72,7 +94,7 @@ class ReceptionController extends GetxController {
                     style: AppWidget.black20Text600Style(),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Expanded(
@@ -111,29 +133,29 @@ class ReceptionController extends GetxController {
                                             style: AppWidget
                                                 .black16Text600Style(),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 6,
                                           ),
-                                          Icon(
+                                          const Icon(
                                             Icons.call,
                                             color: Colors.green,
                                             size: 20,
                                           )
                                         ],
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 8,
                                       ),
                                       Row(
                                         children: [
-                                          Text("Name: "),
+                                          const Text("Name: "),
                                           Text(adminUser.name),
                                         ],
                                       ),
                                       Row(
 
                                         children: [
-                                          Text("Number: "),
+                                          const Text("Number: "),
                                           Text(adminUser.number)
                                         ],
                                       )
@@ -141,7 +163,7 @@ class ReceptionController extends GetxController {
                                   ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 12,
                               ),
                             ],
@@ -149,11 +171,11 @@ class ReceptionController extends GetxController {
                         }),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Center(child: AppElevatedButton(onPressed: (){context.pop();},title: "Close", ))
-                ,SizedBox(
+                ,const SizedBox(
                   height: 12,
                 ),],
             ),

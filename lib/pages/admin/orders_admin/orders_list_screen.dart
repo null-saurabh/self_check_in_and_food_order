@@ -20,7 +20,7 @@ class OrdersListScreen extends StatelessWidget {
       init: AdminOrderListController(),
       builder: (controller) {
         return Scaffold(
-          backgroundColor: Color(0xffFFFEF9),
+          backgroundColor: const Color(0xffFFFEF9),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -42,7 +42,7 @@ class OrdersListScreen extends StatelessWidget {
                                         .pop(); // Go back if there's a previous route
                                   },
                                 )
-                              : SizedBox.shrink(),
+                              : const SizedBox.shrink(),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
@@ -54,7 +54,7 @@ class OrdersListScreen extends StatelessWidget {
                               Text(
                                 'Food',
                                 style: AppWidget.black24Text600Style(
-                                        color: Color(0xffE7C64E))
+                                        color: const Color(0xffE7C64E))
                                     .copyWith(height: 1),
                               ),
                             ],
@@ -76,37 +76,39 @@ class OrdersListScreen extends StatelessWidget {
                                           controller.SearchFilterOrderItems(
                                               value), // Call the search function
                                       decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.zero,
+
                                         hintText:
                                             "Search by name, number, orderId",
                                         hintStyle:
-                                            TextStyle(color: Colors.grey),
-                                        prefixIcon: Icon(Icons.search,
+                                            const TextStyle(color: Colors.grey),
+                                        prefixIcon: const Icon(Icons.search,
                                             color: Colors.grey),
                                         filled: true,
                                         fillColor: Colors.white,
                                         border: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(12),
-                                          borderSide: BorderSide(
+                                          borderSide: const BorderSide(
                                               color: Color(0xffEDCC23)),
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(12),
-                                          borderSide: BorderSide(
+                                          borderSide: const BorderSide(
                                               color: Color(0xffEDCC23)),
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(12),
-                                          borderSide: BorderSide(
+                                          borderSide: const BorderSide(
                                               color: Color(0xffEDCC23)),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 8,
                                 ),
                                 Stack(
@@ -121,15 +123,15 @@ class OrdersListScreen extends StatelessWidget {
                                           top:
                                               -2, // Adjust this to position it properly
                                           child: Container(
-                                            padding: EdgeInsets.all(6),
-                                            decoration: BoxDecoration(
+                                            padding: const EdgeInsets.all(6),
+                                            decoration: const BoxDecoration(
                                               color: Colors.red,
                                               shape: BoxShape.circle,
                                             ),
                                             child: Text(
                                               controller.activeFilterCount.value
                                                   .toString(),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.bold,
@@ -138,26 +140,26 @@ class OrdersListScreen extends StatelessWidget {
                                           ),
                                         );
                                       } else {
-                                        return SizedBox
+                                        return const SizedBox
                                             .shrink(); // Return empty widget if no filters are active
                                       }
                                     }),
                                     AppElevatedButton(
                                       contentPadding:
-                                          EdgeInsets.symmetric(horizontal: 4),
+                                          const EdgeInsets.symmetric(horizontal: 4),
                                       width: 40,
                                       showBorder: true,
                                       backgroundColor: Colors.transparent,
-                                      borderColor: Color(0xffEDCC23),
+                                      borderColor: const Color(0xffEDCC23),
                                       borderWidth: 1,
                                       titleTextColor: Colors.black,
-                                      child: Icon(Icons.filter_alt,
+                                      child: const Icon(Icons.filter_alt,
                                           color: Colors.black, size: 22),
                                       onPressed: () {
                                         showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
-                                              return OrderFilterAlert();
+                                              return const OrderFilterAlert();
                                             });
                                       },
                                     ),
@@ -165,7 +167,7 @@ class OrdersListScreen extends StatelessWidget {
                                 )
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             SingleChildScrollView(
@@ -185,7 +187,7 @@ class OrdersListScreen extends StatelessWidget {
                                           label: "All");
                                     },
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 4,
                                   ),
                                   FilterButton(
@@ -198,7 +200,7 @@ class OrdersListScreen extends StatelessWidget {
                                           label: "Pending");
                                     },
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 4,
                                   ),
                                   FilterButton(
@@ -211,7 +213,7 @@ class OrdersListScreen extends StatelessWidget {
                                           label: "Processing");
                                     },
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 4,
                                   ),
                                   FilterButton(
@@ -224,7 +226,7 @@ class OrdersListScreen extends StatelessWidget {
                                           label: "Completed");
                                     },
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 4,
                                   ),
                                   FilterButton(
@@ -250,175 +252,171 @@ class OrdersListScreen extends StatelessWidget {
               Obx(() {
                 if (controller.orderList.isNotEmpty) {
                   return Expanded(
-                    child: Container(
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 16.0, right: 16, top: 8, bottom: 16),
-                          child: Column(
-                            children: controller.orderList.map(
-                              (orderData) {
-                                return SingleOrder(
-                                  onCallPressed: () {
-                                    controller
-                                        .makePhoneCall(orderData.contactNumber);
-                                  },
-                                  markAsConfirm: () => controller.confirmOrder(
-                                      context, orderData, "Admin"),
-                                  markAsDelivered: () =>
-                                      controller.orderDelivered(
-                                          context, orderData, "Admin"),
-                                  orderData: orderData,
-                                  initiateRefund: () {
-                                    if (orderData.refundAmount != null) {
-                                      controller.refundAmountController.text =
-                                          (orderData.totalAmount.toInt() -
-                                                  orderData.refundAmount!)
-                                              .toString();
-                                    } else {
-                                      controller.refundAmountController.text =
-                                          orderData.totalAmount.toString();
-                                    }
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16.0, right: 16, top: 8, bottom: 16),
+                        child: Column(
+                          children: controller.orderList.map(
+                            (orderData) {
+                              return SingleOrder(
+                                onCallPressed: () {
+                                  controller
+                                      .makePhoneCall(orderData.contactNumber);
+                                },
+                                markAsConfirm: () => controller.confirmOrder(
+                                    context, orderData, "Admin"),
+                                markAsDelivered: () =>
+                                    controller.orderDelivered(
+                                        context, orderData, "Admin"),
+                                orderData: orderData,
+                                initiateRefund: () {
+                                  if (orderData.refundAmount != null) {
+                                    controller.refundAmountController.text =
+                                        (orderData.totalAmount.toInt() -
+                                                orderData.refundAmount!)
+                                            .toString();
+                                  } else {
+                                    controller.refundAmountController.text =
+                                        orderData.totalAmount.toString();
+                                  }
 
-                                    showDialog(
-                                      context: context,
-                                      builder: (context2) {
-                                        return Dialog(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                12.0), // Customize the radius here
-                                          ),
-                                          backgroundColor: Color(0xffFFFEF9),
-                                          child: Container(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
+                                  showDialog(
+                                    context: context,
+                                    builder: (context2) {
+                                      return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              12.0), // Customize the radius here
+                                        ),
+                                        backgroundColor: const Color(0xffFFFEF9),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(
+                                                      top: 20,
+                                                      right: 20.0,
+                                                      left: 20),
+                                              child: Text(
+                                                "Refund",
+                                                style: AppWidget
+                                                    .black20Text600Style(),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 12,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(
+                                                      bottom: 16,
+                                                      right: 20.0,
+                                                      left: 20),
+                                              child: ElevatedContainer(
+                                                child: EditText(
+                                                  labelFontWeight:
+                                                      FontWeight.w600,
+                                                  labelText: "Amount",
+                                                  hint:
+                                                      "Enter Refund Amount",
+                                                  controller: controller
+                                                      .refundAmountController,
+                                                  inputType:
+                                                      TextInputType.number,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 12),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 20,
-                                                          right: 20.0,
-                                                          left: 20),
-                                                  child: Text(
-                                                    "Refund",
-                                                    style: AppWidget
-                                                        .black20Text600Style(),
-                                                  ),
+                                                AppElevatedButton(
+                                                  onPressed: () {
+                                                    context.pop();
+                                                  },
+                                                  title: "Back",
+                                                  titleTextColor:
+                                                      Colors.black,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  showBorder: true,
                                                 ),
-                                                SizedBox(
-                                                  height: 12,
+                                                const SizedBox(
+                                                  width: 12,
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 16,
-                                                          right: 20.0,
-                                                          left: 20),
-                                                  child: ElevatedContainer(
-                                                    child: EditText(
-                                                      labelFontWeight:
-                                                          FontWeight.w600,
-                                                      labelText: "Amount",
-                                                      hint:
-                                                          "Enter Refund Amount",
-                                                      controller: controller
-                                                          .refundAmountController,
-                                                      inputType:
-                                                          TextInputType.number,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 12),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    AppElevatedButton(
-                                                      onPressed: () {
-                                                        context.pop();
-                                                      },
-                                                      title: "Back",
-                                                      titleTextColor:
-                                                          Colors.black,
-                                                      backgroundColor:
-                                                          Colors.transparent,
-                                                      showBorder: true,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 12,
-                                                    ),
-                                                    AppElevatedButton(
-                                                      onPressed: () async {
-                                                        Navigator.of(context)
-                                                            .pop();
+                                                AppElevatedButton(
+                                                  onPressed: () async {
+                                                    Navigator.of(context)
+                                                        .pop();
 
-                                                        RazorpayService
-                                                            razorpay =
-                                                            RazorpayService();
-                                                        razorpay.handleRefund(
-                                                          context: context,
-                                                          paymentId: orderData
-                                                              .transactionId,
-                                                          refundAmount: int
-                                                              .parse(controller
-                                                                  .refundAmountController
-                                                                  .text),
-                                                          orderId: orderData.id,
-                                                          orderAmount: orderData
-                                                              .totalAmount
-                                                              .toInt(),
-                                                        );
-                                                      },
-                                                      title: "Apply",
-                                                    ),
-                                                  ],
+                                                    RazorpayService
+                                                        razorpay =
+                                                        RazorpayService();
+                                                    razorpay.handleRefund(
+                                                      context: context,
+                                                      paymentId: orderData
+                                                          .transactionId,
+                                                      refundAmount: int
+                                                          .parse(controller
+                                                              .refundAmountController
+                                                              .text),
+                                                      orderId: orderData.id,
+                                                      orderAmount: orderData
+                                                          .totalAmount
+                                                          .toInt(),
+                                                    );
+                                                  },
+                                                  title: "Apply",
                                                 ),
-                                                SizedBox(height: 16),
                                               ],
                                             ),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  //controller.confirmOrder(orderData,"Admin");},
-                                );
-                              },
-                            ).toList(),
-                          ),
+                                            const SizedBox(height: 16),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                //controller.confirmOrder(orderData,"Admin");},
+                              );
+                            },
+                          ).toList(),
                         ),
                       ),
                     ),
                   );
                 } else if (controller.isLoading.value) {
-                  return Expanded(
-                      child: const Center(child: CircularProgressIndicator()));
+                  return const Expanded(
+                      child: Center(child: CircularProgressIndicator()));
                 } else {
                   switch (controller.selectedFilter.value) {
                     case 'Completed':
-                      return Expanded(
+                      return const Expanded(
                           child: Center(
                               child: Text('No completed orders found.')));
                     case 'Pending':
-                      return Expanded(
+                      return const Expanded(
                           child:
                               Center(child: Text('No pending orders found.')));
                     case 'Processing':
-                      return Expanded(
+                      return const Expanded(
                           child: Center(
                               child: Text('No processing orders found.')));
                     case 'Refunded':
-                      return Expanded(
+                      return const Expanded(
                           child:
                               Center(child: Text('No refunded orders found.')));
                     case 'All':
-                      return Expanded(
+                      return const Expanded(
                           child: Center(child: Text('No orders found.')));
                     default:
                       // If no filter is selected (default), show a message for pending and processing orders
-                      return Expanded(
+                      return const Expanded(
                         child: Center(child: Text('No pending found.')),
                       );
                   }

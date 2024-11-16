@@ -37,7 +37,7 @@ class MenuAdminScreen extends StatelessWidget {
                                   context.pop(); // Go back if there's a previous route
 
                               },
-                            ):SizedBox.shrink(),
+                            ):const SizedBox.shrink(),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
@@ -49,7 +49,7 @@ class MenuAdminScreen extends StatelessWidget {
                                 Text(
                                   'Menu',
                                   style: AppWidget.black24Text600Style(
-                                      color: Color(0xffE7C64E))
+                                      color: const Color(0xffE7C64E))
                                       .copyWith(height: 1),
                                 ),
                               ],
@@ -67,38 +67,39 @@ class MenuAdminScreen extends StatelessWidget {
                                     onChanged: (value) => controller
                                         .searchFilterMenuItems(value), // Call the search function
                                     decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.zero,
                                       hintText: "Search by item name",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      prefixIcon: Icon(Icons.search, color: Colors.grey),
+                                      hintStyle: const TextStyle(color: Colors.grey),
+                                      prefixIcon: const Icon(Icons.search, color: Colors.grey),
                                       filled: true,
                                       fillColor: Colors.white,
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide(color: Color(0xffEDCC23)),
+                                        borderSide: const BorderSide(color: Color(0xffEDCC23)),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide(color: Color(0xffEDCC23)),//(0xffEDCC23)
+                                        borderSide: const BorderSide(color: Color(0xffEDCC23)),//(0xffEDCC23)
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                         borderSide:
-                                        BorderSide(color: Color(0xffEDCC23)),
+                                        const BorderSide(color: Color(0xffEDCC23)),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 4,),
+                              const SizedBox(width: 4,),
                               AppElevatedButton(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 4),
                                 width: 40,
                                 showBorder: true,
                                 backgroundColor: Colors.transparent,
-                                borderColor: Color(0xffEDCC23),
+                                borderColor: const Color(0xffEDCC23),
                                 borderWidth: 1,
                                 titleTextColor: Colors.black,
-                                child: Icon(Icons.add,color: Colors.black,size: 20,),
+                                child: const Icon(Icons.add,color: Colors.black,size: 20,),
                                 onPressed: (){
 
                                   showModalBottomSheet(
@@ -109,21 +110,21 @@ class MenuAdminScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                                     ),
                                     builder: (context) {
-                                      return AddFoodItem(); // Your widget for the bottom sheet
+                                      return const AddFoodItem(); // Your widget for the bottom sheet
                                     },
                                   );
 
                                   // Get.bottomSheet(
-                                  //   AddFoodItem(),
+                                  //   const AddFoodItem(),
                                   //   isScrollControlled: true, // Allows the bottom sheet to expand with keyboard
-                                  //   backgroundColor: Color(0xffF4F5FA),
-                                  //   shape: RoundedRectangleBorder(
+                                  //   backgroundColor: const Color(0xffF4F5FA),
+                                  //   shape: const RoundedRectangleBorder(
                                   //     borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                                   //   ),
                                   // );
                                 },
                               ),
-                              SizedBox(width: 4,),
+                              const SizedBox(width: 4,),
                               Stack(
                                 children: [
                                   Obx(() {
@@ -144,7 +145,7 @@ class MenuAdminScreen extends StatelessWidget {
                                         right: 4,  // Adjust this to position it properly
                                         top: -2,    // Adjust this to position it properly
                                         child: Container(
-                                          decoration: BoxDecoration(
+                                          decoration: const BoxDecoration(
                                             color: Colors.red,
                                             shape: BoxShape.circle,
                                           ),
@@ -152,7 +153,7 @@ class MenuAdminScreen extends StatelessWidget {
                                             padding: const EdgeInsets.all(6.0),
                                             child: Text(
                                               activeFiltersCount.toString(),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.w500,
@@ -162,24 +163,24 @@ class MenuAdminScreen extends StatelessWidget {
                                         ),
                                       );
                                     } else {
-                                      return SizedBox.shrink(); // Return empty widget if no filters are active
+                                      return const SizedBox.shrink(); // Return empty widget if no filters are active
                                     }
                                   }),
                                   AppElevatedButton(
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                                    contentPadding: const EdgeInsets.symmetric(horizontal: 4),
                                     width: 40,
                                     showBorder: true,
                                     backgroundColor: Colors.transparent,
-                                    borderColor: Color(0xffEDCC23),
+                                    borderColor: const Color(0xffEDCC23),
                                     borderWidth: 1,
                                     titleTextColor: Colors.black,
-                                    child: Icon(Icons.filter_alt, color: Colors.black, size: 22),
+                                    child: const Icon(Icons.filter_alt, color: Colors.black, size: 22),
 
                                       onPressed: (){
                                       showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
-                                            return FilterMenuListAdmin();
+                                            return const FilterMenuListAdmin();
                                           }
                                       );
                                     },
@@ -201,11 +202,11 @@ class MenuAdminScreen extends StatelessWidget {
                   if (controller.allMenuItems.isNotEmpty) {
                     return Expanded(
                       child: ListView.builder(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                             left: 16.0, right: 16, top: 8, bottom: 16),
                         itemCount: controller.allMenuItems.length,
                         itemBuilder: (context, index) {
-                          print("${controller.allMenuItems[index].name} : ${controller.allMenuItems[index].id}");
+                          // print("${controller.allMenuItems[index].name} : ${controller.allMenuItems[index].id}");
                           return MenuItemWidget(
                             menuItem: controller.allMenuItems[index],
                             onEdit: () => controller.editMenuItem(context,
@@ -228,11 +229,11 @@ class MenuAdminScreen extends StatelessWidget {
                       ),
                     );
                   } else if (controller.isLoading.value) {
-                    return Expanded(
-                        child: const Center(child: CircularProgressIndicator()));
+                    return const Expanded(
+                        child: Center(child: CircularProgressIndicator()));
                   } else {
-                    return Expanded(
-                        child: const Center(child: Text("No orders found.")));
+                    return const Expanded(
+                        child: Center(child: Text("No orders found.")));
                   }
                 }),
 

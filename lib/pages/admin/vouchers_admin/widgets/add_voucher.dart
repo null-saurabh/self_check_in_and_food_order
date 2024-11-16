@@ -23,6 +23,7 @@ class AddVoucherAdmin extends StatelessWidget {
       init: AddVoucherAdminController(data: data),
       builder: (controller) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: const Color(0xffFFFEF9),
           body: Column(
             mainAxisSize: MainAxisSize.min,
@@ -46,7 +47,7 @@ class AddVoucherAdmin extends StatelessWidget {
                             Text(
                               'Food',
                               style: AppWidget.black24Text600Style(
-                                      color: Color(0xffE7C64E))
+                                      color: const Color(0xffE7C64E))
                                   .copyWith(height: 1),
                             ),
                             Text(
@@ -58,7 +59,7 @@ class AddVoucherAdmin extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8,)
+                    const SizedBox(height: 8,)
                   ]),
                 ),
               ),
@@ -103,7 +104,7 @@ class AddVoucherAdmin extends StatelessWidget {
                                 },
                                 title: "Auto Generate",
                                 titleTextColor: Colors.white,
-                                contentPadding: EdgeInsets.all(8),
+                                contentPadding: const EdgeInsets.all(8),
                               ),
                             ),
                           ),
@@ -146,7 +147,7 @@ class AddVoucherAdmin extends StatelessWidget {
                                                   .value = 'single-use';
                                             },
                                             checkColor: Colors.white,
-                                            activeColor: Color(0xff2563EB),
+                                            activeColor: const Color(0xff2563EB),
                                           ),
                                           Text(
                                             "Single Use",
@@ -167,7 +168,7 @@ class AddVoucherAdmin extends StatelessWidget {
                                                   .value = 'multi-use';
                                             },
                                             checkColor: Colors.white,
-                                            activeColor: Color(0xff2563EB),
+                                            activeColor: const Color(0xff2563EB),
                                           ),
                                           Text(
                                             "Multi Use",
@@ -188,7 +189,7 @@ class AddVoucherAdmin extends StatelessWidget {
                                                   .value = 'value-based';
                                             },
                                             checkColor: Colors.white,
-                                            activeColor: Color(0xff2563EB),
+                                            activeColor: const Color(0xff2563EB),
                                           ),
                                           Text(
                                             "Value Based",
@@ -234,7 +235,7 @@ class AddVoucherAdmin extends StatelessWidget {
                                                   .value = 'percentage';
                                             },
                                             checkColor: Colors.white,
-                                            activeColor: Color(0xff2563EB),
+                                            activeColor: const Color(0xff2563EB),
                                           ),
                                           Text(
                                             "Percentage Discount (%)",
@@ -255,7 +256,7 @@ class AddVoucherAdmin extends StatelessWidget {
                                                   .value = 'fixed-discount';
                                             },
                                             checkColor: Colors.white,
-                                            activeColor: Color(0xff2563EB),
+                                            activeColor: const Color(0xff2563EB),
                                           ),
                                           Text(
                                             "Fixed Discount (\u{20B9})",
@@ -411,7 +412,7 @@ class AddVoucherAdmin extends StatelessWidget {
                                   style: TextStyle(color: Colors.black),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 16,
                               ),
                               AppElevatedButton(
@@ -424,12 +425,12 @@ class AddVoucherAdmin extends StatelessWidget {
                                 backgroundColor: Colors.black,
                                 child: Text(
                                   isEdit ? "Save" : "Add",
-                                  style: TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                         ],

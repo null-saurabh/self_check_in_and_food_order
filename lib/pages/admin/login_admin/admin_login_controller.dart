@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -22,35 +23,25 @@ class AdminLoginController extends GetxController {
     isLoading.value = true;
 
     try {
-      final QuerySnapshot snapshot = await FirebaseFirestore.instance
+      print("login 0");
+
+      await AuthService.to.login(
+        usernameController.text.trim(),
+        passwordController.text.trim(),
+      );
+
+      print("login 1");
+      // Fetch the logged-in user's docId from Firebase Auth
+      final String userId = FirebaseAuth.instance.currentUser!.uid;
+      print("login 2");
+      // Update the login timestamp in Firestore
+      await FirebaseFirestore.instance
           .collection("AdminAccount")
-          .where("userId", isEqualTo: usernameController.text.trim())
-          .limit(1)
-          .get();
+          .doc(userId) // Use docId of the logged-in user
+          .update({
+        'loginData': FieldValue.arrayUnion([Timestamp.fromDate(DateTime.now())]),
+      });
 
-      if (snapshot.docs.isNotEmpty) {
-        final result = snapshot.docs.first;
-
-        if (result['password'] == passwordController.text.trim()) {
-          // Add the current login timestamp to loginData
-
-          List<DateTime> loginData = List<DateTime>.from(
-              result['loginData'].map((timestamp) => (timestamp as Timestamp).toDate()));
-
-          // print(DateTime.now());
-          loginData.add(DateTime.now());
-
-          await FirebaseFirestore.instance
-              .collection("AdminAccount")
-              .doc(result.id)
-              .update({
-            'loginData': loginData.map((date) => Timestamp.fromDate(date)).toList(),
-          });
-
-          AuthService.to.login();
-
-          // final Map<String, dynamic>? args = GoRouter.of(context).extra as Map<String, dynamic>?;
-          // String? intendedRoute = args != null ? args['redirect'] : null;
 
           String? intendedRoute = Uri.decodeComponent(GoRouterState.of(context).uri.queryParameters['redirect'] ?? '');
           if (intendedRoute != "" && intendedRoute.isNotEmpty) {
@@ -65,35 +56,12 @@ class AdminLoginController extends GetxController {
             // context.replace(Routes.adminHome);
 
           }
-        } else {
 
-          final snackBar = SnackBar(
-            content: const Text("Invalid Password"),
-            backgroundColor: Colors.orangeAccent,
-          );
-
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-        }
-      }
-
-      else {
-
-        final snackBar = SnackBar(
-          content: const Text("Invalid username"),
-          backgroundColor: Colors.orangeAccent,
-        );
-
-// Show the snackbar
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-
-      }
     } catch (e) {
 
-
+      print(e);
       final snackBar = SnackBar(
-        content: const Text("Failed to log in. Try again later."),
+        content:  Text("Failed to log in hjh. $e"),
         backgroundColor: Colors.redAccent,
       );
 

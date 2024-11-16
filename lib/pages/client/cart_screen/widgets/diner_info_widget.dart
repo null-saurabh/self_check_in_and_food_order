@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:wandercrew/widgets/edit_text.dart';
-
-import '../../../../widgets/app_dropdown.dart';
 import '../../../../widgets/widget_support.dart';
 import '../cart_screen_controller.dart';
 

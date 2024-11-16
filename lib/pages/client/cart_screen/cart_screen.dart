@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:wandercrew/pages/client/cart_screen/widgets/bill_summary_widget.dart';
 import 'package:wandercrew/pages/client/cart_screen/widgets/diner_info_widget.dart';
 import 'package:wandercrew/pages/client/cart_screen/widgets/donation_widget.dart';
 import 'package:wandercrew/widgets/app_elevated_button.dart';
 import '../../../models/cart_model.dart';
 import '../../../models/menu_item_model.dart';
+import '../../../widgets/edit_text.dart';
 import '../../../widgets/widget_support.dart';
 import '../menu_screen/widgets/single_product.dart';
 import '../self_checking_screen/widgets/gradient_texture.dart';
@@ -21,6 +21,7 @@ class CartScreen extends StatelessWidget {
       init: CartScreenController(),
       builder: (controller) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: const Color(0xffF4F5FA),
           body: Stack(
               children: [
@@ -89,11 +90,11 @@ class CartScreen extends StatelessWidget {
                                     children: [
                                       const Center(
                                           child: Text('Your cart is empty')),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 4,
                                       ),
                                       AppElevatedButton(
-                                        backgroundColor: Color(0xffFFDE1A),
+                                        backgroundColor: const Color(0xffFFDE1A),
                                         onPressed: () {
                                          controller.navigateToMenu(context);
                                         },
@@ -144,6 +145,7 @@ class CartScreen extends StatelessWidget {
                         const CartTipWidget(),
                         const SizedBox(height: 16.0),
                          CartCustomerInfoWidget(controller: controller,),
+
                         const SizedBox(height: 16.0),
                         AppElevatedButton(
                             width: 120,

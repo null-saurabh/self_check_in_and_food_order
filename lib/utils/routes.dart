@@ -16,6 +16,11 @@ import 'package:wandercrew/pages/client/track_order_screen/track_order_screen.da
 import 'package:wandercrew/service/auth_services.dart';
 
 import '../pages/admin/users_admin/manage_user_admin.dart';
+import '../pages/client/about_us_contact_us/about_us_screen.dart';
+import '../pages/client/about_us_contact_us/contact_us_screen.dart';
+import '../pages/client/about_us_contact_us/privacy_policy_screen.dart';
+import '../pages/client/about_us_contact_us/refund_cancellation_rule_screen.dart';
+import '../pages/client/about_us_contact_us/term_condition_screen.dart';
 
 
 
@@ -49,6 +54,28 @@ final GoRouter router = GoRouter(
       path: Routes.receptionTrackOrder,
       name: 'ReceptionTrackOrder',
       builder: (context, state) => const TrackOrderScreen(),
+    ),GoRoute(
+      path: Routes.termAndCondition,
+      name: 'TermAndCondition',
+      builder: (context, state) => const TermsAndConditionsPage(),
+    ),GoRoute(
+      path: Routes.privacyPolicy,
+      name: 'PrivacyPolicy',
+      builder: (context, state) => const PrivacyPolicyPage(),
+    ),GoRoute(
+      path: Routes.aboutUs,
+      name: 'AboutUs',
+      builder: (context, state) => const AboutUsPage(),
+    ),
+    GoRoute(
+      path: Routes.contactUs,
+      name: 'ContactUs',
+      builder: (context, state) => const ContactUsPage(),
+    ),
+    GoRoute(
+      path: Routes.refundCancellation,
+      name: 'RefundCancellation',
+      builder: (context, state) => const RefundCancellationPolicyPage(),
     ),
     GoRoute(
       path: Routes.adminLogin,
@@ -112,11 +139,11 @@ final GoRouter router = GoRouter(
 
 // Middleware auth check
 String? _authGuard(GoRouterState state) {
-  // final AuthService authService = AuthService.to;
-  // if (!authService.isLoggedIn.value) {
-  //   final redirectUri = Uri.encodeComponent(state.uri.toString());
-  //   return '${Routes.adminLogin}?redirect=$redirectUri';
-  // }
+  final AuthService authService = AuthService.to;
+  if (!authService.isLoggedIn.value) {
+    final redirectUri = Uri.encodeComponent(state.uri.toString());
+    return '${Routes.adminLogin}?redirect=$redirectUri';
+  }
   return null; // Allow access if authenticated
 }
 
@@ -131,6 +158,11 @@ class Routes {
   static const String receptionMenuCart = '/reception/menu/cart';
   static const String receptionCheckIn = '/reception/checkIn';
   static const String receptionTrackOrder = '/reception/track-order';
+  static const String termAndCondition = '/reception/terms-conditions';
+  static const String privacyPolicy = '/reception/privacy-policy';
+  static const String aboutUs = '/reception/about-us';
+  static const String contactUs = '/reception/contact-us';
+  static const String refundCancellation = '/reception/refund-cancellation';
 
   static const String adminLogin = '/admin/login';
   static const String adminHome = '/admin';
