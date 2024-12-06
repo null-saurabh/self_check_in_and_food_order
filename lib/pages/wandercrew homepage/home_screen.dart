@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/wandercrew%20homepage/widgets/book_now_section/book_now_section.dart';
 import 'package:wandercrew/pages/wandercrew%20homepage/widgets/cafe_section/cafe_section.dart';
 import 'package:wandercrew/pages/wandercrew%20homepage/widgets/footer_section/footer_section.dart';
 import 'package:wandercrew/pages/wandercrew%20homepage/widgets/last_section/last_section.dart';
 import 'package:wandercrew/pages/wandercrew%20homepage/widgets/offer_section/offer_section.dart';
 import 'package:wandercrew/pages/wandercrew%20homepage/widgets/why_wandercrew_section/why_wandercrew_section.dart';
+import 'package:wandercrew/widgets/widget_support.dart';
+import '../../utils/app_drawer.dart';
+import '../../utils/routes.dart';
 import 'home_screen_controller.dart';
 
 class WanderCrewHomePage extends StatefulWidget {
@@ -26,18 +30,31 @@ class _WanderCrewHomePageState extends State<WanderCrewHomePage> {
           final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
           return Scaffold(
             key: scaffoldKey,
+              endDrawer: const AppDrawer(),
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: IconButton(
-                      icon: const Icon(Icons.menu, color: Colors.white),
-                      onPressed: () {
-                        scaffoldKey.currentState?.openDrawer();
-                      },
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                            icon: const Icon(Icons.menu, color: Colors.black),
+                            onPressed: () {
+                              scaffoldKey.currentState?.openEndDrawer();
+                            },
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text("Wander Crew",style: AppWidget.black24Text600Style(),),
+                        ),
+                      ],
                     ),
-                  ),
+                  )
+                  ,
                   const OfferSectionHomepage(),
                    BookNowSectionHomePage(),
                   const WhyWandercrewSectionHomepage(),
@@ -61,5 +78,6 @@ class _WanderCrewHomePageState extends State<WanderCrewHomePage> {
         });
   }
 }
+
 
 

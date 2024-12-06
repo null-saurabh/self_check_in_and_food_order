@@ -5,7 +5,6 @@ import 'package:wandercrew/pages/client/self_checking_screen/widgets/form_button
 
 import '../check_in_controller.dart';
 import '../forms/form_one_document.dart';
-import '../forms/form_three_signature.dart';
 import '../forms/form_two_personal.dart';
 
 class CheckInFormContainer extends StatelessWidget {
@@ -89,13 +88,12 @@ class CheckInFormContainer extends StatelessWidget {
                     child: checkInController.currentPage.value == 0
                         ? const CheckInFormOneDocument(key: ValueKey('Page1'))
                         :
-          // checkInController.currentPage.value == 1
-          //                   ?
-          const CheckInFormTwoPersonal(
-                                key: ValueKey('Page2'))
-                            // : const CheckInFormThreeSignature(
-                            //     key: ValueKey('Page3'))),
-                ),
+                        // checkInController.currentPage.value == 1
+                        //                   ?
+                        const CheckInFormTwoPersonal(key: ValueKey('Page2'))
+                    // : const CheckInFormThreeSignature(
+                    //     key: ValueKey('Page3'))),
+                    ),
                 const SizedBox(height: 24),
                 Obx(() {
                   return FormButton(
@@ -130,7 +128,7 @@ class CheckInFormContainer extends StatelessWidget {
                       // }
                     },
                     name: checkInController.currentPage.value < 0
-                        ? "Next"
+                        ? "Nexx"
                         : "Submit",
                   );
                 }),

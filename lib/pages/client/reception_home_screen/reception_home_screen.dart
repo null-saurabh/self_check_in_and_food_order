@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/reception_controller.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/widgets/home_screen_menu_widget.dart';
 import 'package:wandercrew/utils/routes.dart';
 
+import '../../../utils/app_drawer.dart';
 import '../../../widgets/widget_support.dart';
 
 class ReceptionHomeScreen extends StatefulWidget {
@@ -19,21 +19,6 @@ class ReceptionHomeScreen extends StatefulWidget {
 class _ReceptionHomeScreenState extends State<ReceptionHomeScreen> {
 
   @override
-  void initState() {
-    super.initState();
-    // Preload the Lottie animation
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      precacheLottieAnimation('assets/animation/drawer_ani.json');
-    });
-  }
-
-// Helper function to preload Lottie animation
-  Future<void> precacheLottieAnimation(String assetPath) async {
-    await Lottie.asset(assetPath);
-  }
-
-
-  @override
   Widget build(BuildContext context) {
     return GetBuilder<ReceptionController>(
         init: ReceptionController(),
@@ -41,91 +26,7 @@ class _ReceptionHomeScreenState extends State<ReceptionHomeScreen> {
           final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
           return Scaffold(
             key: scaffoldKey,
-            drawer: Drawer(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  // Drawer header
-                   DrawerHeader(
-                     padding: EdgeInsets.zero,
-                    decoration: const BoxDecoration(
-                      color: Colors.transparent,
-                    ),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          child: FutureBuilder(
-                            future: precacheLottieAnimation('assets/animation/drawer_ani.json'),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.done) {
-                                return Lottie.asset(
-                                  'assets/animation/drawer_ani.json',
-                                  fit: BoxFit.contain,
-                                );
-                              } else {
-                                // Placeholder while loading
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                        const Positioned(
-                          top: 16,
-                          left: 16,
-                          right: 0,
-                          child: Text(
-                            'WanderCrew',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-
-                        // Title text overlay
-                      ],
-                    ),
-                  ),
-
-                  // Drawer items
-                  ListTile(
-                    leading: const Icon(Icons.contact_mail),
-                    title: const Text('Contact Us'),
-                    onTap: () {
-                      context.go(Routes.contactUs); // Replace with your actual route
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.info),
-                    title: const Text('About Us'),
-                    onTap: () {
-                      context.go(Routes.aboutUs); // Replace with your actual route
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.rule),
-                    title: const Text('Terms and Conditions'),
-                    onTap: () {
-                      context.go(Routes.termAndCondition); // Replace with your actual route
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.privacy_tip),
-                    title: const Text('Privacy Policies'),
-                    onTap: () {
-                      context.go(Routes.privacyPolicy); // Replace with your actual route
-                    },
-                  ),
-
-                ],
-              ),
-            ),
+            drawer: const AppDrawer(),
 
             // backgroundColor: const Color(0xfffdfded),
             body: RefreshIndicator(
