@@ -19,6 +19,15 @@ class AppWidget{
     );
   }
 
+  static TextStyle black32Text700Style() {
+    return GoogleFonts.poppins(
+      color: Colors.black,
+      fontSize: 32.0,
+      fontWeight: FontWeight.w700,
+
+    );
+  }
+
   static TextStyle headingYellowBoldTextStyle() {
     return GoogleFonts.poppins(
       color: Color(0XFFFFD12B),
@@ -113,6 +122,14 @@ class AppWidget{
     );
   }
 
+  static TextStyle green18Text600Style() {
+    return GoogleFonts.poppins(
+      color: Color(0xff4CAF50),
+      fontSize: 18.0,
+      fontWeight: FontWeight.w600,
+    );
+  }
+
   static TextStyle black18Text500Style() {
     return GoogleFonts.poppins(
       color: Colors.black,
@@ -201,11 +218,18 @@ class AppWidget{
     );
   }
 
-  static TextStyle whiteBold16TextStyle() {
+  static TextStyle white16Text600Style() {
     return GoogleFonts.poppins(
       color: Colors.white,
       fontSize: 16.0,
       fontWeight: FontWeight.w600,
+    );
+  }
+  static TextStyle white16Text400Style() {
+    return GoogleFonts.poppins(
+      color: Colors.white,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w400,
     );
   }
 

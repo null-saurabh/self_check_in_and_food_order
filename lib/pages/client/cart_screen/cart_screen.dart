@@ -6,7 +6,6 @@ import 'package:wandercrew/pages/client/cart_screen/widgets/donation_widget.dart
 import 'package:wandercrew/widgets/app_elevated_button.dart';
 import '../../../models/cart_model.dart';
 import '../../../models/menu_item_model.dart';
-import '../../../widgets/edit_text.dart';
 import '../../../widgets/widget_support.dart';
 import '../menu_screen/widgets/single_product.dart';
 import '../self_checking_screen/widgets/gradient_texture.dart';
@@ -96,7 +95,7 @@ class CartScreen extends StatelessWidget {
                                       AppElevatedButton(
                                         backgroundColor: const Color(0xffFFDE1A),
                                         onPressed: () {
-                                         controller.navigateToMenu(context);
+                                          controller.navigateToMenu(context);
                                         },
                                         title: "Menu",
                                         titleTextColor: Colors.black,
@@ -148,8 +147,8 @@ class CartScreen extends StatelessWidget {
 
                         const SizedBox(height: 16.0),
                         AppElevatedButton(
-                            width: 120,
-                            title: "Pay Now",
+                            width: 160,
+                            title: "Order Now",
                             titleTextColor: Colors.white,
                             titleTextSize: 16,
                             titleFontWeight: FontWeight.w400,
@@ -157,7 +156,7 @@ class CartScreen extends StatelessWidget {
                               if (controller
                                   .cartDinnerInfoFormKey.currentState!
                                   .validate()) {
-                                await controller.initiatePayment(context);
+                                await controller.onSuccess(context);
                               }
                             }
                             ),

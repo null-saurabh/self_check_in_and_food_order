@@ -87,6 +87,7 @@ class SingleProduct extends StatelessWidget {
                           child: Text(
                             menuItem.description!,
                             style: AppWidget.black10Text400Style(),
+                            overflow: TextOverflow.ellipsis,
                           )),
                       // const SizedBox(
                       //   height: 4.0,

@@ -93,7 +93,7 @@ class CheckInController extends GetxController {
           orElse: () => countries.first,
         );
         // print("fetching country 6");
-        fetchStates(selectedCountry.value!['code']!);
+        // fetchStates(selectedCountry.value!['code']!);
         // print("fetching country 6");
         documentIssueCountry.value = selectedCountry.value!['name'];
         // print("fetching country 6");
@@ -197,12 +197,12 @@ class CheckInController extends GetxController {
   TextEditingController email = TextEditingController();
   TextEditingController contact = TextEditingController();
   TextEditingController age = TextEditingController();
-  TextEditingController address = TextEditingController();
-  TextEditingController city = TextEditingController();
+  // TextEditingController address = TextEditingController();
+  // TextEditingController city = TextEditingController();
 
   RxnString gender = RxnString();
   var country = 'India'.obs;
-  var regionState = ''.obs;
+  // var regionState = ''.obs;
 
   RxList<String> states = <String>[].obs;
 
@@ -262,23 +262,23 @@ class CheckInController extends GetxController {
 
 
   // Fetch state list based on selected country
-  Future<void> fetchStates(String countryCode) async {
-    try {
-      final response = await http.get(Uri.parse(
-          'https://secure.geonames.org/childrenJSON?geonameId=$countryCode&username=wandercrew'));
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body)['geonames'];
-        states.value = data.map((state) => state['name'].toString()).toList();
-        states.sort(); // Sort states alphabetically
-      } else {
-        debugPrint("Error: Failed to fetch states");
-
-      }
-    } catch (e) {
-    debugPrint("Error: Unable to fetch states. Please check your internet connection.");
-
-    }
-  }
+  // Future<void> fetchStates(String countryCode) async {
+  //   try {
+  //     final response = await http.get(Uri.parse(
+  //         'https://secure.geonames.org/childrenJSON?geonameId=$countryCode&username=wandercrew'));
+  //     if (response.statusCode == 200) {
+  //       final List<dynamic> data = jsonDecode(response.body)['geonames'];
+  //       states.value = data.map((state) => state['name'].toString()).toList();
+  //       states.sort(); // Sort states alphabetically
+  //     } else {
+  //       debugPrint("Error: Failed to fetch states");
+  //
+  //     }
+  //   } catch (e) {
+  //   debugPrint("Error: Unable to fetch states. Please check your internet connection.");
+  //
+  //   }
+  // }
 
   // Page 3
   TextEditingController arrivingFromController = TextEditingController();
@@ -424,13 +424,13 @@ class CheckInController extends GetxController {
             // Handle email
             contact: selectedCountryCode.value + contact.text,
             age: age.text,
-            address: address.text.isNotEmpty ? address.text : null,
+            // address: address.text.isNotEmpty ? address.text : null,
             // Handle address
-            city: city.text.isNotEmpty ? city.text : null,
+            // city: city.text.isNotEmpty ? city.text : null,
             // Handle city
             gender: gender.value!,
             country: country.value,
-            regionState: regionState.value,
+            // regionState: regionState.value,
             arrivingFrom: arrivingFromController.text.isNotEmpty
                 ? arrivingFromController.text
                 : null,
@@ -734,8 +734,8 @@ class CheckInController extends GetxController {
     email.clear();
     contact.clear();
     age.clear();
-    address.clear();
-    city.clear();
+    // address.clear();
+    // city.clear();
     documentType.value = '';
     // frontDocument.value = '';
     // backDocument.value.c;

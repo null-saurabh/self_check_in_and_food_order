@@ -130,6 +130,7 @@ class CheckInFormTwoPersonal extends StatelessWidget {
                   onValidate: Validators.requiredField,
                 ),
 
+
                 // Gender Dropdown
                 FormField<String>(validator: (value) {
                   if (selfCheckingController.gender.value == null) {
@@ -217,87 +218,20 @@ class CheckInFormTwoPersonal extends StatelessWidget {
                           ),
                       ]);
                 }),
-                const SizedBox(
-                  height: 12,
-                ),
-                // Address
+                SizedBox(height: 12,),
                 EditText(
-                  labelText: "Address*",
-                  hint: "Enter Address",
-                  controller: selfCheckingController.address,
+                  labelText: "Arriving From*",
+                  hint: "Enter Place",
+                  controller: selfCheckingController.arrivingFromController,
+                  onValidate: Validators.requiredField,
+                ),
+                EditText(
+                  labelText: "Going To*",
+                  hint: "Enter Place",
+                  controller: selfCheckingController.goingToController,
                   onValidate: Validators.requiredField,
                 ),
 
-                // City
-                EditText(
-                  labelText: "City",
-                  hint: "Enter City",
-                  controller: selfCheckingController.city,
-                  // onValidate: Validators.requiredField,
-                ),
-
-                AppDropDown(
-                  items: selfCheckingController.countries.map((country) {
-                    return DropdownMenuItem(
-                        value: country, child: Text(country['name']!));
-                  }).toList(),
-                  onChange: (value) {
-                    selfCheckingController.selectedCountry.value = value!;
-                    selfCheckingController.regionState.value = "";
-                    selfCheckingController.fetchStates(value[
-                        'code']!); // Use the country code for fetching states
-                  },
-                  value: selfCheckingController.selectedCountry.value,
-                  labelText: "Country",
-                  showLabel: true,
-                  height: 40,
-                  iconColor: Colors.grey,
-                  // width: 60,
-                  // dropDownWidth: 200,
-                  showSearch: true,
-                  searchCtrl: TextEditingController(),
-                  searchMatchFn: (item, searchValue) {
-                    searchValue = searchValue.toLowerCase();
-                    return item.value
-                        .toString()
-                        .toLowerCase()
-                        .contains(searchValue);
-                  },
-                  onValidate: Validators.requiredField,
-                ),
-
-                const SizedBox(height: 12),
-
-                // Region/State Dropdown
-                Obx(() {
-                  return AppDropDown(
-                    items: selfCheckingController.states.map((state) {
-                      return DropdownMenuItem(value: state, child: Text(state));
-                    }).toList(),
-                    onChange: (value) =>
-                        selfCheckingController.regionState.value = value!,
-                    value: selfCheckingController.regionState.value.isNotEmpty
-                        ? selfCheckingController.regionState.value
-                        : null,
-                    labelText: "Region/State*",
-                    hintText: "Select State",
-                    showLabel: true,
-                    height: 40,
-                    iconColor: Colors.grey,
-                    // width: 60,
-                    // dropDownWidth: 200,
-                    onValidate: Validators.requiredField,
-                    showSearch: true,
-                    searchCtrl: TextEditingController(),
-                    searchMatchFn: (item, searchValue) {
-                      searchValue = searchValue.toLowerCase();
-                      return item.value
-                          .toString()
-                          .toLowerCase()
-                          .contains(searchValue);
-                    },
-                  );
-                }),
 
                 // Next Button
               ],

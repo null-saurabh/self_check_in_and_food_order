@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactUsPage extends StatelessWidget {
-  final String address = "WanderCrew, Chichoga Road, Aleo, Manali, Himachal Pradesh, Bharat";
+  final String address = "Durga Ashram Gali, Sheikhpura Bagicha, Patna, Bihar Pin - 800014";
   final String phone1 = "9709568649";
   final String phone2 = "8597788095";
   final String email = "wandercrew9@gmail.com";
@@ -15,7 +15,7 @@ class ContactUsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Contact Us"),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

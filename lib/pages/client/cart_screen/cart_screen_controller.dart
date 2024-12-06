@@ -13,6 +13,9 @@ import 'package:http/http.dart' as http;
 import 'dart:html' as html;
 
 import '../../../utils/routes.dart';
+import '../../../widgets/app_elevated_button.dart';
+import '../../../widgets/confirmDialog.dart';
+import '../../../widgets/widget_support.dart';
 
 
 
@@ -310,7 +313,7 @@ class CartScreenController extends GetxController {
   }
 
 
-  Future<void> onSuccess(BuildContext context,response) async {
+  Future<void> onSuccess(BuildContext context) async {
 
     try {
 
@@ -324,9 +327,9 @@ class CartScreenController extends GetxController {
         },
       );
 
-      String transactionID =
-          response['razorpay_payment_id']; // From Razorpay response
-      String orderId = response['razorpay_order_id'];
+      // String transactionID =
+      //     response['razorpay_payment_id']; // From Razorpay response
+      // String orderId = response['razorpay_order_id'];
       String todayDate = DateTime.now().toIso8601String();
 
       // Create a list of OrderedItemModels from cart items
@@ -343,8 +346,8 @@ class CartScreenController extends GetxController {
       // Create order model
       FoodOrderModel orderData = FoodOrderModel(
         id: "",
-        orderId: orderId, // Firebase will generate the ID
-        transactionId: transactionID,
+        // orderId: orderId, // Firebase will generate the ID
+        // transactionId: transactionID,
         dinerName: dinerName.text, //dinerName.text,
         orderStatusHistory: [
           OrderStatusUpdate(
@@ -357,12 +360,12 @@ class CartScreenController extends GetxController {
         paymentMethod: "", // Or other payment methods
         orderDate: todayDate,
         deliveryAddress:
-           deliveryAddressController.text, //deliveryAddressController.text, // Replace with dynamic data
+           deliveryAddressController.text == "" ? 'N/A' :  deliveryAddressController.text, //deliveryAddressController.text, // Replace with dynamic data
         contactNumber:
             contactNumberController.text, //contactNumberController.text, // Replace with dynamic data
         estimatedDeliveryTime: "30 mins", // Dynamically adjust
         paymentStatus: "",
-        specialInstructions: instructionController.text,
+        specialInstructions: instructionController.text == "" ? 'N/A' : instructionController.text,
         createdAt: DateTime.now(),
         couponCode: isCouponApplied.value ? coupon.value!.code: null,
         discount: isCouponApplied.value ? discountAmount.value: null,
@@ -422,14 +425,91 @@ class CartScreenController extends GetxController {
       }
 
       context.pop();
-      navigateToMenu(context);
+      // navigateToMenu(context);
 
-      final snackBar = SnackBar(
-        content: Text("Success Order placed successfully!."),
-        backgroundColor: Colors.green,
+      // const snackBar = SnackBar(
+      //   content: Text("Success Order placed successfully!."),
+      //   backgroundColor: Colors.green,
+      // );
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.circular(12.0), // Customize the radius here
+            ),
+            backgroundColor: const Color(0xffFFFEF9),
+            child: Container(
+              constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.68),
+              child: Padding(
+                padding:
+                const EdgeInsets.only(top: 20, right: 20.0, left: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Order Placed!",
+                      style: AppWidget.green18Text600Style(),
+                    ),
+
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppElevatedButton(
+                            title: "Track",
+                            height: 40,
+                            titleTextSize: 14,
+                            borderColor: Colors.transparent,
+                            titleTextColor: Colors.white,
+                            backgroundColor: Color(0xff2196F3),
+                            onPressed: () {
+                              context.pop();
+                              navigateToTrackOrder(context);
+                            },
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        Expanded(
+                          child: AppElevatedButton(
+                            title: "Ok",
+                            height: 40,
+                            titleTextSize: 14,
+                            titleTextColor: Color(0xff212121),
+                            backgroundColor: Color(0xffE0E0E0),
+                            onPressed: () {
+                              context.pop();
+                              navigateToMenu(context);
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
+
+
+
+
 
     } catch (e) {
 
@@ -541,6 +621,17 @@ class CartScreenController extends GetxController {
     // html.window.history.replaceState({}, '', Routes.receptionHome);
     context.go(Routes.receptionMenu);
   }
+
+
+  void navigateToTrackOrder(BuildContext context) {
+
+    // Replace the current route with the new route
+    html.window.history.replaceState({}, '', '/reception');
+    // html.window.history.replaceState({}, '', Routes.receptionHome);
+    context.go(Routes.receptionTrackOrder);
+  }
+
+
 
 
   // Handle payment failure
@@ -655,7 +746,7 @@ class CartScreenController extends GetxController {
         );
       } else {
         fetchRazorpayKey();
-        final snackBar = SnackBar(
+        const snackBar = SnackBar(
           content: Text("Error: Razorpay error. Try again! If persists, Please contact WanderCrew Team."),
           backgroundColor: Colors.red,
         );
@@ -666,7 +757,7 @@ class CartScreenController extends GetxController {
 
       }
     } else {
-      final snackBar = SnackBar(
+      const snackBar = SnackBar(
         content: Text("Error: Total amount must be greater than zero."),
         backgroundColor: Colors.red,
       );

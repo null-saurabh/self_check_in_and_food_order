@@ -10,11 +10,11 @@ class SelfCheckInModel {
   final String? email; // Optional
   final String contact;
   final String age;
-  final String? address; // Optional
-  final String? city; // Optional
+  // final String? address; // Optional
+  // final String? city; // Optional
   final String gender;
   final String country;
-  final String regionState;
+  // final String regionState;
   final String? arrivingFrom; // Optional
   final String? goingTo; // Optional
   final String signatureUrl;
@@ -37,11 +37,11 @@ class SelfCheckInModel {
     required this.age,
     required this.gender,
     required this.country,
-    required this.regionState,
+    // required this.regionState,
     required this.signatureUrl,
     this.email,
-    this.address,
-    this.city,
+    // this.address,
+    // this.city,
 
     this.arrivingFrom,
     this.goingTo,
@@ -64,11 +64,11 @@ class SelfCheckInModel {
       email: data['email'], // May be null
       contact: data['contact'],
       age: data['age'],
-      address: data['address'], // May be null
-      city: data['city'], // May be null
+      // address: data['address'], // May be null
+      // city: data['city'], // May be null
       gender: data['gender'],
       country: data['country'],
-      regionState: data['regionState'],
+      // regionState: data['regionState'],
       arrivingFrom: data['arrivingFrom'], // May be null
       goingTo: data['goingTo'], // May be null
       signatureUrl: data['signatureUrl'],
@@ -91,11 +91,11 @@ class SelfCheckInModel {
       'email' : email,
       'contact': contact,
       'age': age,
-      'address': address,
-      'city':city,
+      // 'address': address,
+      // 'city':city,
       'gender': gender,
       'country': country,
-      'regionState': regionState,
+      // 'regionState': regionState,
       'arrivingFrom':arrivingFrom,
       'goingTo':goingTo,
       'signatureUrl': signatureUrl,
@@ -114,8 +114,8 @@ class SelfCheckInModel {
     // if (createdAt != null) data[
     // if (updatedAt != null) data['updatedAt'] = Timestamp.fromDate(updatedAt!);
     if (email != null && email!.isNotEmpty) data['email'] = email;
-    if (address != null && address!.isNotEmpty) data['address'] = address;
-    if (city != null && city!.isNotEmpty) data['city'] = city;
+    // if (address != null && address!.isNotEmpty) data['address'] = address;
+    // if (city != null && city!.isNotEmpty) data['city'] = city;
     if (arrivingFrom != null && arrivingFrom!.isNotEmpty) data['arrivingFrom'] = arrivingFrom;
     if (goingTo != null && goingTo!.isNotEmpty) data['goingTo'] = goingTo;
 

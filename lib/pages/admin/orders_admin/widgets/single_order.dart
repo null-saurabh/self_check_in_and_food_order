@@ -9,7 +9,7 @@ class SingleOrder extends StatelessWidget {
   final FoodOrderModel orderData;
   final VoidCallback markAsConfirm;
   final VoidCallback markAsDelivered;
-  final VoidCallback initiateRefund;
+  // final VoidCallback initiateRefund;
   final VoidCallback onCallPressed;
 
   const SingleOrder(
@@ -17,7 +17,7 @@ class SingleOrder extends StatelessWidget {
       required this.orderData,
       required this.markAsConfirm,
       required this.markAsDelivered,
-      required this.initiateRefund,
+      // required this.initiateRefund,
       required this.onCallPressed});
 
   @override
@@ -58,7 +58,7 @@ class SingleOrder extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       Text(
@@ -75,12 +75,12 @@ class SingleOrder extends StatelessWidget {
                             orderData.contactNumber,
                             style: AppWidget.black16Text500Style(),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 4,
                           ),
                           GestureDetector(
                             onTap: onCallPressed,
-                            child: Icon(
+                            child: const Icon(
                               Icons.call,
                               color: Colors.green,
                               size: 20,
@@ -115,7 +115,7 @@ class SingleOrder extends StatelessWidget {
                             ),
                           ],
                         ),
-                      SizedBox(
+                      const SizedBox(
                         height: 12,
                       ),
                       Text(
@@ -125,7 +125,7 @@ class SingleOrder extends StatelessWidget {
                             .join('\n'),
                         style: AppWidget.black16Text500Style(),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       if(orderData.isRefunded != null)
@@ -155,7 +155,7 @@ class SingleOrder extends StatelessWidget {
                         ],
                       ),
                       if(orderData.isRefunded != null)
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
 
@@ -186,7 +186,7 @@ class SingleOrder extends StatelessWidget {
                         ],
                       ),
                       if(orderData.couponCode != null || orderData.discount != null)
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
 
@@ -195,16 +195,16 @@ class SingleOrder extends StatelessWidget {
                           children: [
                             Text("\u{20B9}${orderData.totalAmount.toString()}",
                                 style: AppWidget.black16Text500Style(
-                                  color: Color(0xff2563EB),
+                                  color: const Color(0xff2563EB),
                                 )),
-                            SizedBox(width: 4,),
-                            VerticalDivider(
+                            const SizedBox(width: 4,),
+                            const VerticalDivider(
                               color: Colors
                                   .black, // You can change the color as needed
                               thickness: 1, // Thickness of the divider
                               width: 8, // The space occupied by the divider
                             ),
-                            SizedBox(width: 4,),
+                            const SizedBox(width: 4,),
 
                             Text(
                               DateTimeUtils.formatDateTime(
@@ -227,7 +227,7 @@ class SingleOrder extends StatelessWidget {
                                         : orderData.orderStatusHistory.last
                                                     .status ==
                                                 "Confirmed"
-                                            ? Color(0xffFFB700)
+                                            ? const Color(0xffFFB700)
                                             : Colors.red),
                           ),
                           Text(
@@ -236,7 +236,7 @@ class SingleOrder extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 12,
                       ),
                       Row(
@@ -264,21 +264,21 @@ class SingleOrder extends StatelessWidget {
                                 }
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 8,
                             ),
                           ],
-                          orderData.isRefunded != null && orderData.isRefunded! == 'complete refund'
-                          ? SizedBox.shrink()
-                          :AppElevatedButton(
-                            showBorder: true,
-                            backgroundColor: Colors.transparent,
-                            title: "Refund",
-                            titleTextColor: Colors.red,
-                            onPressed: () {
-                              initiateRefund();
-                            },
-                          ),
+                          // orderData.isRefunded != null && orderData.isRefunded! == 'complete refund'
+                          // ? SizedBox.shrink()
+                          // :AppElevatedButton(
+                          //   showBorder: true,
+                          //   backgroundColor: Colors.transparent,
+                          //   title: "Refund",
+                          //   titleTextColor: Colors.red,
+                          //   onPressed: () {
+                          //     initiateRefund();
+                          //   },
+                          // ),
                         ],
                       )
                     ],
@@ -297,7 +297,7 @@ class SingleOrder extends StatelessWidget {
                       :orderData.orderStatusHistory.last.status == "Pending"
                       ? Colors.red
                       : orderData.orderStatusHistory.last.status == "Confirmed"
-                          ? Color(0xffFFB700) // Yellow for preparing
+                          ? const Color(0xffFFB700) // Yellow for preparing
                           : orderData.orderStatusHistory.last.status ==
                                   "Delivered"
                               ? Colors.green
@@ -314,19 +314,19 @@ class SingleOrder extends StatelessWidget {
                           : orderData.orderStatusHistory.last.status == "Delivered"
                               ? "Completed"
                               : "error",
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             )
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 12,
         )
       ],

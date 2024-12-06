@@ -13,11 +13,6 @@ class PrivacyPolicyPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Privacy Policy",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16),
-            Text(
               "Effective Date: 01/11/2024\n\n"
                   "This Privacy Policy describes how we collect, use, and protect your personal information when you use our website and app ('Service'). By using the Service, you agree to the terms outlined in this policy.\n\n"
                   "1. Information We Collect:\n"

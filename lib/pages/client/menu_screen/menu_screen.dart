@@ -109,7 +109,6 @@ class MenuScreen extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                       ),
-
                       // Speech bubble container next to the girl image
                       Positioned(
                         top: -76,
@@ -147,7 +146,7 @@ class MenuScreen extends StatelessWidget {
 
               Obx(() {
                 return controller.itemTotalAmount == 0
-                    ? SizedBox()
+                    ? const SizedBox()
                     : Positioned(
                         bottom: 0,
                         child: GestureDetector(
@@ -159,9 +158,9 @@ class MenuScreen extends StatelessWidget {
                           child: Container(
                             height: 32,
                             width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               // Apply linear gradient
-                              gradient: const LinearGradient(
+                              gradient: LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
@@ -180,10 +179,10 @@ class MenuScreen extends StatelessWidget {
                                 Obx(() {
                                   return Text(
                                     "${controller.totalQuantity} item added",
-                                    style: TextStyle(color: Colors.white),
+                                    style: const TextStyle(color: Colors.white),
                                   );
                                 }),
-                                Icon(Icons.arrow_forward_outlined,
+                                const Icon(Icons.arrow_forward_outlined,
                                     color: Colors.white),
                               ],
                             ),

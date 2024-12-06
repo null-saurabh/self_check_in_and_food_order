@@ -13,11 +13,6 @@ class RefundCancellationPolicyPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Refund and Cancellation Policy",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16),
-            Text(
               "Effective Date: 01/11/2024\n\n"
                   "This Refund and Cancellation Policy applies to all purchases made through our Service.\n\n"
                   "1. Refund Eligibility:\n"

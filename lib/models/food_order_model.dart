@@ -71,8 +71,8 @@ class OrderStatusUpdate {
 class FoodOrderModel {
 
   String id;                       // Unique ID for each order
-  String orderId;                       // Unique ID for each order
-  String transactionId;                 // from razorpay
+  String? orderId;                       // Unique ID for each order
+  String? transactionId;                 // from razorpay
   String dinerName;// Reference to the user placing the order
   List<OrderStatusUpdate> orderStatusHistory;  // Track order status changes with time
   // String orderStatus;                   // e.g., Pending, Confirmed, Delivered, Cancelled
@@ -82,7 +82,7 @@ class FoodOrderModel {
   String orderDate;                     // Date and time of the order
   String deliveryAddress;               // Address where the order should be delivered
   String contactNumber;                 // Contact number for delivery updates
-  String? specialInstructions;          // Any special instructions for the order
+  String specialInstructions;          // Any special instructions for the order
   double? discount;                     // Any discount applied to the order
   String? couponCode;                   // Coupon code applied, if any
   // String deliveryStatus;                // Status of delivery (e.g., Preparing, Out for Delivery, Delivered)
@@ -95,8 +95,8 @@ class FoodOrderModel {
   int? refundAmount;
   FoodOrderModel({
     required this.id,
-    required this.orderId,
-    required this.transactionId,
+    this.orderId,
+    this.transactionId,
     required this.dinerName,
     required this.orderStatusHistory,
     // required this.orderStatus,
@@ -106,7 +106,7 @@ class FoodOrderModel {
     required this.orderDate,
     required this.deliveryAddress,
     required this.contactNumber,
-    this.specialInstructions,
+    required this.specialInstructions,
     this.discount,
     this.couponCode,
     // required this.deliveryStatus,

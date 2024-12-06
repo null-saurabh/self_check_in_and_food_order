@@ -39,7 +39,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                   "6. Termination:\n"
                   "- We reserve the right to suspend or terminate your access to the Service for any violation of these Terms.\n\n"
                   "7. Governing Law:\n"
-                  "- These Terms are governed by the laws of [Your Country]. Disputes will be resolved in the courts of [Your Location].\n\n"
+                  "- These Terms are governed by the laws of India. Disputes will be resolved in the courts of Patna.\n\n"
                   "8. Changes to Terms:\n"
                   "- We may update these Terms at any time. Continued use of the Service constitutes acceptance of any changes.\n\n"
                   "For any inquiries or complaints, contact us at wandercrew9@gmail.com.",

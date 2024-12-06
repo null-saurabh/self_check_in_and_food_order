@@ -88,12 +88,14 @@ class CheckInFormContainer extends StatelessWidget {
                     },
                     child: checkInController.currentPage.value == 0
                         ? const CheckInFormOneDocument(key: ValueKey('Page1'))
-                        : checkInController.currentPage.value == 1
-                            ? const CheckInFormTwoPersonal(
+                        :
+          // checkInController.currentPage.value == 1
+          //                   ?
+          const CheckInFormTwoPersonal(
                                 key: ValueKey('Page2'))
-                            : const CheckInFormThreeSignature(
-                                key: ValueKey('Page3'))),
-                // ),
+                            // : const CheckInFormThreeSignature(
+                            //     key: ValueKey('Page3'))),
+                ),
                 const SizedBox(height: 24),
                 Obx(() {
                   return FormButton(
@@ -110,22 +112,24 @@ class CheckInFormContainer extends StatelessWidget {
                         // print("validating form 2");
                         if (checkInController.formKeyPage2.currentState!
                             .validate()) {
-                          checkInController.nextPage();
+                          checkInController.submitData(context);
+                          // checkInController.nextPage();
                         } else {
                           checkInController.receptionistText.value =
                               "Ops! Looks like there some issue.";
                         }
-                      } else {
-                        if (checkInController.formKeyPage3.currentState!
-                            .validate()) {
-                          checkInController.submitData(context);
-                        } else {
-                          checkInController.receptionistText.value =
-                              "Sign Please.";
-                        }
                       }
+                      // else {
+                      //   if (checkInController.formKeyPage3.currentState!
+                      //       .validate()) {
+                      //     checkInController.submitData(context);
+                      //   } else {
+                      //     checkInController.receptionistText.value =
+                      //         "Sign Please.";
+                      //   }
+                      // }
                     },
-                    name: checkInController.currentPage.value < 2
+                    name: checkInController.currentPage.value < 0
                         ? "Next"
                         : "Submit",
                   );

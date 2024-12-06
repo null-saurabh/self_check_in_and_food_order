@@ -112,9 +112,9 @@ class CheckInListController extends GetxController {
         List<SelfCheckInModel> filteredCheckIns = checkIns.where((item) {
           return item.fullName.toLowerCase().contains(queryLower) ||
               item.contact.toLowerCase().contains(queryLower) ||
-              (item.address ?? "address").toLowerCase().contains(queryLower) ||
-              (item.email ?? "").toLowerCase().contains(queryLower) ||
-              item.regionState.toLowerCase().contains(queryLower);
+              // (item.address ?? "address").toLowerCase().contains(queryLower) ||
+              (item.email ?? "").toLowerCase().contains(queryLower);
+              // item.regionState.toLowerCase().contains(queryLower);
         }).toList();
 
         // Only add to the filteredGroupedData if there are matching check-ins for this date
@@ -317,13 +317,13 @@ class CheckInListController extends GetxController {
                 _buildInfoRow('Age', checkInItem.age.toString()),
                 _buildInfoRow('Gender', checkInItem.gender),
                 _buildInfoRow('Country', checkInItem.country),
-                _buildInfoRow('State', checkInItem.regionState),
+                // _buildInfoRow('State', checkInItem.regionState),
                 if (checkInItem.email != null)
                   _buildInfoRow('Email', checkInItem.email!),
-                if (checkInItem.address != null)
-                  _buildInfoRow('Address', checkInItem.address!),
-                if (checkInItem.city != null)
-                  _buildInfoRow('City', checkInItem.city!),
+                // if (checkInItem.address != null)
+                //   _buildInfoRow('Address', checkInItem.address!),
+                // if (checkInItem.city != null)
+                //   _buildInfoRow('City', checkInItem.city!),
                 if (checkInItem.arrivingFrom != null)
                   _buildInfoRow('Arriving From', checkInItem.arrivingFrom!),
                 if (checkInItem.goingTo != null)

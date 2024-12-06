@@ -72,7 +72,7 @@ class AdminOrderListController extends GetxController {
       applyDefaultFilter();
       applyRangeFilters();
       update();
-      return null;
+      return;
     }
     selectedFilter.value = label;
 
@@ -144,7 +144,7 @@ class AdminOrderListController extends GetxController {
         // Check if the end date is provided
         if (filterToDate.text.isNotEmpty) {
           DateTime end = DateFormat("dd-MMM-yy").parse(filterToDate.text);
-          matchesDateRange = matchesDateRange && DateTime.parse(order.orderDate).isBefore(end.add(Duration(days: 1)));
+          matchesDateRange = matchesDateRange && DateTime.parse(order.orderDate).isBefore(end.add(const Duration(days: 1)));
         }
 
         return matchesOrderValue && matchesDateRange && matchesStatus;
@@ -156,7 +156,7 @@ class AdminOrderListController extends GetxController {
     }
 
 
-  void SearchFilterOrderItems(String query) {
+  void searchFilterOrderItems(String query) {
     if (query.isEmpty) {
       orderList.value =
           List.from(originalOrderList); // Restore the original data
@@ -167,7 +167,7 @@ class AdminOrderListController extends GetxController {
         final queryLower = query.toLowerCase();
 
         return item.dinerName.toLowerCase().contains(queryLower) ||
-            item.orderId.toLowerCase().contains(queryLower) ||
+            item.id.toLowerCase().contains(queryLower) ||
             item.contactNumber.toLowerCase().contains(queryLower);
       }).toList();
     }
@@ -178,7 +178,7 @@ class AdminOrderListController extends GetxController {
 
 
   void makePhoneCall(String number) {
-    String phoneNumber = '$number';
+    String phoneNumber = number;
     html.window.open('tel:$phoneNumber', '_self');
   }
 
@@ -208,15 +208,15 @@ class AdminOrderListController extends GetxController {
       //   print(docId);
       // }
 
-      print(item.orderId);
+      // print(item.orderId);
         DocumentSnapshot orderSnapshot = await FirebaseFirestore.instance
             .collection("Orders")
             .doc(item.id)
             .get();
-        print("confirm 6");
+        // print("confirm 6");
 
         if (orderSnapshot.exists) {
-          print("confirm 7");
+          // print("confirm 7");
 
           // Parse the order data into OrderModel
           FoodOrderModel order = FoodOrderModel.fromMap(
@@ -246,7 +246,7 @@ class AdminOrderListController extends GetxController {
           // print("confirm 9");
           fetchOrderData();
           context.pop();
-          final snackBar = SnackBar(
+          const snackBar = SnackBar(
             content: Text("Success', 'Order status updated to Preparing"),
             backgroundColor: Colors.green,
           );
@@ -257,11 +257,11 @@ class AdminOrderListController extends GetxController {
         }
 
         else {
-          print("confirm 8");
+          // print("confirm 8");
 
           context.pop();
 
-          final snackBar = SnackBar(
+          const snackBar = SnackBar(
             content: Text('Order not found'),
             backgroundColor: Colors.red,
           );
@@ -339,7 +339,7 @@ class AdminOrderListController extends GetxController {
 
           fetchOrderData();
           context.pop();
-          final snackBar = SnackBar(
+          const snackBar = SnackBar(
             content: Text('Order marked as Delivered'),
             backgroundColor: Colors.green,
           );
@@ -349,7 +349,7 @@ class AdminOrderListController extends GetxController {
 
         } else {
 
-          final snackBar = SnackBar(
+          const snackBar = SnackBar(
             content: Text('Order not found'),
             backgroundColor: Colors.red,
           );

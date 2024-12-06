@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+// import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +7,7 @@ import 'package:wandercrew/widgets/app_elevated_button.dart';
 import 'package:wandercrew/widgets/elevated_container.dart';
 import 'package:wandercrew/widgets/widget_support.dart';
 import 'dart:html' as html;
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 
 
 import '../../../models/user_model.dart';

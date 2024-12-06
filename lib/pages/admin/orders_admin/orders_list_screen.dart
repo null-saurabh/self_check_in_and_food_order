@@ -3,10 +3,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/admin/orders_admin/widgets/order_filter_alert.dart';
 import 'package:wandercrew/pages/admin/orders_admin/widgets/single_order.dart';
-import 'package:wandercrew/service/razorpay_web.dart';
 import '../../../widgets/app_elevated_button.dart';
-import '../../../widgets/edit_text.dart';
-import '../../../widgets/elevated_container.dart';
 import '../../../widgets/filter_button.dart';
 import '../../../widgets/widget_support.dart';
 import 'admin_order_controller.dart';
@@ -73,7 +70,7 @@ class OrdersListScreen extends StatelessWidget {
                                     height: 40,
                                     child: TextField(
                                       onChanged: (value) =>
-                                          controller.SearchFilterOrderItems(
+                                          controller.searchFilterOrderItems(
                                               value), // Call the search function
                                       decoration: InputDecoration(
                                         contentPadding: EdgeInsets.zero,
@@ -270,118 +267,118 @@ class OrdersListScreen extends StatelessWidget {
                                     controller.orderDelivered(
                                         context, orderData, "Admin"),
                                 orderData: orderData,
-                                initiateRefund: () {
-                                  if (orderData.refundAmount != null) {
-                                    controller.refundAmountController.text =
-                                        (orderData.totalAmount.toInt() -
-                                                orderData.refundAmount!)
-                                            .toString();
-                                  } else {
-                                    controller.refundAmountController.text =
-                                        orderData.totalAmount.toString();
-                                  }
-
-                                  showDialog(
-                                    context: context,
-                                    builder: (context2) {
-                                      return Dialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              12.0), // Customize the radius here
-                                        ),
-                                        backgroundColor: const Color(0xffFFFEF9),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(
-                                                      top: 20,
-                                                      right: 20.0,
-                                                      left: 20),
-                                              child: Text(
-                                                "Refund",
-                                                style: AppWidget
-                                                    .black20Text600Style(),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 12,
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(
-                                                      bottom: 16,
-                                                      right: 20.0,
-                                                      left: 20),
-                                              child: ElevatedContainer(
-                                                child: EditText(
-                                                  labelFontWeight:
-                                                      FontWeight.w600,
-                                                  labelText: "Amount",
-                                                  hint:
-                                                      "Enter Refund Amount",
-                                                  controller: controller
-                                                      .refundAmountController,
-                                                  inputType:
-                                                      TextInputType.number,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 12),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                AppElevatedButton(
-                                                  onPressed: () {
-                                                    context.pop();
-                                                  },
-                                                  title: "Back",
-                                                  titleTextColor:
-                                                      Colors.black,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  showBorder: true,
-                                                ),
-                                                const SizedBox(
-                                                  width: 12,
-                                                ),
-                                                AppElevatedButton(
-                                                  onPressed: () async {
-                                                    Navigator.of(context)
-                                                        .pop();
-
-                                                    RazorpayService
-                                                        razorpay =
-                                                        RazorpayService();
-                                                    razorpay.handleRefund(
-                                                      context: context,
-                                                      paymentId: orderData
-                                                          .transactionId,
-                                                      refundAmount: int
-                                                          .parse(controller
-                                                              .refundAmountController
-                                                              .text),
-                                                      orderId: orderData.id,
-                                                      orderAmount: orderData
-                                                          .totalAmount
-                                                          .toInt(),
-                                                    );
-                                                  },
-                                                  title: "Apply",
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 16),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
+                                // initiateRefund: () {
+                                //   if (orderData.refundAmount != null) {
+                                //     controller.refundAmountController.text =
+                                //         (orderData.totalAmount.toInt() -
+                                //                 orderData.refundAmount!)
+                                //             .toString();
+                                //   } else {
+                                //     controller.refundAmountController.text =
+                                //         orderData.totalAmount.toString();
+                                //   }
+                                //
+                                //   showDialog(
+                                //     context: context,
+                                //     builder: (context2) {
+                                //       return Dialog(
+                                //         shape: RoundedRectangleBorder(
+                                //           borderRadius: BorderRadius.circular(
+                                //               12.0), // Customize the radius here
+                                //         ),
+                                //         backgroundColor: const Color(0xffFFFEF9),
+                                //         child: Column(
+                                //           crossAxisAlignment:
+                                //               CrossAxisAlignment.start,
+                                //           mainAxisSize: MainAxisSize.min,
+                                //           children: [
+                                //             Padding(
+                                //               padding:
+                                //                   const EdgeInsets.only(
+                                //                       top: 20,
+                                //                       right: 20.0,
+                                //                       left: 20),
+                                //               child: Text(
+                                //                 "Refund",
+                                //                 style: AppWidget
+                                //                     .black20Text600Style(),
+                                //               ),
+                                //             ),
+                                //             const SizedBox(
+                                //               height: 12,
+                                //             ),
+                                //             Padding(
+                                //               padding:
+                                //                   const EdgeInsets.only(
+                                //                       bottom: 16,
+                                //                       right: 20.0,
+                                //                       left: 20),
+                                //               child: ElevatedContainer(
+                                //                 child: EditText(
+                                //                   labelFontWeight:
+                                //                       FontWeight.w600,
+                                //                   labelText: "Amount",
+                                //                   hint:
+                                //                       "Enter Refund Amount",
+                                //                   controller: controller
+                                //                       .refundAmountController,
+                                //                   inputType:
+                                //                       TextInputType.number,
+                                //                 ),
+                                //               ),
+                                //             ),
+                                //             const SizedBox(height: 12),
+                                //             Row(
+                                //               mainAxisAlignment:
+                                //                   MainAxisAlignment.center,
+                                //               children: [
+                                //                 AppElevatedButton(
+                                //                   onPressed: () {
+                                //                     context.pop();
+                                //                   },
+                                //                   title: "Back",
+                                //                   titleTextColor:
+                                //                       Colors.black,
+                                //                   backgroundColor:
+                                //                       Colors.transparent,
+                                //                   showBorder: true,
+                                //                 ),
+                                //                 const SizedBox(
+                                //                   width: 12,
+                                //                 ),
+                                //                 AppElevatedButton(
+                                //                   onPressed: () async {
+                                //                     Navigator.of(context)
+                                //                         .pop();
+                                //
+                                //                     RazorpayService
+                                //                         razorpay =
+                                //                         RazorpayService();
+                                //                     razorpay.handleRefund(
+                                //                       context: context,
+                                //                       paymentId: orderData
+                                //                           .transactionId,
+                                //                       refundAmount: int
+                                //                           .parse(controller
+                                //                               .refundAmountController
+                                //                               .text),
+                                //                       orderId: orderData.id,
+                                //                       orderAmount: orderData
+                                //                           .totalAmount
+                                //                           .toInt(),
+                                //                     );
+                                //                   },
+                                //                   title: "Apply",
+                                //                 ),
+                                //               ],
+                                //             ),
+                                //             const SizedBox(height: 16),
+                                //           ],
+                                //         ),
+                                //       );
+                                //     },
+                                //   );
+                                // },
                                 //controller.confirmOrder(orderData,"Admin");},
                               );
                             },

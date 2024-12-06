@@ -1,4 +1,3 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/admin/check_in_list_admin/check_in_list_admin.dart';
@@ -13,6 +12,7 @@ import 'package:wandercrew/pages/client/menu_screen/menu_screen.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/reception_home_screen.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_screen.dart';
 import 'package:wandercrew/pages/client/track_order_screen/track_order_screen.dart';
+import 'package:wandercrew/pages/wandercrew%20homepage/home_screen.dart';
 import 'package:wandercrew/service/auth_services.dart';
 
 import '../pages/admin/users_admin/manage_user_admin.dart';
@@ -28,8 +28,13 @@ import '../pages/client/about_us_contact_us/term_condition_screen.dart';
 
 
 final GoRouter router = GoRouter(
-  initialLocation: Routes.receptionHome,
+  initialLocation: Routes.wanderCrewHome,
   routes: [
+    GoRoute(
+      path: Routes.wanderCrewHome,
+      name: 'WanderCrewHome',
+      builder: (context, state) => const WanderCrewHomePage(),
+    ),
     GoRoute(
       path: Routes.receptionHome,
       name: 'ReceptionHome',
@@ -152,6 +157,8 @@ String? _authGuard(GoRouterState state) {
 class Routes {
   // static const String wanderCrew = '/';
 
+
+  static const String wanderCrewHome = '/';
 
   static const String receptionHome = '/reception';
   static const String receptionMenu = '/reception/menu';
