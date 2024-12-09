@@ -12,7 +12,7 @@ import 'package:wandercrew/pages/client/menu_screen/menu_screen.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/reception_home_screen.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_screen.dart';
 import 'package:wandercrew/pages/client/track_order_screen/track_order_screen.dart';
-import 'package:wandercrew/pages/wandercrew%20homepage/home_screen.dart';
+import 'package:wandercrew/pages/wandercrew%20homepage/homepage/home_screen.dart';
 import 'package:wandercrew/service/auth_services.dart';
 
 import '../pages/admin/users_admin/manage_user_admin.dart';
@@ -21,10 +21,7 @@ import '../pages/client/about_us_contact_us/contact_us_screen.dart';
 import '../pages/client/about_us_contact_us/privacy_policy_screen.dart';
 import '../pages/client/about_us_contact_us/refund_cancellation_rule_screen.dart';
 import '../pages/client/about_us_contact_us/term_condition_screen.dart';
-
-
-
-
+import '../pages/wandercrew homepage/select_room_screen/select_room_screen.dart';
 
 
 final GoRouter router = GoRouter(
@@ -34,6 +31,11 @@ final GoRouter router = GoRouter(
       path: Routes.wanderCrewHome,
       name: 'WanderCrewHome',
       builder: (context, state) => const WanderCrewHomePage(),
+    ),
+    GoRoute(
+      path: Routes.wanderCrewSelectRoom,
+      name: 'SelectRoom',
+      builder: (context, state) => SelectRoomScreen(),
     ),
     GoRoute(
       path: Routes.receptionHome,
@@ -129,12 +131,6 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const ManageVoucherAdmin(),
       redirect: (context, state) => _authGuard(state),
     ),
-
-    // GoRoute(
-    //   path: '/',
-    //   name: 'WanderCrew',
-    //   builder: (context, state) => const TestScreen(),
-    // ),
   ],
   errorBuilder: (context, state) => const Scaffold(
     body: Center(child: Text('Page not found')),
@@ -157,8 +153,8 @@ String? _authGuard(GoRouterState state) {
 class Routes {
   // static const String wanderCrew = '/';
 
-
   static const String wanderCrewHome = '/';
+  static const String wanderCrewSelectRoom = '/rooms';
 
   static const String receptionHome = '/reception';
   static const String receptionMenu = '/reception/menu';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wandercrew/pages/wandercrew%20homepage/widgets/footer_section/social_media_icon_row.dart';
+import 'package:wandercrew/pages/wandercrew%20homepage/homepage/widgets/footer_section/social_media_icon_row.dart';
 
-import '../../../../utils/routes.dart';
-import '../../../../widgets/custom_text.dart';
-import '../../../../widgets/widget_support.dart';
+import '../../../../../utils/routes.dart';
+import '../../../../../widgets/custom_text.dart';
+import '../../../../../widgets/widget_support.dart';
 
 class FooterSection extends StatelessWidget {
   const FooterSection({

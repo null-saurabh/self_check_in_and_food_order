@@ -53,7 +53,7 @@ class SingleOrder extends StatelessWidget {
                             style: AppWidget.black16Text400Style(),
                           ),
                           Text(
-                            "  #${orderData.orderId}",
+                            "  #${orderData.orderId ?? orderData.id}",
                             style: AppWidget.black16Text500Style(),
                           ),
                         ],
@@ -101,8 +101,8 @@ class SingleOrder extends StatelessWidget {
                             ),
                           ],
                         ),
-                      if (orderData.specialInstructions != null &&
-                          orderData.specialInstructions!.isNotEmpty)
+                      // if (orderData.specialInstructions != null &&
+                      //     orderData.specialInstructions!.isNotEmpty)
                         Row(
                           children: [
                             Text(
@@ -110,7 +110,7 @@ class SingleOrder extends StatelessWidget {
                               style: AppWidget.black16Text400Style(),
                             ),
                             Text(
-                              orderData.specialInstructions!,
+                              orderData.specialInstructions,
                               style: AppWidget.black16Text500Style(),
                             ),
                           ],

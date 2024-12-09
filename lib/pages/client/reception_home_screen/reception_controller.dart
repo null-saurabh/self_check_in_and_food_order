@@ -17,6 +17,100 @@ class ReceptionController extends GetxController {
   var adminUsers = <AdminUserModel>[].obs; // Observable list of admin users
   ScrollController scrollController = ScrollController();
 
+
+
+  // Future<void> addIndexToMenuItems() async {
+  //   try {
+  //     print('tring');
+  //
+  //     final collectionRef = FirebaseFirestore.instance.collection('Menu');
+  //     final snapshot = await collectionRef.get();
+  //
+  //     if (snapshot.docs.isEmpty) {
+  //       print('No menu items found.');
+  //       return;
+  //     }
+  //
+  //     int index = 1;
+  //     WriteBatch batch = FirebaseFirestore.instance.batch();
+  //
+  //     for (var doc in snapshot.docs) {
+  //       // Reference to the document
+  //       DocumentReference docRef = collectionRef.doc(doc.id);
+  //       print('doing $index');
+  //
+  //       // Add "itemIndexNumber" field
+  //       batch.update(docRef, {'itemIndexNumber': index});
+  //       index++;
+  //
+  //       // Commit batch after 500 updates to avoid size limit
+  //       if (index % 500 == 0) {
+  //         await batch.commit();
+  //         batch = FirebaseFirestore.instance.batch();
+  //       }
+  //     }
+  //
+  //     // Commit the remaining batch
+  //     await batch.commit();
+  //     print('All menu items updated successfully.');
+  //   } catch (e) {
+  //     print('Error updating menu items: $e');
+  //   }
+  // }
+
+  Future<void> addAvailableTimesToMenuItems() async {
+    try {
+      print('Starting to add availableTimes to menu items.');
+
+      final collectionRef = FirebaseFirestore.instance.collection('Menu_Category');
+      final snapshot = await collectionRef.get();
+
+      if (snapshot.docs.isEmpty) {
+        print('No menu items found.');
+        return;
+      }
+
+      // Define the default available times (using strings in "HH:mm" format)
+      List<Map<String, String>> defaultAvailableTimes = [
+        {
+          'start': '07:30', // 7:30 AM
+          'end': '11:00',   // 11:00 AM
+        },
+        {
+          'start': '17:00', // 5:00 PM
+          'end': '21:00',   // 9:00 PM
+        },
+      ];
+
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+      int index = 0;
+
+      for (var doc in snapshot.docs) {
+        // Reference to the document
+        DocumentReference docRef = collectionRef.doc(doc.id);
+        print('Updating availableTimes for item $index');
+
+        // Add "availableTimes" field as the default times
+        batch.update(docRef, {'availableTimes': defaultAvailableTimes});
+        index++;
+
+        // Commit batch after 500 updates to avoid size limit
+        if (index % 500 == 0) {
+          await batch.commit();
+          batch = FirebaseFirestore.instance.batch();
+        }
+      }
+
+      // Commit the remaining batch
+      await batch.commit();
+      print('All menu items updated with availableTimes successfully.');
+    } catch (e) {
+      print('Error updating menu items with availableTimes: $e');
+    }
+  }
+
+
+
   @override
   void onInit() {
     // fetchCountryCodes(); // Fetch countries from API when controller is initialized

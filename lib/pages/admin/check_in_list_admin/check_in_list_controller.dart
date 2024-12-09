@@ -64,7 +64,7 @@ class CheckInListController extends GetxController {
         // Check if the end date is provided
         if (filterToDate.text.isNotEmpty) {
           DateTime end = DateFormat("dd-MMM-yy").parse(filterToDate.text);
-          matchesDateRange = matchesDateRange && checkIn.createdAt.isBefore(end.add(Duration(days: 1)));
+          matchesDateRange = matchesDateRange && checkIn.createdAt.isBefore(end.add(const Duration(days: 1)));
         }
 
         return matchesDateRange;
@@ -92,7 +92,7 @@ class CheckInListController extends GetxController {
 
 
   void makePhoneCall(String number) {
-    String phoneNumber = '$number';
+    String phoneNumber = number;
     html.window.open('tel:$phoneNumber', '_self');
   }
 
@@ -155,6 +155,9 @@ class CheckInListController extends GetxController {
         }
       }).toList();
 
+      newList.sort(
+              (a, b) => b.createdAt.compareTo(a.createdAt));
+
       //   return SelfCheckInModel.fromMap(
       //       data); // Using fromMap factory constructor
       // }).toList();
@@ -196,7 +199,8 @@ class CheckInListController extends GetxController {
     if (kIsWeb) {
       // For Web
       downloadFileWeb(context,imageUrl, fileName);
-    } else {
+    }
+    else {
       // For Android
       await downloadFileAndroid(context,imageUrl, fileName);
     }
@@ -424,89 +428,87 @@ class CheckInListController extends GetxController {
             borderRadius:
             BorderRadius.circular(12.0), // Customize the radius here
           ),
-          backgroundColor: Color(0xffFFFEF9),
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding:
-                  const EdgeInsets.only(top: 20, right: 20.0, left: 20),
-                  child: Text(
-                    "Modify",
-                    style: AppWidget.black20Text600Style(),
+          backgroundColor: const Color(0xffFFFEF9),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding:
+                const EdgeInsets.only(top: 20, right: 20.0, left: 20),
+                child: Text(
+                  "Modify",
+                  style: AppWidget.black20Text600Style(),
+                ),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    bottom: 16, right: 20.0, left: 20),
+                child: ElevatedContainer(
+                  child: EditText(
+                    labelFontWeight: FontWeight.w600,
+                    labelText: "Note",
+                    hint: "Enter Note",
+                    controller:noteController,
+                    inputType: TextInputType.number,
                   ),
                 ),
-                SizedBox(
-                  height: 12,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 16, right: 20.0, left: 20),
-                  child: ElevatedContainer(
-                    child: EditText(
-                      labelFontWeight: FontWeight.w600,
-                      labelText: "Note",
-                      hint: "Enter Note",
-                      controller:noteController,
-                      inputType: TextInputType.number,
-                    ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AppElevatedButton(
+                    onPressed: (){
+                      context.pop();
+                    },
+                    title: "Back",
+                    titleTextColor: Colors.black,
+                    backgroundColor: Colors.transparent,
+                    showBorder: true,
                   ),
-                ),
-                SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AppElevatedButton(
-                      onPressed: (){
-                        context.pop();
-                      },
-                      title: "Back",
-                      titleTextColor: Colors.black,
-                      backgroundColor: Colors.transparent,
-                      showBorder: true,
-                    ),
-                    SizedBox(width: 12,),
-                    AppElevatedButton(
-                      onPressed: () async {
+                  const SizedBox(width: 12,),
+                  AppElevatedButton(
+                    onPressed: () async {
 
 
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false, // Prevents the user from dismissing the dialog
-                          builder: (BuildContext context) {
-                            return const Center(child: CircularProgressIndicator());
-                          },
-                        );
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false, // Prevents the user from dismissing the dialog
+                        builder: (BuildContext context) {
+                          return const Center(child: CircularProgressIndicator());
+                        },
+                      );
 
 
-                        String newNote = noteController.text;
-                        print("editin");
-                        // Update the note in the database
-                        await FirebaseFirestore.instance.collection("Self_Check_In")
-                            .doc(item.id)
-                            .update({'notes': newNote,'updatedAt':DateTime.now(),'updatedBy':"Admin"});
-                        print("editin  4");
+                      String newNote = noteController.text;
+                      // print("editin");
+                      // Update the note in the database
+                      await FirebaseFirestore.instance.collection("Self_Check_In")
+                          .doc(item.id)
+                          .update({'notes': newNote,'updatedAt':DateTime.now(),'updatedBy':"Admin"});
+                      // print("editin  4");
 
-                        // Update local item note
-                        item.notes = newNote;
-                        update();
+                      // Update local item note
+                      item.notes = newNote;
+                      update();
 
-                        // Close the dialog
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
+                      // Close the dialog
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
 
-                      },
+                    },
 
-                      title: "Apply",
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
+                    title: "Apply",
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
 
-              ],
-            ),
+            ],
           ),
         );
       },

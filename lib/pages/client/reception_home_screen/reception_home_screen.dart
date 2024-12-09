@@ -106,6 +106,8 @@ class _ReceptionHomeScreenState extends State<ReceptionHomeScreen> {
                                       onTap: () {
                                         // Add action for check-in
                                         context.go(Routes.receptionCheckIn);
+                                        // controller.addAvailableTimesToMenuItems();
+
 
                                       },
                                     ),

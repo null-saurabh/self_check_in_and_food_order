@@ -6,6 +6,22 @@ import 'package:get/get.dart';
 import '../../../models/menu_item_model.dart';
 
 class MenuScreenController extends GetxController {
+
+
+  @override
+  void onInit() {
+    fetchMenuData();
+    super.onInit();
+
+    // Initialize the section keys based on the number of categories
+    sectionKeys = List.generate(filteredMenuByCategory.keys.length, (index) => GlobalKey());
+    // Add a listener for ListView scroll
+    listViewScrollController.addListener(onListViewScroll);
+
+  }
+
+
+
   RxBool isVegSelected = false.obs;
   RxBool isNonVegSelected = false.obs;
 
@@ -79,49 +95,103 @@ class MenuScreenController extends GetxController {
   Map<int, double> sectionOffsets = {};
   Timer? _scrollDebounce;
 
+  List<Map<String, dynamic>> sortedCategories = [];
 
-  @override
-  void onInit() {
-    fetchMenuData();
-    super.onInit();
 
-    // Initialize the section keys based on the number of categories
-    sectionKeys = List.generate(filteredMenuByCategory.keys.length, (index) => GlobalKey());
-    // Add a listener for ListView scroll
-    listViewScrollController.addListener(onListViewScroll);
 
-  }
 
   fetchMenuData() async {
     try {
       isLoading.value = true; // Start loading
-    QuerySnapshot value = await FirebaseFirestore.instance.collection("Menu").get();
-    allMenuItems.value = value.docs.map((element) => MenuItemModel.fromMap(element.data() as Map<String, dynamic>)).toList();
 
-    categorizeMenuItems(allMenuItems);
-    applyFilters(); // Apply filters initially
-    initializeExpandedCategories(); // Initialize expanded categories
+      // Fetch categories from "menu_category" collection and sort them by "id"
+      QuerySnapshot categorySnapshot = await FirebaseFirestore.instance
+          .collection("Menu_Category")
+          .orderBy("id") // Sort by "id" in ascending order
+          .get();
 
-    update();
+      // Map the categories to a list
+      sortedCategories = categorySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+
+      // Fetch menu items where "isAvailable" is true
+      QuerySnapshot menuSnapshot = await FirebaseFirestore.instance
+          .collection("Menu")
+          .where("isAvailable", isEqualTo: true)
+          .get();
+
+      allMenuItems.value = menuSnapshot.docs
+          .map((doc) =>
+          MenuItemModel.fromMap(doc.data() as Map<String, dynamic>))
+          .toList();
+
+      // Categorize and sort the menu items based on the sorted categories
+      categorizeMenuItems(allMenuItems, sortedCategories);
+      applyFilters(); // Apply filters initially
+      initializeExpandedCategories(); // Initialize expanded categories
+
+      update();
     } catch (e) {
       debugPrint('Failed to fetch menu: $e');
-
-    }
-    finally {
+    } finally {
       isLoading.value = false; // End loading
     }
   }
 
-  void categorizeMenuItems(List<MenuItemModel> allMenuItems) {
-    // print("aaa");
+  void categorizeMenuItems(List<MenuItemModel> allMenuItems, List<Map<String, dynamic>> sortedCategories) {
+    // Clear previous categories
+    categorizedMenuItems.clear();
 
-    for (var item in allMenuItems) {
-      if (!categorizedMenuItems.containsKey(item.category)) {
-        categorizedMenuItems[item.category] = [];
+    // Iterate through sorted categories
+    for (var category in sortedCategories) {
+      String categoryName = category['categoryName'];
+
+      // Filter menu items belonging to the current category
+      List<MenuItemModel> items = allMenuItems
+          .where((item) => item.category == categoryName)
+          .toList();
+
+    // Sort the items within the category by ascending "itemIndexNumber"
+    items.sort((a, b) => a.itemIndexNumber.compareTo(b.itemIndexNumber));
+
+      // Add the category to the map only if it has items
+      if (items.isNotEmpty) {
+        categorizedMenuItems[categoryName] = items;
       }
-      categorizedMenuItems[item.category]!.add(item);
     }
   }
+
+  // fetchMenuData() async {
+  //   try {
+  //     isLoading.value = true; // Start loading
+  //     QuerySnapshot value = await FirebaseFirestore.instance.collection("Menu").where("isAvailable", isEqualTo: true).get();
+  //     allMenuItems.value = value.docs.map((element) => MenuItemModel.fromMap(element.data() as Map<String, dynamic>)).toList();
+  //
+  //     categorizeMenuItems(allMenuItems);
+  //     applyFilters(); // Apply filters initially
+  //     initializeExpandedCategories(); // Initialize expanded categories
+  //
+  //     update();
+  //   } catch (e) {
+  //     debugPrint('Failed to fetch menu: $e');
+  //
+  //   }
+  //   finally {
+  //     isLoading.value = false; // End loading
+  //   }
+  // }
+  //
+  // void categorizeMenuItems(List<MenuItemModel> allMenuItems) {
+  //   // print("aaa");
+  //
+  //   for (var item in allMenuItems) {
+  //     if (!categorizedMenuItems.containsKey(item.category)) {
+  //       categorizedMenuItems[item.category] = [];
+  //     }
+  //     categorizedMenuItems[item.category]!.add(item);
+  //   }
+  // }
 
   void applyFilters() {
     filteredMenuByCategory.clear();
@@ -142,9 +212,7 @@ class MenuScreenController extends GetxController {
       sectionKeys = List.generate(filteredMenuByCategory.keys.length, (index) => GlobalKey());
       // print("apply");
       update();
-
     }
-
   }
 
   // Retrieve the filtered items for display in the UI
@@ -325,6 +393,81 @@ class MenuScreenController extends GetxController {
     selectedCategoryIndex.value = index;
     update();
   }
+
+
+
+
+  bool isCategoryAvailable(Map<String, String> availableTime) {
+    DateTime now = DateTime.now();
+    String currentTime = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+
+    String startTime = availableTime['start']!;
+    String endTime = availableTime['end']!;
+
+    return currentTime.compareTo(startTime) >= 0 && currentTime.compareTo(endTime) <= 0;
+  }
+
+  List<Map<String, String>> getAvailableTimesForCategory(String categoryName) {
+    // Find the category with the given name
+    var category = sortedCategories.firstWhere(
+          (category) => category['categoryName'] == categoryName,
+      orElse: () => {},  // Return an empty map if category is not found
+    );
+
+    // If the category is found, return the available times, otherwise return an empty list
+    if (category.isNotEmpty) {
+      // Safely cast the availableTimes list to the expected type
+      List<Map<String, String>> availableTimes = List<Map<String, String>>.from(
+        category['availableTimes'].map<Map<String, String>>((time) {
+          // Ensure that each time map is casted properly
+          return Map<String, String>.from(time);
+        }).toList(),
+      );
+      return availableTimes;
+    } else {
+      return []; // Return empty list if category is not found
+    }
+  }
+
+
+
+  String getNextAvailableTime(List<Map<String, String>> availableTimes, DateTime currentTime) {
+    for (var timeRange in availableTimes) {
+      // Parse start time to DateTime
+      DateTime startTime = _parseTime(timeRange['start']!);
+
+      // If the start time is after the current time, return it as the next available time
+      if (startTime.isAfter(currentTime)) {
+        return _formatTime(startTime); // Format the time before returning it
+      }
+    }
+
+    return "N/A"; // Return "N/A" if no future time is available
+  }
+
+// Helper method to parse time string into DateTime
+  DateTime _parseTime(String timeStr) {
+    // Assume timeStr is in "HH:mm" format
+    List<String> parts = timeStr.split(":");
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1]);
+    DateTime now = DateTime.now();
+    return DateTime(now.year, now.month, now.day, hours, minutes);
+  }
+
+// Helper method to format DateTime back to "hh:mm a" (12-hour format with AM/PM)
+  String _formatTime(DateTime time) {
+    int hour = time.hour;
+    String ampm = hour >= 12 ? "PM" : "AM";
+
+    // Convert hour to 12-hour format (1-12 range)
+    hour = hour % 12;
+    if (hour == 0) hour = 12; // Handle 12:00 noon and midnight
+
+    return "${hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')} $ampm";
+  }
+
+
 
   @override
   void dispose() {

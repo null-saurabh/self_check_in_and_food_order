@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../widgets/custom_text.dart';
-import '../../../../widgets/widget_support.dart';
+import '../../../../../widgets/custom_text.dart';
+import '../../../../../widgets/widget_support.dart';
 
 class WhyWandercrewSectionHomepage extends StatelessWidget {
   const WhyWandercrewSectionHomepage({super.key});

@@ -36,6 +36,7 @@ class AddFoodItemController extends GetxController {
   // var idController = TextEditingController();
   var nameController = TextEditingController();
   var priceController = TextEditingController();
+  var indexController = TextEditingController();
   var descriptionController = TextEditingController();
 
   // TextEditingControllers for optional fields
@@ -50,6 +51,7 @@ class AddFoodItemController extends GetxController {
   FocusNode nameFocusNode = FocusNode();
   FocusNode priceFocusNode = FocusNode();
   FocusNode descriptionFocusNode = FocusNode();
+  FocusNode indexFocusNode = FocusNode();
   FocusNode stockCountFocusNode = FocusNode();
   FocusNode notesFocusNode = FocusNode();
   FocusNode preparationTimeFocusNode = FocusNode();
@@ -81,6 +83,7 @@ class AddFoodItemController extends GetxController {
     nameController.text = item.name;
     priceController.text = item.price.toString();
     descriptionController.text = item.description ?? '';
+    indexController.text = item.itemIndexNumber.toString();
     // Set other fields similarly
     // For the image, use just the URL
     // itemImageName.value = item.image;
@@ -196,6 +199,7 @@ class AddFoodItemController extends GetxController {
           name: nameController.text,
           price: double.parse(priceController.text),
           category: selectedCategory.value!,
+          itemIndexNumber: int.parse(indexController.text),
           isAvailable: isAvailable.value,
           isVeg: isVeg.value,
           image: downloadUrl,

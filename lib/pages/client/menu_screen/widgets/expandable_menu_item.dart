@@ -36,35 +36,29 @@ class ExpandableMenuItem extends StatelessWidget {
                           children: controller.filteredMenuByCategory.entries
                               .where((entry) => entry.value.isNotEmpty) // Filter out empty categories
                               .map((entry) {
-                        
-                            // return Column(
-                            //   crossAxisAlignment: CrossAxisAlignment.start,
-                            //   children: [
-                            //     // Display the category name
-                            //     Padding(
-                            //       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                            //       child: Text(
-                            //         entry.key,
-                            //         style: AppWidget.heading24Bold500TextStyle(),
-                            //       ),
-                            //     ),
-                            //     // Display the menu items for the category
-                            //     Container(
-                            //       padding: const EdgeInsets.all(8.0),
-                            //       decoration: const BoxDecoration(
-                            //         color: Colors.white,
-                            //       ),
-                            //       child: Column(
-                            //         children: entry.value.map((menuItem) {
-                            //           return SingleProduct(menuItem: menuItem);
-                            //         }).toList(),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // );
-
 
                             int index = controller.filteredMenuByCategory.keys.toList().indexOf(entry.key);
+
+
+                            // Get the available times for the current category
+                            List<Map<String, String>> availableTimes = controller.getAvailableTimesForCategory(entry.key);
+                            availableTimes.sort((a, b) => a['start']!.compareTo(b['start']!));
+
+                            // Get current time
+                            DateTime now = DateTime.now();
+
+                            // Find the next available time
+                            String nextAvailableTime = controller.getNextAvailableTime(availableTimes, now);
+
+                            // print(entry.key);
+                            // Check if the category is available based on the current time
+                            bool isCategoryAvailable = availableTimes.any((timeRange) => controller.isCategoryAvailable(timeRange));
+
+                            // Set the initial state of category expansion
+                            controller.expandedCategories[index] = isCategoryAvailable;
+                            // print(isCategoryAvailable);
+
+
                             return Column(
                               key: controller.sectionKeys[index],
                               children: [
@@ -107,10 +101,25 @@ class ExpandableMenuItem extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                          Text(
-                                            entry.key,
-                                            style: AppWidget.heading24Bold500TextStyle(),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                entry.key,
+                                                style: !isCategoryAvailable ? AppWidget.grey24Bold500():AppWidget.heading24Bold500TextStyle(),
+                                              ),
+                                              if (!isCategoryAvailable)
+                                                Text(
+                                                  " (Available at $nextAvailableTime)",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.grey,
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                            ],
                                           ),
+
+
                                           Icon(
                                             controller.expandedCategories[index]
                                                 ? Icons.arrow_drop_down

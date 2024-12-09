@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:wandercrew/pages/wandercrew%20homepage/widgets/book_now_section/widgets/custom_info_widget.dart';
-import 'package:wandercrew/pages/wandercrew%20homepage/widgets/book_now_section/widgets/date_picker_dialog.dart';
-import 'package:wandercrew/pages/wandercrew%20homepage/widgets/book_now_section/widgets/guest_picker_dialog.dart';
+import 'package:wandercrew/pages/wandercrew%20homepage/homepage/widgets/book_now_section/widgets/custom_info_widget.dart';
+import 'package:wandercrew/pages/wandercrew%20homepage/homepage/widgets/book_now_section/widgets/date_picker_dialog.dart';
+import 'package:wandercrew/pages/wandercrew%20homepage/homepage/widgets/book_now_section/widgets/guest_picker_dialog.dart';
+import 'package:wandercrew/utils/routes.dart';
 
 import '../../home_screen_controller.dart';
 
@@ -78,6 +79,7 @@ class BookNowSectionHomePage extends StatelessWidget {
             // Book Now Button
             GestureDetector(
               onTap: () {
+                context.go(Routes.wanderCrewSelectRoom);
                 // Add action for "Book Now"
               },
               child: Container(

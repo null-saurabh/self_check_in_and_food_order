@@ -5,7 +5,7 @@ class HomeScreenController extends GetxController {
 
   var startDate = DateTime.now().obs; // Default to today
   var focusedDay = DateTime.now().obs; // Default to today
-  var endDate = DateTime.now().add(Duration(days: 1)).obs; // Default to tomorrow
+  var endDate = DateTime.now().add(const Duration(days: 1)).obs; // Default to tomorrow
   final String googleMapsUrl = 'https://maps.app.goo.gl/Uxhksgkm1aEoXuoa9';
 
 // Guests variable
@@ -13,12 +13,14 @@ class HomeScreenController extends GetxController {
 
   Future<void> openMap() async {
     if (
-    await canLaunch(googleMapsUrl))
+    await canLaunch(googleMapsUrl)
+    )
     {
       await launch(googleMapsUrl);
     } else {
       throw 'Could not launch $googleMapsUrl';
-    } }
+    }
+  }
 
 
   // Utility method to reset data if needed

@@ -7,6 +7,7 @@ class MenuItemModel {
   String category;         // Required
   bool isAvailable;        // Required
   bool isVeg;              // Required
+  int itemIndexNumber;            // Required
 
   // Optional Fields
   String? image;
@@ -31,6 +32,7 @@ class MenuItemModel {
     required this.name,
     required this.price,
     required this.category,
+    required this.itemIndexNumber,
     required this.isAvailable,
     required this.isVeg,
     this.image,
@@ -58,6 +60,7 @@ class MenuItemModel {
       name: data['name'],
       price: data['price'].toDouble(),
       category: data['category'],
+      itemIndexNumber: data['itemIndexNumber'],
       isAvailable: data['isAvailable'],
       isVeg: data['isVeg'],
       image: data['productImage'],
@@ -89,6 +92,7 @@ class MenuItemModel {
       'name': name,
       'price': price,
       'category': category,
+      'itemIndexNumber': itemIndexNumber,
       'isAvailable': isAvailable,
       'isVeg': isVeg,
       'productImage': image,

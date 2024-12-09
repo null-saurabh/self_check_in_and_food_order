@@ -52,6 +52,14 @@ class AppWidget{
     );
   }
 
+  static TextStyle grey24Bold500() {
+    return GoogleFonts.poppins(
+      color: Colors.grey,
+      fontSize: 24.0,
+      fontWeight: FontWeight.w500,
+    );
+  }
+
   static TextStyle heading3BoldTextStyle() {
     return GoogleFonts.poppins(
       color: Colors.black,

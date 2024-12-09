@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../../utils/routes.dart';
+import '../../../../utils/routes.dart';
 
 class HomePageDrawer extends StatelessWidget {
   const HomePageDrawer({super.key});

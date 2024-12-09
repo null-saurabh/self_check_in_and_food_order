@@ -103,40 +103,7 @@ class AddFoodItem extends StatelessWidget {
                             //     inputType: TextInputType.number,
                             //   ),
                             // ),
-                            const SizedBox(height: 16.0),
-                            ElevatedContainer(
-                              child: Obx(() {
-                                return AppDropDown(
-                                  items: controller.categories.map((item) {
-                                    return DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(item,
-                                          style: const TextStyle(
-                                              fontSize: 18.0,
-                                              color: Colors.black)),
-                                    );
-                                  }).toList(),
-                                  value: controller.selectedCategory.value,
-                                  onChange: (value) =>
-                                      controller.selectedCategory.value = value,
-                                  hintText: "Select Category",
-                                  labelText: "Category*",
-                                  showLabel: true,
-                                  height: 40,
-                                  iconColor: Colors.grey,
-                                  showSearch: true,
-                                  searchCtrl: TextEditingController(),
-                                  searchMatchFn: (item, searchValue) {
-                                    searchValue = searchValue.toLowerCase();
-                                    return item.value
-                                        .toString()
-                                        .toLowerCase()
-                                        .contains(searchValue);
-                                  },
-                                  onValidate: Validators.requiredField,
-                                );
-                              }),
-                            ),
+
                             const SizedBox(height: 16.0),
                             ElevatedContainer(
                               child: EditText(
@@ -158,6 +125,51 @@ class AddFoodItem extends StatelessWidget {
                                 maxLine: 6,
                                 height: 100,
                                 // focusNode: controller.descriptionFocusNode,
+                              ),
+                            ),
+                            const SizedBox(height: 16.0),
+                            ElevatedContainer(
+                              child: Obx(() {
+                                return AppDropDown(
+                                  items: controller.categories.map((item) {
+                                    return DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(item,
+                                          style: const TextStyle(
+                                              fontSize: 18.0,
+                                              color: Colors.black)),
+                                    );
+                                  }).toList(),
+                                  value: controller.selectedCategory.value,
+                                  onChange: (value) =>
+                                  controller.selectedCategory.value = value,
+                                  hintText: "Select Category",
+                                  labelText: "Category*",
+                                  showLabel: true,
+                                  height: 40,
+                                  iconColor: Colors.grey,
+                                  showSearch: true,
+                                  searchCtrl: TextEditingController(),
+                                  searchMatchFn: (item, searchValue) {
+                                    searchValue = searchValue.toLowerCase();
+                                    return item.value
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(searchValue);
+                                  },
+                                  onValidate: Validators.requiredField,
+                                );
+                              }),
+                            ),
+                            const SizedBox(height: 16.0),
+                            ElevatedContainer(
+                              child: EditText(
+                                labelText: "Item Index*",
+                                hint: "Enter Item Index",
+                                controller: controller.indexController,
+                                onValidate: Validators.validateInt,
+                                inputType: TextInputType.number,
+                                focusNode: controller.indexFocusNode,
                               ),
                             ),
                             const SizedBox(height: 16.0),
