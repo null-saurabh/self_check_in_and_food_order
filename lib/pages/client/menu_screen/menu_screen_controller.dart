@@ -31,7 +31,9 @@ class MenuScreenController extends GetxController {
   // This will hold the filtered items for each category
   Map<String, List<MenuItemModel>> filteredMenuByCategory = {};
 
-  RxList<bool> expandedCategories = RxList.empty();
+  RxList<bool?> expandedCategories = RxList.empty();
+
+  // RxList<bool> expandedCategories = RxList.empty();
   RxString receptionistText = "Welcome! Delicious Food Awaits You".obs;
 
   ScrollController listViewScrollController = ScrollController();
@@ -251,15 +253,35 @@ class MenuScreenController extends GetxController {
     applyFilters(); // Reapply filters
   }
 
-  // Initialize expanded categories based on the number of categories
+  // // Initialize expanded categories based on the number of categories
+  // void initializeExpandedCategories() {
+  //   expandedCategories.value = List.filled(filteredMenuByCategory.length, true); // True means expanded by default
+  // }
+
   void initializeExpandedCategories() {
-    expandedCategories.value = List.filled(filteredMenuByCategory.length, true); // True means expanded by default
+    expandedCategories.value = List.generate(filteredMenuByCategory.length, (index) {
+      String categoryName = filteredMenuByCategory.keys.elementAt(index);
+      List<Map<String, String>> availableTimes = getAvailableTimesForCategory(categoryName);
+
+      // Check if availableTimes is not empty and pass the first element to isCategoryAvailable
+      bool isAvailable = availableTimes.isNotEmpty ? isCategoryAvailable(availableTimes.first) : false;
+
+      // If the category is available, expand it by default (true), else collapse it (false)
+      return isAvailable;
+    });
   }
 
+
+
   void toggleCategoryExpansion(int index) {
-    expandedCategories[index] = !expandedCategories[index];
-    update();
+    // Toggle the category expansion on user interaction
+    expandedCategories[index] = !expandedCategories[index]!;
+    update();  // Update the UI with the new state
   }
+  // void toggleCategoryExpansion(int index) {
+  //   expandedCategories[index] = !expandedCategories[index]!;
+  //   update();
+  // }
 
 
   // This function will be called every time a new section's offset is calculated

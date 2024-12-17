@@ -128,7 +128,7 @@ class CartScreen extends StatelessWidget {
 
                                         return SingleProduct(
                                           menuItem: menuItem,
-                                          isCart: true,
+                                          isCart: true, isDisabled: false,
                                         );
                                       },
                                     );

@@ -10,6 +10,7 @@ import 'package:wandercrew/pages/admin/vouchers_admin/manage_voucher_admin.dart'
 import 'package:wandercrew/pages/client/cart_screen/cart_screen.dart';
 import 'package:wandercrew/pages/client/menu_screen/menu_screen.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/reception_home_screen.dart';
+import 'package:wandercrew/pages/client/reception_home_screen/widgets/bonfire_booking_screen.dart';
 import 'package:wandercrew/pages/client/self_checking_screen/check_in_screen.dart';
 import 'package:wandercrew/pages/client/track_order_screen/track_order_screen.dart';
 import 'package:wandercrew/pages/wandercrew%20homepage/homepage/home_screen.dart';
@@ -61,7 +62,13 @@ final GoRouter router = GoRouter(
       path: Routes.receptionTrackOrder,
       name: 'ReceptionTrackOrder',
       builder: (context, state) => const TrackOrderScreen(),
-    ),GoRoute(
+    ),
+    GoRoute(
+      path: Routes.receptionBonfire,
+      name: 'ReceptionBonfire',
+      builder: (context, state) => const BonfireBookingScreen(),
+    ),
+    GoRoute(
       path: Routes.termAndCondition,
       name: 'TermAndCondition',
       builder: (context, state) => const TermsAndConditionsPage(),
@@ -161,6 +168,7 @@ class Routes {
   static const String receptionMenuCart = '/reception/menu/cart';
   static const String receptionCheckIn = '/reception/checkIn';
   static const String receptionTrackOrder = '/reception/track-order';
+  static const String receptionBonfire = '/reception/bonfire';
   static const String termAndCondition = '/reception/terms-conditions';
   static const String privacyPolicy = '/reception/privacy-policy';
   static const String aboutUs = '/reception/about-us';

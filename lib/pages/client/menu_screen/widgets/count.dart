@@ -7,15 +7,20 @@ import '../../cart_screen/cart_screen_controller.dart';
 class Count extends StatelessWidget {
   final MenuItemModel menuItem;
   final bool isCart;
+  final bool isDisabled;
 
-  const Count({super.key, required this.menuItem, this.isCart = false});
+  const Count({
+    super.key,
+    required this.menuItem,
+    this.isCart = false,
+    required this.isDisabled,
+  });
 
   @override
   Widget build(BuildContext context) {
     // // Use GetX to find the CartScreenController
     // final CartScreenController cartController =
     //     Get.put(CartScreenController());
-
     return GetBuilder<CartScreenController>(
         init: CartScreenController(),
         builder: (cartScreenController) {
@@ -31,7 +36,7 @@ class Count extends StatelessWidget {
                   height: 36,
                   width: 82,
                   decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xffEDCC23)),
+                    border: !isDisabled?Border.all(color: const Color(0xffEDCC23)):Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: count > 0
@@ -41,9 +46,10 @@ class Count extends StatelessWidget {
                             Expanded(
                               child: InkWell(
                                 onTap: () {
-
-                                    cartScreenController.decreaseItem(menuItem.id);
-
+                                  if (!isDisabled) {
+                                    cartScreenController
+                                        .decreaseItem(menuItem.id);
+                                  }
                                 },
                                 child: const Icon(
                                   Icons.remove,
@@ -62,7 +68,10 @@ class Count extends StatelessWidget {
                             Expanded(
                               child: InkWell(
                                 onTap: () {
-                                  cartScreenController.addItem(menuItem, 1,context);
+                                  if (!isDisabled) {
+                                    cartScreenController.addItem(
+                                        menuItem, 1, context);
+                                  }
                                 },
                                 child: const Icon(
                                   Icons.add,
@@ -76,7 +85,10 @@ class Count extends StatelessWidget {
                       : Center(
                           child: InkWell(
                             onTap: () {
-                              cartScreenController.addItem(menuItem, 1,context);
+                              if (!isDisabled) {
+                                cartScreenController.addItem(
+                                    menuItem, 1, context);
+                              }
                             },
                             child: SizedBox(
                               height: double.infinity,
@@ -84,18 +96,18 @@ class Count extends StatelessWidget {
                               child: Center(
                                 child: Text(
                                   "ADD",
-                                  style: AppWidget.subHeadingTextStyle(),
+                                  style: !isDisabled?AppWidget.subHeadingTextStyle():AppWidget.subHeadingGreyTextStyle(),
                                 ),
                               ),
                             ),
                           ),
                         ),
                 ),
-                if(isCart)
-                Text(
-                  '\u{20B9} ${menuItem.price * count}',
-                  style: AppWidget.black14Text300Style(),
-                ),
+                if (isCart)
+                  Text(
+                    '\u{20B9} ${menuItem.price * count}',
+                    style: AppWidget.black14Text300Style(),
+                  ),
               ],
             );
           });

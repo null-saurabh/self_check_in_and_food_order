@@ -17,6 +17,12 @@ class ReceptionController extends GetxController {
   var adminUsers = <AdminUserModel>[].obs; // Observable list of admin users
   ScrollController scrollController = ScrollController();
 
+  TextEditingController name = TextEditingController();
+  TextEditingController number = TextEditingController();
+  TextEditingController time = TextEditingController();
+  RxString selectedTime = "7:30".obs;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
 
 
   // Future<void> addIndexToMenuItems() async {
@@ -60,13 +66,13 @@ class ReceptionController extends GetxController {
 
   Future<void> addAvailableTimesToMenuItems() async {
     try {
-      print('Starting to add availableTimes to menu items.');
+      // print('Starting to add availableTimes to menu items.');
 
       final collectionRef = FirebaseFirestore.instance.collection('Menu_Category');
       final snapshot = await collectionRef.get();
 
       if (snapshot.docs.isEmpty) {
-        print('No menu items found.');
+        // print('No menu items found.');
         return;
       }
 
@@ -88,7 +94,7 @@ class ReceptionController extends GetxController {
       for (var doc in snapshot.docs) {
         // Reference to the document
         DocumentReference docRef = collectionRef.doc(doc.id);
-        print('Updating availableTimes for item $index');
+        // print('Updating availableTimes for item $index');
 
         // Add "availableTimes" field as the default times
         batch.update(docRef, {'availableTimes': defaultAvailableTimes});
@@ -103,9 +109,9 @@ class ReceptionController extends GetxController {
 
       // Commit the remaining batch
       await batch.commit();
-      print('All menu items updated with availableTimes successfully.');
+      // print('All menu items updated with availableTimes successfully.');
     } catch (e) {
-      print('Error updating menu items with availableTimes: $e');
+      // print('Error updating menu items with availableTimes: $e');
     }
   }
 
@@ -158,7 +164,7 @@ class ReceptionController extends GetxController {
   }
 
   void makePhoneCall(String number) {
-    String phoneNumber = '$number';
+    String phoneNumber = number;
     html.window.open('tel:$phoneNumber', '_self');
   }
 
@@ -276,5 +282,73 @@ class ReceptionController extends GetxController {
         );
       },
     );
+  }
+
+
+  Future<void> bookBonfire(BuildContext context) async {
+    // Show loading dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevents the user from dismissing the dialog
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+
+    try {
+      // Firestore instance
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      // Generate data for booking
+      Map<String, dynamic> bonfireData = {
+        "name": name.text,
+        "contact": number.text,
+        "preferredTime": selectedTime,
+        "bookedAt": Timestamp.now(), // Current server time
+      };
+
+      // Add booking to the 'Bonfire' collection
+      await firestore.collection("Bonfire").add(bonfireData);
+
+      // Dismiss loading dialog
+      context.pop();
+      context.pop();
+
+      const snackBar = SnackBar(
+        content: Text("Success: Bonfire successfully booked!",),
+        backgroundColor: Colors.green,
+      );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
+      // Clear form fields after booking
+      name.clear();
+      number.clear();
+      selectedTime.value = "7:30";
+      update(); // Notify GetBuilder to rebuild widgets if necessary
+    } catch (e) {
+      // Dismiss loading dialog
+      Get.back();
+
+      const snackBar = SnackBar(
+        content: Text(
+            "Failed to book bonfire. Please try again."),
+        backgroundColor: Colors.red,
+      );
+
+// Show the snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      // // Show error Snackbar
+      // Get.snackbar(
+      //   "Error",
+      //   "Failed to book bonfire. Please try again.",
+      //   backgroundColor: Colors.red,
+      //   colorText: Colors.white,
+      //   snackPosition: SnackPosition.TOP,
+      // );
+    }
   }
 }

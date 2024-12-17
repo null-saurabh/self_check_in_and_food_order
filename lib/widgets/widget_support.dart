@@ -76,6 +76,14 @@ class AppWidget{
     );
   }
 
+  static TextStyle subHeadingGreyTextStyle() {
+    return GoogleFonts.poppins(
+      color: Colors.grey,
+      fontSize: 12.0,
+      fontWeight: FontWeight.w400,
+    );
+  }
+
   static TextStyle white12SubHeadingTextStyle() {
     return GoogleFonts.poppins(
       color: Colors.white,

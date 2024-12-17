@@ -169,7 +169,7 @@ class CheckInController extends GetxController {
     }
 
     if (backDocument.value == null) {
-      if (documentType == "Passport") {
+      if (documentType.value == "Passport") {
         isBackDocumentInvalid.value = false;
       } else {
         isBackDocumentInvalid.value = true;
@@ -457,7 +457,7 @@ class CheckInController extends GetxController {
           context.pop();
           // print("55");
 
-          final snackBar = SnackBar(
+          const snackBar = SnackBar(
             content: Text("Success: Self check-in completed successfully!",),
             backgroundColor: Colors.green,
           );
@@ -469,7 +469,7 @@ class CheckInController extends GetxController {
           clearFields();
         }
       } else {
-        final snackBar = SnackBar(
+        const snackBar = SnackBar(
           content: Text(
               "Error: Failed to upload documents/signature. Please try again."),
           backgroundColor: Colors.red,

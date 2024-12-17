@@ -54,9 +54,7 @@ class ExpandableMenuItem extends StatelessWidget {
                             // Check if the category is available based on the current time
                             bool isCategoryAvailable = availableTimes.any((timeRange) => controller.isCategoryAvailable(timeRange));
 
-                            // Set the initial state of category expansion
-                            controller.expandedCategories[index] = isCategoryAvailable;
-                            // print(isCategoryAvailable);
+                            controller.expandedCategories[index] = controller.expandedCategories[index] ?? availableTimes.any((timeRange) => controller.isCategoryAvailable(timeRange));
 
 
                             return Column(
@@ -121,7 +119,7 @@ class ExpandableMenuItem extends StatelessWidget {
 
 
                                           Icon(
-                                            controller.expandedCategories[index]
+                                            controller.expandedCategories[index]!
                                                 ? Icons.arrow_drop_down
                                                 : Icons.arrow_drop_up,
                                           ),
@@ -130,7 +128,7 @@ class ExpandableMenuItem extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                if (controller.expandedCategories[index]) ...[ // Show items only if expanded
+                                if (controller.expandedCategories[index]!) ...[ // Show items only if expanded
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 0.0),
                                     child: Container(
@@ -140,7 +138,7 @@ class ExpandableMenuItem extends StatelessWidget {
                                       padding: const EdgeInsets.all(8),
                                       child: Column(
                                         children: entry.value.map((menuItem) {
-                                          return SingleProduct(menuItem: menuItem);
+                                          return SingleProduct(menuItem: menuItem,isDisabled: !isCategoryAvailable,);
                                         }).toList(),
                                       ),
                                     ),

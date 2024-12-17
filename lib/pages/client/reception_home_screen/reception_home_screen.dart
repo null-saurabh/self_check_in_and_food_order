@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/reception_controller.dart';
+import 'package:wandercrew/pages/client/reception_home_screen/widgets/bonfire_booking_screen.dart';
+import 'package:wandercrew/pages/client/reception_home_screen/widgets/bonfire_booking_screen.dart';
 import 'package:wandercrew/pages/client/reception_home_screen/widgets/home_screen_menu_widget.dart';
 import 'package:wandercrew/utils/routes.dart';
 
@@ -165,6 +167,22 @@ class _ReceptionHomeScreenState extends State<ReceptionHomeScreen> {
                                   ],
                                 ),
                               ],
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            ReceptionHomeGridItem(
+                              width: 354,
+                              height: 84,
+                              widthRatio: 0.94,
+                              isFeedbackList: true,
+                              iconHeight: 55,
+                              iconWidth: 55,
+                              icon: "assets/icons/bonfire.png",
+                              label: "Bonfire",
+                              onTap: () {
+                                context.go(Routes.receptionBonfire);
+                              },
                             )
                           ],
                         ),

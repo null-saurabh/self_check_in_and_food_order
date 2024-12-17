@@ -6,10 +6,13 @@ import 'count.dart';
 class SingleProduct extends StatelessWidget {
   final MenuItemModel menuItem;
   final bool isCart;
+  final bool isDisabled;
+
   const SingleProduct({
     super.key,
     this.isCart = false,
     required this.menuItem,
+    required this.isDisabled,
   });
 
   @override
@@ -112,6 +115,7 @@ class SingleProduct extends StatelessWidget {
                             Count(
                               isCart: isCart,
                               menuItem: menuItem,
+                              isDisabled: isDisabled,
                             ),
                           ],
                         ),
